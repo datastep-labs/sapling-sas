@@ -5,7 +5,8 @@ call at a time and look at what each call made. It takes about fifteen minutes.
 
 You need SAS 9.4 and a copy of the repository
 [datastep-labs/sapling-sas](https://github.com/datastep-labs/sapling-sas). The terms of use of the macros are in the
-[LICENSE](https://github.com/datastep-labs/sapling-sas/blob/main/LICENSE) of the repository. The whole tutorial is also
+[LICENSE](https://github.com/datastep-labs/sapling-sas/blob/main/LICENSE) of the repository; for commercial use and
+its price, write to [datastep.studio@gmail.com](mailto:datastep.studio@gmail.com). The whole tutorial is also
 one program, [examples/tutorial.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/tutorial.sas): you
 learn more by submitting the steps one at a time, as below.
 

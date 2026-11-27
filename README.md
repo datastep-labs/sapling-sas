@@ -67,5 +67,6 @@ table, the figure.
 ## License
 
 The macros are **source available, not open source**: the code and the proof are public to read. The terms of use are
-in the [LICENSE](LICENSE) of DataStep Labs. The data and the references of the proof belong to their owners
+in the [LICENSE](LICENSE) of DataStep Labs. **To use the macros for a commercial purpose, and for the price, write to
+[datastep.studio@gmail.com](mailto:datastep.studio@gmail.com).** The data and the references of the proof belong to their owners
 ([NOTICE](NOTICE)).

@@ -4,7 +4,7 @@ site_url: https://datastep-labs.github.io/sapling-sas/
 repo_url: https://github.com/datastep-labs/sapling-sas
 repo_name: datastep-labs/sapling-sas
 edit_uri: ""
-copyright: Copyright 2026 DataStep Labs. The macros are source available under a commercial license.
+copyright: Copyright 2026 DataStep Labs. The macros are source available under a commercial license. Commercial use and price - <a href="mailto:datastep.studio@gmail.com">datastep.studio@gmail.com</a>
 
 theme:
   name: material
