@@ -85,7 +85,9 @@
 | model       The fixed effects of the MMRM, separated by         Optional
 |             blanks. When not given: the covariates, the by=
 |             variable, the visit= variable and the interaction
-|             of the two (such as trt01p*avisit).
+|             of the two (such as trt01p*avisit). This default
+|             has no interaction of a covariate with the visit,
+|             such as base*avisit: give model= to add one.
 | type        The covariance structure of the MMRM: TYPE= of the  un
 |             REPEATED statement, such as un, cs, ar(1) or toep
 |             (type= of %mmrm)
@@ -158,7 +160,7 @@
    , title    = "Table 14.3.1 ANCOVA of the change of systolic blood pressure at Week 12"
    , file     = &spl_out./tlf/t14_3_1
  )
- * Uses method=mmrm on five visits: the LS means and the differences at Week 24.;
+ * Uses method=mmrm with the model of the mmrm example: the same differences at Week 24.;
  %table_model(
      data     = advs
    , adsl     = adsl
@@ -169,6 +171,7 @@
    , at       = "Week 24"
    , order    = trt01pn
    , method   = mmrm
+   , model    = base trt01p avisit trt01p*avisit base*avisit
    , type     = un
    , fallback = toep
    , title    = "Table 14.3.3 MMRM of the change of systolic blood pressure at Week 24"
@@ -202,8 +205,10 @@
 | 27-NOV-2026 Sapling      1.10.0: The label of the model block ("ANCOVA,
 |                          adjusted for base", "MMRM: Week 24") and the
 |                          direction of a difference in the printed table;
-|                          Proven in plain words, for the published manual. No
-|                          number changes.
+|                          Proven in plain words, for the published manual. The
+|                          MMRM example gives model= with base*avisit, the model
+|                          of the example of mmrm, so that both give the same
+|                          numbers at Week 24. No number changes.
 |
 *******************************************************************************/
 %MACRO table_model(

@@ -51,7 +51,7 @@ Returns the Kaplan-Meier summary of a time in each group: subjects, events, the 
 :   The confidence level: a number between 0 and 1. *(optional, default `0.95`)*
 
 `stats=`
-:   The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, events, median, lcl, ucl and, with `time=`, surv. A name without a pattern takes its default pattern (n="XX", mean="XX.X", pval="X.XXX" ...; see [%describe](describe.md)). *(optional, default `n="XX" events="XX" median="XX.X" lcl="XX.X" ucl="XX.X"`)*
+:   The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, events, median, lcl, ucl and, with `time=`, surv. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed). *(optional, default `n="XX" events="XX" median="XX.X" lcl="XX.X" ucl="XX.X"`)*
 
 `label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
@@ -78,6 +78,32 @@ Use [%kmplot](kmplot.md) to draw the curve, and [%table_tte](table_tte.md) for t
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+??? note "Before these examples: the calls that make their inputs"
+
+    Run `examples/setup.sas`, then these examples of other pages ([%tte](tte.md)), in this order. Then the examples of this page run as shown.
+
+    ```sas
+    /* the example of %tte */
+    * Derives the time to the first skin event from the first dose: CNSR 0 is an event, 1 a censoring.;
+    %tte(
+         subjects      = adsl
+       , events        = adae
+       , event         = trtemfl = 'Y' AND aebodsys = 'SKIN AND SUBCUTANEOUS TISSUE DISORDERS'
+       , date          = astdt
+       , start         = trtsdt
+       , censor_date   = trtedt
+       , seq           = aeseq
+       , censor_desc   = "End of treatment"
+       , censor_source = "ADSL"
+       , event_desc    = aedecod
+       , source        = "ADAE"
+       , paramcd       = "TTDE"
+       , out           = adttde
+     )
+    TITLE;
+    FOOTNOTE;
+    ```
 
 Gives n, events, the median and its limits of each group: NE is a median not reached.
 
@@ -145,7 +171,7 @@ Xanomeline Low Dose   TRT01P         lcl     94.837376767   94.8
 Xanomeline Low Dose   TRT01P         ucl              100  100.0
 ```
 
-Uses conftype=loglog and a 90 percent level: only the lower limit of Low Dose changes, 51 to 48.
+Uses conftype=loglog: only the lower limit of Low Dose changes, 51 to 48.
 
 ```sas
 %km(
@@ -153,8 +179,39 @@ Uses conftype=loglog and a 90 percent level: only the lower limit of Low Dose ch
    , var      = aval
    , by       = trt01a
    , conftype = loglog
-   , level    = 0.90
-   , out      = ttde_km90
+   , out      = ttde_kmll
+ )
+```
+
+```text
+ttde_kmll: 15 rows
+TRT01A                GROUPS  BLOCK  STAT    VALUE  TEXT
+Placebo               TRT01A         n          85  85
+Placebo               TRT01A         events     20  20
+Placebo               TRT01A         median         NE
+Placebo               TRT01A         lcl            NE
+Placebo               TRT01A         ucl            NE
+Xanomeline High Dose  TRT01A         n          72  72
+Xanomeline High Dose  TRT01A         events     39  39
+Xanomeline High Dose  TRT01A         median     57  57.0
+Xanomeline High Dose  TRT01A         lcl        46  46.0
+Xanomeline High Dose  TRT01A         ucl       177  177.0
+Xanomeline Low Dose   TRT01A         n          95  95
+Xanomeline Low Dose   TRT01A         events     39  39
+Xanomeline Low Dose   TRT01A         median     80  80.0
+Xanomeline Low Dose   TRT01A         lcl        48  48.0
+Xanomeline Low Dose   TRT01A         ucl            NE
+```
+
+Uses a 90 percent level: on these data the limits of the median stay as at 95 percent.
+
+```sas
+%km(
+     data  = adttde
+   , var   = aval
+   , by    = trt01a
+   , level = 0.90
+   , out   = ttde_km90
  )
 ```
 
@@ -174,7 +231,7 @@ Xanomeline High Dose  TRT01A         ucl       177  177.0
 Xanomeline Low Dose   TRT01A         n          95  95
 Xanomeline Low Dose   TRT01A         events     39  39
 Xanomeline Low Dose   TRT01A         median     80  80.0
-Xanomeline Low Dose   TRT01A         lcl        48  48.0
+Xanomeline Low Dose   TRT01A         lcl        51  51.0
 Xanomeline Low Dose   TRT01A         ucl            NE
 ```
 
@@ -190,7 +247,7 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Time to an event: [%logrank](logrank.md), [%cox](cox.md).
 
-Named on this page: [%describe](describe.md), [%kmplot](kmplot.md), [%table_tte](table_tte.md).
+Named on this page: [%kmplot](kmplot.md), [%table_tte](table_tte.md), [%tte](tte.md).
 
 Guides that use %km: [Make a Kaplan-Meier figure with the number at risk](../how-to/kaplan-meier-figure.md).
 

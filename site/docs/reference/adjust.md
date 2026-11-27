@@ -66,6 +66,42 @@ Every row of `data=` with STAT pval and a pair of `family=` is one hypothesis of
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `sbp_ls` (made by the [example of %lsmeans](lsmeans.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
+??? note "Before these examples: the calls that make their inputs"
+
+    Run `examples/setup.sas`, then these examples of other pages ([%lsmeans](lsmeans.md)), in this order. Then the examples of this page run as shown.
+
+    ```sas
+    /* the example of %lsmeans */
+    * Gives the difference of the LS means of every pair at Week 12, adjusted for baseline and sex.;
+    %lsmeans(
+         data   = advs
+       , where  = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')
+       , var    = chg
+       , by     = trt01p
+       , covars = base
+       , class  = sex
+       , pairs  = all
+       , order  = trt01pn
+       , out    = sbp_ls
+     )
+    * Compares two pairs against Placebo at a 90 percent level and keeps the statistics of stats=.;
+    %lsmeans(
+         data   = advs
+       , where  = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')
+       , var    = chg
+       , by     = trt01p
+       , covars = base
+       , pairs  = "Xanomeline High Dose" "Placebo"
+                # "Xanomeline Low Dose"  "Placebo"
+       , order  = trt01pn
+       , level  = 0.90
+       , stats  = lsmean lsmean_se diff lcl ucl pval
+       , out    = sbp_ls90
+     )
+    TITLE;
+    FOOTNOTE;
+    ```
+
 Adjusts the p values of the two comparisons against Placebo by Hochberg: PADJ after PVAL.
 
 ```sas
@@ -92,6 +128,11 @@ Xanomeline Low Dose   Placebo              TRT01P VERSUS  padj  0.9584423033  0.
 ## Messages
 
 The macro gives only the [messages every macro shares](index.md#messages-every-macro-shares).
+
+The macro also writes these NOTE lines to the log, without stopping:
+
+- `NOTE: [adjust] No data qualified: data=<data> has no p-value of a pair of family=.`
+- `NOTE: [adjust] out=<out> has no adjusted p-value.`
 
 ## See also
 

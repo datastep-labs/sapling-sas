@@ -66,6 +66,32 @@ Use [%km](km.md) for the medians of the groups, and [%cox](cox.md) for a hazard 
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
+??? note "Before these examples: the calls that make their inputs"
+
+    Run `examples/setup.sas`, then these examples of other pages ([%tte](tte.md)), in this order. Then the examples of this page run as shown.
+
+    ```sas
+    /* the example of %tte */
+    * Derives the time to the first skin event from the first dose: CNSR 0 is an event, 1 a censoring.;
+    %tte(
+         subjects      = adsl
+       , events        = adae
+       , event         = trtemfl = 'Y' AND aebodsys = 'SKIN AND SUBCUTANEOUS TISSUE DISORDERS'
+       , date          = astdt
+       , start         = trtsdt
+       , censor_date   = trtedt
+       , seq           = aeseq
+       , censor_desc   = "End of treatment"
+       , censor_source = "ADSL"
+       , event_desc    = aedecod
+       , source        = "ADAE"
+       , paramcd       = "TTDE"
+       , out           = adttde
+     )
+    TITLE;
+    FOOTNOTE;
+    ```
+
 Tests the curves of the groups with the log rank test, stratified by sex: one p value.
 
 ```sas
@@ -95,6 +121,8 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 ## See also
 
 Time to an event: [%km](km.md), [%cox](cox.md).
+
+Named on this page: [%tte](tte.md).
 
 Guides that use %logrank: [Make a Kaplan-Meier figure with the number at risk](../how-to/kaplan-meier-figure.md).
 

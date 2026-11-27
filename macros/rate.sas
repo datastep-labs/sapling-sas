@@ -57,8 +57,8 @@
 |             exposure, rate, lcl and ucl. When not given: n
 |             (events with count=events), exposure, rate, lcl
 |             and ucl. A name without a pattern takes its
-|             default pattern (n="XX", mean="XX.X", pval="X.XXX"
-|             ...; see %describe).
+|             default pattern: see the table of default patterns
+|             (How a number is kept and printed).
 | label       The label of the block in the table: a text in      Optional
 |             quotes. A block is the rows of one call in the
 |             table.
@@ -128,7 +128,8 @@
 | 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
 | 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
-|                          manual. No number changes.
+|                          manual. stats= points to the table of default
+|                          patterns of the manual. No number changes.
 |
 *******************************************************************************/
 %MACRO rate(

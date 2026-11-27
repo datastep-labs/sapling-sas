@@ -166,8 +166,8 @@ T_AGE,sd,Placebo,,,,,8.59016712714192,8.59
 ```
 
 The file is `examples/out/ard/t_first.csv`: `file=` of `%ard` is a name, and the macro puts the file in the folder
-`ard` of the output folder. Each line holds one number as SAS keeps it, written with the format `BEST32.` (`raw`,
-up to 15 significant digits), and its printed text (`formatted`). A second program can check its own numbers against this file.
+`ard` of the output folder. Each line holds one number, written with the format `BEST32.` (`raw`, at
+most 15 significant digits), and its printed text (`formatted`). A second program can check its own numbers against this file.
 
 ## Step 6: lay out the rows
 
@@ -211,7 +211,7 @@ Write the titles, then print:
 ```sas
 TITLE1 "Table 1 Age and sex by treatment";
 TITLE2 "Safety population";
-FOOTNOTE1 J=L "Program: first_table.sas";
+FOOTNOTE1 J=L "Program: tutorial.sas";
 %print(&t_first_print.)
 ```
 
@@ -234,7 +234,7 @@ Sex
   F           53 (61.6%)   55 (57.3%)           35 (48.6%)           143 (56.3%)
   M           33 (38.4%)   41 (42.7%)           37 (51.4%)           111 (43.7%)
 
-Program: first_table.sas
+Program: tutorial.sas
 ```
 
 `%print` wrote two files to the folder `tlf` of the output folder: `t_first.rtf` for Word and `t_first.lst`, the text

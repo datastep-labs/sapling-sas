@@ -116,7 +116,7 @@ Returns one time-to-event parameter: for each subject the date of the first even
 
 ## Result
 
-The data set of `out=`: one record per subject with an event, a censoring or (with `end=`) a period, in the order of `subjects=`: the variables of `subjects=`, PARAMCD, ADT, CNSR, AVAL, ATM (with `time=`), EVNTDESC, SRCDOM, SRCVAR, SRCSEQ, ADTF and ATMF (when their parameters are given) and the variables of `keep=`. With `end=`, a subject with no START or no END gets no record and a WARNING that names it; a subject whose START is after its END gets no record. Two records of a subject in `subjects=` give an ERROR line.
+The data set of `out=`: one record per subject with an event, a censoring or (with `end=`) a period, in the order of `subjects=`: the variables of `subjects=`, PARAMCD, ADT, CNSR, AVAL, ATM (with `time=`), EVNTDESC, SRCDOM, SRCVAR, SRCSEQ, ADTF and ATMF (when their parameters are given) and the variables of `keep=`. With `end=`, a subject with no START or no END gets no record and a WARNING that names it; a subject whose START is after its END gets no record. Two records of a subject in `subjects=` give an ERROR line. Without `end=`, a subject with no event and no censoring date gets no record, and a NOTE gives their number.
 
 ## Details
 
@@ -126,7 +126,7 @@ It writes the records of an ADTTE parameter; [%km](km.md), [%logrank](logrank.md
 - When a subject has no event, the latest censoring is taken: the latest date of `censors=` (or of `subjects=`); on one date, the last record.
 - AVAL is ADT - START + 1, in days.
 
-Without `end=`, every date counts, and a date before START becomes START (as admiral does). A subject with no event and no censoring gets no record. With `end=`, the at-risk period runs from START to END: only the events and censorings in it count, and a subject with neither is censored at END. An event on the start day counts unless `time=` and `start_time=` are both there and the event time is before the start time.
+Without `end=`, every date counts, and a date before START becomes START (as admiral does). A subject with no event and no censoring date gets no record, and the log has a NOTE with the number of such subjects. With `end=`, the at-risk period runs from START to END: only the events and censorings in it count, and a subject with neither is censored at END. An event on the start day counts unless `time=` and `start_time=` are both there and the event time is before the start time.
 
 ## Examples
 
@@ -182,6 +182,10 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 | censors=&lt;censors&gt; has no date | give censor_date= the date of a censoring in it. |
 | time= and start_time= need end=, the end of the period | give end=, or give neither time= nor start_time=. |
 | more than one record of the subject in subjects=&lt;subjects&gt; (with the USUBJID of the record) | give one record per subject. |
+
+The macro also writes these NOTE lines to the log, without stopping:
+
+- `NOTE: [tte] <nodate> subject(s) with no event and no censoring date: no record.`
 
 ## See also
 

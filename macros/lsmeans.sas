@@ -58,8 +58,8 @@
 |             separated by blanks. The names are diff, diff_se,   ucl="XX.X" pval="X.XXX"
 |             lcl, ucl, pval, lsmean, lsmean_se, lsmean_lcl and
 |             lsmean_ucl. A name without a pattern takes its
-|             default pattern (n="XX", mean="XX.X", pval="X.XXX"
-|             ...; see %describe).
+|             default pattern: see the table of default patterns
+|             (How a number is kept and printed).
 | label       The label of the block in the table: a text in      Optional
 |             quotes. A block is the rows of one call in the
 |             table.
@@ -147,7 +147,8 @@
 |                          of diff (the group minus VERSUS); the caption of the
 |                          first example says what it gives (the differences,
 |                          not the LS means); Proven in plain words, for the
-|                          published manual. No number changes.
+|                          published manual. stats= points to the table of
+|                          default patterns of the manual. No number changes.
 |
 *******************************************************************************/
 %MACRO lsmeans(

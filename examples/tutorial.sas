@@ -44,5 +44,5 @@ TITLE;
 
 TITLE1 "Table 1 Age and sex by treatment";
 TITLE2 "Safety population";
-FOOTNOTE1 J=L "Program: first_table.sas";
+FOOTNOTE1 J=L "Program: tutorial.sas";
 %print(&t_first_print.)

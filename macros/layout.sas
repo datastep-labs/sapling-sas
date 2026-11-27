@@ -95,11 +95,11 @@
 |             variable as var= of %columns
 | page        A group variable of the results, such as page =     Optional
 |             sex: one page per value, in the order of its
-|             numeric twin (SEXN), else of its values. It is no
-|             level of the rows; each page starts with its first
-|             block, and the header of a column on a page has
-|             the N of that page. Give %columns the same page=.
-|             It goes into the setup.
+|             numeric twin (SEXN), else of its values. Its
+|             values are not rows of the table; each page starts
+|             with its first block, and the header of a column
+|             on a page has the N of that page. Give %columns
+|             the same page=. It goes into the setup.
 | format      The labels of categories: pairs of a variable and   Optional
 |             a character format, as in a FORMAT statement
 |             (format = sex $sexf. race $racef.). A value that
@@ -157,7 +157,7 @@
    , setup   = t14_1_1_print
    , out     = t14_1_1_display
  )
- * Gives label= and rows= to the setup: the print call it keeps labels the last column p value.;
+ * Puts label= and rows= into the setup: the last column is labelled p value, 30 rows a page.;
  %layout(
      data    = t14_2_1
    , columns = t14_2_1_cols
@@ -253,7 +253,8 @@
 |                          named the page variable, blank): the empty display
 |                          is made again. No number changes.
 | 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
-|                          manual. No number changes.
+|                          manual. The caption of the third call and the text of
+|                          page= in plain words. No number changes.
 |
 *******************************************************************************/
 %MACRO layout(

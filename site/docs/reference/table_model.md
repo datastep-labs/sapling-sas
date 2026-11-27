@@ -76,7 +76,7 @@ Makes a table of a continuous endpoint in one call: descriptive statistics, and 
     Accepts: `ancova`, `mmrm`.
 
 `model=`
-:   The fixed effects of the MMRM, separated by blanks. When not given: the covariates, the `by=` variable, the `visit=` variable and the interaction of the two (such as trt01p*avisit). *(optional)*
+:   The fixed effects of the MMRM, separated by blanks. When not given: the covariates, the `by=` variable, the `visit=` variable and the interaction of the two (such as trt01p*avisit). This default has no interaction of a covariate with the visit, such as base*avisit: give `model=` to add one. *(optional)*
 
 `type=`
 :   The covariance structure of the MMRM: TYPE= of the REPEATED statement, such as un, cs, ar(1) or toep (type= of [%mmrm](mmrm.md)). *(optional, default `un`)*
@@ -192,7 +192,7 @@ ANCOVA, adjusted for base
     p-value                                                    0.027
 ```
 
-Uses method=mmrm on five visits: the LS means and the differences at Week 24.
+Uses method=mmrm with the model of the mmrm example: the same differences at Week 24.
 
 ```sas
 %table_model(
@@ -205,6 +205,7 @@ Uses method=mmrm on five visits: the LS means and the differences at Week 24.
    , at       = "Week 24"
    , order    = trt01pn
    , method   = mmrm
+   , model    = base trt01p avisit trt01p*avisit base*avisit
    , type     = un
    , fallback = toep
    , title    = "Table 14.3.3 MMRM of the change of systolic blood pressure at Week 24"
@@ -221,15 +222,15 @@ Table 14.3.3 MMRM of the change of systolic blood pressure at Week 24
 --------------------------------------------------------------------------------
 
 MMRM: Week 24
-  LS mean (SE)            -1.8 (1.72)  -1.4 (2.41)          -5.9 (2.31)
+  LS mean (SE)            -1.8 (1.72)  -1.2 (2.42)          -6.0 (2.31)
   vs Placebo
-    Difference (SE)                    0.4 (2.96)           -4.1 (2.88)
-    Confidence interval                (-5.5, 6.2)          (-9.8, 1.6)
-    p-value                            0.903                0.157
+    Difference (SE)                    0.6 (2.96)           -4.2 (2.87)
+    Confidence interval                (-5.3, 6.4)          (-9.9, 1.5)
+    p-value                            0.850                0.145
   vs Xanomeline Low Dose
-    Difference (SE)                                         -4.4 (3.34)
-    Confidence interval                                     (-11.0, 2.1)
-    p-value                                                 0.184
+    Difference (SE)                                         -4.8 (3.34)
+    Confidence interval                                     (-11.4, 1.8)
+    p-value                                                 0.156
 ```
 
 ## Messages

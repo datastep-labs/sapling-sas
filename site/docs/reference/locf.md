@@ -113,7 +113,7 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 | Message | Fix |
 |---|---|
-| row &lt;bad&gt; of &lt;name&gt;= has not &lt;nval&gt; values. | write a row as &lt;form&gt;, # between the rows. |
+| row &lt;n&gt; of &lt;parameter&gt;= has not &lt;n&gt; values. | write a row as &lt;the form of a row&gt;, # between the rows. |
 
 ## See also
 

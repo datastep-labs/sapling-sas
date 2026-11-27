@@ -57,9 +57,9 @@
 |             name with its pattern of the printed number,        median="XX.X" lcl="XX.X"
 |             separated by blanks. The names are n, events,       ucl="XX.X"
 |             median, lcl, ucl and, with time=, surv. A name
-|             without a pattern takes its default pattern
-|             (n="XX", mean="XX.X", pval="X.XXX" ...; see
-|             %describe).
+|             without a pattern takes its default pattern: see
+|             the table of default patterns (How a number is
+|             kept and printed).
 | label       The label of the block in the table: a text in      Optional
 |             quotes. A block is the rows of one call in the
 |             table.
@@ -94,14 +94,21 @@
    , stats = n="XX" events="XX" surv="XX.X" lcl="XX.X" ucl="XX.X"
    , out   = os_km
  )
- * Uses conftype=loglog and a 90 percent level: only the lower limit of Low Dose changes, 51 to 48.;
+ * Uses conftype=loglog: only the lower limit of Low Dose changes, 51 to 48.;
  %km(
      data     = adttde
    , var      = aval
    , by       = trt01a
    , conftype = loglog
-   , level    = 0.90
-   , out      = ttde_km90
+   , out      = ttde_kmll
+ )
+ * Uses a 90 percent level: on these data the limits of the median stay as at 95 percent.;
+ %km(
+     data  = adttde
+   , var   = aval
+   , by    = trt01a
+   , level = 0.90
+   , out   = ttde_km90
  )
 |
 |-------------------------------------------------------------------------------
@@ -141,7 +148,11 @@
 |                          comment line before it). No number changes.
 | 27-NOV-2026 Sapling      1.10.0: The caption of the third example says what
 |                          changes in its output; Proven in plain words, for the
-|                          published manual. No number changes.
+|                          published manual. stats= points to the table of
+|                          default patterns of the manual. The third example is
+|                          two: conftype=loglog alone, then level=0.90 alone,
+|                          each with a caption true to its output. No number
+|                          changes.
 |
 *******************************************************************************/
 %MACRO km(

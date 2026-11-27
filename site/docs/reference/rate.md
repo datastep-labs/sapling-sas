@@ -38,7 +38,7 @@ Returns the exposure-adjusted incidence rate of each group, with its exact Poiss
 :   The groups: one variable, in `data=` and in `denom=`. *(required)*
 
 `exposure=`
-:   The exposure of a subject: a numeric variable of `denom=`, or an expression of its variables (`exposure = trtdur` / 365.25 gives years). *(required)*
+:   The exposure of a subject: a numeric variable of `denom=`, or an expression of its variables (`exposure = trtdur / 365.25` gives years). *(required)*
 
 `count=`
 :   What the rate counts: subjects (the subjects with a record, each once) or events (every record). *(optional, default `subjects`)*
@@ -51,7 +51,7 @@ Returns the exposure-adjusted incidence rate of each group, with its exact Poiss
 :   The confidence level: a number between 0 and 1 (`level = 0.90`). *(optional, default `0.95`)*
 
 `stats=`
-:   The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, events, exposure, rate, lcl and ucl. When not given: n (events with count=events), exposure, rate, lcl and ucl. A name without a pattern takes its default pattern (n="XX", mean="XX.X", pval="X.XXX" ...; see [%describe](describe.md)). *(optional)*
+:   The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, events, exposure, rate, lcl and ucl. When not given: n (events with count=events), exposure, rate, lcl and ucl. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed). *(optional)*
 
 `label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*

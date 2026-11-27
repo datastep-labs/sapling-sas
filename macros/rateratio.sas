@@ -60,8 +60,8 @@
 |             name with the pattern of its printed number,        ucl="XX.XX" pval="X.XXX"
 |             separated by blanks. The names are irr, lcl, ucl
 |             and pval. A name without a pattern takes its
-|             default pattern (n="XX", mean="XX.X", pval="X.XXX"
-|             ...; see %describe).
+|             default pattern: see the table of default patterns
+|             (How a number is kept and printed).
 | label       The label of the block in the table: a text in      Optional
 |             quotes. A block is the rows of one call in the
 |             table.
@@ -130,8 +130,9 @@
 | 27-NOV-2026 Sapling      1.10.0: The Output says the direction of irr (the
 |                          rate of the group over the rate of VERSUS); the Note
 |                          names the R twin as a separate product; Proven in
-|                          plain words, for the published manual. No number
-|                          changes.
+|                          plain words, for the published manual. stats= points
+|                          to the table of default patterns of the manual. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO rateratio(

@@ -33,7 +33,7 @@ Gives every record of a group the value of the group's baseline record, as a new
 :   The baseline flag: a character variable that is 'Y' on the baseline record. *(optional, default `ABLFL`)*
 
 `replace=`
-:   yes: `data=` has the variable `new=` already; the macro drops it and makes it again. *(optional, default `no`)*
+:   yes: `data=` has the variable `new=` already; the macro drops it and makes it again, with the type and length of `value=`. With no, the values are written into the variable `new=` of `data=` when it has one (its type, length and label stay). *(optional, default `no`)*
 
 `new=`
 :   The name of the new variable, such as base. *(required)*
@@ -48,7 +48,7 @@ The data sets: `data=`, changed in place: the variable `new=` on every record, w
 
 ## Details
 
-The macro does not make the change from baseline: CHG = AVAL - BASE is a DATA step after %baseline (see the how-to guide Derive analysis visits, the baseline and the change from baseline). The baseline record is the one whose `flag=` variable is 'Y'. A group with no baseline record gets a missing value. The rows of `data=` keep their order. When a group has two baseline records, the log has an ERROR line that names the group, and `data=` is not changed.
+The macro does not make the change from baseline: CHG = AVAL - BASE is a DATA step after %baseline (the how-to guide "Derive analysis visits, the baseline and the change from baseline" shows all the steps). The baseline record is the one whose `flag=` variable is 'Y'. A group with no baseline record gets a missing value. The rows of `data=` keep their order. When a group has two baseline records, the log has an ERROR line that names the group, and `data=` is not changed.
 
 ## Examples
 

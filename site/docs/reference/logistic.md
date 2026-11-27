@@ -62,7 +62,7 @@ Returns the odds ratios of pairs of groups from a logistic regression, with thei
 :   The confidence level of the limits: a number between 0 and 1. *(optional, default `0.95`)*
 
 `stats=`
-:   The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are or, lcl, ucl and pval. A name without a pattern takes its default pattern (n="XX", mean="XX.X", pval="X.XXX" ...; see [%describe](describe.md)). *(optional, default `or="XX.XX" lcl="XX.XX" ucl="XX.XX" pval="X.XXX"`)*
+:   The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are or, lcl, ucl and pval. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed). *(optional, default `or="XX.XX" lcl="XX.XX" ucl="XX.XX" pval="X.XXX"`)*
 
 `label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
@@ -164,8 +164,6 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 ## See also
 
 Compare groups with a model: [%lsmeans](lsmeans.md), [%mmrm](mmrm.md), [%risk](risk.md), [%rateratio](rateratio.md).
-
-Named on this page: [%describe](describe.md).
 
 ## Proof
 

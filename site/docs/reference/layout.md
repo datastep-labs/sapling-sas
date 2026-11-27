@@ -35,7 +35,7 @@ Returns the display data set of a table: one row per printed line and one column
 :   The column variable of the results: the same variable as `var=` of [%columns](columns.md). *(required)*
 
 `page=`
-:   A group variable of the results, such as `page = sex`: one page per value, in the order of its numeric twin (SEXN), else of its values. It is no level of the rows; each page starts with its first block, and the header of a column on a page has the N of that page. Give [%columns](columns.md) the same `page=`. It goes into the setup. *(optional)*
+:   A group variable of the results, such as `page = sex`: one page per value, in the order of its numeric twin (SEXN), else of its values. Its values are not rows of the table; each page starts with its first block, and the header of a column on a page has the N of that page. Give [%columns](columns.md) the same `page=`. It goes into the setup. *(optional)*
 
 `format=`
 :   The labels of categories: pairs of a variable and a character format, as in a FORMAT statement (`format = sex $sexf. race $racef.`). A value that the format decodes shows its label. *(optional)*
@@ -118,6 +118,238 @@ When `data=` has no row, the display data set has no row, and [%print](print.md)
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `t14_2_1` (made by the [example of %stack](stack.md#examples)), `t14_2_1_cols` (made by the [example of %columns](columns.md#examples)), `t14_1_1` (made by the [example of %stack](stack.md#examples)), `t14_1_1_cols` (made by the [example of %columns](columns.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
+??? note "Before these examples: the calls that make their inputs"
+
+    Run `examples/setup.sas`, then these examples of other pages ([%tte](tte.md), [%describe](describe.md), [%anova](anova.md), [%freq](freq.md), [%chisq](chisq.md), [%cox](cox.md), [%stack](stack.md), [%columns](columns.md)), in this order. Then the examples of this page run as shown.
+
+    ```sas
+    /* the example of %tte */
+    * Derives the time to the first skin event from the first dose: CNSR 0 is an event, 1 a censoring.;
+    %tte(
+         subjects      = adsl
+       , events        = adae
+       , event         = trtemfl = 'Y' AND aebodsys = 'SKIN AND SUBCUTANEOUS TISSUE DISORDERS'
+       , date          = astdt
+       , start         = trtsdt
+       , censor_date   = trtedt
+       , seq           = aeseq
+       , censor_desc   = "End of treatment"
+       , censor_source = "ADSL"
+       , event_desc    = aedecod
+       , source        = "ADAE"
+       , paramcd       = "TTDE"
+       , out           = adttde
+     )
+    TITLE;
+    FOOTNOTE;
+    /* the example of %describe */
+    * Summarizes age in each group and in the Total: n, mean, SD, median, minimum and maximum.;
+    %describe(
+         data  = adsl
+       , var   = age
+       , by    = trt01a
+       , total = yes
+       , label = "Age (years)"
+       , out   = age_describe
+     )
+    * Uses three BY variables: one row per group, parameter, visit and statistic, with PARAM kept.;
+    %describe(
+         data  = advs
+       , where = (anl01fl = 'Y')
+       , var   = aval
+       , by    = trt01a paramcd avisit
+       , keep  = param avisitn
+       , out   = vs
+     )
+    * Adds the SE, Q1 and Q3 and calls the Total All subjects: the rows keep the order of stats=.;
+    %describe(
+         data  = advs
+       , where = (paramcd = 'WEIGHT' AND ablfl = 'Y')
+       , var   = aval
+       , by    = trt01a
+       , total = "All subjects"
+       , stats = n mean sd se median q1 q3 min="XX.X" max="XX.X"
+       , label = "Weight at baseline (kg)"
+       , out   = wt_describe
+     )
+    * Adds sex as a second BY variable: the rows of each group and sex, for a page per sex.;
+    %describe(
+         data  = adsl
+       , var   = age
+       , by    = trt01a sex
+       , total = yes
+       , label = "Age (years)"
+       , out   = age_sex
+     )
+    TITLE;
+    FOOTNOTE;
+    /* the example of %anova */
+    * Tests age across the three groups: one row, the p value of the F test.;
+    %anova(
+         data  = adsl
+       , var   = age
+       , by    = trt01a
+       , label = "Age (years)"
+       , out   = age_anova
+     )
+    TITLE;
+    FOOTNOTE;
+    /* the example of %freq */
+    * Counts each sex in each group and in the Total: n and the percent of the subjects of the group.;
+    %freq(
+         data  = adsl
+       , var   = sex
+       , by    = trt01a
+       , total = yes
+       , label = "Sex"
+       , out   = sex_freq
+     )
+    * Counts subjects and events of each term under its class: the percent uses the N of denom=.;
+    %freq(
+         data  = adae
+       , denom = adsl
+       , where = (trtemfl = 'Y')
+       , var   = aebodsys aedecod
+       , by    = trt01a
+       , stats = n pct events
+       , out   = teae
+     )
+    * Counts the shift at Week 24 with planned levels: a level without a subject has a row of 0.;
+    %freq(
+         data   = adlb
+       , denom  = adsl
+       , where  = (avisit = 'Week 24')
+       , var    = paramcd bnrind anrind
+       , by     = trt01a
+       , levels = bnrind 'LOW' 'NORMAL' 'HIGH' anrind 'LOW' 'NORMAL' 'HIGH'
+       , out    = shift
+     )
+    * Keeps the terms that reach 5 percent in a group: AEDECODN ranks them, the most subjects first.;
+    %freq(
+         data      = adae
+       , denom     = adsl
+       , where     = (trtemfl = 'Y')
+       , var       = aedecod
+       , by        = trt01a
+       , threshold = 5
+       , order     = frequency
+       , out       = common
+     )
+    * Adds sex as a second BY variable: the age groups of each group and sex, for a page per sex.;
+    %freq(
+         data  = adsl
+       , var   = agegr1
+       , by    = trt01a sex
+       , total = yes
+       , label = "Age group"
+       , out   = agegr_sex
+     )
+    TITLE;
+    FOOTNOTE;
+    /* the example of %chisq */
+    * Tests sex across the groups: one row, the p value of the chi square test.;
+    %chisq(
+         data  = adsl
+       , var   = sex
+       , by    = trt01a
+       , label = "Sex"
+       , out   = sex_chisq
+     )
+    * Runs the exact test of the normal range within each parameter: one p value per parameter.;
+    %chisq(
+         data   = adlb
+       , where  = (avisit = 'Week 24')
+       , var    = anrind
+       , by     = trt01a
+       , within = paramcd
+       , exact  = yes
+       , out    = nr_test
+     )
+    TITLE;
+    FOOTNOTE;
+    /* the example of %cox */
+    * Gives the hazard ratio of each pair, stratified by sex, with its limits and p value.;
+    %cox(
+         data   = adttde
+       , var    = aval
+       , by     = trt01a
+       , strata = sex
+       , order  = trt01an
+       , out    = ttde_hr
+     )
+    * Gives the hazard ratio against Placebo for each sex: the rows carry SEX, for a forest plot.;
+    %cox(
+         data   = adttde
+       , var    = aval
+       , by     = trt01a
+       , within = sex
+       , pairs  = "Xanomeline High Dose" "Placebo"
+                # "Xanomeline Low Dose"  "Placebo"
+       , out    = hr_sex
+     )
+    * Gives the hazard ratio against Placebo for each age group.;
+    %cox(
+         data   = adttde
+       , var    = aval
+       , by     = trt01a
+       , within = agegr1
+       , pairs  = "Xanomeline High Dose" "Placebo"
+                # "Xanomeline Low Dose"  "Placebo"
+       , out    = hr_age
+     )
+    * Uses the Breslow ties, and as p value the log rank test of the two groups of each pair.;
+    %cox(
+         data   = adttde
+       , var    = aval
+       , by     = trt01a
+       , pairs  = "Xanomeline High Dose" "Placebo"
+                # "Xanomeline Low Dose"  "Placebo"
+       , ties   = breslow
+       , pvalue = logrank
+       , out    = ttde_hr_lr
+     )
+    TITLE;
+    FOOTNOTE;
+    /* the example of %stack */
+    * Stacks four results in the order of the table: RESULT and ORD tell where each row came from.;
+    %stack(age_describe age_anova sex_freq sex_chisq, out=t14_2_1)
+    * Stacks the hazard ratios by sex and by age group, for one forest plot.;
+    %stack(hr_sex hr_age, out=hr_sub)
+    * Stacks age and the age groups by sex: the results of a table with a page per sex.;
+    %stack(age_sex agegr_sex, out=t14_1_1)
+    TITLE;
+    FOOTNOTE;
+    /* the example of %columns */
+    * Makes the four columns with their N from adsl, the Total last, in the order of TRT01AN.;
+    %columns(
+         data  = t14_2_1
+       , n     = adsl
+       , var   = trt01a
+       , order = trt01an
+       , total = yes
+       , out   = t14_2_1_cols
+     )
+    * Gives page=sex: one row per column and sex, the N of each column on the page of its sex.;
+    %columns(
+         data  = t14_1_1
+       , n     = adsl
+       , var   = trt01a
+       , order = trt01an
+       , page  = sex
+       , total = yes
+       , out   = t14_1_1_cols
+     )
+    * Leaves out n=: the columns have no N and come in the order of their values, the Total last.;
+    %columns(
+         data  = t14_2_1
+       , var   = trt01a
+       , total = yes
+       , out   = t14_2_1_cols_no_n
+     )
+    TITLE;
+    FOOTNOTE;
+    ```
+
 Makes the display data set: one row per printed line, one column per group, sex by its labels.
 
 ```sas
@@ -183,7 +415,7 @@ Male      4  Min, Max     52, 85       51, 88       56, 86       51, 88       Pl
 Male      5                                                                   Placebo|(N=33)
 ```
 
-Gives label= and rows= to the setup: the print call it keeps labels the last column p value.
+Puts label= and rows= into the setup: the last column is labelled p value, 30 rows a page.
 
 ```sas
 %layout(
@@ -197,6 +429,14 @@ Gives label= and rows= to the setup: the print call it keeps labels the last col
    , setup   = t14_2_1_label_print
    , out     = t14_2_1_label_display
  )
+```
+
+*No output is shown for this call: it makes `t14_2_1_label_print`, `t14_2_1_label_display` for the calls after it.*
+
+Prints the display data set again with the call that the setup keeps.
+
+```sas
+%print(&t14_2_1_label_print.)
 ```
 
 ```text
@@ -218,12 +458,6 @@ Sex
   p-value                                                                         0.251
 ```
 
-Prints the display data set again with the call that the setup keeps.
-
-```sas
-%print(&t14_2_1_label_print.)
-```
-
 Counts the severe events of the subjects under 50: there is none, so the result has no row.
 
 ```sas
@@ -237,12 +471,7 @@ Counts the severe events of the subjects under 50: there is none, so the result 
 )
 ```
 
-```text
-tlf/t_sev50.lst: 3 lines
---------------------------------------
-
-No subject under 50 had a severe event
-```
+*No output is shown for this call: it makes `t_sev50` for the calls after it.*
 
 Gives nodata= for a result with no row: the display data set has no row.
 
@@ -269,6 +498,13 @@ Prints the setup of the empty table: the page has the text of nodata= in place o
 %print(&t_sev50_print.)
 ```
 
+```text
+tlf/t_sev50.lst: 3 lines
+--------------------------------------
+
+No subject under 50 had a severe event
+```
+
 ## Messages
 
 A wrong call writes the message and its fix to the log and stops. The macro also gives the [messages every macro shares](index.md#messages-every-macro-shares).
@@ -283,11 +519,16 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 | &lt;nopage&gt; row(s) of data=&lt;data&gt; are not by page=&lt;page&gt;. | add &lt;page&gt; to by= of its macro, such as by=trt01a &lt;page&gt;. |
 | a result of data=&lt;data&gt; has &lt;deep&gt; groups besides var= (4 at most). | give each result at most 4 groups besides var=. |
 
+The macro also writes these NOTE lines to the log, without stopping:
+
+- `NOTE: [layout] setup=<setup> keeps the print of <out>: <list>`
+- `NOTE: [layout] print it with %print(&<setup>.)`
+
 ## See also
 
 Build a table: [%stack](stack.md), [%columns](columns.md), [%ard](ard.md), [%print](print.md), [%csv](csv.md).
 
-Named on this page: [%table](table.md).
+Named on this page: [%table](table.md), [%tte](tte.md), [%describe](describe.md), [%anova](anova.md), [%freq](freq.md), [%chisq](chisq.md), [%cox](cox.md).
 
 Guides that use %layout: [Tutorial: your first table](../tutorial/index.md), [Make a demographic table with tests](../how-to/demographic-table.md), [Make one page per subgroup](../how-to/page-per-subgroup.md).
 

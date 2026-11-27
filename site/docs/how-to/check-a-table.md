@@ -58,9 +58,9 @@ T_AGE,n,Placebo,,,,,86,86
 
 ### 2. Read the numbers file
 
-Each line of the numbers file holds one number: its result, its statistic, the values of its groups, the number as
-SAS keeps it, written with the format `BEST32.` (`raw`, up to 15 significant digits), and its printed text
-(`formatted`). Read it with a DATA step:
+Each line of the numbers file holds one number: its result, its statistic, the values of its groups, the number
+written with the format `BEST32.` (`raw`: at most 15 significant digits, the last one cut, not rounded; see
+[How a number is kept and printed](../explanation/numbers.md#the-numbers-file)), and its printed text (`formatted`). Read it with a DATA step:
 
 ```sas
 DATA prod;
@@ -179,8 +179,8 @@ Data Set Summary
 
 Dataset             Created          Modified  NVar    NObs
 
-WORK.PROD  27NOV26:12:37:11  27NOV26:12:37:11     9      44
-WORK.QC    27NOV26:12:37:11  27NOV26:12:37:11     5      44
+WORK.PROD  27NOV26:13:12:05  27NOV26:13:12:05     9      44
+WORK.QC    27NOV26:13:12:05  27NOV26:13:12:05     5      44
 
 Variables Summary
 
@@ -213,7 +213,7 @@ Maximum Difference Criterion Value: 1.6592E-15.
 ```
 
 The report says that the two data sets have all 44 numbers in common and that no value differs by more than the
-criterion. 14 values are not exactly equal: the numbers file holds 15 significant digits, and
+criterion. 14 values are not exactly equal: the numbers file holds at most 15 significant digits, with the last one cut, and
 `METHOD=RELATIVE CRITERION=1E-10` accepts a difference in the last digits.
 
 ### 5. Decide from the return code

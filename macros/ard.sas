@@ -11,11 +11,12 @@
 |                 a figure. The numbers file has one line per number: the result
 |                 it comes from, its statistic, the values of its groups, and
 |                 the number as stored and as printed. The number as stored is
-|                 the value as SAS keeps it, written with the format BEST32. (up
-|                 to 15 significant digits); the number as printed is the TEXT
-|                 of the result. It reads the results, never the printed page,
-|                 so that a second program, in SAS or R, can compare its numbers
-|                 with this file.
+|                 the value written with the format BEST32.: at most 15
+|                 significant digits and at most 14 decimals, the digits after
+|                 them cut, not rounded (664/9 is 73.7777777777777); the number
+|                 as printed is the TEXT of the result. It reads the results,
+|                 never the printed page, so that a second program, in SAS or R,
+|                 can compare its numbers with this file.
 |                 - With columns=, the first lines are the N of each column (the
 |                   result N).
 |                 - A number has the values of at most five groups (g1_value to
@@ -43,8 +44,10 @@
 |                 g1_value to g5_value (the values of the group variables in the
 |                 order of GROUPS of the result: the column first, then the
 |                 levels of the row, such as VERSUS of a comparison), raw (the
-|                 value written with BEST32., up to 15 significant digits; blank
-|                 for a missing value) and formatted (the printed text).
+|                 value written with BEST32.: at most 15 significant digits and
+|                 at most 14 decimals, the last digit cut, not rounded, so that
+|                 664/9 is 73.7777777777777; a whole number in full; blank for a
+|                 missing value) and formatted (the printed text).
 |
 | Example:
 |
@@ -75,7 +78,10 @@
 |                          comment line before it). No number changes.
 | 27-NOV-2026 Sapling      1.10.0: The Output names each column of the numbers
 |                          file; Proven in plain words, for the published
-|                          manual. No number changes.
+|                          manual. raw as SAS writes it with BEST32.: at most 15
+|                          significant digits and 14 decimals, the digits after
+|                          cut, not rounded (measured on SAS 9.4 M9). No number
+|                          changes.
 |
 *******************************************************************************/
 %MACRO ard(

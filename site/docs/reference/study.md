@@ -24,10 +24,10 @@ Starts a program: sets the study, the program and the output folder, opens the A
 :   The name of this program, without quotes (`program = t14_2_01`). [%ard](ard.md) names the numbers file after it when its `file=` is not given. *(required)*
 
 `adam=`
-:   The folder of the ADaM data sets: a path without quotes. The macro opens it as the library ADAM, read only. *(optional, default `&spl_root./adam`)*
+:   The folder of the ADaM data sets: a path without quotes. The macro opens it as the library ADAM, read only. SPL_ROOT is the folder of the library (it holds macros/): give `adam=` when the study is in a folder of its own. *(optional, default `&spl_root./adam`)*
 
 `out=`
-:   The output folder: a path without quotes. The macros write into its folders tlf, listings, figures and ard. *(optional, default `&spl_root./out`)*
+:   The output folder: a path without quotes. The macros write into its folders tlf, listings, figures and ard. SPL_ROOT is the folder of the library (it holds macros/): give `out=` when the study is in a folder of its own. *(optional, default `&spl_root./out`)*
 
 ## Result
 
@@ -35,7 +35,17 @@ What it sets: the global macro variables SPL_STUDY, SPL_PROGRAM (in lower case) 
 
 ## Details
 
-Call it once, at the top of each program, before any other macro of the library. The ADaM library ADAM is read only. [%ard](ard.md) names the numbers file after the program when its `file=` is not given. The options are those of the outputs: no date, no page numbers, no centering, a blank for a missing value. The macro also clears the TITLE and FOOTNOTE statements.
+Call it once, at the top of each program, before any other macro of the library. The ADaM library ADAM is read only. [%ard](ard.md) names the numbers file after the program when its `file=` is not given. The macro also clears the TITLE and FOOTNOTE statements. The options, and why each is set:
+
+- NODATE NONUMBER NOCENTER: no date and no page number at the top of a page, and the text starts at the left margin, as the outputs are laid out.
+- LS=160: a line of a listing is 160 characters wide, the width of a landscape table.
+- PS=32767: the longest page SAS has, so that SAS never breaks a part of a listing; [%print](print.md) starts each page itself (rows=).
+- FORMDLIM=' ': a new page of the LISTING output is a blank line, not a form feed.
+- MISSING=' ': a missing number prints as a blank, not as a period.
+- VALIDVARNAME=UPCASE: the names of the variables a program makes are in upper case, as in the ADaM data sets.
+- NOFMTERR: a format that is not found does not stop the program: the value prints with the default format, and the log has only a NOTE. The risk: a code prints in place of its label (F in place of Female); look for the NOTE "Format ... was not found" in the log.
+
+To set an option back, write an OPTIONS statement after the call of %study: OPTIONS FMTERR stops the program again at a format that is not found, OPTIONS CENTER centers the output again.
 
 ## Examples
 
@@ -68,7 +78,7 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 
 Start a program: [%import_xpt](import_xpt.md).
 
-Named on this page: [%ard](ard.md).
+Named on this page: [%ard](ard.md), [%print](print.md).
 
 Guides that use %study: [Use the macros in your own program](../how-to/own-program.md).
 

@@ -1242,7 +1242,7 @@
      "name": "stats",
      "default": "pval=\"X.XXX\"",
      "required": false,
-     "description": "The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are pval, estimate, se, lcl and ucl. A name without a pattern takes its default pattern (n=\"XX\", mean=\"XX.X\", pval=\"X.XXX\" ...; see %describe)."
+     "description": "The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are pval, estimate, se, lcl and ucl. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed)."
     },
     {
      "name": "label",
@@ -1337,10 +1337,10 @@
    "name": "ard",
    "file": "sas/macros/ard.sas",
    "kind": "statistics",
-   "purpose": "Writes every number of a table to a CSV file, the numbers file. Use %csv for the records of a listing or the numbers of a figure. The numbers file has one line per number: the result it comes from, its statistic, the values of its groups, and the number as stored and as printed. The number as stored is the value as SAS keeps it, written with the format BEST32. (up to 15 significant digits); the number as printed is the TEXT of the result. It reads the results, never the printed page, so that a second program, in SAS or R, can compare its numbers with this file.\n- With columns=, the first lines are the N of each column (the result N).\n- A number has the values of at most five groups (g1_value to g5_value), in the order of GROUPS.",
+   "purpose": "Writes every number of a table to a CSV file, the numbers file. Use %csv for the records of a listing or the numbers of a figure. The numbers file has one line per number: the result it comes from, its statistic, the values of its groups, and the number as stored and as printed. The number as stored is the value written with the format BEST32.: at most 15 significant digits and at most 14 decimals, the digits after them cut, not rounded (664/9 is 73.7777777777777); the number as printed is the TEXT of the result. It reads the results, never the printed page, so that a second program, in SAS or R, can compare its numbers with this file.\n- With columns=, the first lines are the N of each column (the result N).\n- A number has the values of at most five groups (g1_value to g5_value), in the order of GROUPS.",
    "procedure": "DATA steps (FILE, PUT)",
    "proven": "The tables of a made-up study: 759 of 759 numbers the same as those of a second program in R; ran on SAS 9.4 M9, 2026-11-12",
-   "output": "FILE: <out>/ard/<file>.csv, where <out> is the output folder that %study set and <file> is in lower case. Its columns: result (the name of the result), stat (the statistic), g1_value to g5_value (the values of the group variables in the order of GROUPS of the result: the column first, then the levels of the row, such as VERSUS of a comparison), raw (the value written with BEST32., up to 15 significant digits; blank for a missing value) and formatted (the printed text).",
+   "output": "FILE: <out>/ard/<file>.csv, where <out> is the output folder that %study set and <file> is in lower case. Its columns: result (the name of the result), stat (the statistic), g1_value to g5_value (the values of the group variables in the order of GROUPS of the result: the column first, then the levels of the row, such as VERSUS of a comparison), raw (the value written with BEST32.: at most 15 significant digits and at most 14 decimals, the last digit cut, not rounded, so that 664/9 is 73.7777777777777; a whole number in full; blank for a missing value) and formatted (the printed text).",
    "des": "Every number of a table as a CSV file, with every digit (DATA steps)",
    "date": "27NOV2026",
    "parameters": [
@@ -1516,7 +1516,7 @@
    "name": "baseline",
    "file": "sas/macros/baseline.sas",
    "kind": "adam",
-   "purpose": "Gives every record of a group the value of the group's baseline record, as a new variable such as BASE. The macro does not make the change from baseline: CHG = AVAL - BASE is a DATA step after %baseline (see the how-to guide Derive analysis visits, the baseline and the change from baseline). The baseline record is the one whose flag= variable is 'Y'. A group with no baseline record gets a missing value. The rows of data= keep their order. When a group has two baseline records, the log has an ERROR line that names the group, and data= is not changed.",
+   "purpose": "Gives every record of a group the value of the group's baseline record, as a new variable such as BASE. The macro does not make the change from baseline: CHG = AVAL - BASE is a DATA step after %baseline (the how-to guide \"Derive analysis visits, the baseline and the change from baseline\" shows all the steps). The baseline record is the one whose flag= variable is 'Y'. A group with no baseline record gets a missing value. The rows of data= keep their order. When a group has two baseline records, the log has an ERROR line that names the group, and data= is not changed.",
    "procedure": "PROC SORT, MERGE",
    "proven": "Checked on its test cases of the baseline value (small made-up records): every value the same as that of the expected records; ran on SAS 9.4 M9, 2026-11-12",
    "output": "DATA: data=, changed in place: the variable new= on every record, with the value of value= on the baseline record of its group. A group with no baseline record gets a missing value.",
@@ -1551,7 +1551,7 @@
      "name": "replace",
      "default": "no",
      "required": false,
-     "description": "yes: data= has the variable new= already; the macro drops it and makes it again"
+     "description": "yes: data= has the variable new= already; the macro drops it and makes it again, with the type and length of value=. With no, the values are written into the variable new= of data= when it has one (its type, length and label stay)."
     },
     {
      "name": "new",
@@ -2040,7 +2040,7 @@
      "name": "stats",
      "default": "hr=\"XX.XX\" lcl=\"XX.XX\" ucl=\"XX.XX\" pval=\"X.XXX\"",
      "required": false,
-     "description": "The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are hr, lcl, ucl and pval. A name without a pattern takes its default pattern (n=\"XX\", mean=\"XX.X\", pval=\"X.XXX\" ...; see %describe)."
+     "description": "The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are hr, lcl, ucl and pval. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed)."
     },
     {
      "name": "label",
@@ -2610,7 +2610,7 @@
      "name": "stats",
      "default": "n=\"XX\" pct=\"(XX.X%)\"",
      "required": false,
-     "description": "The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, pct and events. A name without a pattern takes its default pattern (n=\"XX\", mean=\"XX.X\", pval=\"X.XXX\" ...; see %describe)."
+     "description": "The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, pct and events. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed)."
     },
     {
      "name": "label",
@@ -3103,7 +3103,7 @@
      "name": "stats",
      "default": "n=\"XX\" events=\"XX\" median=\"XX.X\" lcl=\"XX.X\" ucl=\"XX.X\"",
      "required": false,
-     "description": "The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, events, median, lcl, ucl and, with time=, surv. A name without a pattern takes its default pattern (n=\"XX\", mean=\"XX.X\", pval=\"X.XXX\" ...; see %describe)."
+     "description": "The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, events, median, lcl, ucl and, with time=, surv. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed)."
     },
     {
      "name": "label",
@@ -3124,7 +3124,7 @@
      "description": "yes: keep the work data sets _km_*"
     }
    ],
-   "example": "* Gives n, events, the median and its limits of each group: NE is a median not reached.;\n%km(\n     data  = adttde\n   , var   = aval\n   , by    = trt01a\n   , label = \"Time to the first skin event (days)\"\n   , out   = ttde_km\n )\n* Gives the percent of subjects alive at day 182 and its limits, with the patterns of stats=.;\n%km(\n     data  = adtte\n   , where = (paramcd = 'OS')\n   , var   = aval\n   , by    = trt01p\n   , time  = 182\n   , stats = n=\"XX\" events=\"XX\" surv=\"XX.X\" lcl=\"XX.X\" ucl=\"XX.X\"\n   , out   = os_km\n )\n* Uses conftype=loglog and a 90 percent level: only the lower limit of Low Dose changes, 51 to 48.;\n%km(\n     data     = adttde\n   , var      = aval\n   , by       = trt01a\n   , conftype = loglog\n   , level    = 0.90\n   , out      = ttde_km90\n )",
+   "example": "* Gives n, events, the median and its limits of each group: NE is a median not reached.;\n%km(\n     data  = adttde\n   , var   = aval\n   , by    = trt01a\n   , label = \"Time to the first skin event (days)\"\n   , out   = ttde_km\n )\n* Gives the percent of subjects alive at day 182 and its limits, with the patterns of stats=.;\n%km(\n     data  = adtte\n   , where = (paramcd = 'OS')\n   , var   = aval\n   , by    = trt01p\n   , time  = 182\n   , stats = n=\"XX\" events=\"XX\" surv=\"XX.X\" lcl=\"XX.X\" ucl=\"XX.X\"\n   , out   = os_km\n )\n* Uses conftype=loglog: only the lower limit of Low Dose changes, 51 to 48.;\n%km(\n     data     = adttde\n   , var      = aval\n   , by       = trt01a\n   , conftype = loglog\n   , out      = ttde_kmll\n )\n* Uses a 90 percent level: on these data the limits of the median stay as at 95 percent.;\n%km(\n     data  = adttde\n   , var   = aval\n   , by    = trt01a\n   , level = 0.90\n   , out   = ttde_km90\n )",
    "outputs": [
     "examples/km.txt"
    ]
@@ -3187,7 +3187,7 @@
      "name": "by",
      "default": "",
      "required": true,
-     "description": "The groups: one variable, one curve per group"
+     "description": "The groups: one variable, one curve per group. Required unless par= gives it."
     },
     {
      "name": "panel",
@@ -3247,7 +3247,7 @@
      "name": "file",
      "default": "",
      "required": true,
-     "description": "The output file without its extension: the macro writes <file>.png (300 dpi) and <file>.rtf"
+     "description": "The output file without its extension: the macro writes <file>.png (300 dpi) and <file>.rtf. Required unless par= gives it."
     },
     {
      "name": "width",
@@ -3319,7 +3319,7 @@
      "name": "page",
      "default": "",
      "required": false,
-     "description": "A group variable of the results, such as page = sex: one page per value, in the order of its numeric twin (SEXN), else of its values. It is no level of the rows; each page starts with its first block, and the header of a column on a page has the N of that page. Give %columns the same page=. It goes into the setup."
+     "description": "A group variable of the results, such as page = sex: one page per value, in the order of its numeric twin (SEXN), else of its values. Its values are not rows of the table; each page starts with its first block, and the header of a column on a page has the N of that page. Give %columns the same page=. It goes into the setup."
     },
     {
      "name": "format",
@@ -3370,7 +3370,7 @@
      "description": "yes: keep the work data sets _layout_*"
     }
    ],
-   "example": "* Makes the display data set: one row per printed line, one column per group, sex by its labels.;\n%layout(\n     data    = t14_2_1\n   , columns = t14_2_1_cols\n   , var     = trt01a\n   , format  = sex $sexf.\n   , file    = &spl_out./tlf/t14_2_1\n   , setup   = t14_2_1_print\n   , out     = t14_2_1_display\n )\n* Makes one page per sex: SEX and HEAD_C1 to HEAD_C4 hold the page and the N of each column on it.;\n%layout(\n     data    = t14_1_1\n   , columns = t14_1_1_cols\n   , var     = trt01a\n   , page    = sex\n   , format  = sex $sexf.\n   , file    = &spl_out./tlf/t14_1_1\n   , setup   = t14_1_1_print\n   , out     = t14_1_1_display\n )\n* Gives label= and rows= to the setup: the print call it keeps labels the last column p value.;\n%layout(\n     data    = t14_2_1\n   , columns = t14_2_1_cols\n   , var     = trt01a\n   , format  = sex $sexf.\n   , label   = c99=\"p-value\"\n   , rows    = 30\n   , file    = &spl_out./tlf/t14_2_1_label\n   , setup   = t14_2_1_label_print\n   , out     = t14_2_1_label_display\n )\n* Prints the display data set again with the call that the setup keeps.;\n%print(&t14_2_1_label_print.)\n* Counts the severe events of the subjects under 50: there is none, so the result has no row.;\n%freq(\n    data  = adae\n  , denom = adsl\n  , where = (aesev = 'SEVERE' AND age < 50)\n  , var   = aedecod\n  , by    = trt01a\n  , out   = t_sev50\n)\n* Gives nodata= for a result with no row: the display data set has no row.;\n%layout(\n     data    = t_sev50\n   , columns = t14_2_1_cols\n   , var     = trt01a\n   , file    = &spl_out./tlf/t_sev50\n   , nodata  = No subject under 50 had a severe event\n   , setup   = t_sev50_print\n   , out     = t_sev50_display\n )\n* Prints the setup of the empty table: the page has the text of nodata= in place of the rows.;\n%print(&t_sev50_print.)",
+   "example": "* Makes the display data set: one row per printed line, one column per group, sex by its labels.;\n%layout(\n     data    = t14_2_1\n   , columns = t14_2_1_cols\n   , var     = trt01a\n   , format  = sex $sexf.\n   , file    = &spl_out./tlf/t14_2_1\n   , setup   = t14_2_1_print\n   , out     = t14_2_1_display\n )\n* Makes one page per sex: SEX and HEAD_C1 to HEAD_C4 hold the page and the N of each column on it.;\n%layout(\n     data    = t14_1_1\n   , columns = t14_1_1_cols\n   , var     = trt01a\n   , page    = sex\n   , format  = sex $sexf.\n   , file    = &spl_out./tlf/t14_1_1\n   , setup   = t14_1_1_print\n   , out     = t14_1_1_display\n )\n* Puts label= and rows= into the setup: the last column is labelled p value, 30 rows a page.;\n%layout(\n     data    = t14_2_1\n   , columns = t14_2_1_cols\n   , var     = trt01a\n   , format  = sex $sexf.\n   , label   = c99=\"p-value\"\n   , rows    = 30\n   , file    = &spl_out./tlf/t14_2_1_label\n   , setup   = t14_2_1_label_print\n   , out     = t14_2_1_label_display\n )\n* Prints the display data set again with the call that the setup keeps.;\n%print(&t14_2_1_label_print.)\n* Counts the severe events of the subjects under 50: there is none, so the result has no row.;\n%freq(\n    data  = adae\n  , denom = adsl\n  , where = (aesev = 'SEVERE' AND age < 50)\n  , var   = aedecod\n  , by    = trt01a\n  , out   = t_sev50\n)\n* Gives nodata= for a result with no row: the display data set has no row.;\n%layout(\n     data    = t_sev50\n   , columns = t14_2_1_cols\n   , var     = trt01a\n   , file    = &spl_out./tlf/t_sev50\n   , nodata  = No subject under 50 had a severe event\n   , setup   = t_sev50_print\n   , out     = t_sev50_display\n )\n* Prints the setup of the empty table: the page has the text of nodata= in place of the rows.;\n%print(&t_sev50_print.)",
    "outputs": [
     "examples/layout.txt"
    ]
@@ -3672,7 +3672,7 @@
      "name": "stats",
      "default": "or=\"XX.XX\" lcl=\"XX.XX\" ucl=\"XX.XX\" pval=\"X.XXX\"",
      "required": false,
-     "description": "The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are or, lcl, ucl and pval. A name without a pattern takes its default pattern (n=\"XX\", mean=\"XX.X\", pval=\"X.XXX\" ...; see %describe)."
+     "description": "The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are or, lcl, ucl and pval. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed)."
     },
     {
      "name": "label",
@@ -3850,7 +3850,7 @@
      "name": "stats",
      "default": "diff=\"XX.X\" diff_se=\"XX.XX\" lcl=\"XX.X\" ucl=\"XX.X\" pval=\"X.XXX\"",
      "required": false,
-     "description": "The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are diff, diff_se, lcl, ucl, pval, lsmean, lsmean_se, lsmean_lcl and lsmean_ucl. A name without a pattern takes its default pattern (n=\"XX\", mean=\"XX.X\", pval=\"X.XXX\" ...; see %describe)."
+     "description": "The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are diff, diff_se, lcl, ucl, pval, lsmean, lsmean_se, lsmean_lcl and lsmean_ucl. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed)."
     },
     {
      "name": "label",
@@ -4191,7 +4191,7 @@
      "name": "stats",
      "default": "diff=\"XX.X\" diff_se=\"XX.XX\" lcl=\"XX.X\" ucl=\"XX.X\" pval=\"X.XXX\"",
      "required": false,
-     "description": "The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are diff, diff_se, lcl, ucl, pval, lsmean and lsmean_se. A name without a pattern takes its default pattern (n=\"XX\", mean=\"XX.X\", pval=\"X.XXX\" ...; see %describe)."
+     "description": "The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are diff, diff_se, lcl, ucl, pval, lsmean and lsmean_se. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed)."
     },
     {
      "name": "label",
@@ -4490,7 +4490,7 @@
      "description": "yes: keep the work data sets _print_*"
     }
    ],
-   "example": "* Prints the display data set as RTF and as a listing: the rows of one block stay on one page.;\n%print(\n     data     = t14_2_1_display\n   , by       = row\n   , var      = c:\n   , together = grp\n   , label    = %STR(row=\" \")\n   , file     = &spl_out./tlf/t14_2_1\n )\n* Prints a listing: USUBJID is the left column, shown once for each subject.;\n%print(\n     data = adae\n   , by   = usubjid\n   , var  = trt01a aedecod astdt aesev\n   , file = &spl_out./listings/l14_5_1\n )\n* Prints one page per sex: the N of each column is that of the page, and the title names the sex.;\nOPTIONS NOBYLINE;\nTITLE1 \"Table 14.1.1 Demographic characteristics by sex\";\nTITLE2 \"Sex: #BYVAL1\";\n%print(\n     data     = t14_1_1_display\n   , by       = row\n   , var      = c:\n   , page     = sex\n   , together = grp\n   , label    = %STR(row=\" \")\n   , file     = &spl_out./tlf/t14_1_1_page\n )\nOPTIONS BYLINE;",
+   "example": "* Prints the display data set as RTF and as a listing: the rows of one block stay on one page.;\n%print(\n     data     = t14_2_1_display\n   , by       = row\n   , var      = c:\n   , together = grp\n   , label    = %STR(row=\" \")\n   , file     = &spl_out./tlf/t14_2_1\n )\n* Sorts the events by subject and start date: a listing shows its records in their order.;\nPROC SORT DATA=adae OUT=ae_listing; BY usubjid astdt aedecod; RUN;\n* Prints the listing: USUBJID is the left column, shown once for each subject.;\n%print(\n     data = ae_listing\n   , by   = usubjid\n   , var  = trt01a aedecod astdt aesev\n   , file = &spl_out./listings/l14_5_1\n )\n* Prints one page per sex: the N of each column is that of the page, and the title names the sex.;\nOPTIONS NOBYLINE;\nTITLE1 \"Table 14.1.1 Demographic characteristics by sex\";\nTITLE2 \"Sex: #BYVAL1\";\n%print(\n     data     = t14_1_1_display\n   , by       = row\n   , var      = c:\n   , page     = sex\n   , together = grp\n   , label    = %STR(row=\" \")\n   , file     = &spl_out./tlf/t14_1_1_page\n )\nOPTIONS BYLINE;",
    "outputs": [
     "examples/print.txt"
    ]
@@ -4702,7 +4702,7 @@
      "name": "stats",
      "default": "n=\"XX\" pct=\"(XX.X%)\" lcl=\"XX.X\" ucl=\"XX.X\"",
      "required": false,
-     "description": "The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, pct, lcl and ucl. A name without a pattern takes its default pattern (n=\"XX\", mean=\"XX.X\", pval=\"X.XXX\" ...; see %describe)."
+     "description": "The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, pct, lcl and ucl. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed)."
     },
     {
      "name": "label",
@@ -4791,7 +4791,7 @@
      "name": "stats",
      "default": "",
      "required": false,
-     "description": "The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, events, exposure, rate, lcl and ucl. When not given: n (events with count=events), exposure, rate, lcl and ucl. A name without a pattern takes its default pattern (n=\"XX\", mean=\"XX.X\", pval=\"X.XXX\" ...; see %describe)."
+     "description": "The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, events, exposure, rate, lcl and ucl. When not given: n (events with count=events), exposure, rate, lcl and ucl. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed)."
     },
     {
      "name": "label",
@@ -4905,7 +4905,7 @@
      "name": "stats",
      "default": "irr=\"XX.XX\" lcl=\"XX.XX\" ucl=\"XX.XX\" pval=\"X.XXX\"",
      "required": false,
-     "description": "The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are irr, lcl, ucl and pval. A name without a pattern takes its default pattern (n=\"XX\", mean=\"XX.X\", pval=\"X.XXX\" ...; see %describe)."
+     "description": "The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are irr, lcl, ucl and pval. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed)."
     },
     {
      "name": "label",
@@ -5101,7 +5101,7 @@
      "name": "ci",
      "default": "wald",
      "required": false,
-     "description": "The interval of a risk difference: wald, newcombe, miettinen-nurminen (CL=MN) or agresti-caffo (CL=AC). With strata= the interval is always mh."
+     "description": "The interval of a risk difference: wald, newcombe, miettinen-nurminen (CL=MN), agresti-caffo (CL=AC) or mh, the interval of Mantel and Haenszel, which needs strata=; with strata= the interval is always mh, whatever ci= says"
     },
     {
      "name": "level",
@@ -5113,7 +5113,7 @@
      "name": "stats",
      "default": "",
      "required": false,
-     "description": "The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. When not given: rd=\"X.XXX\" lcl=\"X.XXX\" ucl=\"X.XXX\" pval=\"X.XXX\"; for measure=rr or or, rr=\"XX.XX\" or or=\"XX.XX\" with lcl=\"XX.XX\" ucl=\"XX.XX\" pval=\"X.XXX\". A name without a pattern takes its default pattern (n=\"XX\", mean=\"XX.X\", pval=\"X.XXX\" ...; see %describe)."
+     "description": "The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. When not given: rd=\"X.XXX\" lcl=\"X.XXX\" ucl=\"X.XXX\" pval=\"X.XXX\"; for measure=rr or or, rr=\"XX.XX\" or or=\"XX.XX\" with lcl=\"XX.XX\" ucl=\"XX.XX\" pval=\"X.XXX\". A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed)."
     },
     {
      "name": "label",
@@ -5310,7 +5310,7 @@
    "name": "study",
    "file": "sas/macros/study.sas",
    "kind": "setup",
-   "purpose": "Starts a program: sets the study, the program and the output folder, opens the ADaM library, sets the options. Call it once, at the top of each program, before any other macro of the library. The ADaM library ADAM is read only. %ard names the numbers file after the program when its file= is not given. The options are those of the outputs: no date, no page numbers, no centering, a blank for a missing value. The macro also clears the TITLE and FOOTNOTE statements.",
+   "purpose": "Starts a program: sets the study, the program and the output folder, opens the ADaM library, sets the options. Call it once, at the top of each program, before any other macro of the library. The ADaM library ADAM is read only. %ard names the numbers file after the program when its file= is not given. The macro also clears the TITLE and FOOTNOTE statements. The options, and why each is set:\n- NODATE NONUMBER NOCENTER: no date and no page number at the top of a page, and the text starts at the left margin, as the outputs are laid out.\n- LS=160: a line of a listing is 160 characters wide, the width of a landscape table.\n- PS=32767: the longest page SAS has, so that SAS never breaks a part of a listing; %print starts each page itself (rows=).\n- FORMDLIM=' ': a new page of the LISTING output is a blank line, not a form feed.\n- MISSING=' ': a missing number prints as a blank, not as a period.\n- VALIDVARNAME=UPCASE: the names of the variables a program makes are in upper case, as in the ADaM data sets.\n- NOFMTERR: a format that is not found does not stop the program: the value prints with the default format, and the log has only a NOTE. The risk: a code prints in place of its label (F in place of Female); look for the NOTE \"Format ... was not found\" in the log.\nTo set an option back, write an OPTIONS statement after the call of %study: OPTIONS FMTERR stops the program again at a format that is not found, OPTIONS CENTER centers the output again.",
    "procedure": "LIBNAME, OPTIONS",
    "proven": "Every program of a made-up study: each ran with a clean log, and 570 of 570 numbers the same as those of a second program in R; ran on SAS 9.4 M9, 2026-11-12",
    "output": "CODE: the global macro variables SPL_STUDY, SPL_PROGRAM (in lower case) and SPL_OUT; the library ADAM (read only); the options NODATE NONUMBER NOCENTER LS=160 PS=32767 MISSING=' ' VALIDVARNAME=upcase NOFMTERR FORMDLIM=' '; no TITLE and no FOOTNOTE.",
@@ -5333,13 +5333,13 @@
      "name": "adam",
      "default": "&spl_root./adam",
      "required": false,
-     "description": "The folder of the ADaM data sets: a path without quotes. The macro opens it as the library ADAM, read only."
+     "description": "The folder of the ADaM data sets: a path without quotes. The macro opens it as the library ADAM, read only. SPL_ROOT is the folder of the library (it holds macros/): give adam= when the study is in a folder of its own."
     },
     {
      "name": "out",
      "default": "&spl_root./out",
      "required": false,
-     "description": "The output folder: a path without quotes. The macros write into its folders tlf, listings, figures and ard."
+     "description": "The output folder: a path without quotes. The macros write into its folders tlf, listings, figures and ard. SPL_ROOT is the folder of the library (it holds macros/): give out= when the study is in a folder of its own."
     }
    ],
    "example": "* Starts the program of the examples: it sets SPL_STUDY, SPL_PROGRAM and SPL_OUT and opens ADAM.;\n%study(\n     CDISCPILOT01\n   , program = examples\n   , adam    = &spl_root./examples/adam\n   , out     = &spl_root./examples/out\n )",
@@ -5760,7 +5760,7 @@
      "name": "model",
      "default": "",
      "required": false,
-     "description": "The fixed effects of the MMRM, separated by blanks. When not given: the covariates, the by= variable, the visit= variable and the interaction of the two (such as trt01p*avisit)."
+     "description": "The fixed effects of the MMRM, separated by blanks. When not given: the covariates, the by= variable, the visit= variable and the interaction of the two (such as trt01p*avisit). This default has no interaction of a covariate with the visit, such as base*avisit: give model= to add one."
     },
     {
      "name": "type",
@@ -5835,7 +5835,7 @@
      "description": "yes: keep the work data sets of the macros that the long program calls"
     }
    ],
-   "example": "* Makes the ANCOVA table at Week 12: three descriptive blocks, then the LS means and difference.;\n%table_model(\n     data     = advs\n   , adsl     = adsl\n   , where    = (paramcd = 'SYSBP' AND anl01fl = 'Y' AND avisitn < 99)\n   , covars   = base\n   , by       = trt01p\n   , at       = \"Week 12\"\n   , order    = trt01pn\n   , describe = base aval chg\n   , pairs    = \"Xanomeline High Dose\" \"Placebo\"\n   , title    = \"Table 14.3.1 ANCOVA of the change of systolic blood pressure at Week 12\"\n   , file     = &spl_out./tlf/t14_3_1\n )\n* Uses method=mmrm on five visits: the LS means and the differences at Week 24.;\n%table_model(\n     data     = advs\n   , adsl     = adsl\n   , where    = (paramcd = 'SYSBP' AND anl01fl = 'Y' AND avisitn IN (4 8 12 16 24))\n   , covars   = base\n   , visit    = avisit\n   , by       = trt01p\n   , at       = \"Week 24\"\n   , order    = trt01pn\n   , method   = mmrm\n   , type     = un\n   , fallback = toep\n   , title    = \"Table 14.3.3 MMRM of the change of systolic blood pressure at Week 24\"\n   , file     = &spl_out./tlf/t14_3_3\n )",
+   "example": "* Makes the ANCOVA table at Week 12: three descriptive blocks, then the LS means and difference.;\n%table_model(\n     data     = advs\n   , adsl     = adsl\n   , where    = (paramcd = 'SYSBP' AND anl01fl = 'Y' AND avisitn < 99)\n   , covars   = base\n   , by       = trt01p\n   , at       = \"Week 12\"\n   , order    = trt01pn\n   , describe = base aval chg\n   , pairs    = \"Xanomeline High Dose\" \"Placebo\"\n   , title    = \"Table 14.3.1 ANCOVA of the change of systolic blood pressure at Week 12\"\n   , file     = &spl_out./tlf/t14_3_1\n )\n* Uses method=mmrm with the model of the mmrm example: the same differences at Week 24.;\n%table_model(\n     data     = advs\n   , adsl     = adsl\n   , where    = (paramcd = 'SYSBP' AND anl01fl = 'Y' AND avisitn IN (4 8 12 16 24))\n   , covars   = base\n   , visit    = avisit\n   , by       = trt01p\n   , at       = \"Week 24\"\n   , order    = trt01pn\n   , method   = mmrm\n   , model    = base trt01p avisit trt01p*avisit base*avisit\n   , type     = un\n   , fallback = toep\n   , title    = \"Table 14.3.3 MMRM of the change of systolic blood pressure at Week 24\"\n   , file     = &spl_out./tlf/t14_3_3\n )",
    "outputs": [
     "examples/table_model.txt"
    ]
@@ -6576,10 +6576,10 @@
    "name": "tte",
    "file": "sas/macros/tte.sas",
    "kind": "adam",
-   "purpose": "Returns one time-to-event parameter: for each subject the date of the first event, or else of the latest censoring. It writes the records of an ADTTE parameter; %km, %logrank and %cox then analyse them. The rule:\n- An event is a record of events= that meets event= and has a date. The first event of a subject is taken; priority= orders the events of one date.\n- When a subject has no event, the latest censoring is taken: the latest date of censors= (or of subjects=); on one date, the last record.\n- AVAL is ADT - START + 1, in days.\nWithout end=, every date counts, and a date before START becomes START (as admiral does). A subject with no event and no censoring gets no record. With end=, the at-risk period runs from START to END: only the events and censorings in it count, and a subject with neither is censored at END. An event on the start day counts unless time= and start_time= are both there and the event time is before the start time.",
+   "purpose": "Returns one time-to-event parameter: for each subject the date of the first event, or else of the latest censoring. It writes the records of an ADTTE parameter; %km, %logrank and %cox then analyse them. The rule:\n- An event is a record of events= that meets event= and has a date. The first event of a subject is taken; priority= orders the events of one date.\n- When a subject has no event, the latest censoring is taken: the latest date of censors= (or of subjects=); on one date, the last record.\n- AVAL is ADT - START + 1, in days.\nWithout end=, every date counts, and a date before START becomes START (as admiral does). A subject with no event and no censoring date gets no record, and the log has a NOTE with the number of such subjects. With end=, the at-risk period runs from START to END: only the events and censorings in it count, and a subject with neither is censored at END. An event on the start day counts unless time= and start_time= are both there and the event time is before the start time.",
    "procedure": "PROC SORT, MERGE",
    "proven": "Checked on its test cases of the time to an event, also within a period (small made-up records): every value the same as that of the expected records; ran on SAS 9.4 M9, 2026-11-12",
-   "output": "OUT: one record per subject with an event, a censoring or (with end=) a period, in the order of subjects=: the variables of subjects=, PARAMCD, ADT, CNSR, AVAL, ATM (with time=), EVNTDESC, SRCDOM, SRCVAR, SRCSEQ, ADTF and ATMF (when their parameters are given) and the variables of keep=. With end=, a subject with no START or no END gets no record and a WARNING that names it; a subject whose START is after its END gets no record. Two records of a subject in subjects= give an ERROR line.",
+   "output": "OUT: one record per subject with an event, a censoring or (with end=) a period, in the order of subjects=: the variables of subjects=, PARAMCD, ADT, CNSR, AVAL, ATM (with time=), EVNTDESC, SRCDOM, SRCVAR, SRCSEQ, ADTF and ATMF (when their parameters are given) and the variables of keep=. With end=, a subject with no START or no END gets no record and a WARNING that names it; a subject whose START is after its END gets no record. Two records of a subject in subjects= give an ERROR line. Without end=, a subject with no event and no censoring date gets no record, and a NOTE gives their number.",
    "des": "One time-to-event parameter: the first event, else the latest censoring (PROC SORT)",
    "date": "27NOV2026",
    "parameters": [
@@ -6802,7 +6802,7 @@
      "name": "stats",
      "default": "diff=\"XX.X\" diff_se=\"XX.XX\" lcl=\"XX.X\" ucl=\"XX.X\" pval=\"X.XXX\"",
      "required": false,
-     "description": "The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are diff, diff_se, lcl, ucl and pval. A name without a pattern takes its default pattern (n=\"XX\", mean=\"XX.X\", pval=\"X.XXX\" ...; see %describe)."
+     "description": "The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are diff, diff_se, lcl, ucl and pval. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed)."
     },
     {
      "name": "label",
@@ -6920,7 +6920,7 @@
      "name": "stats",
      "default": "estimate=\"XX.XX\" lcl=\"XX.XX\" ucl=\"XX.XX\" pval=\"X.XXX\"",
      "required": false,
-     "description": "The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are estimate, lcl, ucl and pval. A name without a pattern takes its default pattern (n=\"XX\", mean=\"XX.X\", pval=\"X.XXX\" ...; see %describe)."
+     "description": "The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are estimate, lcl, ucl and pval. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed)."
     },
     {
      "name": "label",

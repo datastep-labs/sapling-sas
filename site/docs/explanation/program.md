@@ -62,7 +62,7 @@ Each step writes a data set that a person can open. A programmer who checks a ta
 | a statistics macro | its result | the numbers of one block |
 | `%stack` | the stacked results | the order of the blocks |
 | `%columns` | the columns data set | the column order and each N |
-| `%ard` | the numbers file | every number as SAS keeps it (`BEST32.`) and as printed |
+| `%ard` | the numbers file | every number written with `BEST32.` (15 significant digits) and as printed |
 | `%layout` | the display data set | each printed line, before it is printed |
 
 A change in one step is made in one place. For example, a sponsor who wants another row label changes the display

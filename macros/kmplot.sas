@@ -62,7 +62,8 @@
 |             (the ADaM CNSR: 1, 2 ... name the reason). A
 |             missing or negative value on a record used stops
 |             the macro with an ERROR.
-| by          The groups: one variable, one curve per group       Required
+| by          The groups: one variable, one curve per group.      Required
+|             Required unless par= gives it.
 | panel       A variable: one panel per value (panel = sex)       Optional
 | atrisk      yes: show the number at risk under the axis         yes
 | times       The ticks of the x axis and the times of the        Optional
@@ -84,7 +85,8 @@
 | ref         Reference lines on the y axis: one value or         Optional
 |             several, separated by blanks (ref = 0 50)
 | file        The output file without its extension: the macro    Required
-|             writes <file>.png (300 dpi) and <file>.rtf
+|             writes <file>.png (300 dpi) and <file>.rtf.
+|             Required unless par= gives it.
 | width       The width of the figure: a length with its unit     6.5in
 |             (width = 9in)
 | height      The height of the figure: a length with its unit    4.5in
@@ -170,7 +172,8 @@
 |                          second call draws the figure again from them (plot=,
 |                          par=). No number changes.
 | 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
-|                          manual. No number changes.
+|                          manual. by= and file= are required unless par= gives
+|                          them, as the code checks. No number changes.
 |
 *******************************************************************************/
 %MACRO kmplot(

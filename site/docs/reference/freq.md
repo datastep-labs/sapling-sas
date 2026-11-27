@@ -66,7 +66,7 @@ Counts the subjects in each category and group, with their percent of the subjec
 :   The group whose subjects rank the rows for order=frequency: a value of the first BY variable, in quotes (`orderby = "Placebo"`). When not given, all groups together, without the Total. *(optional)*
 
 `stats=`
-:   The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, pct and events. A name without a pattern takes its default pattern (n="XX", mean="XX.X", pval="X.XXX" ...; see [%describe](describe.md)). *(optional, default `n="XX" pct="(XX.X%)"`)*
+:   The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, pct and events. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed). *(optional, default `n="XX" pct="(XX.X%)"`)*
 
 `label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
@@ -267,6 +267,10 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 |---|---|
 | total= needs a character group first in by= (&lt;first&gt; is numeric) | give by= a character group first (TRT01A), or total=no. |
 | levels= names the variable &lt;w&gt;, and var=&lt;var&gt; does not have it. | give levels= variables of var= only, or add &lt;w&gt; to var=. |
+
+The macro also writes these NOTE lines to the log, without stopping:
+
+- `NOTE: [freq] No data qualified: no record meets where= and the conditions of the macro.`
 
 ## See also
 

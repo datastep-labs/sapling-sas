@@ -57,8 +57,8 @@
 |             name with the pattern of its printed number,        ucl="XX.XX" pval="X.XXX"
 |             separated by blanks. The names are or, lcl, ucl
 |             and pval. A name without a pattern takes its
-|             default pattern (n="XX", mean="XX.X", pval="X.XXX"
-|             ...; see %describe).
+|             default pattern: see the table of default patterns
+|             (How a number is kept and printed).
 | label       The label of the block in the table: a text in      Optional
 |             quotes. A block is the rows of one call in the
 |             table.
@@ -137,8 +137,9 @@
 |                          comment line before it). No number changes.
 | 27-NOV-2026 Sapling      1.10.0: The Output says the direction of or (the odds
 |                          of the group over the odds of VERSUS); Proven in
-|                          plain words, for the published manual. No number
-|                          changes.
+|                          plain words, for the published manual. stats= points
+|                          to the table of default patterns of the manual. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO logistic(

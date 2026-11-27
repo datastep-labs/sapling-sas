@@ -24,8 +24,8 @@ long program
     block.
 
 numbers file
-:   The CSV file `%ard` writes: every number of a table as SAS keeps it, written with the format `BEST32.` (up to 15
-    significant digits), and its printed text.
+:   The CSV file `%ard` writes: every number of a table, written with the format `BEST32.` (at most 15
+    significant digits, the last one cut, not rounded), and its printed text.
 
 output folder
 :   The folder where tables, figures and numbers files go. `%study` sets it; a program calls it `&spl_out.`.
@@ -47,4 +47,7 @@ setup
 
 twin
 :   The numeric variable that gives the order of a character variable: `TRT01AN` is the twin of `TRT01A`. Macros sort
-    columns and rows by the twin (`order=`).
+    columns by the twin (`order=` of `%columns`, `%table` and the one-call tables), and the groups of a comparison
+    (`order=` of `%lsmeans`, `%cox` ...). `order=` of `%freq` is not a twin: `order = frequency` ranks the rows by
+    their subjects and writes the rank into the twin of the variable. See
+    [How the parameters are named](explanation/conventions.md).

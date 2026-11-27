@@ -78,8 +78,8 @@
 |             name with its pattern of the printed number,        ucl="XX.XX" pval="X.XXX"
 |             separated by blanks. The names are hr, lcl, ucl
 |             and pval. A name without a pattern takes its
-|             default pattern (n="XX", mean="XX.X", pval="X.XXX"
-|             ...; see %describe).
+|             default pattern: see the table of default patterns
+|             (How a number is kept and printed).
 | label       The label of the block in the table: a text in      Optional
 |             quotes. A block is the rows of one call in the
 |             table.
@@ -185,8 +185,9 @@
 |                          hazard of the group over that of VERSUS); the caption
 |                          of the fourth example names the log rank test of the
 |                          two groups of each pair (PROC LIFETEST); Proven in
-|                          plain words, for the published manual. No number
-|                          changes.
+|                          plain words, for the published manual. stats= points
+|                          to the table of default patterns of the manual. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO cox(

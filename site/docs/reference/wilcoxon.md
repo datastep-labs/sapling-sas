@@ -51,7 +51,7 @@ Returns the p-value of the Wilcoxon rank-sum test of each pair of groups, with t
 :   The confidence level: a number between 0 and 1 (`level = 0.90`). *(optional, default `0.95`)*
 
 `stats=`
-:   The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are estimate, lcl, ucl and pval. A name without a pattern takes its default pattern (n="XX", mean="XX.X", pval="X.XXX" ...; see [%describe](describe.md)). *(optional, default `estimate="XX.XX" lcl="XX.XX" ucl="XX.XX" pval="X.XXX"`)*
+:   The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are estimate, lcl, ucl and pval. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed). *(optional, default `estimate="XX.XX" lcl="XX.XX" ucl="XX.XX" pval="X.XXX"`)*
 
 `label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
@@ -145,8 +145,6 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 ## See also
 
 Test the groups: [%anova](anova.md), [%ttest](ttest.md), [%chisq](chisq.md), [%fisher](fisher.md), [%cmh](cmh.md), [%ancova](ancova.md), [%adjust](adjust.md).
-
-Named on this page: [%describe](describe.md).
 
 ## Proof
 

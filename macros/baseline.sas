@@ -9,13 +9,13 @@
 | Macro Purpose : Gives every record of a group the value of the group's
 |                 baseline record, as a new variable such as BASE. The macro
 |                 does not make the change from baseline: CHG = AVAL - BASE is a
-|                 DATA step after %baseline (see the how-to guide Derive
-|                 analysis visits, the baseline and the change from baseline).
-|                 The baseline record is the one whose flag= variable is 'Y'. A
-|                 group with no baseline record gets a missing value. The rows
-|                 of data= keep their order. When a group has two baseline
-|                 records, the log has an ERROR line that names the group, and
-|                 data= is not changed.
+|                 DATA step after %baseline (the how-to guide "Derive analysis
+|                 visits, the baseline and the change from baseline" shows all
+|                 the steps). The baseline record is the one whose flag=
+|                 variable is 'Y'. A group with no baseline record gets a
+|                 missing value. The rows of data= keep their order. When a
+|                 group has two baseline records, the log has an ERROR line that
+|                 names the group, and data= is not changed.
 | Procedure     : PROC SORT, MERGE
 | Proven        : Checked on its test cases of the baseline value (small made-up
 |                 records): every value the same as that of the expected
@@ -34,7 +34,10 @@
 | flag        The baseline flag: a character variable that is     ABLFL
 |             'Y' on the baseline record
 | replace     yes: data= has the variable new= already; the       no
-|             macro drops it and makes it again
+|             macro drops it and makes it again, with the type
+|             and length of value=. With no, the values are
+|             written into the variable new= of data= when it
+|             has one (its type, length and label stay).
 | new         The name of the new variable, such as base          Required
 | debug       yes: keep the work data sets _baseline_*            no
 |-------------------------------------------------------------------------------
@@ -82,7 +85,8 @@
 | 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
 | 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
-|                          manual. No number changes.
+|                          manual. The title of the how-to guide in quotes;
+|                          replace= says what no does. No number changes.
 |
 *******************************************************************************/
 %MACRO baseline(

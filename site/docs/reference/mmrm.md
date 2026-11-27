@@ -82,7 +82,7 @@ Returns the differences of the LS means of pairs of groups at one visit from a r
 :   The confidence level of the limits: a number between 0 and 1. *(optional, default `0.95`)*
 
 `stats=`
-:   The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are diff, diff_se, lcl, ucl, pval, lsmean and lsmean_se. A name without a pattern takes its default pattern (n="XX", mean="XX.X", pval="X.XXX" ...; see [%describe](describe.md)). *(optional, default `diff="XX.X" diff_se="XX.XX" lcl="XX.X" ucl="XX.X" pval="X.XXX"`)*
+:   The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are diff, diff_se, lcl, ucl, pval, lsmean and lsmean_se. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed). *(optional, default `diff="XX.X" diff_se="XX.XX" lcl="XX.X" ucl="XX.X" pval="X.XXX"`)*
 
 `label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
@@ -157,11 +157,17 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 |---|---|
 | no covariance structure of type=&lt;type&gt; fallback=&lt;fallback&gt; converged | give fallback= more types (cs, ar(1), toep) or check it. |
 
+The macro also writes these NOTE lines to the log, without stopping:
+
+- `NOTE: [mmrm] The covariance structure TYPE=<try> converged.`
+- `NOTE: [mmrm] The covariance structure TYPE=<try> did not converge.`
+- `NOTE: [mmrm] The WARNING lines of PROC MIXED above are of this fit: not used.`
+
 ## See also
 
 Compare groups with a model: [%lsmeans](lsmeans.md), [%logistic](logistic.md), [%risk](risk.md), [%rateratio](rateratio.md).
 
-Named on this page: [%describe](describe.md), [%ancova](ancova.md).
+Named on this page: [%ancova](ancova.md).
 
 ## Proof
 

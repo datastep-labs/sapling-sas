@@ -67,8 +67,10 @@
 |             or or, the odds ratio, the ratio of the two odds.
 |             A ratio has no unit.
 | ci          The interval of a risk difference: wald, newcombe,  wald
-|             miettinen-nurminen (CL=MN) or agresti-caffo
-|             (CL=AC). With strata= the interval is always mh.
+|             miettinen-nurminen (CL=MN), agresti-caffo (CL=AC)
+|             or mh, the interval of Mantel and Haenszel, which
+|             needs strata=; with strata= the interval is always
+|             mh, whatever ci= says
 | level       The confidence level of the interval: a number      0.95
 |             between 0 and 1
 | stats       The statistics, in the order of the rows: each      Optional
@@ -77,9 +79,9 @@
 |             lcl="X.XXX" ucl="X.XXX" pval="X.XXX"; for
 |             measure=rr or or, rr="XX.XX" or or="XX.XX" with
 |             lcl="XX.XX" ucl="XX.XX" pval="X.XXX". A name
-|             without a pattern takes its default pattern
-|             (n="XX", mean="XX.X", pval="X.XXX" ...; see
-|             %describe).
+|             without a pattern takes its default pattern: see
+|             the table of default patterns (How a number is
+|             kept and printed).
 | label       The label of the block in the table: a text in      Optional
 |             quotes. A block is the rows of one call in the
 |             table.
@@ -178,7 +180,12 @@
 |                          comment line before it). No number changes.
 | 27-NOV-2026 Sapling      1.10.0: The Output says the direction of rd, rr and
 |                          or (the group against VERSUS); Proven in plain words,
-|                          for the published manual. No number changes.
+|                          for the published manual. stats= points to the table
+|                          of default patterns of the manual. ci= lists mh;
+|                          ci=mh without strata= stops with the ERROR of the
+|                          macro (PROC FREQ has no RISKDIFF(CL=MH), so the step
+|                          stopped with a syntax error before). No number
+|                          changes.
 |
 *******************************************************************************/
 %MACRO risk(
@@ -220,6 +227,11 @@
   %IF not %SYSFUNC(INDEXW(WALD NEWCOMBE MN AC MH, &cl.)) %THEN %DO;
     %PUT %STR(ERR)OR: [risk] ci=&ci. is not an interval here;
     %PUT %STR(ERR)OR: [risk]   fix: give ci= wald, newcombe, miettinen-nurminen, agresti-caffo, mh.;
+    %RETURN;
+  %END;
+  %IF &cl. = MH and %LENGTH(&strata.) = 0 %THEN %DO;
+    %PUT %STR(ERR)OR: [risk] ci=mh is the interval of strata= (Mantel and Haenszel);
+    %PUT %STR(ERR)OR: [risk]   fix: give strata=, or give ci= wald, newcombe, mn or ac.;
     %RETURN;
   %END;
   %IF %LENGTH(&strata.) and %SUPERQ(measure) ne rd %THEN %DO;

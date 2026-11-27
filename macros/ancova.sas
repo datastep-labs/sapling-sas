@@ -47,8 +47,8 @@
 |             name with the pattern of its printed number,
 |             separated by blanks. The names are pval, estimate,
 |             se, lcl and ucl. A name without a pattern takes
-|             its default pattern (n="XX", mean="XX.X",
-|             pval="X.XXX" ...; see %describe).
+|             its default pattern: see the table of default
+|             patterns (How a number is kept and printed).
 | label       The label of the block in the table: a text in      Optional
 |             quotes. A block is the rows of one call in the
 |             table.
@@ -104,8 +104,9 @@
 | 27-NOV-2026 Sapling      1.10.0: The first sentence says that the macro tests
 |                          one numeric term (a dose response) and names %lsmeans
 |                          for the ANCOVA comparison of the groups; Proven in
-|                          plain words, for the published manual. No number
-|                          changes.
+|                          plain words, for the published manual. stats= points
+|                          to the table of default patterns of the manual. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO ancova(

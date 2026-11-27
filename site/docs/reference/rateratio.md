@@ -33,7 +33,7 @@ Returns the rate ratios of pairs of groups from a Poisson or negative binomial m
 :   The input data set, with USUBJID: one record per subject. *(required)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as `where = (trtdurd &gt; 0)`. *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (trtdurd > 0)`. *(optional)*
 
 `var=`
 :   The count: one numeric variable (`var = teaecnt`). *(required)*
@@ -42,7 +42,7 @@ Returns the rate ratios of pairs of groups from a Poisson or negative binomial m
 :   The groups of the model: one character variable. *(required)*
 
 `exposure=`
-:   The exposure of each subject: a numeric variable, or an expression of variables of `data=`, such as `exposure = trtdurd` / 365.25 for years. A subject with an exposure of 0 or less is not used in the model. *(required)*
+:   The exposure of each subject: a numeric variable, or an expression of variables of `data=`, such as `exposure = trtdurd / 365.25` for years. A subject with an exposure of 0 or less is not used in the model. *(required)*
 
 `within=`
 :   One model in each group of these variables, separated by blanks, such as the levels of a subgroup (`within = sex`). *(optional)*
@@ -67,7 +67,7 @@ Returns the rate ratios of pairs of groups from a Poisson or negative binomial m
 :   The confidence level of the limits: a number between 0 and 1. *(optional, default `0.95`)*
 
 `stats=`
-:   The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are irr, lcl, ucl and pval. A name without a pattern takes its default pattern (n="XX", mean="XX.X", pval="X.XXX" ...; see [%describe](describe.md)). *(optional, default `irr="XX.XX" lcl="XX.XX" ucl="XX.XX" pval="X.XXX"`)*
+:   The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are irr, lcl, ucl and pval. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed). *(optional, default `irr="XX.XX" lcl="XX.XX" ucl="XX.XX" pval="X.XXX"`)*
 
 `label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
@@ -139,7 +139,7 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Compare groups with a model: [%lsmeans](lsmeans.md), [%mmrm](mmrm.md), [%logistic](logistic.md), [%risk](risk.md).
 
-Named on this page: [%describe](describe.md), [%rate](rate.md).
+Named on this page: [%rate](rate.md).
 
 ## Proof
 

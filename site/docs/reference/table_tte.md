@@ -112,6 +112,32 @@ The global macro variable &lt;name&gt;_print keeps the call of [%print](print.md
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
+??? note "Before these examples: the calls that make their inputs"
+
+    Run `examples/setup.sas`, then these examples of other pages ([%tte](tte.md)), in this order. Then the examples of this page run as shown.
+
+    ```sas
+    /* the example of %tte */
+    * Derives the time to the first skin event from the first dose: CNSR 0 is an event, 1 a censoring.;
+    %tte(
+         subjects      = adsl
+       , events        = adae
+       , event         = trtemfl = 'Y' AND aebodsys = 'SKIN AND SUBCUTANEOUS TISSUE DISORDERS'
+       , date          = astdt
+       , start         = trtsdt
+       , censor_date   = trtedt
+       , seq           = aeseq
+       , censor_desc   = "End of treatment"
+       , censor_source = "ADSL"
+       , event_desc    = aedecod
+       , source        = "ADAE"
+       , paramcd       = "TTDE"
+       , out           = adttde
+     )
+    TITLE;
+    FOOTNOTE;
+    ```
+
 Makes the table of the time to the event: Kaplan Meier, the log rank test and the hazard ratio.
 
 ```sas
@@ -204,7 +230,7 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Tables in one call: [%table](table.md), [%table_summary](table_summary.md), [%table_ae](table_ae.md), [%table_visit](table_visit.md), [%table_shift](table_shift.md), [%table_response](table_response.md), [%table_model](table_model.md).
 
-Named on this page: [%km](km.md), [%layout](layout.md), [%kmplot](kmplot.md), [%logrank](logrank.md), [%cox](cox.md), [%stack](stack.md), [%columns](columns.md), [%print](print.md).
+Named on this page: [%km](km.md), [%layout](layout.md), [%kmplot](kmplot.md), [%logrank](logrank.md), [%cox](cox.md), [%stack](stack.md), [%columns](columns.md), [%print](print.md), [%tte](tte.md).
 
 ## Proof
 

@@ -11,9 +11,30 @@
 |                 once, at the top of each program, before any other macro of
 |                 the library. The ADaM library ADAM is read only. %ard names
 |                 the numbers file after the program when its file= is not
-|                 given. The options are those of the outputs: no date, no page
-|                 numbers, no centering, a blank for a missing value. The macro
-|                 also clears the TITLE and FOOTNOTE statements.
+|                 given. The macro also clears the TITLE and FOOTNOTE
+|                 statements. The options, and why each is set:
+|                 - NODATE NONUMBER NOCENTER: no date and no page number at the
+|                   top of a page, and the text starts at the left margin, as
+|                   the outputs are laid out.
+|                 - LS=160: a line of a listing is 160 characters wide, the
+|                   width of a landscape table.
+|                 - PS=32767: the longest page SAS has, so that SAS never breaks
+|                   a part of a listing; %print starts each page itself (rows=).
+|                 - FORMDLIM=' ': a new page of the LISTING output is a blank
+|                   line, not a form feed.
+|                 - MISSING=' ': a missing number prints as a blank, not as a
+|                   period.
+|                 - VALIDVARNAME=UPCASE: the names of the variables a program
+|                   makes are in upper case, as in the ADaM data sets.
+|                 - NOFMTERR: a format that is not found does not stop the
+|                   program: the value prints with the default format, and the
+|                   log has only a NOTE. The risk: a code prints in place of its
+|                   label (F in place of Female); look for the NOTE "Format ...
+|                   was not found" in the log.
+|                 To set an option back, write an OPTIONS statement after the
+|                 call of %study: OPTIONS FMTERR stops the program again at a
+|                 format that is not found, OPTIONS CENTER centers the output
+|                 again.
 | Procedure     : LIBNAME, OPTIONS
 | Proven        : Every program of a made-up study: each ran with a clean log,
 |                 and 570 of 570 numbers the same as those of a second program
@@ -31,10 +52,14 @@
 |             when its file= is not given
 | adam        The folder of the ADaM data sets: a path without    &spl_root./adam
 |             quotes. The macro opens it as the library ADAM,
-|             read only.
+|             read only. SPL_ROOT is the folder of the library
+|             (it holds macros/): give adam= when the study is
+|             in a folder of its own.
 | out         The output folder: a path without quotes. The       &spl_root./out
 |             macros write into its folders tlf, listings,
-|             figures and ard.
+|             figures and ard. SPL_ROOT is the folder of the
+|             library (it holds macros/): give out= when the
+|             study is in a folder of its own.
 |-------------------------------------------------------------------------------
 |
 | Output        : CODE: the global macro variables SPL_STUDY, SPL_PROGRAM (in
@@ -72,7 +97,10 @@
 | 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
 | 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
-|                          manual. No number changes.
+|                          manual. The text says why each option is set, the
+|                          risk of NOFMTERR, how to set an option back, and that
+|                          adam= and out= name the folders of a study outside
+|                          the folder of the library. No number changes.
 |
 *******************************************************************************/
 %MACRO study(

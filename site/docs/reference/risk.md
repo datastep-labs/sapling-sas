@@ -61,13 +61,13 @@ Returns the risk difference, relative risk or odds ratio of pairs of groups, wit
     Accepts: `rd`, `rr`, `or`.
 
 `ci=`
-:   The interval of a risk difference: wald, newcombe, miettinen-nurminen (CL=MN) or agresti-caffo (CL=AC). With `strata=` the interval is always mh. *(optional, default `wald`)*
+:   The interval of a risk difference: wald, newcombe, miettinen-nurminen (CL=MN), agresti-caffo (CL=AC) or mh, the interval of Mantel and Haenszel, which needs `strata=`; with `strata=` the interval is always mh, whatever `ci=` says. *(optional, default `wald`)*
 
 `level=`
 :   The confidence level of the interval: a number between 0 and 1. *(optional, default `0.95`)*
 
 `stats=`
-:   The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. When not given: rd="X.XXX" lcl="X.XXX" ucl="X.XXX" pval="X.XXX"; for measure=rr or or, rr="XX.XX" or or="XX.XX" with lcl="XX.XX" ucl="XX.XX" pval="X.XXX". A name without a pattern takes its default pattern (n="XX", mean="XX.X", pval="X.XXX" ...; see [%describe](describe.md)). *(optional)*
+:   The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. When not given: rd="X.XXX" lcl="X.XXX" ucl="X.XXX" pval="X.XXX"; for measure=rr or or, rr="XX.XX" or or="XX.XX" with lcl="XX.XX" ucl="XX.XX" pval="X.XXX". A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed). *(optional)*
 
 `label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
@@ -96,6 +96,26 @@ The p-value is that of Pearson's chi-square test without continuity correction. 
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `ae_flags` (made by the [example of %termflags](termflags.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+??? note "Before these examples: the calls that make their inputs"
+
+    Run `examples/setup.sas`, then these examples of other pages ([%termflags](termflags.md)), in this order. Then the examples of this page run as shown.
+
+    ```sas
+    /* the example of %termflags */
+    * Flags each subject for each term that reaches 5 percent: FLAG is Y with the term, N without.;
+    %termflags(
+         data      = adae
+       , denom     = adsl
+       , where     = (trtemfl = 'Y')
+       , terms     = aebodsys aedecod
+       , by        = trt01a
+       , threshold = 5
+       , out       = ae_flags
+     )
+    TITLE;
+    FOOTNOTE;
+    ```
 
 Gives the risk difference of discontinuation of each pair, its Newcombe limits and p value.
 
@@ -233,6 +253,7 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 | Message | Fix |
 |---|---|
 | ci=&lt;ci&gt; is not an interval here | give ci= wald, newcombe, miettinen-nurminen, agresti-caffo, mh. |
+| ci=mh is the interval of strata= (Mantel and Haenszel) | give strata=, or give ci= wald, newcombe, mn or ac. |
 | strata=&lt;strata&gt; is taken by the risk difference only | give measure=rd, or no strata=. |
 | pairs= names the group "&lt;group&gt;", and no record has it. | give pairs= the values of &lt;by&gt; as the data have them. |
 
@@ -240,7 +261,7 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Compare groups with a model: [%lsmeans](lsmeans.md), [%mmrm](mmrm.md), [%logistic](logistic.md), [%rateratio](rateratio.md).
 
-Named on this page: [%termflags](termflags.md), [%describe](describe.md), [%fisher](fisher.md).
+Named on this page: [%termflags](termflags.md), [%fisher](fisher.md).
 
 ## Proof
 

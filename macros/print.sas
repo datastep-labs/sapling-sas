@@ -87,9 +87,11 @@
    , label    = %STR(row=" ")
    , file     = &spl_out./tlf/t14_2_1
  )
- * Prints a listing: USUBJID is the left column, shown once for each subject.;
+ * Sorts the events by subject and start date: a listing shows its records in their order.;
+ PROC SORT DATA=adae OUT=ae_listing; BY usubjid astdt aedecod; RUN;
+ * Prints the listing: USUBJID is the left column, shown once for each subject.;
  %print(
-     data = adae
+     data = ae_listing
    , by   = usubjid
    , var  = trt01a aedecod astdt aesev
    , file = &spl_out./listings/l14_5_1
@@ -133,7 +135,9 @@
 | 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example; a
 |                          third call with page=. No number changes.
 | 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
-|                          manual. No number changes.
+|                          manual. The listing example sorts its records by
+|                          subject and start date first (PROC SORT), as a
+|                          listing should. No number changes.
 |
 *******************************************************************************/
 %MACRO print(

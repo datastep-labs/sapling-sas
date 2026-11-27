@@ -131,6 +131,10 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 |---|---|
 | more than one record in from=&lt;from&gt; of &lt;USUBJID&gt; | give unique=no with order= and which= (the record to keep), or remove the duplicate records. |
 
+The macro also writes these NOTE lines to the log, without stopping:
+
+- `NOTE: [pick] data=<data> has <new> already: new=<new> replaces it.`
+
 ## See also
 
 ADaM steps: [%merge_subject](merge_subject.md), [%summarize](summarize.md), [%summarize_groups](summarize_groups.md), [%baseline](baseline.md), [%flag_first](flag_first.md), [%flag_if_any](flag_if_any.md), [%windows](windows.md), [%visits](visits.md), [%locf](locf.md), [%relchange](relchange.md), [%param_wide](param_wide.md), [%pool](pool.md), [%tte](tte.md).

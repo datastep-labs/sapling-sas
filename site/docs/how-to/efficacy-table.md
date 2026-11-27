@@ -12,6 +12,10 @@ covariance. You get an RTF file, a text listing and a numbers file.
   the change (`chg`). The guide uses the systolic blood pressure of `advs` at Week 12.
 - Know the model of the plan: the response, the covariates, the class factors and the pairs of groups to compare.
   The guide models the change with the baseline as covariate and compares each dose with placebo.
+- Know the analysis population of the plan. An efficacy table is usually on the efficacy or full analysis
+  population, by the planned treatment (`TRT01P`). The example data have no flag of such a population (no `EFFFL`,
+  no `ITTFL`): the guide uses the safety population (`SAFFL`) of `examples/setup.sas`, by the planned treatment. With
+  your own data, select the population of the plan in step 1 and give its subjects to `n=`.
 
 ## Steps
 
@@ -105,7 +109,7 @@ Skip this step if the plan has no such test.
 ```sas
 %stack(t_base t_aval t_chg t_model t_dose, out=t_eff)
 TITLE1 "Table 14.4.1 Systolic blood pressure (mmHg): ANCOVA of the change from baseline at Week 12";
-TITLE2 "Safety population";
+TITLE2 "Safety population, by planned treatment";
 FOOTNOTE1 J=L "ANCOVA: change from baseline = baseline + treatment.";
 FOOTNOTE2 J=L "Difference: the dose group minus placebo, with its 95% confidence interval.";
 %table(
@@ -120,7 +124,7 @@ FOOTNOTE2 J=L "Difference: the dose group minus placebo, with its 95% confidence
 ```text
 tlf/t_eff.lst: 37 lines
 Table 14.4.1 Systolic blood pressure (mmHg): ANCOVA of the change from baseline at Week 12
-Safety population
+Safety population, by planned treatment
 
                                     Placebo        Xanomeline Low Dose  Xanomeline High Dose  All
                                     (N=86)         (N=84)               (N=84)                groups

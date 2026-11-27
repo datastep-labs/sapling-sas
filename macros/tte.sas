@@ -19,7 +19,8 @@
 |                 - AVAL is ADT - START + 1, in days.
 |                 Without end=, every date counts, and a date before START
 |                 becomes START (as admiral does). A subject with no event and
-|                 no censoring gets no record. With end=, the at-risk period
+|                 no censoring date gets no record, and the log has a NOTE with
+|                 the number of such subjects. With end=, the at-risk period
 |                 runs from START to END: only the events and censorings in it
 |                 count, and a subject with neither is censored at END. An event
 |                 on the start day counts unless time= and start_time= are both
@@ -108,7 +109,8 @@
 |                 subject with no START or no END gets no record and a WARNING
 |                 that names it; a subject whose START is after its END gets no
 |                 record. Two records of a subject in subjects= give an ERROR
-|                 line.
+|                 line. Without end=, a subject with no event and no censoring
+|                 date gets no record, and a NOTE gives their number.
 |
 | Example:
 |
@@ -154,7 +156,9 @@
 | 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
 | 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
-|                          manual. No number changes.
+|                          manual. Without end=, a subject with no event and no
+|                          censoring date is no longer left out in silence: a
+|                          NOTE gives their number. No number changes.
 |
 *******************************************************************************/
 %MACRO tte(
@@ -185,7 +189,7 @@
    , out           =        /* The result */
    , debug         = no     /* yes: keep the work data sets _tte_* */
 ) / DES = 'One time-to-event parameter: the first event, else the latest censoring (PROC SORT)';
-  %LOCAL t0 i dsn dsname token keys made period evdrop;
+  %LOCAL t0 i dsn dsname token keys made period evdrop nodate;
   %LET t0 = %_spl_begin(tte);
 
   /* Step 1: the parameters: the data sets exist, the variables are in them */
@@ -441,7 +445,14 @@
   RUN;
   PROC SORT DATA=&out. OUT=&out.(DROP=_tte_row); BY _tte_row; RUN;
 
-  /* Step 8: the work data sets are deleted (kept with debug=yes) */
+  /* Step 8: without end=, the subjects with no record are counted in the log */
+  %IF %LENGTH(&end.) = 0 %THEN %DO;
+    %LET nodate = %EVAL(%_spl_nobs(_tte_subjects) - %_spl_nobs(&out.));  /* the subjects left out */
+    %IF &nodate. > 0 %THEN
+      %PUT NOTE: [tte] &nodate. subject(s) with no event and no censoring date: no record.;
+  %END;
+
+  /* Step 9: the work data sets are deleted (kept with debug=yes) */
   %IF %UPCASE(&debug.) ne YES %THEN %DO;
     PROC DATASETS LIBRARY=work NOLIST NOWARN;
       DELETE _tte_:;

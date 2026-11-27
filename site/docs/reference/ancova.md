@@ -46,7 +46,7 @@ Returns the Type III p-value of one numeric term in a linear model, such as the 
 :   The confidence level of the limits: a number between 0 and 1. *(optional, default `0.95`)*
 
 `stats=`
-:   The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are pval, estimate, se, lcl and ucl. A name without a pattern takes its default pattern (n="XX", mean="XX.X", pval="X.XXX" ...; see [%describe](describe.md)). *(optional, default `pval="X.XXX"`)*
+:   The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are pval, estimate, se, lcl and ucl. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed). *(optional, default `pval="X.XXX"`)*
 
 `label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
@@ -94,11 +94,16 @@ GROUPS  BLOCK          STAT         VALUE   TEXT
 
 The macro gives only the [messages every macro shares](index.md#messages-every-macro-shares).
 
+The macro also writes these NOTE lines to the log, without stopping:
+
+- `NOTE: [ancova] <ndup> record(s) of where= are a second record of a subject:`
+- `NOTE: [ancova] the first record of each subject is used.`
+
 ## See also
 
 Test the groups: [%anova](anova.md), [%ttest](ttest.md), [%wilcoxon](wilcoxon.md), [%chisq](chisq.md), [%fisher](fisher.md), [%cmh](cmh.md), [%adjust](adjust.md).
 
-Named on this page: [%describe](describe.md), [%lsmeans](lsmeans.md), [%mmrm](mmrm.md).
+Named on this page: [%lsmeans](lsmeans.md), [%mmrm](mmrm.md).
 
 Guides that use %ancova: [Make an efficacy table with an ANCOVA](../how-to/efficacy-table.md).
 

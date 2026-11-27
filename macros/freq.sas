@@ -81,8 +81,8 @@
 |             name with its pattern of the printed number,
 |             separated by blanks. The names are n, pct and
 |             events. A name without a pattern takes its default
-|             pattern (n="XX", mean="XX.X", pval="X.XXX" ...;
-|             see %describe).
+|             pattern: see the table of default patterns (How a
+|             number is kept and printed).
 | label       The label of the block in the table: a text in      Optional
 |             quotes. A block is the rows of one call in the
 |             table.
@@ -192,7 +192,8 @@
 |                          number changes.
 | 27-NOV-2026 Sapling      1.10.0: The caption of the fourth example says that
 |                          AEDECODN holds the rank; Proven in plain words, for
-|                          the published manual. No number changes.
+|                          the published manual. stats= points to the table of
+|                          default patterns of the manual. No number changes.
 |
 *******************************************************************************/
 %MACRO freq(

@@ -42,7 +42,7 @@ Returns the p-value of the treatment-by-subgroup interaction in a Poisson or neg
 :   The factor of the subgroups: one variable whose values are its levels (`factor = sex`). *(required)*
 
 `exposure=`
-:   The exposure of each subject: a numeric variable, or an expression of it (`exposure = trtdurd` / 365.25). It must be above 0, because the offset is its logarithm. *(required)*
+:   The exposure of each subject: a numeric variable, or an expression of it (`exposure = trtdurd / 365.25`). It must be above 0, because the offset is its logarithm. *(required)*
 
 `covars=`
 :   The numeric covariates of the model, separated by blanks (`covars = base`). *(optional)*

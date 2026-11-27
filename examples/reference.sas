@@ -567,14 +567,21 @@ FOOTNOTE;
    , stats = n="XX" events="XX" surv="XX.X" lcl="XX.X" ucl="XX.X"
    , out   = os_km
  )
-* Uses conftype=loglog and a 90 percent level: only the lower limit of Low Dose changes, 51 to 48.;
+* Uses conftype=loglog: only the lower limit of Low Dose changes, 51 to 48.;
 %km(
      data     = adttde
    , var      = aval
    , by       = trt01a
    , conftype = loglog
-   , level    = 0.90
-   , out      = ttde_km90
+   , out      = ttde_kmll
+ )
+* Uses a 90 percent level: on these data the limits of the median stay as at 95 percent.;
+%km(
+     data  = adttde
+   , var   = aval
+   , by    = trt01a
+   , level = 0.90
+   , out   = ttde_km90
  )
 TITLE;
 FOOTNOTE;
@@ -716,7 +723,7 @@ FOOTNOTE;
    , setup   = t14_1_1_print
    , out     = t14_1_1_display
  )
-* Gives label= and rows= to the setup: the print call it keeps labels the last column p value.;
+* Puts label= and rows= into the setup: the last column is labelled p value, 30 rows a page.;
 %layout(
      data    = t14_2_1
    , columns = t14_2_1_cols
@@ -764,9 +771,11 @@ FOOTNOTE;
    , label    = %STR(row=" ")
    , file     = &spl_out./tlf/t14_2_1
  )
-* Prints a listing: USUBJID is the left column, shown once for each subject.;
+* Sorts the events by subject and start date: a listing shows its records in their order.;
+PROC SORT DATA=adae OUT=ae_listing; BY usubjid astdt aedecod; RUN;
+* Prints the listing: USUBJID is the left column, shown once for each subject.;
 %print(
-     data = adae
+     data = ae_listing
    , by   = usubjid
    , var  = trt01a aedecod astdt aesev
    , file = &spl_out./listings/l14_5_1
@@ -1083,7 +1092,7 @@ FOOTNOTE;
    , title    = "Table 14.3.1 ANCOVA of the change of systolic blood pressure at Week 12"
    , file     = &spl_out./tlf/t14_3_1
  )
-* Uses method=mmrm on five visits: the LS means and the differences at Week 24.;
+* Uses method=mmrm with the model of the mmrm example: the same differences at Week 24.;
 %table_model(
      data     = advs
    , adsl     = adsl
@@ -1094,6 +1103,7 @@ FOOTNOTE;
    , at       = "Week 24"
    , order    = trt01pn
    , method   = mmrm
+   , model    = base trt01p avisit trt01p*avisit base*avisit
    , type     = un
    , fallback = toep
    , title    = "Table 14.3.3 MMRM of the change of systolic blood pressure at Week 24"
