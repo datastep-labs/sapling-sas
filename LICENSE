@@ -1,0 +1,136 @@
+Sapling Library - Commercial License Agreement
+DRAFT, to be reviewed by a lawyer before the first paid release.
+
+Copyright (c) 2026 DataStep Labs. All rights reserved.
+
+This agreement covers the Sapling library: the SAS macros (the files of this
+folder, and the copy shipped in DataStep Studio for SAS) and the R package
+"sapling", with their documentation, examples and tutorials ("the Library").
+The Library is commercial software. It is licensed, not sold.
+
+
+1. Definitions
+
+   "You" is the company, institution or person that holds the license.
+   "Licensed User" is a named person whom you allow to use the Library and for
+   whom you hold a paid seat (a "Seat").
+   "Study Programs" are the programs, data sets, tables, listings, figures and
+   other results that a Licensed User makes with the Library.
+   "Study Deliverables" are the Study Programs of one clinical study, or one
+   project, as handed over to the persons named in section 4.
+
+
+2. License grant
+
+   While you hold a valid paid license, and for its number of Seats, each
+   Licensed User may:
+   (a) install and run the Library, on any computer and SAS or R server that
+       you use;
+   (b) read the source code, and change it for your own internal use; a
+       changed copy stays under this agreement;
+   (c) write Study Programs that call the Library, for your own studies and,
+       as a contract research organization or a consultant, for the studies of
+       your clients.
+
+   Early Access: while DataStep Studio holds a valid Early Access entitlement,
+   the Library may be used free of charge under the terms of this agreement.
+   Early Access is temporary. After it ends, the Library requires a paid
+   license.
+
+
+3. Your results are yours
+
+   The Study Programs and their results belong to you (or to your client), not
+   to DataStep Labs. DataStep Labs claims no rights in your data, your programs
+   or your results.
+
+
+4. Study deliverables and regulatory submissions
+
+   You may include copies of the parts of the Library that your Study Programs
+   call (changed or unchanged) in the Study Deliverables that you give to:
+   (a) the sponsor of the study, and your client;
+   (b) regulatory authorities, such as the FDA, EMA, PMDA and national
+       authorities, in a submission or on their request;
+   (c) auditors, inspectors, reviewers, ethics committees and data monitoring
+       committees of the study;
+   (d) a future owner of the study, if the study is sold or transferred.
+
+   These recipients need no license and pay no fee. They may use these copies
+   only to read, run again, check and review the Study Programs of that study,
+   and to keep them in the archive of that study. They may not use the copies
+   for other studies or projects, unless they hold their own license. Keep this
+   license notice with the copies.
+
+
+5. Archived studies
+
+   When your license ends, you may keep the copies of the Library that are in
+   the archives of studies made while the license was valid, and run them
+   again to reproduce, check or defend the results of those studies. You may
+   not use them to write new Study Programs or for new studies.
+
+
+6. Restrictions
+
+   You may not:
+   (a) give, sell, rent, lend, sublicense or publish the Library, or a changed
+       copy, except as section 4 allows;
+   (b) let persons who are not Licensed Users use the Library, except as
+       sections 4 and 5 allow;
+   (c) use more Seats than you paid for, or share one Seat between persons;
+   (d) use the Library, or a changed copy of it, to make or offer a product or
+       a macro library that competes with the Library;
+   (e) remove or change the copyright notices, the license notices or the
+       headers of the files;
+   (f) get around the license check of DataStep Studio.
+
+
+7. Fees
+
+   The fees, the term of the license and the number of Seats are those of your
+   order or subscription. A subscription renews for its term unless it is
+   cancelled before the end of its term.
+
+
+8. No warranty
+
+   THE LIBRARY IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+
+   You are responsible for the validation of the Library in your environment
+   and for checking the results of your Study Programs, as the regulations
+   and your own procedures require.
+
+
+9. Limitation of liability
+
+   TO THE EXTENT PERMITTED BY LAW, DATASTEP LABS SHALL NOT BE LIABLE FOR ANY
+   INDIRECT, INCIDENTAL, SPECIAL OR CONSEQUENTIAL DAMAGES ARISING FROM THE USE
+   OF THE LIBRARY. THE TOTAL LIABILITY OF DATASTEP LABS IS LIMITED TO THE FEES
+   YOU PAID FOR THE LIBRARY IN THE TWELVE MONTHS BEFORE THE CLAIM.
+
+
+10. Termination
+
+   This license ends at the end of its term, or when you breach it and do not
+   cure the breach within 30 days of a notice. When it ends, stop using the
+   Library, except as sections 4 and 5 allow.
+
+
+11. Trademarks
+
+   SAS and all other SAS Institute Inc. product or service names are
+   registered trademarks or trademarks of SAS Institute Inc. in the USA and
+   other countries. (R) indicates USA registration. The Library is an
+   independent product and is not affiliated with, sponsored by or endorsed by
+   SAS Institute Inc.
+
+
+12. General
+
+   DataStep Labs may publish new versions of this agreement with new versions
+   of the Library; a version of the Library stays under the agreement it came
+   with. The governing law and the place of jurisdiction are to be set before
+   the first paid release.

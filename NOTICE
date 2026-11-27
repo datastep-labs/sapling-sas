@@ -1,0 +1,11 @@
+Third-party material of this repository
+
+proof/pharmaverse/data/adsl.xpt and adae.xpt are the data sets adsl and adae of the R package pharmaverseadam 1.3.0
+(https://github.com/pharmaverse/pharmaverseadam), Apache License 2.0, written as SAS transport files without a change
+(proof/pharmaverse/data/make_xpt.R). The subjects are those of the CDISC pilot study (public example data).
+
+The references are cited, not copied: their numbers were read from the published outputs of
+- the R Consortium R Submission Pilot 1, https://github.com/RConsortium/submissions-pilot1 (commit ba1d3e7af60e281def02df11c76c64f8352526f4), and
+- the pharmaverse examples, https://github.com/pharmaverse/examples (branch gh-pages, commit bcaacf1143fbb1e4f59a46ed14194564a2e72eae),
+into proof/*/reference/*.csv, with the place each number was read from. No code of either repository is included.
+The ADaM transport files of the R Submission Pilot 1 are not included: proof/run.sas says where to get them.

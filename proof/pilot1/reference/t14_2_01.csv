@@ -1,0 +1,97 @@
+result,stat,group,level,reference,source
+N,n,Placebo,,86,output/tlf-demographic.out:6
+N,n,Xanomeline Low Dose,,84,output/tlf-demographic.out:6
+N,n,Xanomeline High Dose,,84,output/tlf-demographic.out:6
+T_AGE,mean,Placebo,,75.21,output/tlf-demographic.out:9
+T_AGE,sd,Placebo,,8.59,output/tlf-demographic.out:9
+T_AGE,mean,Xanomeline Low Dose,,75.67,output/tlf-demographic.out:9
+T_AGE,sd,Xanomeline Low Dose,,8.29,output/tlf-demographic.out:9
+T_AGE,mean,Xanomeline High Dose,,74.38,output/tlf-demographic.out:9
+T_AGE,sd,Xanomeline High Dose,,7.89,output/tlf-demographic.out:9
+T_AGE,median,Placebo,,76,output/tlf-demographic.out:10
+T_AGE,median,Xanomeline Low Dose,,77.5,output/tlf-demographic.out:10
+T_AGE,median,Xanomeline High Dose,,76,output/tlf-demographic.out:10
+T_AGE,min,Placebo,,52,output/tlf-demographic.out:11
+T_AGE,max,Placebo,,89,output/tlf-demographic.out:11
+T_AGE,min,Xanomeline Low Dose,,51,output/tlf-demographic.out:11
+T_AGE,max,Xanomeline Low Dose,,88,output/tlf-demographic.out:11
+T_AGE,min,Xanomeline High Dose,,56,output/tlf-demographic.out:11
+T_AGE,max,Xanomeline High Dose,,88,output/tlf-demographic.out:11
+T_AGEGR1,n,Placebo,<65,14,output/tlf-demographic.out:13
+T_AGEGR1,n,Xanomeline Low Dose,<65,8,output/tlf-demographic.out:13
+T_AGEGR1,n,Xanomeline High Dose,<65,11,output/tlf-demographic.out:13
+T_AGEGR1,n,Placebo,65-80,42,output/tlf-demographic.out:14
+T_AGEGR1,n,Xanomeline Low Dose,65-80,47,output/tlf-demographic.out:14
+T_AGEGR1,n,Xanomeline High Dose,65-80,55,output/tlf-demographic.out:14
+T_AGEGR1,n,Placebo,>80,30,output/tlf-demographic.out:15
+T_AGEGR1,n,Xanomeline Low Dose,>80,29,output/tlf-demographic.out:15
+T_AGEGR1,n,Xanomeline High Dose,>80,18,output/tlf-demographic.out:15
+T_RACE,n,Placebo,WHITE,78,output/tlf-demographic.out:17
+T_RACE,n,Xanomeline Low Dose,WHITE,78,output/tlf-demographic.out:17
+T_RACE,n,Xanomeline High Dose,WHITE,74,output/tlf-demographic.out:17
+T_RACE,n,Placebo,BLACK OR AFRICAN AMERICAN,8,output/tlf-demographic.out:18
+T_RACE,n,Xanomeline Low Dose,BLACK OR AFRICAN AMERICAN,6,output/tlf-demographic.out:18
+T_RACE,n,Xanomeline High Dose,BLACK OR AFRICAN AMERICAN,9,output/tlf-demographic.out:18
+T_RACE,n,Placebo,AMERICAN INDIAN OR ALASKA NATIVE,0,output/tlf-demographic.out:19
+T_RACE,n,Xanomeline Low Dose,AMERICAN INDIAN OR ALASKA NATIVE,0,output/tlf-demographic.out:19
+T_RACE,n,Xanomeline High Dose,AMERICAN INDIAN OR ALASKA NATIVE,1,output/tlf-demographic.out:19
+T_HEIGHT,mean,Placebo,,162.57,output/tlf-demographic.out:21
+T_HEIGHT,sd,Placebo,,11.52,output/tlf-demographic.out:21
+T_HEIGHT,mean,Xanomeline Low Dose,,163.43,output/tlf-demographic.out:21
+T_HEIGHT,sd,Xanomeline Low Dose,,10.42,output/tlf-demographic.out:21
+T_HEIGHT,mean,Xanomeline High Dose,,165.82,output/tlf-demographic.out:21
+T_HEIGHT,sd,Xanomeline High Dose,,10.13,output/tlf-demographic.out:21
+T_HEIGHT,median,Placebo,,162.6,output/tlf-demographic.out:22
+T_HEIGHT,median,Xanomeline Low Dose,,162.6,output/tlf-demographic.out:22
+T_HEIGHT,median,Xanomeline High Dose,,165.1,output/tlf-demographic.out:22
+T_HEIGHT,min,Placebo,,137.2,output/tlf-demographic.out:23
+T_HEIGHT,max,Placebo,,185.4,output/tlf-demographic.out:23
+T_HEIGHT,min,Xanomeline Low Dose,,135.9,output/tlf-demographic.out:23
+T_HEIGHT,max,Xanomeline Low Dose,,195.6,output/tlf-demographic.out:23
+T_HEIGHT,min,Xanomeline High Dose,,146.1,output/tlf-demographic.out:23
+T_HEIGHT,max,Xanomeline High Dose,,190.5,output/tlf-demographic.out:23
+T_WEIGHT,mean,Placebo,,62.76,output/tlf-demographic.out:25
+T_WEIGHT,sd,Placebo,,12.77,output/tlf-demographic.out:25
+T_WEIGHT,mean,Xanomeline Low Dose,,67.28,output/tlf-demographic.out:25
+T_WEIGHT,sd,Xanomeline Low Dose,,14.12,output/tlf-demographic.out:25
+T_WEIGHT,mean,Xanomeline High Dose,,70,output/tlf-demographic.out:25
+T_WEIGHT,sd,Xanomeline High Dose,,14.65,output/tlf-demographic.out:25
+T_WEIGHT,median,Placebo,,60.55,output/tlf-demographic.out:26
+T_WEIGHT,median,Xanomeline Low Dose,,64.9,output/tlf-demographic.out:26
+T_WEIGHT,median,Xanomeline High Dose,,69.2,output/tlf-demographic.out:26
+T_WEIGHT,min,Placebo,,34,output/tlf-demographic.out:27
+T_WEIGHT,max,Placebo,,86.2,output/tlf-demographic.out:27
+T_WEIGHT,min,Xanomeline Low Dose,,45.4,output/tlf-demographic.out:27
+T_WEIGHT,max,Xanomeline Low Dose,,106.1,output/tlf-demographic.out:27
+T_WEIGHT,min,Xanomeline High Dose,,41.7,output/tlf-demographic.out:27
+T_WEIGHT,max,Xanomeline High Dose,,108,output/tlf-demographic.out:27
+T_BMI,mean,Placebo,,23.64,output/tlf-demographic.out:29
+T_BMI,sd,Placebo,,3.67,output/tlf-demographic.out:29
+T_BMI,mean,Xanomeline Low Dose,,25.06,output/tlf-demographic.out:29
+T_BMI,sd,Xanomeline Low Dose,,4.27,output/tlf-demographic.out:29
+T_BMI,mean,Xanomeline High Dose,,25.35,output/tlf-demographic.out:29
+T_BMI,sd,Xanomeline High Dose,,4.16,output/tlf-demographic.out:29
+T_BMI,median,Placebo,,23.4,output/tlf-demographic.out:30
+T_BMI,median,Xanomeline Low Dose,,24.3,output/tlf-demographic.out:30
+T_BMI,median,Xanomeline High Dose,,24.8,output/tlf-demographic.out:30
+T_BMI,min,Placebo,,15.1,output/tlf-demographic.out:31
+T_BMI,max,Placebo,,33.3,output/tlf-demographic.out:31
+T_BMI,min,Xanomeline Low Dose,,17.7,output/tlf-demographic.out:31
+T_BMI,max,Xanomeline Low Dose,,40.1,output/tlf-demographic.out:31
+T_BMI,min,Xanomeline High Dose,,13.7,output/tlf-demographic.out:31
+T_BMI,max,Xanomeline High Dose,,34.5,output/tlf-demographic.out:31
+T_MMSE,mean,Placebo,,18.05,output/tlf-demographic.out:33
+T_MMSE,sd,Placebo,,4.27,output/tlf-demographic.out:33
+T_MMSE,mean,Xanomeline Low Dose,,17.87,output/tlf-demographic.out:33
+T_MMSE,sd,Xanomeline Low Dose,,4.22,output/tlf-demographic.out:33
+T_MMSE,mean,Xanomeline High Dose,,18.51,output/tlf-demographic.out:33
+T_MMSE,sd,Xanomeline High Dose,,4.16,output/tlf-demographic.out:33
+T_MMSE,median,Placebo,,19.5,output/tlf-demographic.out:34
+T_MMSE,median,Xanomeline Low Dose,,18,output/tlf-demographic.out:34
+T_MMSE,median,Xanomeline High Dose,,20,output/tlf-demographic.out:34
+T_MMSE,min,Placebo,,10,output/tlf-demographic.out:35
+T_MMSE,max,Placebo,,23,output/tlf-demographic.out:35
+T_MMSE,min,Xanomeline Low Dose,,10,output/tlf-demographic.out:35
+T_MMSE,max,Xanomeline Low Dose,,24,output/tlf-demographic.out:35
+T_MMSE,min,Xanomeline High Dose,,10,output/tlf-demographic.out:35
+T_MMSE,max,Xanomeline High Dose,,24,output/tlf-demographic.out:35

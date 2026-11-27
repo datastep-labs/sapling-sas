@@ -1,0 +1,99 @@
+result,stat,group,level,reference,source
+N,n,Placebo,,86,tlg/demographic.html: line 2 of the table
+N,n,Xanomeline High Dose,,72,tlg/demographic.html: line 2 of the table
+N,n,Xanomeline Low Dose,,96,tlg/demographic.html: line 2 of the table
+N,n,All Patients,,254,tlg/demographic.html: line 2 of the table
+T_AGE,n,Placebo,,86,tlg/demographic.html: line 5 of the table
+T_AGE,n,Xanomeline High Dose,,72,tlg/demographic.html: line 5 of the table
+T_AGE,n,Xanomeline Low Dose,,96,tlg/demographic.html: line 5 of the table
+T_AGE,n,All Patients,,254,tlg/demographic.html: line 5 of the table
+T_AGE,mean,Placebo,,75.2,tlg/demographic.html: line 6 of the table
+T_AGE,sd,Placebo,,8.6,tlg/demographic.html: line 6 of the table
+T_AGE,mean,Xanomeline High Dose,,73.8,tlg/demographic.html: line 6 of the table
+T_AGE,sd,Xanomeline High Dose,,7.9,tlg/demographic.html: line 6 of the table
+T_AGE,mean,Xanomeline Low Dose,,76.0,tlg/demographic.html: line 6 of the table
+T_AGE,sd,Xanomeline Low Dose,,8.1,tlg/demographic.html: line 6 of the table
+T_AGE,mean,All Patients,,75.1,tlg/demographic.html: line 6 of the table
+T_AGE,sd,All Patients,,8.2,tlg/demographic.html: line 6 of the table
+T_AGE,median,Placebo,,76.0,tlg/demographic.html: line 7 of the table
+T_AGE,median,Xanomeline High Dose,,75.5,tlg/demographic.html: line 7 of the table
+T_AGE,median,Xanomeline Low Dose,,78.0,tlg/demographic.html: line 7 of the table
+T_AGE,median,All Patients,,77.0,tlg/demographic.html: line 7 of the table
+T_AGE,min,Placebo,,52.0,tlg/demographic.html: line 8 of the table
+T_AGE,max,Placebo,,89.0,tlg/demographic.html: line 8 of the table
+T_AGE,min,Xanomeline High Dose,,56.0,tlg/demographic.html: line 8 of the table
+T_AGE,max,Xanomeline High Dose,,88.0,tlg/demographic.html: line 8 of the table
+T_AGE,min,Xanomeline Low Dose,,51.0,tlg/demographic.html: line 8 of the table
+T_AGE,max,Xanomeline Low Dose,,88.0,tlg/demographic.html: line 8 of the table
+T_AGE,min,All Patients,,51.0,tlg/demographic.html: line 8 of the table
+T_AGE,max,All Patients,,89.0,tlg/demographic.html: line 8 of the table
+T_AGEGR1,n,Placebo,,86,tlg/demographic.html: line 10 of the table
+T_AGEGR1,n,Xanomeline High Dose,,72,tlg/demographic.html: line 10 of the table
+T_AGEGR1,n,Xanomeline Low Dose,,96,tlg/demographic.html: line 10 of the table
+T_AGEGR1,n,All Patients,,254,tlg/demographic.html: line 10 of the table
+T_AGEGR1,n,Placebo,18-40,0,tlg/demographic.html: line 11 of the table
+T_AGEGR1,n,Xanomeline High Dose,18-40,0,tlg/demographic.html: line 11 of the table
+T_AGEGR1,n,Xanomeline Low Dose,18-40,0,tlg/demographic.html: line 11 of the table
+T_AGEGR1,n,All Patients,18-40,0,tlg/demographic.html: line 11 of the table
+T_AGEGR1,n,Placebo,41-64,14,tlg/demographic.html: line 12 of the table
+T_AGEGR1,pct,Placebo,41-64,16.3,tlg/demographic.html: line 12 of the table
+T_AGEGR1,n,Xanomeline High Dose,41-64,11,tlg/demographic.html: line 12 of the table
+T_AGEGR1,pct,Xanomeline High Dose,41-64,15.3,tlg/demographic.html: line 12 of the table
+T_AGEGR1,n,Xanomeline Low Dose,41-64,8,tlg/demographic.html: line 12 of the table
+T_AGEGR1,pct,Xanomeline Low Dose,41-64,8.3,tlg/demographic.html: line 12 of the table
+T_AGEGR1,n,All Patients,41-64,33,tlg/demographic.html: line 12 of the table
+T_AGEGR1,pct,All Patients,41-64,13,tlg/demographic.html: line 12 of the table
+T_AGEGR1,n,Placebo,>=65,72,tlg/demographic.html: line 13 of the table
+T_AGEGR1,pct,Placebo,>=65,83.7,tlg/demographic.html: line 13 of the table
+T_AGEGR1,n,Xanomeline High Dose,>=65,61,tlg/demographic.html: line 13 of the table
+T_AGEGR1,pct,Xanomeline High Dose,>=65,84.7,tlg/demographic.html: line 13 of the table
+T_AGEGR1,n,Xanomeline Low Dose,>=65,88,tlg/demographic.html: line 13 of the table
+T_AGEGR1,pct,Xanomeline Low Dose,>=65,91.7,tlg/demographic.html: line 13 of the table
+T_AGEGR1,n,All Patients,>=65,221,tlg/demographic.html: line 13 of the table
+T_AGEGR1,pct,All Patients,>=65,87,tlg/demographic.html: line 13 of the table
+T_SEX,n,Placebo,,86,tlg/demographic.html: line 15 of the table
+T_SEX,n,Xanomeline High Dose,,72,tlg/demographic.html: line 15 of the table
+T_SEX,n,Xanomeline Low Dose,,96,tlg/demographic.html: line 15 of the table
+T_SEX,n,All Patients,,254,tlg/demographic.html: line 15 of the table
+T_SEX,n,Placebo,FEMALE,53,tlg/demographic.html: line 16 of the table
+T_SEX,pct,Placebo,FEMALE,61.6,tlg/demographic.html: line 16 of the table
+T_SEX,n,Xanomeline High Dose,FEMALE,35,tlg/demographic.html: line 16 of the table
+T_SEX,pct,Xanomeline High Dose,FEMALE,48.6,tlg/demographic.html: line 16 of the table
+T_SEX,n,Xanomeline Low Dose,FEMALE,55,tlg/demographic.html: line 16 of the table
+T_SEX,pct,Xanomeline Low Dose,FEMALE,57.3,tlg/demographic.html: line 16 of the table
+T_SEX,n,All Patients,FEMALE,143,tlg/demographic.html: line 16 of the table
+T_SEX,pct,All Patients,FEMALE,56.3,tlg/demographic.html: line 16 of the table
+T_SEX,n,Placebo,MALE,33,tlg/demographic.html: line 17 of the table
+T_SEX,pct,Placebo,MALE,38.4,tlg/demographic.html: line 17 of the table
+T_SEX,n,Xanomeline High Dose,MALE,37,tlg/demographic.html: line 17 of the table
+T_SEX,pct,Xanomeline High Dose,MALE,51.4,tlg/demographic.html: line 17 of the table
+T_SEX,n,Xanomeline Low Dose,MALE,41,tlg/demographic.html: line 17 of the table
+T_SEX,pct,Xanomeline Low Dose,MALE,42.7,tlg/demographic.html: line 17 of the table
+T_SEX,n,All Patients,MALE,111,tlg/demographic.html: line 17 of the table
+T_SEX,pct,All Patients,MALE,43.7,tlg/demographic.html: line 17 of the table
+T_RACE,n,Placebo,,86,tlg/demographic.html: line 19 of the table
+T_RACE,n,Xanomeline High Dose,,72,tlg/demographic.html: line 19 of the table
+T_RACE,n,Xanomeline Low Dose,,96,tlg/demographic.html: line 19 of the table
+T_RACE,n,All Patients,,254,tlg/demographic.html: line 19 of the table
+T_RACE,n,Placebo,AMERICAN INDIAN OR ALASKA NATIVE,0,tlg/demographic.html: line 20 of the table
+T_RACE,n,Xanomeline High Dose,AMERICAN INDIAN OR ALASKA NATIVE,1,tlg/demographic.html: line 20 of the table
+T_RACE,pct,Xanomeline High Dose,AMERICAN INDIAN OR ALASKA NATIVE,1.4,tlg/demographic.html: line 20 of the table
+T_RACE,n,Xanomeline Low Dose,AMERICAN INDIAN OR ALASKA NATIVE,0,tlg/demographic.html: line 20 of the table
+T_RACE,n,All Patients,AMERICAN INDIAN OR ALASKA NATIVE,1,tlg/demographic.html: line 20 of the table
+T_RACE,pct,All Patients,AMERICAN INDIAN OR ALASKA NATIVE,0.4,tlg/demographic.html: line 20 of the table
+T_RACE,n,Placebo,BLACK OR AFRICAN AMERICAN,8,tlg/demographic.html: line 21 of the table
+T_RACE,pct,Placebo,BLACK OR AFRICAN AMERICAN,9.3,tlg/demographic.html: line 21 of the table
+T_RACE,n,Xanomeline High Dose,BLACK OR AFRICAN AMERICAN,9,tlg/demographic.html: line 21 of the table
+T_RACE,pct,Xanomeline High Dose,BLACK OR AFRICAN AMERICAN,12.5,tlg/demographic.html: line 21 of the table
+T_RACE,n,Xanomeline Low Dose,BLACK OR AFRICAN AMERICAN,6,tlg/demographic.html: line 21 of the table
+T_RACE,pct,Xanomeline Low Dose,BLACK OR AFRICAN AMERICAN,6.2,tlg/demographic.html: line 21 of the table
+T_RACE,n,All Patients,BLACK OR AFRICAN AMERICAN,23,tlg/demographic.html: line 21 of the table
+T_RACE,pct,All Patients,BLACK OR AFRICAN AMERICAN,9.1,tlg/demographic.html: line 21 of the table
+T_RACE,n,Placebo,WHITE,78,tlg/demographic.html: line 22 of the table
+T_RACE,pct,Placebo,WHITE,90.7,tlg/demographic.html: line 22 of the table
+T_RACE,n,Xanomeline High Dose,WHITE,62,tlg/demographic.html: line 22 of the table
+T_RACE,pct,Xanomeline High Dose,WHITE,86.1,tlg/demographic.html: line 22 of the table
+T_RACE,n,Xanomeline Low Dose,WHITE,90,tlg/demographic.html: line 22 of the table
+T_RACE,pct,Xanomeline Low Dose,WHITE,93.8,tlg/demographic.html: line 22 of the table
+T_RACE,n,All Patients,WHITE,230,tlg/demographic.html: line 22 of the table
+T_RACE,pct,All Patients,WHITE,90.6,tlg/demographic.html: line 22 of the table
