@@ -99,6 +99,7 @@
 |
 | Example:
 |
+ * Makes the table of events by class and term, the terms in the order of their subjects.;
  %table_ae(
      data  = adam.adae
    , adsl  = adam.adsl
@@ -111,6 +112,22 @@
    , label = "Treatment-emergent adverse events"
    , title = "Table 14.5.2 Treatment-emergent adverse events by SOC and PT"
    , file  = &spl_out./tlf/t14_5_2
+ )
+ * Keeps the terms that reach 5 percent in a group, with the events and a Total column.;
+ %table_ae(
+     data      = adae
+   , adsl      = adsl
+   , where     = (trtemfl = 'Y')
+   , var       = aedecod
+   , by        = trt01a
+   , order     = trt01an
+   , sort      = frequency
+   , threshold = 5
+   , total     = yes
+   , label     = "Subjects with an event, n (%) and events"
+   , stats     = n pct events
+   , title     = "Table 14.5.3 Common treatment-emergent adverse events"
+   , file      = &spl_out./tlf/t14_5_3
  )
 |
 |-------------------------------------------------------------------------------
@@ -128,6 +145,9 @@
 | 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; a
+|                          second call with other forms of its parameters. No
 |                          number changes.
 |
 *******************************************************************************/

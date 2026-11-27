@@ -45,10 +45,13 @@
 |
 | Example:
 |
+ * Copies the systolic records with only the variables the windows need: no old AVISIT or AVISITN.;
  DATA vs;
    SET advs;
    WHERE paramcd = 'SYSBP';
+   KEEP usubjid paramcd param adt ady aval vsseq;
  RUN;
+ * Puts each record in the window of its study day, with the limits, the target and the distance.;
  %windows(
      data    = vs
    , windows = 0  "Baseline" .   1   1   "<=1"
@@ -79,6 +82,10 @@
 |                          setup.sas for a later example. No number changes.
 | 27-NOV-2026 Sapling      1.9.1: the text says that a record in no window keeps
 |                          an AVISIT that data= has already. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; the
+|                          example starts from a copy that keeps only the
+|                          variables it needs (no AVISIT, AVISITN of ADVS). No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO windows(

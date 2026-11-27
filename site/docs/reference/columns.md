@@ -62,7 +62,9 @@ A header is the value, a | and the N: Placebo|(N=86). [%layout](layout.md) reads
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `t14_2_1` (made by the [example of %stack](stack.md#examples)).
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `t14_2_1` (made by the [example of %stack](stack.md#examples)), `t14_1_1` (made by the [example of %stack](stack.md#examples)).
+
+Makes the four columns with their N from adsl, the Total last, in the order of TRT01AN.
 
 ```sas
 %columns(
@@ -84,6 +86,53 @@ Xanomeline High Dose|(N=72)  Xanomeline High Dose    3    72
 Total|(N=254)                Total                   4   254
 ```
 
+Gives page=sex: one row per column and sex, the N of each column on the page of its sex.
+
+```sas
+%columns(
+     data  = t14_1_1
+   , n     = adsl
+   , var   = trt01a
+   , order = trt01an
+   , page  = sex
+   , total = yes
+   , out   = t14_1_1_cols
+ )
+```
+
+```text
+t14_1_1_cols: 8 rows
+HEADER                       SEX  COLVALUE              COL  BIGN
+Placebo|(N=53)               F    Placebo                 1    53
+Xanomeline Low Dose|(N=55)   F    Xanomeline Low Dose     2    55
+Xanomeline High Dose|(N=35)  F    Xanomeline High Dose    3    35
+Total|(N=143)                F    Total                   4   143
+Placebo|(N=33)               M    Placebo                 1    33
+Xanomeline Low Dose|(N=41)   M    Xanomeline Low Dose     2    41
+Xanomeline High Dose|(N=37)  M    Xanomeline High Dose    3    37
+Total|(N=111)                M    Total                   4   111
+```
+
+Leaves out n=: the columns have no N and come in the order of their values, the Total last.
+
+```sas
+%columns(
+     data  = t14_2_1
+   , var   = trt01a
+   , total = yes
+   , out   = t14_2_1_cols_no_n
+ )
+```
+
+```text
+t14_2_1_cols_no_n: 4 rows
+HEADER                COLVALUE              COL  BIGN
+Placebo               Placebo                 1
+Xanomeline High Dose  Xanomeline High Dose    2
+Xanomeline Low Dose   Xanomeline Low Dose     3
+Total                 Total                   4
+```
+
 ## Messages
 
 A wrong call writes the message and its fix to the log and stops. The macro also gives the [messages every macro shares](index.md#messages-every-macro-shares).
@@ -97,6 +146,8 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 Build a table: [%stack](stack.md), [%ard](ard.md), [%layout](layout.md), [%print](print.md), [%csv](csv.md).
 
 Named on this page: [%freq](freq.md).
+
+Guides that use %columns: [Make a demographic table with tests](../how-to/demographic-table.md), [Make a Kaplan-Meier figure with the number at risk](../how-to/kaplan-meier-figure.md), [Make one page per subgroup](../how-to/page-per-subgroup.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

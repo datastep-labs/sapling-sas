@@ -45,10 +45,10 @@ Makes a table of a continuous endpoint in one call: descriptive statistics, and 
 :   The subjects: a data set with one row per subject. It gives the population and the N of each column, and its variables are merged onto the records by USUBJID. When not given, the N of a column is the subjects of its records. *(optional)*
 
 `pop=`
-:   The population: a condition on `adsl=` in parentheses, such as pop = (`saffl = 'Y'`). It is used only with `adsl=`. *(optional)*
+:   The population: a condition on `adsl=` in parentheses, such as `pop = (saffl = 'Y')`. It is used only with `adsl=`. *(optional)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`paramcd = 'SYSBP'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (paramcd = 'SYSBP')`. *(optional)*
 
 `var=`
 :   The response: one numeric variable. *(optional, default `CHG`)*
@@ -117,7 +117,7 @@ Makes a table of a continuous endpoint in one call: descriptive statistics, and 
 
 ## Result
 
-The data sets: &lt;name&gt;_&lt;variable&gt; (the descriptive results), &lt;name&gt;_ancova or &lt;name&gt;_mmrm (the result of the model), &lt;name&gt; (the stacked results), &lt;name&gt;_cols, &lt;name&gt;_display, &lt;name&gt;_at (with `at=`), &lt;name&gt;_pop (with `adsl=`) and &lt;name&gt;_rec (with `adsl=` or `where=`). The files: &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file (only with `file=`). The global macro variable: the global macro variable &lt;name&gt;_print. With `show=`: the long program, in the log or in a file.
+The data sets: &lt;name&gt;_&lt;variable&gt; (the descriptive results), &lt;name&gt;_ancova or &lt;name&gt;_mmrm (the result of the model), &lt;name&gt; (the stacked results), &lt;name&gt;_cols, &lt;name&gt;_display, &lt;name&gt;_at (with `at=`), &lt;name&gt;_pop (with `adsl=`) and &lt;name&gt;_rec (with `adsl=` or `where=`). The files: &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file (only with `file=`). The global macro variable: &lt;name&gt;_print. With `show=`: the long program, in the log or in a file.
 
 ## Details
 
@@ -139,6 +139,8 @@ The global macro variable &lt;name&gt;_print keeps the call of [%print](print.md
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+
+Makes the ANCOVA table at Week 12: three descriptive blocks, then the LS means and difference.
 
 ```sas
 %table_model(
@@ -190,6 +192,48 @@ ANCOVA, adjusted for base
     p-value                                                    0.027
 ```
 
+Uses method=mmrm on five visits: the LS means and the differences at Week 24.
+
+```sas
+%table_model(
+     data     = advs
+   , adsl     = adsl
+   , where    = (paramcd = 'SYSBP' AND anl01fl = 'Y' AND avisitn IN (4 8 12 16 24))
+   , covars   = base
+   , visit    = avisit
+   , by       = trt01p
+   , at       = "Week 24"
+   , order    = trt01pn
+   , method   = mmrm
+   , type     = un
+   , fallback = toep
+   , title    = "Table 14.3.3 MMRM of the change of systolic blood pressure at Week 24"
+   , file     = &spl_out./tlf/t14_3_3
+ )
+```
+
+```text
+tlf/t14_3_3.lst: 16 lines
+Table 14.3.3 MMRM of the change of systolic blood pressure at Week 24
+
+                          Placebo      Xanomeline Low Dose  Xanomeline High Dose
+                          (N=86)       (N=84)               (N=84)
+--------------------------------------------------------------------------------
+```
+
+```text
+MMRM: Week 24
+  LS mean (SE)            -1.8 (1.72)  -1.4 (2.41)          -5.9 (2.31)
+  vs Placebo
+    Difference (SE)                    0.4 (2.96)           -4.1 (2.88)
+    Confidence interval                (-5.5, 6.2)          (-9.8, 1.6)
+    p-value                            0.903                0.157
+  vs Xanomeline Low Dose
+    Difference (SE)                                         -4.4 (3.34)
+    Confidence interval                                     (-11.0, 2.1)
+    p-value                                                 0.184
+```
+
 ## Messages
 
 A wrong call writes the message and its fix to the log and stops. The macro also gives the [messages every macro shares](index.md#messages-every-macro-shares).
@@ -203,7 +247,9 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Tables in one call: [%table](table.md), [%table_summary](table_summary.md), [%table_ae](table_ae.md), [%table_visit](table_visit.md), [%table_shift](table_shift.md), [%table_response](table_response.md), [%table_tte](table_tte.md).
 
-Named on this page: [%describe](describe.md), [%lsmeans](lsmeans.md), [%mmrm](mmrm.md), [%stack](stack.md), [%columns](columns.md), [%layout](layout.md), [%print](print.md).
+Named on this page: [%lsmeans](lsmeans.md), [%mmrm](mmrm.md), [%layout](layout.md), [%describe](describe.md), [%stack](stack.md), [%columns](columns.md), [%print](print.md).
+
+Guides that use %table_model: [Make an efficacy table with an ANCOVA](../how-to/efficacy-table.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

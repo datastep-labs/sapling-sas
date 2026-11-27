@@ -29,7 +29,7 @@ Returns the p-value of the Wilcoxon rank-sum test of each pair of groups, with t
 :   The input data set: one record per subject, with USUBJID. *(required)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`avisit = 'Week 24'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (avisit = 'Week 24')`. *(optional)*
 
 `var=`
 :   The variable to compare: one numeric variable. *(required)*
@@ -38,7 +38,7 @@ Returns the p-value of the Wilcoxon rank-sum test of each pair of groups, with t
 :   The groups: one character variable (trt01a, not trt01an). *(required)*
 
 `pairs=`
-:   Which groups to compare. all: each later group against each earlier one, in the order of `order=` (else of the values). Or the pairs, separated by #: in each pair the group first, then the group it is compared with, each value in quotes (`pairs = "Drug"` "Placebo" # "High" "Low"). The form "A"-"B" of version 1.0 is still read. *(optional, default `all`)*
+:   Which groups to compare. all: each later group against each earlier one, in the order of `order=` (else of the values). Or the pairs, separated by #: in each pair the group first, then the group it is compared with, each value in quotes (`pairs = "Drug" "Placebo" # "High" "Low"`). *(optional, default `all`)*
 
 `order=`
 :   The order of the groups: one numeric variable with one value per group (`order = trt01an`). *(optional)*
@@ -81,6 +81,8 @@ The macro uses one record per subject: when a subject has several records, the f
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
 
+Compares each pair with the Wilcoxon rank sum test and the Hodges Lehmann estimate.
+
 ```sas
 %wilcoxon(
      data  = advs
@@ -108,6 +110,8 @@ Xanomeline High Dose  Xanomeline Low Dose  TRT01P VERSUS         lcl            
 Xanomeline High Dose  Xanomeline Low Dose  TRT01P VERSUS         ucl                  2   2.00
 Xanomeline High Dose  Xanomeline Low Dose  TRT01P VERSUS         pval       0.202676797  0.203
 ```
+
+Leaves out the continuity correction for one pair: only the p value changes.
 
 ```sas
 %wilcoxon(
@@ -138,11 +142,13 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 
 Test the groups: [%anova](anova.md), [%ttest](ttest.md), [%chisq](chisq.md), [%fisher](fisher.md), [%cmh](cmh.md), [%ancova](ancova.md), [%adjust](adjust.md).
 
-Named on this page: [%stack](stack.md), [%describe](describe.md).
+Named on this page: [%describe](describe.md).
+
+Guides that use %wilcoxon: [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

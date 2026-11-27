@@ -44,10 +44,12 @@
 |
 | Example:
 |
+ * Copies the systolic records.;
  DATA vs;
    SET advs;
    WHERE paramcd = 'SYSBP';
  RUN;
+ * Copies the value of the baseline record to BASE on each record of its subject and parameter.;
  %baseline(
      data    = vs
    , value   = aval
@@ -76,6 +78,8 @@
 |                          %baseline. The example first copies its records into a
 |                          data set of its own, so that it changes no data set of
 |                          setup.sas for a later example. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO baseline(

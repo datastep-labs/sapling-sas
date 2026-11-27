@@ -47,7 +47,7 @@
 |             by #, each the group first and then the group it
 |             is compared with, a value with a blank or a hyphen
 |             in quotes: pairs = "Drug" "Placebo" # "High"
-|             "Low". The old form "A"-"B" is still read.
+|             "Low"
 | order       The order of the groups: one numeric variable with  Optional
 |             one value per group (order = trt01pn)
 | level       The confidence level of the limits: a number        0.95
@@ -73,6 +73,7 @@
 |
 | Example:
 |
+ * Gives the LS means and the difference of every pair at Week 12, adjusted for baseline and sex.;
  %lsmeans(
      data   = advs
    , where  = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')
@@ -84,6 +85,7 @@
    , order  = trt01pn
    , out    = sbp_ls
  )
+ * Compares two pairs against Placebo at a 90 percent level and keeps the statistics of stats=.;
  %lsmeans(
      data   = advs
    , where  = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')
@@ -132,6 +134,8 @@
 | 27-NOV-2026 Sapling      1.9.1: an example with pairs=, level= and stats= with
 |                          the LS means; the text says to give a where= that
 |                          leaves one record per subject. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO lsmeans(

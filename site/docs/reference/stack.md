@@ -40,7 +40,9 @@ A block is the rows of one call in the table: the rows of one result, under its 
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `age_describe` (made by the [example of %describe](describe.md#examples)), `age_anova` (made by the [example of %anova](anova.md#examples)), `sex_freq` (made by the [example of %freq](freq.md#examples)), `sex_chisq` (made by the [example of %chisq](chisq.md#examples)), `hr_sex` (made by the [example of %cox](cox.md#examples)), `hr_age` (made by the [example of %cox](cox.md#examples)).
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `age_describe` (made by the [example of %describe](describe.md#examples)), `age_anova` (made by the [example of %anova](anova.md#examples)), `sex_freq` (made by the [example of %freq](freq.md#examples)), `sex_chisq` (made by the [example of %chisq](chisq.md#examples)), `hr_sex` (made by the [example of %cox](cox.md#examples)), `hr_age` (made by the [example of %cox](cox.md#examples)), `age_sex` (made by the [example of %describe](describe.md#examples)), `agegr_sex` (made by the [example of %freq](freq.md#examples)).
+
+Stacks four results in the order of the table: RESULT and ORD tell where each row came from.
 
 ```sas
 %stack(age_describe age_anova sex_freq sex_chisq, out=t14_2_1)
@@ -66,6 +68,8 @@ Xanomeline High Dose       AGE_DESCRIBE    1  TRT01A  Age (years)  mean    73.77
 Xanomeline High Dose       AGE_DESCRIBE    1  TRT01A  Age (years)  sd      7.9438562002  7.94
 ```
 
+Stacks the hazard ratios by sex and by age group, for one forest plot.
+
 ```sas
 %stack(hr_sex hr_age, out=hr_sub)
 ```
@@ -90,6 +94,32 @@ Xanomeline Low Dose   Placebo  M            HR_SEX    1  TRT01A VERSUS SEX      
 Xanomeline Low Dose   Placebo  M            HR_SEX    1  TRT01A VERSUS SEX         ucl   13.160521402  13.16
 ```
 
+Stacks age and the age groups by sex: the results of a table with a page per sex.
+
+```sas
+%stack(age_sex agegr_sex, out=t14_1_1)
+```
+
+```text
+t14_1_1: the first 15 of 80 rows
+TRT01A   SEX  AGEGR1  RESULT   ORD  GROUPS      BLOCK        STAT           VALUE  TEXT
+Placebo  F            AGE_SEX    1  TRT01A SEX  Age (years)  n                 53    53
+Placebo  F            AGE_SEX    1  TRT01A SEX  Age (years)  mean    76.358490566  76.4
+Placebo  F            AGE_SEX    1  TRT01A SEX  Age (years)  sd      8.7334334151  8.73
+Placebo  F            AGE_SEX    1  TRT01A SEX  Age (years)  median            78  78.0
+Placebo  F            AGE_SEX    1  TRT01A SEX  Age (years)  min               59    59
+Placebo  F            AGE_SEX    1  TRT01A SEX  Age (years)  max               89    89
+Placebo  M            AGE_SEX    1  TRT01A SEX  Age (years)  n                 33    33
+Placebo  M            AGE_SEX    1  TRT01A SEX  Age (years)  mean    73.363636364  73.4
+Placebo  M            AGE_SEX    1  TRT01A SEX  Age (years)  sd      8.1463879335  8.15
+Placebo  M            AGE_SEX    1  TRT01A SEX  Age (years)  median            74  74.0
+Placebo  M            AGE_SEX    1  TRT01A SEX  Age (years)  min               52    52
+Placebo  M            AGE_SEX    1  TRT01A SEX  Age (years)  max               85    85
+Total    F            AGE_SEX    1  TRT01A SEX  Age (years)  n                143   143
+Total    F            AGE_SEX    1  TRT01A SEX  Age (years)  mean     75.65034965  75.7
+Total    F            AGE_SEX    1  TRT01A SEX  Age (years)  sd       8.193314641  8.19
+```
+
 ## Messages
 
 A wrong call writes the message and its fix to the log and stops. The macro also gives the [messages every macro shares](index.md#messages-every-macro-shares).
@@ -103,6 +133,8 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 Build a table: [%columns](columns.md), [%ard](ard.md), [%layout](layout.md), [%print](print.md), [%csv](csv.md).
 
 Named on this page: [%describe](describe.md), [%freq](freq.md).
+
+Guides that use %stack: [Make an adverse event table](../how-to/adverse-event-table.md), [Make a demographic table with tests](../how-to/demographic-table.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

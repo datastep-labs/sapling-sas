@@ -32,7 +32,7 @@ Returns the percent of subjects in each category and group, with its confidence 
 :   The subjects of the percent: a data set with one row per subject and the variable of `by=`. When not given, the subjects of `data=` (without `where=`). *(optional)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`avisit = 'Week 24'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (avisit = 'Week 24')`. *(optional)*
 
 `var=`
 :   The category: one variable. *(required)*
@@ -74,6 +74,8 @@ Use [%freq](freq.md) for counts and percents without an interval. The statistics
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
 
+Gives the percent that completed and that discontinued, each with its Clopper Pearson limits.
+
 ```sas
 %proportion(
      data   = adsl
@@ -104,6 +106,8 @@ Xanomeline High Dose  DISCONTINUED  TRT01A EOSSTT         n               45  45
 Xanomeline High Dose  DISCONTINUED  TRT01A EOSSTT         pct           62.5  (62.5%)
 Xanomeline High Dose  DISCONTINUED  TRT01A EOSSTT         lcl   50.298592937  50.3
 ```
+
+Gives the percent of the best responses CR and PR of the N of denom=, with Wilson limits.
 
 ```sas
 %proportion(
@@ -150,11 +154,11 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Describe the data: [%describe](describe.md), [%freq](freq.md), [%rate](rate.md), [%worst](worst.md), [%termflags](termflags.md).
 
-Named on this page: [%stack](stack.md).
+Guides that use %proportion: [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

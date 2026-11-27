@@ -72,6 +72,7 @@
 |
 | Example:
 |
+ * Tests the treatment by sex interaction of the time to the event in a Cox model.;
  %interaction_phreg(
      data   = adttde
    , var    = aval
@@ -103,6 +104,8 @@
 |                          2 an event); a missing or negative CNSR on a record
 |                          used stops the macro with an ERROR. No number changes
 |                          on data with CNSR 0 and 1.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO interaction_phreg(

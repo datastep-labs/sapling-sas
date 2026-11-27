@@ -24,7 +24,7 @@ Keeps the records of each subject at its worst level, such as the highest severi
 :   The input data set: the records, with USUBJID. *(required)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`trtemfl = 'Y'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (trtemfl = 'Y')`. *(optional)*
 
 `var=`
 :   The graded variable: one variable, character or numeric (`var = aesev`). *(required)*
@@ -33,7 +33,7 @@ Keeps the records of each subject at its worst level, such as the highest severi
 :   The variables of a row: one or several, separated by blanks (`by = aebodsys aedecod`). The macro keeps the worst records of each subject in each row. When not given, the worst of all the records of the subject. *(optional)*
 
 `levels=`
-:   The values of `var=` from the least to the most severe, separated by blanks: texts in quotes, numbers without (`levels = 'MILD'` 'MODERATE' 'SEVERE'). *(required)*
+:   The values of `var=` from the least to the most severe, separated by blanks: texts in quotes, numbers without (`levels = 'MILD' 'MODERATE' 'SEVERE'`). *(required)*
 
 `out=`
 :   The name of the data set of the records kept. *(required)*
@@ -53,6 +53,8 @@ Use it before [%freq](freq.md), so that [%freq](freq.md) counts each subject onc
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+
+Keeps the records of each subject and term at the worst severity, the last value of levels=.
 
 ```sas
 %worst(
@@ -93,9 +95,11 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 
 Describe the data: [%describe](describe.md), [%freq](freq.md), [%proportion](proportion.md), [%rate](rate.md), [%termflags](termflags.md).
 
+Guides that use %worst: [Run the examples of the reference](../how-to/run-the-examples.md).
+
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

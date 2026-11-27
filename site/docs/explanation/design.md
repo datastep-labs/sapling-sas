@@ -54,7 +54,10 @@ input, so the log never fills with the errors of a procedure.
 ## The tables in one call
 
 `%table_summary`, `%table_ae` and the other one-call tables are the exception to the building blocks: one call makes a
-whole standard table. They have a population parameter (`pop=`), because a standard table always has one. They hide
+whole standard table. Most of them take the population as a parameter, because a standard table always has one: the
+tables of records (`%table_ae`, `%table_visit`, `%table_shift`, `%table_response`, `%table_model`, `%table_tte`) have
+`pop=`, a condition on the subjects of `adsl=`; `%table_summary` reads one row per subject and selects them with
+`where=`; `%table` prints a table that the program stacked, so the program selects its population. They hide
 nothing: each call runs the long program it stands for, the same calls of `%describe`, `%freq`, `%stack`, `%layout`
 and `%print` that a programmer would write. `show=yes` writes that long program to the log, and `show=<file>` writes
 it to a file and runs it from there. A reviewer reads the long program; a programmer who needs a change starts from it.

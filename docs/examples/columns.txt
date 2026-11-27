@@ -1,6 +1,0 @@
-t14_2_1_cols: 4 rows
-HEADER                       COLVALUE              COL  BIGN
-Placebo|(N=86)               Placebo                 1    86
-Xanomeline Low Dose|(N=96)   Xanomeline Low Dose     2    96
-Xanomeline High Dose|(N=72)  Xanomeline High Dose    3    72
-Total|(N=254)                Total                   4   254

@@ -100,6 +100,7 @@
 |
 | Example:
 |
+ * Counts each sex in each group and in the Total: n and the percent of the subjects of the group.;
  %freq(
      data  = adsl
    , var   = sex
@@ -108,6 +109,7 @@
    , label = "Sex"
    , out   = sex_freq
  )
+ * Counts subjects and events of each term under its class: the percent uses the N of denom=.;
  %freq(
      data  = adae
    , denom = adsl
@@ -117,6 +119,7 @@
    , stats = n pct events
    , out   = teae
  )
+ * Counts the shift at Week 24 with planned levels: a level without a subject has a row of 0.;
  %freq(
      data   = adlb
    , denom  = adsl
@@ -126,6 +129,7 @@
    , levels = bnrind 'LOW' 'NORMAL' 'HIGH' anrind 'LOW' 'NORMAL' 'HIGH'
    , out    = shift
  )
+ * Keeps the terms that reach 5 percent in a group, in the order of their subjects, the most first.;
  %freq(
      data      = adae
    , denom     = adsl
@@ -135,6 +139,15 @@
    , threshold = 5
    , order     = frequency
    , out       = common
+ )
+ * Adds sex as a second BY variable: the age groups of each group and sex, for a page per sex.;
+ %freq(
+     data  = adsl
+   , var   = agegr1
+   , by    = trt01a sex
+   , total = yes
+   , label = "Age group"
+   , out   = agegr_sex
  )
 |
 |-------------------------------------------------------------------------------
@@ -174,6 +187,9 @@
 | 27-NOV-2026 Sapling      1.9.1: The example result is sex_freq, the name %stack
 |                          reads. The text of stats=: a name without a pattern
 |                          takes its default pattern. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; a
+|                          fifth call with a page variable (by= trt01a sex). No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO freq(

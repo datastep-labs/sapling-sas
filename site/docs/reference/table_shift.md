@@ -40,10 +40,10 @@ Makes a shift table in one call: the subjects in each category at baseline again
 :   The subjects: a data set with one row per subject. It gives the population and the N of each column, and its variables are merged onto the records by USUBJID. When not given, the N of a column is the subjects of its records. *(optional)*
 
 `pop=`
-:   The population: a condition on `adsl=` in parentheses, such as pop = (`saffl = 'Y'`). It is used only with `adsl=`. *(optional)*
+:   The population: a condition on `adsl=` in parentheses, such as `pop = (saffl = 'Y')`. It is used only with `adsl=`. *(optional)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`trtemfl = 'Y'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (trtemfl = 'Y')`. *(optional)*
 
 `var=`
 :   Two variables, separated by a blank: the category at baseline, then the category after baseline. *(optional, default `BNRIND ANRIND`)*
@@ -61,7 +61,7 @@ Makes a shift table in one call: the subjects in each category at baseline again
 :   The numeric twin of `by=`, such as `order = trt01an`: it gives the order of the columns. *(optional)*
 
 `levels=`
-:   The planned categories of both variables of `var=`: values in quotes, separated by blanks, such as `levels = 'LOW'` 'NORMAL' 'HIGH'. A planned category has a row also without a subject; a record of another category is not counted (levels= of [%freq](freq.md)). *(optional)*
+:   The planned categories of both variables of `var=`: values in quotes, separated by blanks, such as `levels = 'LOW' 'NORMAL' 'HIGH'`. A planned category has a row also without a subject; a record of another category is not counted (levels= of [%freq](freq.md)). *(optional)*
 
 `total=`
 :   yes: add the column Total, all groups together. *(optional, default `no`)*
@@ -97,7 +97,7 @@ Makes a shift table in one call: the subjects in each category at baseline again
 
 ## Result
 
-The data sets: &lt;name&gt;_shift (the result), &lt;name&gt; (the stacked results), &lt;name&gt;_cols, &lt;name&gt;_display, &lt;name&gt;_pop (with `adsl=`) and &lt;name&gt;_rec (with `adsl=` or `where=`). The files: &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file (only with `file=`). The global macro variable: the global macro variable &lt;name&gt;_print. With `show=`: the long program, in the log or in a file.
+The data sets: &lt;name&gt;_shift (the result), &lt;name&gt; (the stacked results), &lt;name&gt;_cols, &lt;name&gt;_display, &lt;name&gt;_pop (with `adsl=`) and &lt;name&gt;_rec (with `adsl=` or `where=`). The files: &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file (only with `file=`). The global macro variable: &lt;name&gt;_print. With `show=`: the long program, in the log or in a file.
 
 ## Details
 
@@ -113,6 +113,8 @@ The global macro variable &lt;name&gt;_print keeps the call of [%print](print.md
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+
+Makes the shift table of the normal range at Week 12 and Week 24, with every planned level.
 
 ```sas
 %table_shift(
@@ -170,6 +172,62 @@ Table 14.8.1 Shift from baseline of the normal range
 ---------------------------------------------------------------------
 ```
 
+Shifts to the highest value after baseline, with a label of the block and a Total column.
+
+```sas
+%table_shift(
+     data   = adlb
+   , adsl   = adsl
+   , where  = (avisit = 'POST-BASELINE MAXIMUM')
+   , within = paramcd
+   , by     = trt01a
+   , keep   = param
+   , order  = trt01an
+   , levels = 'LOW' 'NORMAL' 'HIGH'
+   , total  = yes
+   , label  = "Baseline by the highest value after baseline"
+   , title  = "Table 14.8.2 Shift to the highest value after baseline"
+   , file   = &spl_out./tlf/t14_8_2
+ )
+```
+
+```text
+tlf/t14_8_2.lst: 33 lines
+Table 14.8.2 Shift to the highest value after baseline
+
+                                              Placebo      Xanomeline Low Dose  Xanomeline High Dose  Total
+                                              (N=86)       (N=96)               (N=72)                (N=254)
+-----------------------------------------------------------------------------------------------------------------
+
+Baseline by the highest value after baseline
+  Alanine Aminotransferase (U/L)
+    LOW
+      LOW                                       0 ( 0.0%)    0 ( 0.0%)            0 ( 0.0%)             0 ( 0.0%)
+      NORMAL                                    0 ( 0.0%)    0 ( 0.0%)            0 ( 0.0%)             0 ( 0.0%)
+      HIGH                                      0 ( 0.0%)    0 ( 0.0%)            0 ( 0.0%)             0 ( 0.0%)
+    NORMAL
+      LOW                                       0 ( 0.0%)    0 ( 0.0%)            0 ( 0.0%)             0 ( 0.0%)
+      NORMAL                                   73 (88.0%)   65 (86.7%)           61 (84.7%)           199 (86.5%)
+      HIGH                                      6 ( 7.2%)    8 (10.7%)            7 ( 9.7%)            21 ( 9.1%)
+    HIGH
+      LOW                                       0 ( 0.0%)    0 ( 0.0%)            0 ( 0.0%)             0 ( 0.0%)
+      NORMAL                                    1 ( 1.2%)    0 ( 0.0%)            0 ( 0.0%)             1 ( 0.4%)
+      HIGH                                      3 ( 3.6%)    2 ( 2.7%)            4 ( 5.6%)             9 ( 3.9%)
+  Aspartate Aminotransferase (U/L)
+    LOW
+      LOW                                       0 ( 0.0%)    0 ( 0.0%)            0 ( 0.0%)             0 ( 0.0%)
+      NORMAL                                    0 ( 0.0%)    0 ( 0.0%)            0 ( 0.0%)             0 ( 0.0%)
+      HIGH                                      0 ( 0.0%)    0 ( 0.0%)            0 ( 0.0%)             0 ( 0.0%)
+    NORMAL
+      LOW                                       0 ( 0.0%)    0 ( 0.0%)            0 ( 0.0%)             0 ( 0.0%)
+      NORMAL                                   69 (83.1%)   61 (81.3%)           64 (88.9%)           194 (84.3%)
+      HIGH                                      8 ( 9.6%)    6 ( 8.0%)            5 ( 6.9%)            19 ( 8.3%)
+    HIGH
+      LOW                                       0 ( 0.0%)    0 ( 0.0%)            0 ( 0.0%)             0 ( 0.0%)
+      NORMAL                                    2 ( 2.4%)    4 ( 5.3%)            1 ( 1.4%)             7 ( 3.0%)
+      HIGH                                      4 ( 4.8%)    4 ( 5.3%)            2 ( 2.8%)            10 ( 4.3%)
+```
+
 ## Messages
 
 A wrong call writes the message and its fix to the log and stops. The macro also gives the [messages every macro shares](index.md#messages-every-macro-shares).
@@ -184,7 +242,9 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Tables in one call: [%table](table.md), [%table_summary](table_summary.md), [%table_ae](table_ae.md), [%table_visit](table_visit.md), [%table_response](table_response.md), [%table_model](table_model.md), [%table_tte](table_tte.md).
 
-Named on this page: [%freq](freq.md), [%stack](stack.md), [%columns](columns.md), [%layout](layout.md), [%print](print.md).
+Named on this page: [%freq](freq.md), [%layout](layout.md), [%stack](stack.md), [%columns](columns.md), [%print](print.md).
+
+Guides that use %table_shift: [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

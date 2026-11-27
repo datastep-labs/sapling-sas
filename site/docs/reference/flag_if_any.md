@@ -26,7 +26,7 @@ Flags with Y every row of each subject that has a record in another data set tha
 :   The data set of the records, with USUBJID, such as adae. *(required)*
 
 `where=`
-:   The condition on the records of `from=`, in parentheses, such as where = (`aesev = 'SEVERE'`). *(required)*
+:   The condition on the records of `from=`, in parentheses, such as `where = (aesev = 'SEVERE')`. *(required)*
 
 `else=`
 :   The value for the other subjects: N, or blank for a blank value. *(optional, default `N`)*
@@ -50,12 +50,16 @@ Use [%flag_first](flag_first.md) to flag one record of each group instead of a s
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
 
+Copies the subjects with USUBJID and EOSSTT only.
+
 ```sas
 DATA sl;
   SET adsl;
   KEEP usubjid eosstt;
 RUN;
 ```
+
+Sets COMPLFL to Y for a subject with a disposition record COMPLETED, else to N.
 
 ```sas
 %flag_if_any(
@@ -93,6 +97,8 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 ## See also
 
 ADaM steps: [%merge_subject](merge_subject.md), [%pick](pick.md), [%summarize](summarize.md), [%summarize_groups](summarize_groups.md), [%baseline](baseline.md), [%flag_first](flag_first.md), [%windows](windows.md), [%visits](visits.md), [%locf](locf.md), [%relchange](relchange.md), [%param_wide](param_wide.md), [%pool](pool.md), [%tte](tte.md).
+
+Guides that use %flag_if_any: [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

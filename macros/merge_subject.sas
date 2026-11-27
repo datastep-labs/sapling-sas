@@ -38,10 +38,12 @@
 |
 | Example:
 |
+ * Copies the time to event records with four variables of their own.;
  DATA tt;
    SET adtte;
    KEEP usubjid paramcd aval cnsr;
  RUN;
+ * Adds the age group, the race and the planned treatment of adsl by USUBJID, two of them renamed.;
  %merge_subject(
      data = tt
    , from = adsl
@@ -72,6 +74,8 @@
 | 27-NOV-2026 Sapling      1.9.1: the message prints a macro variable, not a
 |                          macro expression: it reads the same in the log and in
 |                          the code. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO merge_subject(

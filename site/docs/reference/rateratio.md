@@ -58,7 +58,7 @@ Returns the rate ratios of pairs of groups from a Poisson or negative binomial m
     Accepts: `poisson`, `negbin`, `nb`.
 
 `pairs=`
-:   The pairs of groups to compare. all: each later group against each earlier one, in the order of `order=` (or of the values). Or the pairs separated by #, each the group first and then the group it is compared with, a value with a blank or a hyphen in quotes: `pairs = "Drug"` "Placebo" # "High" "Low". The old form "A"-"B" is still read. *(optional, default `all`)*
+:   The pairs of groups to compare. all: each later group against each earlier one, in the order of `order=` (or of the values). Or the pairs separated by #, each the group first and then the group it is compared with, a value with a blank or a hyphen in quotes: `pairs = "Drug" "Placebo" # "High" "Low"`. *(optional, default `all`)*
 
 `order=`
 :   The order of the groups: one numeric variable with one value per group (`order = trt01an`). *(optional)*
@@ -94,6 +94,8 @@ Use [%rate](rate.md) for the rate of each group without a model. The model is PR
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+
+Compares the event counts in a negative binomial model: STAT irr is the rate ratio.
 
 ```sas
 %rateratio(
@@ -137,11 +139,13 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Compare groups with a model: [%lsmeans](lsmeans.md), [%mmrm](mmrm.md), [%logistic](logistic.md), [%risk](risk.md).
 
-Named on this page: [%rate](rate.md), [%stack](stack.md), [%describe](describe.md).
+Named on this page: [%describe](describe.md), [%rate](rate.md).
+
+Guides that use %rateratio: [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

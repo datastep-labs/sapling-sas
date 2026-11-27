@@ -5,7 +5,8 @@ column counted on its page and the value in the title. All pages go into one RTF
 
 ## Before you start
 
-- Submit `examples/setup.sas`, or start your own program with `%study`.
+- Submit `examples/setup.sas`, or start your own program as [Use the macros in your own program](own-program.md)
+  shows.
 - Have the population, one row per subject, with the subgroup variable. The guide uses `adsl` and makes one page
   per sex.
 - Have a format for the values of the subgroup if the title should print a label, such as `$sexf.` of the example

@@ -76,6 +76,7 @@
 |
 | Example:
 |
+ * Gives n, events, the median and its limits of each group: NE is a median not reached.;
  %km(
      data  = adttde
    , var   = aval
@@ -83,6 +84,7 @@
    , label = "Time to the first skin event (days)"
    , out   = ttde_km
  )
+ * Gives the percent of subjects alive at day 182 and its limits, with the patterns of stats=.;
  %km(
      data  = adtte
    , where = (paramcd = 'OS')
@@ -92,6 +94,7 @@
    , stats = n="XX" events="XX" surv="XX.X" lcl="XX.X" ucl="XX.X"
    , out   = os_km
  )
+ * Uses conftype=loglog and a 90 percent level: the median stays, its limits change.;
  %km(
      data     = adttde
    , var      = aval
@@ -134,6 +137,8 @@
 |                          on data with CNSR 0 and 1.
 | 27-NOV-2026 Sapling      1.9.1: an example with conftype= and level=. No number
 |                          changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO km(

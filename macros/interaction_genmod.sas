@@ -67,6 +67,7 @@
 |
 | Example:
 |
+ * Tests the treatment by sex interaction of the event counts in a negative binomial model.;
  %interaction_genmod(
      data     = adsl
    , where    = (trtdurd > 0)
@@ -96,6 +97,8 @@
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO interaction_genmod(

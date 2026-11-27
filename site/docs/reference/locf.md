@@ -28,7 +28,7 @@ Adds last-observation-carried-forward records (DTYPE = 'LOCF') to the analysis w
 :   The windows, in the form of `windows=` of [%windows](windows.md): baseline first, then one window or more after it. *(required)*
 
 `where=`
-:   The records to carry forward: a condition in parentheses, such as where = (`paramcd = 'SYSBP'`). When not given, all analysed records count. *(optional)*
+:   The records to carry forward: a condition in parentheses, such as `where = (paramcd = 'SYSBP')`. When not given, all analysed records count. *(optional)*
 
 `by=`
 :   The groups, each carried forward by itself: variables separated by blanks. *(optional, default `USUBJID PARAMCD`)*
@@ -64,12 +64,16 @@ The new records get the window variables of their window and DTYPE = 'LOCF'; the
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
 
+Copies the systolic records of the analysis visits.
+
 ```sas
 DATA vs;
   SET advs;
   WHERE paramcd = 'SYSBP' AND avisitn IN (0 4 12 24);
 RUN;
 ```
+
+Carries the last value forward into a visit without a value: DTYPE is LOCF on the new records.
 
 ```sas
 %locf(
@@ -110,6 +114,8 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 ## See also
 
 ADaM steps: [%merge_subject](merge_subject.md), [%pick](pick.md), [%summarize](summarize.md), [%summarize_groups](summarize_groups.md), [%baseline](baseline.md), [%flag_first](flag_first.md), [%flag_if_any](flag_if_any.md), [%windows](windows.md), [%visits](visits.md), [%relchange](relchange.md), [%param_wide](param_wide.md), [%pool](pool.md), [%tte](tte.md).
+
+Guides that use %locf: [Derive analysis visits, the baseline and the change from baseline](../how-to/derive-baseline.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

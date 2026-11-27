@@ -51,7 +51,7 @@
 |             by #, each the group first and then the group it
 |             is compared with, a value with a blank or a hyphen
 |             in quotes: pairs = "Drug" "Placebo" # "High"
-|             "Low". The old form "A"-"B" is still read.
+|             "Low"
 | order       The order of the groups: one numeric variable with  Optional
 |             one value per group (order = trt01an)
 | level       The confidence level of the limits: a number        0.95
@@ -80,6 +80,7 @@
 |
 | Example:
 |
+ * Compares the event counts in a negative binomial model: STAT irr is the rate ratio.;
  %rateratio(
      data     = adsl
    , where    = (trtdurd > 0)
@@ -117,6 +118,8 @@
 | 27-NOV-2026 Sapling      1.9.1: the message of exposure= prints a macro
 |                          variable, not a macro expression; the Note names the R
 |                          package. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO rateratio(

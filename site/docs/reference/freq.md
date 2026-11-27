@@ -36,7 +36,7 @@ Counts the subjects in each category and group, with their percent of the subjec
 :   The subjects of each group: the N of the percent and the columns. A data set with one row per subject and the variables of `by=`; data set options are allowed: adsl(where=(`saffl = 'Y'`)). When not given, the subjects of `data=` (without `where=`). *(optional)*
 
 `where=`
-:   The records to count: a condition in parentheses, such as where = (`trtemfl = 'Y'`). *(optional)*
+:   The records to count: a condition in parentheses, such as `where = (trtemfl = 'Y')`. *(optional)*
 
 `var=`
 :   The categories: one variable or several, separated by blanks, nested in their order (`var = aebodsys aedecod`: a term within its class). When not given, the macro counts the subjects with any record. *(optional)*
@@ -90,6 +90,8 @@ Use [%proportion](proportion.md) when the percent needs a confidence interval, a
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
 
+Counts each sex in each group and in the Total: n and the percent of the subjects of the group.
+
 ```sas
 %freq(
      data  = adsl
@@ -120,6 +122,8 @@ Xanomeline Low Dose   F    TRT01A SEX  Sex    n               55  55
 Xanomeline Low Dose   F    TRT01A SEX  Sex    pct   57.291666667  (57.3%)
 Xanomeline Low Dose   M    TRT01A SEX  Sex    n               41  41
 ```
+
+Counts subjects and events of each term under its class: the percent uses the N of denom=.
 
 ```sas
 %freq(
@@ -153,6 +157,8 @@ Placebo  CARDIAC DISORDERS  ATRIOVENTRICULAR BLOCK SECOND DEGREE  TRT01A AEBODSY
 Placebo  CARDIAC DISORDERS  ATRIOVENTRICULAR BLOCK SECOND DEGREE  TRT01A AEBODSYS AEDECOD         events             1  1
 ```
 
+Counts the shift at Week 24 with planned levels: a level without a subject has a row of 0.
+
 ```sas
 %freq(
      data   = adlb
@@ -184,6 +190,8 @@ Placebo  ALT      NORMAL  HIGH          2        3  TRT01A PARAMCD BNRIND ANRIND
 Placebo  ALT      NORMAL  HIGH          2        3  TRT01A PARAMCD BNRIND ANRIND         pct   2.3255813953  ( 2.3%)
 Placebo  ALT      NORMAL  LOW           2        1  TRT01A PARAMCD BNRIND ANRIND         n                1  1
 ```
+
+Keeps the terms that reach 5 percent in a group, in the order of their subjects, the most first.
 
 ```sas
 %freq(
@@ -218,6 +226,39 @@ Placebo  COUGH                              17  TRT01A AEDECOD         pct   1.1
 Placebo  DIARRHOEA                           9  TRT01A AEDECOD         n                9  9
 ```
 
+Adds sex as a second BY variable: the age groups of each group and sex, for a page per sex.
+
+```sas
+%freq(
+     data  = adsl
+   , var   = agegr1
+   , by    = trt01a sex
+   , total = yes
+   , label = "Age group"
+   , out   = agegr_sex
+ )
+```
+
+```text
+agegr_sex: the first 15 of 32 rows
+TRT01A   SEX  AGEGR1  GROUPS             BLOCK      STAT         VALUE  TEXT
+Placebo  F    18-64   TRT01A SEX AGEGR1  Age group  n                9  9
+Placebo  F    18-64   TRT01A SEX AGEGR1  Age group  pct   16.981132075  (17.0%)
+Placebo  F    >64     TRT01A SEX AGEGR1  Age group  n               44  44
+Placebo  F    >64     TRT01A SEX AGEGR1  Age group  pct   83.018867925  (83.0%)
+Placebo  M    18-64   TRT01A SEX AGEGR1  Age group  n                5  5
+Placebo  M    18-64   TRT01A SEX AGEGR1  Age group  pct   15.151515152  (15.2%)
+Placebo  M    >64     TRT01A SEX AGEGR1  Age group  n               28  28
+Placebo  M    >64     TRT01A SEX AGEGR1  Age group  pct   84.848484848  (84.8%)
+Total    F    18-64   TRT01A SEX AGEGR1  Age group  n               19  19
+Total    F    18-64   TRT01A SEX AGEGR1  Age group  pct   13.286713287  (13.3%)
+Total    F    >64     TRT01A SEX AGEGR1  Age group  n              124  124
+Total    F    >64     TRT01A SEX AGEGR1  Age group  pct   86.713286713  (86.7%)
+Total    M    18-64   TRT01A SEX AGEGR1  Age group  n               14  14
+Total    M    18-64   TRT01A SEX AGEGR1  Age group  pct   12.612612613  (12.6%)
+Total    M    >64     TRT01A SEX AGEGR1  Age group  n               97  97
+```
+
 ## Messages
 
 A wrong call writes the message and its fix to the log and stops. The macro also gives the [messages every macro shares](index.md#messages-every-macro-shares).
@@ -231,11 +272,13 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Describe the data: [%describe](describe.md), [%proportion](proportion.md), [%rate](rate.md), [%worst](worst.md), [%termflags](termflags.md).
 
-Named on this page: [%stack](stack.md), [%layout](layout.md), [%print](print.md).
+Named on this page: [%layout](layout.md), [%print](print.md).
+
+Guides that use %freq: [Make an adverse event table](../how-to/adverse-event-table.md), [Make a demographic table with tests](../how-to/demographic-table.md), [Make one page per subgroup](../how-to/page-per-subgroup.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

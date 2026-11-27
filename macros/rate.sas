@@ -72,6 +72,7 @@
 |
 | Example:
 |
+ * Gives the subjects with an event per 100 patient years, with the exposure and the limits.;
  %rate(
      data     = adae
    , denom    = adsl(WHERE=(trtdurd > 0))
@@ -80,6 +81,7 @@
    , exposure = trtdurd / 365.25
    , out      = ae_rate
  )
+ * Counts the events, not the subjects, with count=events: a subject adds each of its events.;
  %rate(
      data     = adae
    , denom    = adsl(WHERE=(trtdurd > 0))
@@ -89,6 +91,7 @@
    , count    = events
    , out      = ae_events
  )
+ * Gives the rate of severe events per 1000 patient years with per=1000.;
  %rate(
      data     = adae
    , denom    = adsl(WHERE=(trtdurd > 0))
@@ -121,6 +124,8 @@
 | 27-NOV-2026 Sapling      1.9.1: The text of stats=: a name without a pattern
 |                          takes its default pattern. No number changes.
 | 27-NOV-2026 Sapling      1.9.1: an example with per=. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO rate(

@@ -5,7 +5,8 @@ and preferred term, with Fisher's exact test of each term. You get an RTF file, 
 
 ## Before you start
 
-- Submit `examples/setup.sas`, or start your own program with `%study`.
+- Submit `examples/setup.sas`, or start your own program as [Use the macros in your own program](own-program.md)
+  shows.
 - Have two data sets: the population, one row per subject (`adsl`), and the adverse events, one row per event
   (`adae`). Both need the treatment variable of the columns (`trt01a`).
 - Know the condition of the events to count. The guide counts the treatment-emergent events: `trtemfl = 'Y'`.

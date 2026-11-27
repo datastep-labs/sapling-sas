@@ -74,7 +74,9 @@ The setup of [%layout](layout.md) (setup=) holds the parameters of a table: %pri
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `t14_2_1_display` (made by the [example of %layout](layout.md#examples)).
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `t14_2_1_display` (made by the [example of %layout](layout.md#examples)), `t14_1_1_display` (made by the [example of %layout](layout.md#examples)).
+
+Prints the display data set as RTF and as a listing: the rows of one block stay on one page.
 
 ```sas
 %print(
@@ -105,6 +107,8 @@ Sex
   Male        33 (38.4%)   41 (42.7%)           37 (51.4%)           111 (43.7%)
   p-value                                                                         0.251
 ```
+
+Prints a listing: USUBJID is the left column, shown once for each subject.
 
 ```sas
 %print(
@@ -159,6 +163,64 @@ Identifier   for Period 01         Dictionary-Derived Term                      
              Xanomeline Low Dose   APPLICATION SITE PRURITUS                  02DEC12  MILD
 ```
 
+Prints one page per sex: the N of each column is that of the page, and the title names the sex.
+
+```sas
+OPTIONS NOBYLINE;
+TITLE1 "Table 14.1.1 Demographic characteristics by sex";
+TITLE2 "Sex: #BYVAL1";
+%print(
+     data     = t14_1_1_display
+   , by       = row
+   , var      = c:
+   , page     = sex
+   , together = grp
+   , label    = %STR(row=" ")
+   , file     = &spl_out./tlf/t14_1_1_page
+ )
+```
+
+```text
+tlf/t14_1_1_page.lst: 33 lines
+Table 14.1.1 Demographic characteristics by sex
+Sex: Female
+
+             Placebo      Xanomeline Low Dose  Xanomeline High Dose  Total
+             (N=53)       (N=55)               (N=35)                (N=143)
+--------------------------------------------------------------------------------
+
+Age (years)
+  n          53           55                   35                    143
+  Mean (SD)  76.4 (8.73)  76.2 (7.97)          73.7 (7.58)           75.7 (8.19)
+  Median     78.0         78.0                 75.0                  77.0
+  Min, Max   59, 89       54, 87               56, 88                54, 89
+
+Age group
+  18-64        9 (17.0%)    5 ( 9.1%)            5 (14.3%)            19 (13.3%)
+  >64         44 (83.0%)   50 (90.9%)           30 (85.7%)           124 (86.7%)
+
+Table 14.1.1 Demographic characteristics by sex
+Sex: Male
+
+             Placebo      Xanomeline Low Dose  Xanomeline High Dose  Total
+             (N=33)       (N=41)               (N=37)                (N=111)
+--------------------------------------------------------------------------------
+
+Age (years)
+  n          33           41                   37                    111
+  Mean (SD)  73.4 (8.15)  75.6 (8.38)          73.9 (8.38)           74.4 (8.29)
+  Median     74.0         77.0                 77.0                  77.0
+  Min, Max   52, 85       51, 88               56, 86                51, 88
+
+Age group
+  18-64        5 (15.2%)    3 ( 7.3%)            6 (16.2%)            14 (12.6%)
+  >64         28 (84.8%)   38 (92.7%)           31 (83.8%)            97 (87.4%)
+```
+
+```sas
+OPTIONS BYLINE;
+```
+
 ## Messages
 
 A wrong call writes the message and its fix to the log and stops. The macro also gives the [messages every macro shares](index.md#messages-every-macro-shares).
@@ -172,6 +234,8 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 Build a table: [%stack](stack.md), [%columns](columns.md), [%ard](ard.md), [%layout](layout.md), [%csv](csv.md).
 
 Named on this page: [%table](table.md).
+
+Guides that use %print: [Make a demographic table with tests](../how-to/demographic-table.md), [Use the macros in your own program](../how-to/own-program.md), [Make one page per subgroup](../how-to/page-per-subgroup.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

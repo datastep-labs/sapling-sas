@@ -113,6 +113,7 @@
 |
 | Example:
 |
+ * Makes the table of the time to the event: the curves, the log rank test and the hazard ratio.;
  %table_tte(
      data  = adttde
    , by    = trt01a
@@ -120,6 +121,16 @@
    , pairs = "Xanomeline High Dose" "Placebo"
    , title = "Table 14.6.1 Time to the first skin event"
    , file  = &spl_out./tlf/t14_6_1
+ )
+ * Takes the N of each column from adsl= and stratifies the test and the Cox model by sex.;
+ %table_tte(
+     data   = adttde
+   , adsl   = adsl
+   , by     = trt01a
+   , strata = sex
+   , order  = trt01an
+   , title  = "Table 14.6.2 Time to the first skin event, stratified by sex"
+   , file   = &spl_out./tlf/t14_6_2
  )
 |
 |-------------------------------------------------------------------------------
@@ -145,6 +156,9 @@
 |                          positive value a censoring, as %km, %logrank and %cox
 |                          now read it. No number changes on data with CNSR 0 and
 |                          1.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; a
+|                          second call with other forms of its parameters. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO table_tte(

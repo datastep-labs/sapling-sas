@@ -1,3 +1,0 @@
-age_anova: 1 row
-GROUPS  BLOCK        STAT         VALUE   TEXT
-        Age (years)  pval  0.2346471181  0.235

@@ -38,10 +38,10 @@ Makes a time-to-event table in one call: the Kaplan-Meier summary, the log-rank 
 :   The subjects: a data set with one row per subject. It gives the population and the N of each column, and its variables are merged onto the records by USUBJID. When not given, the N of a column is the subjects of its records. *(optional)*
 
 `pop=`
-:   The population: a condition on `adsl=` in parentheses, such as pop = (`saffl = 'Y'`). It is used only with `adsl=`. *(optional)*
+:   The population: a condition on `adsl=` in parentheses, such as `pop = (saffl = 'Y')`. It is used only with `adsl=`. *(optional)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`trtemfl = 'Y'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (trtemfl = 'Y')`. *(optional)*
 
 `var=`
 :   The time: one numeric variable. *(optional, default `AVAL`)*
@@ -88,7 +88,7 @@ Makes a time-to-event table in one call: the Kaplan-Meier summary, the log-rank 
 
 ## Result
 
-The data sets: &lt;name&gt;_km, &lt;name&gt;_surv (with `time=`), &lt;name&gt;_lr and &lt;name&gt;_cox (the results), &lt;name&gt; (the stacked results), &lt;name&gt;_cols, &lt;name&gt;_display, &lt;name&gt;_pop (with `adsl=`) and &lt;name&gt;_rec (with `adsl=` or `where=`). The files: &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file (only with `file=`). The global macro variable: the global macro variable &lt;name&gt;_print. With `show=`: the long program, in the log or in a file.
+The data sets: &lt;name&gt;_km, &lt;name&gt;_surv (with `time=`), &lt;name&gt;_lr and &lt;name&gt;_cox (the results), &lt;name&gt; (the stacked results), &lt;name&gt;_cols, &lt;name&gt;_display, &lt;name&gt;_pop (with `adsl=`) and &lt;name&gt;_rec (with `adsl=` or `where=`). The files: &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file (only with `file=`). The global macro variable: &lt;name&gt;_print. With `show=`: the long program, in the log or in a file.
 
 ## Details
 
@@ -110,7 +110,9 @@ The global macro variable &lt;name&gt;_print keeps the call of [%print](print.md
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#examples)).
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#examples)), `and` (made by the [example of %kmplot](kmplot.md#examples)).
+
+Makes the table of the time to the event: the curves, the log rank test and the hazard ratio.
 
 ```sas
 %table_tte(
@@ -132,6 +134,29 @@ Table 14.6.1 Time to the first skin event
 -------------------------------------------------------------------------------------------------------------------
 ```
 
+Takes the N of each column from adsl= and stratifies the test and the Cox model by sex.
+
+```sas
+%table_tte(
+     data   = adttde
+   , adsl   = adsl
+   , by     = trt01a
+   , strata = sex
+   , order  = trt01an
+   , title  = "Table 14.6.2 Time to the first skin event, stratified by sex"
+   , file   = &spl_out./tlf/t14_6_2
+ )
+```
+
+```text
+tlf/t14_6_2.lst: 24 lines
+Table 14.6.2 Time to the first skin event, stratified by sex
+
+                                                        Placebo   Xanomeline Low Dose  Xanomeline High Dose  All
+                                                        (N=86)    (N=96)               (N=72)                groups
+-------------------------------------------------------------------------------------------------------------------
+```
+
 ```text
 Kaplan-Meier: subjects, events, median time and 95% CI
   n                                                     85        95                   72
@@ -149,6 +174,27 @@ Cox model: hazard ratio (95% CI) and p-value
     p-value                                                                            <0.001
 ```
 
+```text
+Kaplan-Meier: subjects, events, median time and 95% CI
+  n                                                     85        95                   72
+  Events                                                20        39                   39
+  Median                                                NE        80.0                 57.0
+  Confidence interval                                   (NE, NE)  (51.0, NE)           (46.0, 177.0)
+
+Log-rank test
+  p-value                                                                                                    <0.001
+
+Cox model: hazard ratio (95% CI) and p-value
+  vs Placebo
+    Hazard ratio                                                  3.24                 3.74
+    Confidence interval                                           (1.86, 5.62)         (2.16, 6.48)
+    p-value                                                       <0.001               <0.001
+  vs Xanomeline Low Dose
+    Hazard ratio                                                                       1.16
+    Confidence interval                                                                (0.74, 1.81)
+    p-value                                                                            0.521
+```
+
 ## Messages
 
 A wrong call writes the message and its fix to the log and stops. The macro also gives the [messages every macro shares](index.md#messages-every-macro-shares).
@@ -162,7 +208,9 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Tables in one call: [%table](table.md), [%table_summary](table_summary.md), [%table_ae](table_ae.md), [%table_visit](table_visit.md), [%table_shift](table_shift.md), [%table_response](table_response.md), [%table_model](table_model.md).
 
-Named on this page: [%kmplot](kmplot.md), [%km](km.md), [%logrank](logrank.md), [%cox](cox.md), [%stack](stack.md), [%columns](columns.md), [%layout](layout.md), [%print](print.md).
+Named on this page: [%km](km.md), [%layout](layout.md), [%kmplot](kmplot.md), [%logrank](logrank.md), [%cox](cox.md), [%stack](stack.md), [%columns](columns.md), [%print](print.md).
+
+Guides that use %table_tte: [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

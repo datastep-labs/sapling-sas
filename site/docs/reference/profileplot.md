@@ -47,7 +47,7 @@ Draws one line per subject through its values by visit as PNG and RTF files and 
 :   The data set of [%columns](columns.md): it gives the order of the groups and their colours. When not given, the groups come in the order of the data. *(optional)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`anl01fl = 'Y'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (anl01fl = 'Y')`. *(optional)*
 
 `x=`
 :   The visit: one numeric variable (`x = avisitn` or `x = ady`). *(required)*
@@ -115,6 +115,8 @@ Use [%meanplot](meanplot.md) for the mean of each group alone, with error bars. 
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `t14_2_1_cols` (made by the [example of %columns](columns.md#examples)).
 
+Draws the ALT of each subject over the study days: one line per subject, no mean.
+
 ```sas
 %profileplot(
      data    = adlb
@@ -145,9 +147,11 @@ Figures: [%kmplot](kmplot.md), [%forestplot](forestplot.md), [%meanplot](meanplo
 
 Named on this page: [%columns](columns.md).
 
+Guides that use %profileplot: [Run the examples of the reference](../how-to/run-the-examples.md).
+
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

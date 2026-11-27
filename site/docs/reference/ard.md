@@ -40,6 +40,8 @@ Use [%csv](csv.md) for the records of a listing or the numbers of a figure. The 
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `t14_2_1` (made by the [example of %stack](stack.md#examples)), `t14_2_1_cols` (made by the [example of %columns](columns.md#examples)).
 
+Writes every number of the table and each column N to one CSV file: the full value and the text.
+
 ```sas
 %ard(data=t14_2_1, columns=t14_2_1_cols, file=t14_2_1)
 ```
@@ -97,6 +99,8 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 Build a table: [%stack](stack.md), [%columns](columns.md), [%layout](layout.md), [%print](print.md), [%csv](csv.md).
 
 Named on this page: [%study](study.md).
+
+Guides that use %ard: [Check a table against an independent program](../how-to/check-a-table.md), [Make a demographic table with tests](../how-to/demographic-table.md), [Use the macros in your own program](../how-to/own-program.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

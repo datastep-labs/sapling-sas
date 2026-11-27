@@ -6,7 +6,8 @@ and the change from baseline.
 
 ## Before you start
 
-- Submit `examples/setup.sas`, or start your own program with `%study`.
+- Submit `examples/setup.sas`, or start your own program as [Use the macros in your own program](own-program.md)
+  shows.
 - Have the records with the value (`aval`) and the study day (`ady`), one row per measurement. The guide starts from
   the blood pressure records of `advs` and keeps only the collected variables.
 - Have the visit windows and the baseline rule of the plan. The guide uses: baseline is the last value on or before

@@ -57,6 +57,7 @@
 |
 | Example:
 |
+ * Tests the treatment by sex interaction of the change at Week 12, adjusted for baseline.;
  %interaction_glm(
      data   = advs
    , where  = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')
@@ -87,6 +88,8 @@
 |                          number changes.
 | 27-NOV-2026 Sapling      1.9.1: The example analyses the records of anl01fl =
 |                          'Y' (one record per subject). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO interaction_glm(

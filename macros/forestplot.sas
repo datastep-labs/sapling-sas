@@ -104,6 +104,7 @@
 |
 | Example:
 |
+ * Draws the hazard ratios of each subgroup on a log scale, with the reference line at 1.;
  %forestplot(
      data     = hr_sub
    , columns  = t14_2_1_cols
@@ -136,6 +137,8 @@
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO forestplot(

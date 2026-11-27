@@ -40,10 +40,10 @@ Makes a response table in one call: the responders in each group, and the compar
 :   The subjects: a data set with one row per subject. It gives the population and the N of each column, and its variables are merged onto the records by USUBJID. When not given, the N of a column is the subjects of its records. *(optional)*
 
 `pop=`
-:   The population: a condition on `adsl=` in parentheses, such as pop = (`saffl = 'Y'`). It is used only with `adsl=`. *(optional)*
+:   The population: a condition on `adsl=` in parentheses, such as `pop = (saffl = 'Y')`. It is used only with `adsl=`. *(optional)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`trtemfl = 'Y'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (trtemfl = 'Y')`. *(optional)*
 
 `var=`
 :   The response: one variable with two values. *(required)*
@@ -97,7 +97,7 @@ Makes a response table in one call: the responders in each group, and the compar
 
 ## Result
 
-The data sets: &lt;name&gt;_prop, &lt;name&gt;_&lt;measure&gt; (with a measure) and &lt;name&gt;_adj (with `covars=`), the results; &lt;name&gt; (the stacked results), &lt;name&gt;_cols, &lt;name&gt;_display, &lt;name&gt;_pop (with `adsl=`) and &lt;name&gt;_rec (with `adsl=` or `where=`). The files: &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file (only with `file=`). The global macro variable: the global macro variable &lt;name&gt;_print. With `show=`: the long program, in the log or in a file.
+The data sets: &lt;name&gt;_prop, &lt;name&gt;_&lt;measure&gt; (with a measure) and &lt;name&gt;_adj (with `covars=`), the results; &lt;name&gt; (the stacked results), &lt;name&gt;_cols, &lt;name&gt;_display, &lt;name&gt;_pop (with `adsl=`) and &lt;name&gt;_rec (with `adsl=` or `where=`). The files: &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file (only with `file=`). The global macro variable: &lt;name&gt;_print. With `show=`: the long program, in the log or in a file.
 
 ## Details
 
@@ -119,6 +119,8 @@ The global macro variable &lt;name&gt;_print keeps the call of [%print](print.md
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+
+Makes the table of the responders with their limits and the risk difference of each pair.
 
 ```sas
 %table_response(
@@ -155,6 +157,50 @@ Risk difference (95% CI) and p-value
     p-value                                                                       0.837
 ```
 
+Asks for the relative risk with Wilson limits, and the odds ratio adjusted for age.
+
+```sas
+%table_response(
+     data    = adrs
+   , where   = (paramcd = 'RSP')
+   , var     = avalc
+   , event   = "Y"
+   , by      = trt01a
+   , covars  = age
+   , order   = trt01an
+   , pairs   = "Xanomeline High Dose" "Placebo"
+             # "Xanomeline Low Dose"  "Placebo"
+   , ci      = wilson
+   , measure = rr
+   , title   = "Table 14.3.4 Responders: relative risk and odds ratio adjusted for age"
+   , file    = &spl_out./tlf/t14_3_4
+ )
+```
+
+```text
+tlf/t14_3_4.lst: 20 lines
+Table 14.3.4 Responders: relative risk and odds ratio adjusted for age
+
+                                                  Placebo               Xanomeline Low Dose   Xanomeline High Dose
+                                                  (N=86)                (N=96)                (N=72)
+------------------------------------------------------------------------------------------------------------------
+
+Responders, n (%) and 95% CI
+  Y                                               2 ( 2.3%) (0.6, 8.1)  1 ( 1.0%) (0.2, 5.7)  1 ( 1.4%) (0.2, 7.5)
+
+Relative risk (95% CI) and p-value
+  vs Placebo
+    Relative risk                                                       0.45                  0.60
+    Confidence interval                                                 (0.04, 4.85)          (0.06, 6.45)
+    p-value                                                             0.497                 0.667
+
+Odds ratio adjusted for age (95% CI) and p-value
+  vs Placebo
+    Odds ratio                                                          0.46                  0.55
+    Confidence interval                                                 (0.04, 5.25)          (0.05, 6.22)
+    p-value                                                             0.535                 0.626
+```
+
 ## Messages
 
 A wrong call writes the message and its fix to the log and stops. The macro also gives the [messages every macro shares](index.md#messages-every-macro-shares).
@@ -168,7 +214,9 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Tables in one call: [%table](table.md), [%table_summary](table_summary.md), [%table_ae](table_ae.md), [%table_visit](table_visit.md), [%table_shift](table_shift.md), [%table_model](table_model.md), [%table_tte](table_tte.md).
 
-Named on this page: [%proportion](proportion.md), [%risk](risk.md), [%logistic](logistic.md), [%stack](stack.md), [%columns](columns.md), [%layout](layout.md), [%print](print.md).
+Named on this page: [%logistic](logistic.md), [%proportion](proportion.md), [%risk](risk.md), [%layout](layout.md), [%stack](stack.md), [%columns](columns.md), [%print](print.md).
+
+Guides that use %table_response: [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

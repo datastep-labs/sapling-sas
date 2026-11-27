@@ -43,6 +43,7 @@
 |
 | Example:
 |
+ * Tests age across the three groups: one row, the p value of the F test.;
  %anova(
      data  = adsl
    , var   = age
@@ -69,6 +70,8 @@
 |                          changes.
 | 27-NOV-2026 Sapling      1.9.1: The example result is age_anova, the name
 |                          %stack reads. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO anova(

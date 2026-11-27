@@ -100,6 +100,7 @@
 |
 | Example:
 |
+ * Draws the mean change and its SE at each visit, a panel per parameter, with the n of each point.;
  %meanplot(
      data    = advs
    , columns = t14_2_1_cols
@@ -134,6 +135,8 @@
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO meanplot(

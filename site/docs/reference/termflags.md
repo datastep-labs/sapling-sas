@@ -28,7 +28,7 @@ Returns one record per subject and term, with a flag that says whether the subje
 :   The subjects of the groups: a data set with one row per subject (the population), with USUBJID and the variable of `by=`. *(required)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`trtemfl = 'Y'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (trtemfl = 'Y')`. *(optional)*
 
 `terms=`
 :   The variables of a row: one or several, separated by blanks, nested in their order (`terms = aebodsys aedecod`: a term within its class). When not given, one row of all the records, such as "any event" of an overview table. *(optional)*
@@ -57,6 +57,8 @@ Use it before [%risk](risk.md) to compare the groups on the subjects with a term
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+
+Flags each subject for each term that reaches 5 percent: FLAG is Y with the term, N without.
 
 ```sas
 %termflags(
@@ -104,9 +106,11 @@ Describe the data: [%describe](describe.md), [%freq](freq.md), [%proportion](pro
 
 Named on this page: [%risk](risk.md).
 
+Guides that use %termflags: [Run the examples of the reference](../how-to/run-the-examples.md).
+
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

@@ -27,10 +27,10 @@ Returns the p-value of Fisher's exact test of the subjects with a record against
 :   The input data set: the records (adverse events), with USUBJID. *(required)*
 
 `denom=`
-:   The subjects, one row each, with USUBJID and the variable of `by=`: a data set, with data set options if needed, such as `denom = adsl`(where = (`saffl = 'Y'`)). *(required)*
+:   The subjects, one row each, with USUBJID and the variable of `by=`: a data set, with data set options if needed, such as `denom = adsl(where = (saffl = 'Y'))`. *(required)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`trtemfl = 'Y'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (trtemfl = 'Y')`. *(optional)*
 
 `by=`
 :   The groups to compare: one variable of `denom=`. *(required)*
@@ -66,6 +66,8 @@ Use it for an adverse event between treatments; use [%chisq](chisq.md) for the c
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+
+Tests the subjects with an event against those without in each class: one p value per class.
 
 ```sas
 %fisher(
@@ -106,11 +108,11 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 
 Test the groups: [%anova](anova.md), [%ttest](ttest.md), [%wilcoxon](wilcoxon.md), [%chisq](chisq.md), [%cmh](cmh.md), [%ancova](ancova.md), [%adjust](adjust.md).
 
-Named on this page: [%stack](stack.md).
+Guides that use %fisher: [Make an adverse event table](../how-to/adverse-event-table.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

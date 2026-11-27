@@ -28,7 +28,7 @@ Returns the p-value of the Cochran-Mantel-Haenszel test of the groups against th
 :   The input data set: the records, with USUBJID. *(required)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`avisit = 'Week 24'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (avisit = 'Week 24')`. *(optional)*
 
 `var=`
 :   The categories of the response: one variable; numeric for statistic=rowmean. *(required)*
@@ -74,6 +74,8 @@ Use [%chisq](chisq.md) for the same test without strata. Each subject counts onc
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
 
+Tests the status at the end of the study across the groups, stratified by sex: one p value.
+
 ```sas
 %cmh(
      data   = adsl
@@ -90,6 +92,8 @@ eos_cmh: 1 row
 GROUPS  BLOCK                   STAT         VALUE  TEXT
         Discontinued the study  pval  8.4616214E-8  <0.001
 ```
+
+Uses the row mean score statistic for the ordered age groups: one p value.
 
 ```sas
 %cmh(
@@ -116,11 +120,11 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 
 Test the groups: [%anova](anova.md), [%ttest](ttest.md), [%wilcoxon](wilcoxon.md), [%chisq](chisq.md), [%fisher](fisher.md), [%ancova](ancova.md), [%adjust](adjust.md).
 
-Named on this page: [%stack](stack.md).
+Guides that use %cmh: [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

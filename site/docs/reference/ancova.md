@@ -28,7 +28,7 @@ Returns the Type III p-value of a numeric term in a linear model, such as a test
 :   The input data set, with USUBJID. *(required)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`paramcd = 'SYSBP'` AND `avisit = 'Week 12'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (paramcd = 'SYSBP' AND avisit = 'Week 12')`. *(optional)*
 
 `var=`
 :   The response: one numeric variable. *(required)*
@@ -70,6 +70,8 @@ Use [%lsmeans](lsmeans.md) for the differences between pairs of groups, and [%mm
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
 
+Tests a linear dose response of the change at Week 12, adjusted for baseline: one p value.
+
 ```sas
 %ancova(
      data   = advs
@@ -96,11 +98,13 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 
 Test the groups: [%anova](anova.md), [%ttest](ttest.md), [%wilcoxon](wilcoxon.md), [%chisq](chisq.md), [%fisher](fisher.md), [%cmh](cmh.md), [%adjust](adjust.md).
 
-Named on this page: [%lsmeans](lsmeans.md), [%mmrm](mmrm.md), [%stack](stack.md), [%describe](describe.md).
+Named on this page: [%describe](describe.md), [%lsmeans](lsmeans.md), [%mmrm](mmrm.md).
+
+Guides that use %ancova: [Make an efficacy table with an ANCOVA](../how-to/efficacy-table.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

@@ -67,12 +67,16 @@ Use [%merge_subject](merge_subject.md) when the other data set has one row per s
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
 
+Copies the subjects with USUBJID and TRTSDT only.
+
 ```sas
 DATA sl;
   SET adsl;
   KEEP usubjid trtsdt;
 RUN;
 ```
+
+Takes the date of the first exposure record of each subject, as a text of 10.
 
 ```sas
 %pick(
@@ -85,6 +89,8 @@ RUN;
    , new    = exfstdtc
  )
 ```
+
+Takes the dose of the last exposure record of each subject.
 
 ```sas
 %pick(
@@ -123,11 +129,13 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 | Message | Fix |
 |---|---|
-| more than one record in from=&lt;from&gt; of (with the USUBJID of the record) | give unique=no with order= and which= (the record |
+| more than one record in from=&lt;from&gt; of &lt;USUBJID&gt; | give unique=no with order= and which= (the record to keep), or remove the duplicate records. |
 
 ## See also
 
 ADaM steps: [%merge_subject](merge_subject.md), [%summarize](summarize.md), [%summarize_groups](summarize_groups.md), [%baseline](baseline.md), [%flag_first](flag_first.md), [%flag_if_any](flag_if_any.md), [%windows](windows.md), [%visits](visits.md), [%locf](locf.md), [%relchange](relchange.md), [%param_wide](param_wide.md), [%pool](pool.md), [%tte](tte.md).
+
+Guides that use %pick: [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

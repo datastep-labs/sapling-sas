@@ -101,6 +101,7 @@
 |
 | Example:
 |
+ * Draws the percent of each term of 5 percent or more and its risk difference against Placebo.;
  %aeplot(
      data      = adae
    , columns   = t14_2_1_cols
@@ -133,6 +134,8 @@
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO aeplot(

@@ -43,8 +43,7 @@
 |             (else of the values). Or the pairs, separated by
 |             #: in each pair the group first, then the group it
 |             is compared with, each value in quotes (pairs =
-|             "Drug" "Placebo" # "High" "Low"). The form "A"-"B"
-|             of version 1.0 is still read.
+|             "Drug" "Placebo" # "High" "Low")
 | order       The order of the groups: one numeric variable with  Optional
 |             one value per group (order = trt01an)
 | correction  yes: the continuity correction of the normal        yes
@@ -72,6 +71,7 @@
 |
 | Example:
 |
+ * Compares each pair with the Wilcoxon rank sum test and the Hodges Lehmann estimate.;
  %wilcoxon(
      data  = advs
    , where = (paramcd = 'DIABP' AND avisit = 'Week 12' AND anl01fl = 'Y')
@@ -80,6 +80,7 @@
    , order = trt01pn
    , out   = dbp_w
  )
+ * Leaves out the continuity correction for one pair: only the p value changes.;
  %wilcoxon(
      data       = advs
    , where      = (paramcd = 'DIABP' AND avisit = 'Week 12' AND anl01fl = 'Y')
@@ -117,6 +118,8 @@
 |                          number changes.
 | 27-NOV-2026 Sapling      1.9.1: an example with one pair and correction=no. No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO wilcoxon(

@@ -47,8 +47,12 @@
 |
 | Example:
 |
+ * Stacks four results in the order of the table: RESULT and ORD tell where each row came from.;
  %stack(age_describe age_anova sex_freq sex_chisq, out=t14_2_1)
+ * Stacks the hazard ratios by sex and by age group, for one forest plot.;
  %stack(hr_sex hr_age, out=hr_sub)
+ * Stacks age and the age groups by sex: the results of a table with a page per sex.;
+ %stack(age_sex agegr_sex, out=t14_1_1)
 |
 |-------------------------------------------------------------------------------
 | Change Log :
@@ -76,6 +80,9 @@
 |                          names no internal tool. No number changes.
 | 27-NOV-2026 Sapling      1.9.1: the message of a result that does not exist is
 |                          two lines, the fault and its fix. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; a
+|                          third call, the results of a table with a page per
+|                          sex. No number changes.
 |
 *******************************************************************************/
 %MACRO stack(

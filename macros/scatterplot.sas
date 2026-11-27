@@ -92,6 +92,7 @@
 |
 | Example:
 |
+ * Draws the ALT at Week 24 against its baseline, with the line where the two are equal.;
  %scatterplot(
      data     = adlb
    , columns  = t14_2_1_cols
@@ -126,6 +127,8 @@
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO scatterplot(

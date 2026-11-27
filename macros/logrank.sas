@@ -59,6 +59,7 @@
 |
 | Example:
 |
+ * Tests the curves of the groups with the log rank test, stratified by sex: one p value.;
  %logrank(
      data   = adttde
    , var    = aval
@@ -92,6 +93,8 @@
 |                          2 an event); a missing or negative CNSR on a record
 |                          used stops the macro with an ERROR. No number changes
 |                          on data with CNSR 0 and 1.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO logrank(

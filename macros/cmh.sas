@@ -57,6 +57,7 @@
 |
 | Example:
 |
+ * Tests the status at the end of the study across the groups, stratified by sex: one p value.;
  %cmh(
      data   = adsl
    , var    = eosstt
@@ -65,6 +66,7 @@
    , label  = "Discontinued the study"
    , out    = eos_cmh
  )
+ * Uses the row mean score statistic for the ordered age groups: one p value.;
  %cmh(
      data      = adsl
    , var       = agegr1
@@ -93,6 +95,8 @@
 |                          number changes.
 | 27-NOV-2026 Sapling      1.9.1: an example with statistic=rowmean. No number
 |                          changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO cmh(

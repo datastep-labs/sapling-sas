@@ -112,6 +112,7 @@
 |
 | Example:
 |
+ * Derives the time to the first skin event from the first dose: CNSR 0 is an event, 1 a censoring.;
  %tte(
      subjects      = adsl
    , events        = adae
@@ -150,6 +151,8 @@
 | 27-NOV-2026 Sapling      1.9.1: the message prints a macro variable, not a
 |                          macro expression: it reads the same in the log and in
 |                          the code. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO tte(
@@ -209,8 +212,8 @@
   %END;
   %ELSE %IF not %_spl_vars(tte, subjects, censor_date) %THEN %RETURN;
   %IF %LENGTH(&end.) = 0 and (%LENGTH(&time.) or %LENGTH(&start_time.)) %THEN %DO;
-    %PUT %STR(ERR)OR: [tte] time= and start_time= are the rule of the start day of a period;
-    %PUT %STR(ERR)OR: [tte]   fix: give end= (or neither).;
+    %PUT %STR(ERR)OR: [tte] time= and start_time= need end=, the end of the period;
+    %PUT %STR(ERR)OR: [tte]   fix: give end=, or give neither time= nor start_time=.;
     %RETURN;
   %END;
 

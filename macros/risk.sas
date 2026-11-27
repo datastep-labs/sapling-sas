@@ -55,11 +55,16 @@
 |             by #, each the group first and then the group it
 |             is compared with, a value with a blank or a hyphen
 |             in quotes: pairs = "Drug" "Placebo" # "High"
-|             "Low". The old form "A"-"B" is still read.
+|             "Low"
 | order       The order of the groups: one numeric variable with  Optional
 |             one value per group (order = trt01an)
-| measure     The estimate: rd (risk difference), rr (relative    rd
-|             risk) or or (odds ratio)
+| measure     The estimate of the group against the group it is   rd
+|             compared with: rd, the risk difference, a
+|             difference of two proportions between -1 and 1
+|             (0.25 is 25 percentage points), not of percents;
+|             rr, the relative risk, the ratio of the two risks;
+|             or or, the odds ratio, the ratio of the two odds.
+|             A ratio has no unit.
 | ci          The interval of a risk difference: wald, newcombe,  wald
 |             miettinen-nurminen (CL=MN) or agresti-caffo
 |             (CL=AC). With strata= the interval is always mh.
@@ -88,6 +93,7 @@
 |
 | Example:
 |
+ * Gives the risk difference of discontinuation of each pair, its Newcombe limits and p value.;
  %risk(
      data  = adsl
    , var   = eosstt
@@ -97,6 +103,7 @@
    , ci    = newcombe
    , out   = eos_rd
  )
+ * Gives the risk difference of each flagged term against Placebo, within its class and term.;
  %risk(
      data   = work.ae_flags
    , var    = flag
@@ -108,6 +115,7 @@
    , ci     = newcombe
    , out    = ae_rd
  )
+ * Asks for the relative risk with measure=rr: the rows of STAT rr hold the ratio of the two risks.;
  %risk(
      data    = adsl
    , var     = eosstt
@@ -117,6 +125,7 @@
    , measure = rr
    , out     = eos_rr
  )
+ * Stratifies by sex: the risk difference is the Mantel Haenszel estimate over the strata.;
  %risk(
      data   = adsl
    , var    = eosstt
@@ -154,6 +163,8 @@
 |                          takes its default pattern. No number changes.
 | 27-NOV-2026 Sapling      1.9.1: examples with measure=rr and with strata=. No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO risk(

@@ -42,10 +42,10 @@ Makes a table of the descriptive statistics of each variable by group, parameter
 :   The subjects: a data set with one row per subject. It gives the population and the N of each column, and its variables are merged onto the records by USUBJID. When not given, the N of a column is the subjects of its records. *(optional)*
 
 `pop=`
-:   The population: a condition on `adsl=` in parentheses, such as pop = (`saffl = 'Y'`). It is used only with `adsl=`. *(optional)*
+:   The population: a condition on `adsl=` in parentheses, such as `pop = (saffl = 'Y')`. It is used only with `adsl=`. *(optional)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`trtemfl = 'Y'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (trtemfl = 'Y')`. *(optional)*
 
 `vars=`
 :   The numeric variables to describe, separated by blanks: one block each, such as `vars = aval chg`. *(required)*
@@ -105,7 +105,7 @@ Makes a table of the descriptive statistics of each variable by group, parameter
 
 ## Result
 
-The data sets: &lt;name&gt;_&lt;variable&gt; (the result of each variable), &lt;name&gt; (the stacked results), &lt;name&gt;_cols, &lt;name&gt;_display, &lt;name&gt;_pop (with `adsl=`) and &lt;name&gt;_rec (with `adsl=` or `where=`). The files: &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file (only with `file=`). The global macro variable: the global macro variable &lt;name&gt;_print. With `show=`: the long program, in the log or in a file.
+The data sets: &lt;name&gt;_&lt;variable&gt; (the result of each variable), &lt;name&gt; (the stacked results), &lt;name&gt;_cols, &lt;name&gt;_display, &lt;name&gt;_pop (with `adsl=`) and &lt;name&gt;_rec (with `adsl=` or `where=`). The files: &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file (only with `file=`). The global macro variable: &lt;name&gt;_print. With `show=`: the long program, in the log or in a file.
 
 ## Details
 
@@ -121,6 +121,8 @@ The global macro variable &lt;name&gt;_print keeps the call of [%print](print.md
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+
+Makes the table of the value at each visit and of its change after baseline.
 
 ```sas
 %table_visit(
@@ -182,6 +184,70 @@ Analysis Value
       n                           67             32                   33
 ```
 
+Names the blocks, asks for Q1 and Q3 and adds a Total column.
+
+```sas
+%table_visit(
+     data  = advs
+   , adsl  = adsl
+   , where = (paramcd = 'DIABP' AND (ablfl = 'Y' OR anl01fl = 'Y') AND avisitn IN (0 12 24))
+   , vars  = aval chg
+   , by    = trt01a
+   , keep  = param paramn avisitn
+   , order = trt01an
+   , post  = chg
+   , names = aval="Value" chg="Change from baseline"
+   , total = yes
+   , stats = n mean sd median q1 q3 min max
+   , title = "Table 14.7.2 Diastolic blood pressure at Week 12 and Week 24"
+   , file  = &spl_out./tlf/t14_7_2
+ )
+```
+
+```text
+tlf/t14_7_2.lst: the first 40 of 41 lines
+Table 14.7.2 Diastolic blood pressure at Week 12 and Week 24
+
+                                   Placebo       Xanomeline Low Dose  Xanomeline High Dose  Total
+                                   (N=86)        (N=96)               (N=72)                (N=254)
+--------------------------------------------------------------------------------------------------------
+
+Value
+  Diastolic Blood Pressure (mmHg)
+    Baseline
+      n                            85            96                   72                    253
+      Mean (SD)                    75.7 (11.09)  76.5 (9.68)          77.1 (9.94)           76.4 (10.22)
+      Median                       76.0          76.0                 78.0                  76.0
+      Q1, Q3                       70.0, 84.0    70.0, 83.0           70.0, 84.0            70.0, 84.0
+      Min, Max                     40, 99        57, 100              51, 98                40, 100
+    Week 12
+      n                            68            41                   41                    150
+      Mean (SD)                    72.6 (10.31)  76.3 (11.49)         73.9 (9.15)           74.0 (10.40)
+      Median                       72.0          78.0                 76.0                  74.0
+      Q1, Q3                       66.5, 80.0    68.0, 86.0           68.0, 80.0            68.0, 80.0
+      Min, Max                     50, 99        57, 100              56, 90                50, 100
+    Week 24
+      n                            59            25                   28                    112
+      Mean (SD)                    72.9 (11.32)  75.8 (9.37)          74.5 (9.13)           74.0 (10.38)
+      Median                       74.0          76.0                 74.5                  75.5
+      Q1, Q3                       66.0, 80.0    70.0, 82.0           67.0, 80.0            68.0, 80.0
+      Min, Max                     44, 109       60, 90               60, 92                44, 109
+
+Change from baseline
+  Diastolic Blood Pressure (mmHg)
+    Week 12
+      n                            68            41                   41                    150
+      Mean (SD)                    -2.9 (8.88)   -1.1 (10.38)         -3.3 (10.45)          -2.5 (9.72)
+      Median                       -3.5          0.0                  -2.0                  -2.0
+      Q1, Q3                       -10.0, 2.5    -10.0, 4.0           -10.0, 0.0            -10.0, 3.0
+      Min, Max                     -26, 20       -21, 26              -36, 20               -36, 26
+    Week 24
+      n                            59            25                   28                    112
+      Mean (SD)                    -1.1 (10.91)  -0.8 (8.00)          -1.9 (9.37)           -1.2 (9.88)
+      Median                       -1.0          -2.0                 -1.0                  -1.5
+      Q1, Q3                       -10.0, 4.0    -6.0, 4.0            -8.0, 2.5             -8.0, 4.0
+```
+
 ## Messages
 
 A wrong call writes the message and its fix to the log and stops. The macro also gives the [messages every macro shares](index.md#messages-every-macro-shares).
@@ -195,7 +261,9 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Tables in one call: [%table](table.md), [%table_summary](table_summary.md), [%table_ae](table_ae.md), [%table_shift](table_shift.md), [%table_response](table_response.md), [%table_model](table_model.md), [%table_tte](table_tte.md).
 
-Named on this page: [%describe](describe.md), [%stack](stack.md), [%columns](columns.md), [%layout](layout.md), [%print](print.md).
+Named on this page: [%describe](describe.md), [%layout](layout.md), [%stack](stack.md), [%columns](columns.md), [%print](print.md).
+
+Guides that use %table_visit: [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

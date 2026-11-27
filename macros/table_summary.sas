@@ -103,6 +103,7 @@
 |
 | Example:
 |
+ * Makes the demographic table from one row per subject: age as numbers, the categories as rows.;
  %table_summary(
      data   = adam.adsl
    , where  = (saffl = 'Y')
@@ -113,6 +114,19 @@
    , format = sex $sexf.
    , title  = "Table 14.2.1 Demographic characteristics" "Safety population"
    , file   = &spl_out./tlf/t14_2_1_summary
+ )
+ * Names the blocks, plans a race with no subject and asks for Q1 and Q3: ASIAN has a row of 0.;
+ %table_summary(
+     data     = adsl
+   , vars     = age trtdurd race#
+   , by       = trt01a
+   , order    = trt01an
+   , levels   = race 'WHITE' 'BLACK OR AFRICAN AMERICAN' 'ASIAN' 'AMERICAN INDIAN OR ALASKA NATIVE'
+   , catstats = n pct
+   , names    = age="Age (years)" trtdurd="Duration of treatment (days)" race="Race"
+   , stats    = n mean sd median q1 q3 min max
+   , title    = "Table 14.2.2 Age, duration of treatment and race"
+   , file     = &spl_out./tlf/t14_2_2
  )
 |
 |-------------------------------------------------------------------------------
@@ -128,6 +142,9 @@
 | 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; a
+|                          second call with other forms of its parameters. No
 |                          number changes.
 |
 *******************************************************************************/

@@ -6,10 +6,11 @@
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
 | Purpose       : The example data of the macro library, ready for the examples of
-|                 the manual (docs/macros.md): run this program first, then the
-|                 examples in the order the manual lists (The examples). The data
-|                 are data sets of the R packages pharmaverseadam 1.3.0 and
-|                 pharmaversesdtm 1.4.0 (Apache License 2.0; data/NOTICE), the
+|                 the manual: run this program first, then the examples in the
+|                 order of the page "Run the examples of the reference"
+|                 (https://datastep-labs.github.io/sapling-sas/how-to/run-the-examples/).
+|                 The data are data sets of the R packages pharmaverseadam 1.3.0
+|                 and pharmaversesdtm 1.4.0 (Apache License 2.0; data/NOTICE), the
 |                 subjects of the CDISC pilot study, written as transport files by
 |                 data/make_data.R.
 | Output        : the ADaM data sets in <spl_root>/examples/adam (library ADAM),

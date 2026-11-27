@@ -113,6 +113,7 @@
 |
 | Example:
 |
+ * Makes the table of the responders with their limits and the risk difference of each pair.;
  %table_response(
      data   = adrs
    , where  = (paramcd = 'RSP')
@@ -122,6 +123,22 @@
    , diffci = newcombe
    , title  = "Table 14.3.2 Responders"
    , file   = &spl_out./tlf/t14_3_2
+ )
+ * Asks for the relative risk with Wilson limits, and the odds ratio adjusted for age.;
+ %table_response(
+     data    = adrs
+   , where   = (paramcd = 'RSP')
+   , var     = avalc
+   , event   = "Y"
+   , by      = trt01a
+   , covars  = age
+   , order   = trt01an
+   , pairs   = "Xanomeline High Dose" "Placebo"
+             # "Xanomeline Low Dose"  "Placebo"
+   , ci      = wilson
+   , measure = rr
+   , title   = "Table 14.3.4 Responders: relative risk and odds ratio adjusted for age"
+   , file    = &spl_out./tlf/t14_3_4
  )
 |
 |-------------------------------------------------------------------------------
@@ -142,6 +159,9 @@
 | 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; a
+|                          second call with other forms of its parameters. No
 |                          number changes.
 |
 *******************************************************************************/

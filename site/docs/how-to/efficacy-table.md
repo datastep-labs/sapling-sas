@@ -6,7 +6,8 @@ covariance. You get an RTF file, a text listing and a numbers file.
 
 ## Before you start
 
-- Submit `examples/setup.sas`, or start your own program with `%study`.
+- Submit `examples/setup.sas`, or start your own program as [Use the macros in your own program](own-program.md)
+  shows.
 - Have the analysis records: one record per subject at the visit, with the baseline (`base`), the value (`aval`) and
   the change (`chg`). The guide uses the systolic blood pressure of `advs` at Week 12.
 - Know the model of the plan: the response, the covariates, the class factors and the pairs of groups to compare.

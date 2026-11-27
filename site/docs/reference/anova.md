@@ -25,7 +25,7 @@ Returns the p-value of the F test of a one-way analysis of variance of a variabl
 :   The input data set. *(required)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`anl01fl = 'Y'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (anl01fl = 'Y')`. *(optional)*
 
 `var=`
 :   The variable to analyse: one numeric variable. *(required)*
@@ -58,6 +58,8 @@ Use [%ttest](ttest.md) or [%wilcoxon](wilcoxon.md) to compare pairs of groups, a
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
 
+Tests age across the three groups: one row, the p value of the F test.
+
 ```sas
 %anova(
      data  = adsl
@@ -82,11 +84,11 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 
 Test the groups: [%ttest](ttest.md), [%wilcoxon](wilcoxon.md), [%chisq](chisq.md), [%fisher](fisher.md), [%cmh](cmh.md), [%ancova](ancova.md), [%adjust](adjust.md).
 
-Named on this page: [%stack](stack.md).
+Guides that use %anova: [Make a demographic table with tests](../how-to/demographic-table.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

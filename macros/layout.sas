@@ -32,28 +32,29 @@
 |                   %columns.
 |                 - C99, All groups: the numbers of a result without the column
 |                   variable, such as a p-value of all groups.
-|                 The line table: the order of a line, its label, then its
-|                 template.
-|                 - 0, a category of a frequency block: {n} {pct} {events}
+|                 The line table: each line by its order and its label, then
+|                 its template.
+|                 - line 0 (a category of a frequency block): {n} {pct} {events}
 |                   ({lcl}, {ucl})
-|                 - 1, n: {n}
-|                 - 2, Events: {events}
-|                 - 2.5, Patient-years: {exposure}
-|                 - 3, Mean (SD): {mean} ({sd}) [{se}]. With se and no sd the
-|                   label is Mean (SE); with both, Mean (SD) [SE].
-|                 - 4, Median: {median}
-|                 - 5, Q1, Q3: {q1}, {q3}
-|                 - 6, Min, Max: {min}, {max}
-|                 - 7, LS mean (SE): {lsmean} ({lsmean_se})
-|                 - 8, Difference (SE): {diff} ({diff_se})
-|                 - 9, the estimate, labelled by its STAT (hr Hazard ratio, or
-|                   Odds ratio, irr Rate ratio, rd Risk difference, rr Relative
-|                   risk, rate Rate per 100 patient-years, else Estimate):
-|                   {estimate}
-|                 - 10, Confidence interval: ({lcl}, {ucl})
-|                 - 11, p-value: {pval}
-|                 - 11.5, Adjusted p-value: {padj}
-|                 - 12, any other STAT, labelled by its name: {value}
+|                 - line 1 (n): {n}
+|                 - line 2 (Events): {events}
+|                 - line 2.5 (Patient-years): {exposure}
+|                 - line 3 (Mean (SD)): {mean} ({sd}) [{se}]. With se and no sd
+|                   the label is Mean (SE); with both, Mean (SD) [SE].
+|                 - line 4 (Median): {median}
+|                 - line 5 (Q1, Q3): {q1}, {q3}
+|                 - line 6 (Min, Max): {min}, {max}
+|                 - line 7 (LS mean (SE)): {lsmean} ({lsmean_se})
+|                 - line 8 (Difference (SE)): {diff} ({diff_se})
+|                 - line 9 (the estimate, labelled by its STAT): {estimate}.
+|                   The labels: STAT hr: Hazard ratio; STAT or: Odds ratio;
+|                   STAT irr: Rate ratio; STAT rd: Risk difference; STAT rr:
+|                   Relative risk; STAT rate: Rate per 100 patient-years;
+|                   STAT estimate: Estimate.
+|                 - line 10 (Confidence interval): ({lcl}, {ucl})
+|                 - line 11 (p-value): {pval}
+|                 - line 11.5 (Adjusted p-value): {padj}
+|                 - line 12 (any other STAT, labelled by its name): {value}
 |                 In a template:
 |                 - A part that is missing leaves out its piece with its
 |                   brackets or its comma: a confidence interval without its
@@ -135,6 +136,7 @@
 |
 | Example:
 |
+ * Makes the display data set: one row per printed line, one column per group, sex by its labels.;
  %layout(
      data    = t14_2_1
    , columns = t14_2_1_cols
@@ -144,6 +146,52 @@
    , setup   = t14_2_1_print
    , out     = t14_2_1_display
  )
+ * Makes one page per sex: SEX and HEAD_C1 to HEAD_C4 hold the page and the N of each column on it.;
+ %layout(
+     data    = t14_1_1
+   , columns = t14_1_1_cols
+   , var     = trt01a
+   , page    = sex
+   , format  = sex $sexf.
+   , file    = &spl_out./tlf/t14_1_1
+   , setup   = t14_1_1_print
+   , out     = t14_1_1_display
+ )
+ * Gives label= and rows= to the setup: the print call it keeps labels the last column p value.;
+ %layout(
+     data    = t14_2_1
+   , columns = t14_2_1_cols
+   , var     = trt01a
+   , format  = sex $sexf.
+   , label   = c99="p-value"
+   , rows    = 30
+   , file    = &spl_out./tlf/t14_2_1_label
+   , setup   = t14_2_1_label_print
+   , out     = t14_2_1_label_display
+ )
+ * Prints the display data set again with the call that the setup keeps.;
+ %print(&t14_2_1_label_print.)
+ * Counts the severe events of the subjects under 50: there is none, so the result has no row.;
+ %freq(
+     data  = adae
+   , denom = adsl
+   , where = (aesev = 'SEVERE' AND age < 50)
+   , var   = aedecod
+   , by    = trt01a
+   , out   = t_sev50
+ )
+ * Gives nodata= for a result with no row: the display data set has no row.;
+ %layout(
+     data    = t_sev50
+   , columns = t14_2_1_cols
+   , var     = trt01a
+   , file    = &spl_out./tlf/t_sev50
+   , nodata  = No subject under 50 had a severe event
+   , setup   = t_sev50_print
+   , out     = t_sev50_display
+ )
+ * Prints the setup of the empty table: the page has the text of nodata= in place of the rows.;
+ %print(&t_sev50_print.)
 |
 |-------------------------------------------------------------------------------
 | Change Log :
@@ -194,6 +242,16 @@
 |                          as the p-value of a block) has the GRP of the rows of
 |                          its block before it: a page break no longer separates
 |                          a p-value from its block. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; more
+|                          calls: page=, label= and rows=, nodata= on a result
+|                          with no row, each printed with its setup. The line
+|                          table of the header as a list, line by line, with
+|                          the labels of the estimates by their STAT. No number
+|                          changes.
+| 27-NOV-2026 Sapling      1.9.1: data= with no row and no page= made a syntax
+|                          error (the LENGTH statement of the empty display
+|                          named the page variable, blank): the empty display
+|                          is made again. No number changes.
 |
 *******************************************************************************/
 %MACRO layout(
@@ -297,7 +355,10 @@
   /* Step 2: no row: the display data set without a row (%print says so) */
   %IF %_spl_nobs(&data.) = 0 %THEN %DO;
     DATA &out.;
-      LENGTH grp 8 row $200 c1 $80 &page. $200;
+      LENGTH grp 8 row $200 c1 $80;
+      %IF %LENGTH(&page.) %THEN %DO;
+        LENGTH &page. $200;
+      %END;
       CALL MISSING(OF grp row c1 &page.);
       STOP;
     RUN;

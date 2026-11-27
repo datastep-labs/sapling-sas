@@ -51,6 +51,7 @@
 |
 | Example:
 |
+ * Keeps the records of each subject and term at the worst severity, the last value of levels=.;
  %worst(
      data   = adae
    , where  = (trtemfl = 'Y')
@@ -76,6 +77,8 @@
 | 27-NOV-2026 Sapling      1.9.1: the text of the header for the manual: the
 |                          summary, the form of each parameter. No number
 |                          changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO worst(

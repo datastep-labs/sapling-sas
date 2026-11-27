@@ -48,7 +48,7 @@ Returns one time-to-event parameter: for each subject the date of the first even
 :   The data set of the records of the censorings, with `censor_date=`. When not given, the censorings come from `subjects=`. *(optional)*
 
 `event=`
-:   The records of `events=` that are events: a condition, such as event = `trtemfl = 'Y'`. When not given, every record with a date is an event. *(optional)*
+:   The records of `events=` that are events: a condition, such as `event = trtemfl = 'Y'`. When not given, every record with a date is an event. *(optional)*
 
 `date=`
 :   The date of an event: a numeric date variable of `events=`. A record with a missing date is no event. *(required)*
@@ -132,6 +132,8 @@ Without `end=`, every date counts, and a date before START becomes START (as adm
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
 
+Derives the time to the first skin event from the first dose: CNSR 0 is an event, 1 a censoring.
+
 ```sas
 %tte(
      subjects      = adsl
@@ -178,7 +180,7 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 |---|---|
 | &lt;dsn&gt;=&lt;dsname&gt; does not exist | give &lt;dsn&gt;= a data set that exists (make it first). |
 | censors=&lt;censors&gt; has no date | give censor_date= the date of a censoring in it. |
-| time= and start_time= are the rule of the start day of a period | give end= (or neither). |
+| time= and start_time= need end=, the end of the period | give end=, or give neither time= nor start_time=. |
 | more than one record of the subject in subjects=&lt;subjects&gt; (with the USUBJID of the record) | give one record per subject. |
 
 ## See also
@@ -186,6 +188,8 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 ADaM steps: [%merge_subject](merge_subject.md), [%pick](pick.md), [%summarize](summarize.md), [%summarize_groups](summarize_groups.md), [%baseline](baseline.md), [%flag_first](flag_first.md), [%flag_if_any](flag_if_any.md), [%windows](windows.md), [%visits](visits.md), [%locf](locf.md), [%relchange](relchange.md), [%param_wide](param_wide.md), [%pool](pool.md).
 
 Named on this page: [%km](km.md), [%logrank](logrank.md), [%cox](cox.md).
+
+Guides that use %tte: [Make a Kaplan-Meier figure with the number at risk](../how-to/kaplan-meier-figure.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

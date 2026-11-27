@@ -1003,7 +1003,7 @@
      "name": "family",
      "default": "",
      "required": true,
-     "description": "The pairs of the family in their order, separated by #: each the group first and then the group it is compared with, each value in quotes: family = \"High\" \"Placebo\" # \"Low\" \"Placebo\". The old form \"A\"-\"B\" is still read."
+     "description": "The pairs of the family in their order, separated by #: each the group first and then the group it is compared with, each value in quotes: family = \"High\" \"Placebo\" # \"Low\" \"Placebo\""
     },
     {
      "name": "method",
@@ -1036,7 +1036,7 @@
      "description": "yes: keep the work data sets _adjust_*"
     }
    ],
-   "example": "%adjust(\n     data   = sbp_ls\n   , by     = trt01p\n   , family = \"Xanomeline High Dose\" \"Placebo\"\n            # \"Xanomeline Low Dose\"  \"Placebo\"\n   , method = hochberg\n   , out    = sbp_adj\n )",
+   "example": "* Adjusts the p values of the two comparisons against Placebo by Hochberg: PADJ after PVAL.;\n%adjust(\n     data   = sbp_ls\n   , by     = trt01p\n   , family = \"Xanomeline High Dose\" \"Placebo\"\n            # \"Xanomeline Low Dose\"  \"Placebo\"\n   , method = hochberg\n   , out    = sbp_adj\n )",
    "outputs": [
     "examples/adjust.txt"
    ]
@@ -1180,7 +1180,7 @@
      "description": "yes: keep the work data sets _aeplot_*"
     }
    ],
-   "example": "%aeplot(\n     data      = adae\n   , columns   = t14_2_1_cols\n   , denom     = adsl\n   , where     = (trtemfl = 'Y')\n   , term      = aedecod\n   , by        = trt01a\n   , reference = \"Placebo\"\n   , threshold = 5\n   , file      = &spl_out./figures/f_ae_risk\n   , out       = f_ae_risk\n )",
+   "example": "* Draws the percent of each term of 5 percent or more and its risk difference against Placebo.;\n%aeplot(\n     data      = adae\n   , columns   = t14_2_1_cols\n   , denom     = adsl\n   , where     = (trtemfl = 'Y')\n   , term      = aedecod\n   , by        = trt01a\n   , reference = \"Placebo\"\n   , threshold = 5\n   , file      = &spl_out./figures/f_ae_risk\n   , out       = f_ae_risk\n )",
    "outputs": [
     "examples/aeplot.png"
    ]
@@ -1263,7 +1263,7 @@
      "description": "yes: keep the work data sets _ancova_*"
     }
    ],
-   "example": "%ancova(\n     data   = advs\n   , where  = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')\n   , var    = chg\n   , covars = base\n   , test   = trt01pn\n   , label  = \"Dose response\"\n   , out    = sbp_dose\n )",
+   "example": "* Tests a linear dose response of the change at Week 12, adjusted for baseline: one p value.;\n%ancova(\n     data   = advs\n   , where  = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')\n   , var    = chg\n   , covars = base\n   , test   = trt01pn\n   , label  = \"Dose response\"\n   , out    = sbp_dose\n )",
    "outputs": [
     "examples/ancova.txt"
    ]
@@ -1328,7 +1328,7 @@
      "description": "yes: keep the work data sets _anova_*"
     }
    ],
-   "example": "%anova(\n     data  = adsl\n   , var   = age\n   , by    = trt01a\n   , label = \"Age (years)\"\n   , out   = age_anova\n )",
+   "example": "* Tests age across the three groups: one row, the p value of the F test.;\n%anova(\n     data  = adsl\n   , var   = age\n   , by    = trt01a\n   , label = \"Age (years)\"\n   , out   = age_anova\n )",
    "outputs": [
     "examples/anova.txt"
    ]
@@ -1363,7 +1363,7 @@
      "description": "The name of the numbers file, without its extension. When not given, it is the name of the program that %study set; without %study, file= is required."
     }
    ],
-   "example": "%ard(data=t14_2_1, columns=t14_2_1_cols, file=t14_2_1)",
+   "example": "* Writes every number of the table and each column N to one CSV file: the full value and the text.;\n%ard(data=t14_2_1, columns=t14_2_1_cols, file=t14_2_1)",
    "outputs": [
     "examples/ard.txt"
    ]
@@ -1507,7 +1507,7 @@
      "description": "yes: keep the work data sets _barplot_*"
     }
    ],
-   "example": "%barplot(\n     data    = adae\n   , columns = t14_2_1_cols\n   , denom   = adsl\n   , where   = (trtemfl = 'Y')\n   , var     = aesev\n   , by      = trt01a\n   , file    = &spl_out./figures/f_ae_sev\n   , out     = f_ae_sev\n )",
+   "example": "* Draws the percent of the subjects with each severity in each group, of the N of denom=.;\n%barplot(\n     data    = adae\n   , columns = t14_2_1_cols\n   , denom   = adsl\n   , where   = (trtemfl = 'Y')\n   , var     = aesev\n   , by      = trt01a\n   , file    = &spl_out./figures/f_ae_sev\n   , out     = f_ae_sev\n )",
    "outputs": [
     "examples/barplot.png"
    ]
@@ -1566,7 +1566,7 @@
      "description": "yes: keep the work data sets _baseline_*"
     }
    ],
-   "example": "DATA vs;\n  SET advs;\n  WHERE paramcd = 'SYSBP';\nRUN;\n%baseline(\n     data    = vs\n   , value   = aval\n   , by      = usubjid paramcd\n   , replace = yes\n   , new     = base\n )",
+   "example": "* Copies the systolic records.;\nDATA vs;\n  SET advs;\n  WHERE paramcd = 'SYSBP';\nRUN;\n* Copies the value of the baseline record to BASE on each record of its subject and parameter.;\n%baseline(\n     data    = vs\n   , value   = aval\n   , by      = usubjid paramcd\n   , replace = yes\n   , new     = base\n )",
    "outputs": [
     "examples/baseline.txt"
    ]
@@ -1710,7 +1710,7 @@
      "description": "yes: keep the work data sets _boxplot_*"
     }
    ],
-   "example": "%boxplot(\n     data    = advs\n   , columns = t14_2_1_cols\n   , where   = (paramcd = 'SYSBP' AND anl01fl = 'Y' AND avisitn IN (4 12 24))\n   , y       = chg\n   , x       = avisitn\n   , by      = trt01a\n   , xformat = VISIT.\n   , ref     = 0\n   , file    = &spl_out./figures/f_sbp_box\n   , out     = f_sbp_box\n )",
+   "example": "* Draws a box of the change of the systolic blood pressure at each visit for each group.;\n%boxplot(\n     data    = advs\n   , columns = t14_2_1_cols\n   , where   = (paramcd = 'SYSBP' AND anl01fl = 'Y' AND avisitn IN (4 12 24))\n   , y       = chg\n   , x       = avisitn\n   , by      = trt01a\n   , xformat = VISIT.\n   , ref     = 0\n   , file    = &spl_out./figures/f_sbp_box\n   , out     = f_sbp_box\n )",
    "outputs": [
     "examples/boxplot.png"
    ]
@@ -1787,7 +1787,7 @@
      "description": "yes: keep the work data sets _chisq_*"
     }
    ],
-   "example": "%chisq(\n     data  = adsl\n   , var   = sex\n   , by    = trt01a\n   , label = \"Sex\"\n   , out   = sex_chisq\n )\n%chisq(\n     data   = adlb\n   , where  = (avisit = 'Week 24')\n   , var    = anrind\n   , by     = trt01a\n   , within = paramcd\n   , exact  = yes\n   , out    = nr_test\n )",
+   "example": "* Tests sex across the groups: one row, the p value of the chi square test.;\n%chisq(\n     data  = adsl\n   , var   = sex\n   , by    = trt01a\n   , label = \"Sex\"\n   , out   = sex_chisq\n )\n* Runs the exact test of the normal range within each parameter: one p value per parameter.;\n%chisq(\n     data   = adlb\n   , where  = (avisit = 'Week 24')\n   , var    = anrind\n   , by     = trt01a\n   , within = paramcd\n   , exact  = yes\n   , out    = nr_test\n )",
    "outputs": [
     "examples/chisq.txt"
    ]
@@ -1870,7 +1870,7 @@
      "description": "yes: keep the work data sets _cmh_*"
     }
    ],
-   "example": "%cmh(\n     data   = adsl\n   , var    = eosstt\n   , by     = trt01a\n   , strata = sex\n   , label  = \"Discontinued the study\"\n   , out    = eos_cmh\n )\n%cmh(\n     data      = adsl\n   , var       = agegr1\n   , by        = trt01a\n   , statistic = rowmean\n   , label     = \"Age group\"\n   , out       = agegr_cmh\n )",
+   "example": "* Tests the status at the end of the study across the groups, stratified by sex: one p value.;\n%cmh(\n     data   = adsl\n   , var    = eosstt\n   , by     = trt01a\n   , strata = sex\n   , label  = \"Discontinued the study\"\n   , out    = eos_cmh\n )\n* Uses the row mean score statistic for the ordered age groups: one p value.;\n%cmh(\n     data      = adsl\n   , var       = agegr1\n   , by        = trt01a\n   , statistic = rowmean\n   , label     = \"Age group\"\n   , out       = agegr_cmh\n )",
    "outputs": [
     "examples/cmh.txt"
    ]
@@ -1935,7 +1935,7 @@
      "description": "yes: keep the work data sets _columns_*"
     }
    ],
-   "example": "%columns(\n     data  = t14_2_1\n   , n     = adsl\n   , var   = trt01a\n   , order = trt01an\n   , total = yes\n   , out   = t14_2_1_cols\n )",
+   "example": "* Makes the four columns with their N from adsl, the Total last, in the order of TRT01AN.;\n%columns(\n     data  = t14_2_1\n   , n     = adsl\n   , var   = trt01a\n   , order = trt01an\n   , total = yes\n   , out   = t14_2_1_cols\n )\n* Gives page=sex: one row per column and sex, the N of each column on the page of its sex.;\n%columns(\n     data  = t14_1_1\n   , n     = adsl\n   , var   = trt01a\n   , order = trt01an\n   , page  = sex\n   , total = yes\n   , out   = t14_1_1_cols\n )\n* Leaves out n=: the columns have no N and come in the order of their values, the Total last.;\n%columns(\n     data  = t14_2_1\n   , var   = trt01a\n   , total = yes\n   , out   = t14_2_1_cols_no_n\n )",
    "outputs": [
     "examples/columns.txt"
    ]
@@ -2010,7 +2010,7 @@
      "name": "pairs",
      "default": "all",
      "required": false,
-     "description": "The pairs of groups to compare. all: each later group against each earlier one, in the order of order= (or of the values). Or a list of pairs separated by #: the group first, then the group it is compared with, each value in quotes (\"Drug\" \"Placebo\" # \"High\" \"Low\"). The old form \"A\"-\"B\" of version 1.0 is still read."
+     "description": "The pairs of groups to compare. all: each later group against each earlier one, in the order of order= (or of the values). Or a list of pairs separated by #: the group first, then the group it is compared with, each value in quotes (\"Drug\" \"Placebo\" # \"High\" \"Low\")"
     },
     {
      "name": "order",
@@ -2061,7 +2061,7 @@
      "description": "yes: keep the work data sets _cox_*"
     }
    ],
-   "example": "%cox(\n     data   = adttde\n   , var    = aval\n   , by     = trt01a\n   , strata = sex\n   , order  = trt01an\n   , out    = ttde_hr\n )\n%cox(\n     data   = adttde\n   , var    = aval\n   , by     = trt01a\n   , within = sex\n   , pairs  = \"Xanomeline High Dose\" \"Placebo\"\n            # \"Xanomeline Low Dose\"  \"Placebo\"\n   , out    = hr_sex\n )\n%cox(\n     data   = adttde\n   , var    = aval\n   , by     = trt01a\n   , within = agegr1\n   , pairs  = \"Xanomeline High Dose\" \"Placebo\"\n            # \"Xanomeline Low Dose\"  \"Placebo\"\n   , out    = hr_age\n )\n%cox(\n     data   = adttde\n   , var    = aval\n   , by     = trt01a\n   , pairs  = \"Xanomeline High Dose\" \"Placebo\"\n            # \"Xanomeline Low Dose\"  \"Placebo\"\n   , ties   = breslow\n   , pvalue = logrank\n   , out    = ttde_hr_lr\n )",
+   "example": "* Gives the hazard ratio of each pair, stratified by sex, with its limits and p value.;\n%cox(\n     data   = adttde\n   , var    = aval\n   , by     = trt01a\n   , strata = sex\n   , order  = trt01an\n   , out    = ttde_hr\n )\n* Gives the hazard ratio against Placebo for each sex: the rows carry SEX, for a forest plot.;\n%cox(\n     data   = adttde\n   , var    = aval\n   , by     = trt01a\n   , within = sex\n   , pairs  = \"Xanomeline High Dose\" \"Placebo\"\n            # \"Xanomeline Low Dose\"  \"Placebo\"\n   , out    = hr_sex\n )\n* Gives the hazard ratio against Placebo for each age group.;\n%cox(\n     data   = adttde\n   , var    = aval\n   , by     = trt01a\n   , within = agegr1\n   , pairs  = \"Xanomeline High Dose\" \"Placebo\"\n            # \"Xanomeline Low Dose\"  \"Placebo\"\n   , out    = hr_age\n )\n* Uses the Breslow ties and the p value of the log rank score test.;\n%cox(\n     data   = adttde\n   , var    = aval\n   , by     = trt01a\n   , pairs  = \"Xanomeline High Dose\" \"Placebo\"\n            # \"Xanomeline Low Dose\"  \"Placebo\"\n   , ties   = breslow\n   , pvalue = logrank\n   , out    = ttde_hr_lr\n )",
    "outputs": [
     "examples/cox.txt"
    ]
@@ -2102,7 +2102,7 @@
      "description": "The name of the CSV file, without its extension"
     }
    ],
-   "example": "%csv(data=adae, var=trt01a usubjid aedecod astdt, file=l14_5_1)",
+   "example": "* Writes the listing as a CSV file: the names of var= in the first line, then one line per record.;\n%csv(data=adae, var=trt01a usubjid aedecod astdt, file=l14_5_1)",
    "outputs": [
     "examples/csv.txt"
    ]
@@ -2164,7 +2164,7 @@
      "name": "stats",
      "default": "n=\"XX\" mean=\"XX.X\" sd=\"XX.XX\" median=\"XX.X\" min=\"XX\" max=\"XX\"",
      "required": false,
-     "description": "The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, mean, sd, median, min, max, q1, q3 and se. A name without a pattern takes its default pattern: XX for n, events, min and max; XX.X for mean, median, q1, q3, lsmean, diff, estimate, lcl and ucl; (XX.X%) for pct; X.XXX for pval; XX.XX for the others."
+     "description": "The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, mean, sd, median, min, max, q1, q3 and se. A name without a pattern takes its default pattern: XX for n, min and max; XX.X for mean, median, q1 and q3; XX.XX for sd and se."
     },
     {
      "name": "label",
@@ -2185,7 +2185,7 @@
      "description": "yes: keep the work data sets _describe_*"
     }
    ],
-   "example": "%describe(\n     data  = adsl\n   , var   = age\n   , by    = trt01a\n   , total = yes\n   , label = \"Age (years)\"\n   , out   = age_describe\n )\n%describe(\n     data  = advs\n   , where = (anl01fl = 'Y')\n   , var   = aval\n   , by    = trt01a paramcd avisit\n   , keep  = param avisitn\n   , out   = vs\n )\n%describe(\n     data  = advs\n   , where = (paramcd = 'WEIGHT' AND ablfl = 'Y')\n   , var   = aval\n   , by    = trt01a\n   , total = \"All subjects\"\n   , stats = n mean sd se median q1 q3 min=\"XX.X\" max=\"XX.X\"\n   , label = \"Weight at baseline (kg)\"\n   , out   = wt_describe\n )",
+   "example": "* Summarizes age in each group and in the Total: n, mean, SD, median, minimum and maximum.;\n%describe(\n     data  = adsl\n   , var   = age\n   , by    = trt01a\n   , total = yes\n   , label = \"Age (years)\"\n   , out   = age_describe\n )\n* Uses three BY variables: one row per group, parameter, visit and statistic, with PARAM kept.;\n%describe(\n     data  = advs\n   , where = (anl01fl = 'Y')\n   , var   = aval\n   , by    = trt01a paramcd avisit\n   , keep  = param avisitn\n   , out   = vs\n )\n* Adds the SE, Q1 and Q3 and calls the Total All subjects: the rows keep the order of stats=.;\n%describe(\n     data  = advs\n   , where = (paramcd = 'WEIGHT' AND ablfl = 'Y')\n   , var   = aval\n   , by    = trt01a\n   , total = \"All subjects\"\n   , stats = n mean sd se median q1 q3 min=\"XX.X\" max=\"XX.X\"\n   , label = \"Weight at baseline (kg)\"\n   , out   = wt_describe\n )\n* Adds sex as a second BY variable: the rows of each group and sex, for a page per sex.;\n%describe(\n     data  = adsl\n   , var   = age\n   , by    = trt01a sex\n   , total = yes\n   , label = \"Age (years)\"\n   , out   = age_sex\n )",
    "outputs": [
     "examples/describe.txt"
    ]
@@ -2262,7 +2262,7 @@
      "description": "yes: keep the work data sets _fisher_*"
     }
    ],
-   "example": "%fisher(\n     data   = adae\n   , denom  = adsl\n   , where  = (trtemfl = 'Y')\n   , by     = trt01a\n   , within = aebodsys\n   , out    = soc_test\n )",
+   "example": "* Tests the subjects with an event against those without in each class: one p value per class.;\n%fisher(\n     data   = adae\n   , denom  = adsl\n   , where  = (trtemfl = 'Y')\n   , by     = trt01a\n   , within = aebodsys\n   , out    = soc_test\n )",
    "outputs": [
     "examples/fisher.txt"
    ]
@@ -2321,7 +2321,7 @@
      "description": "yes: keep the work data sets _flag_first_*"
     }
    ],
-   "example": "DATA vs;\n  SET advs;\n  WHERE paramcd = 'SYSBP';\nRUN;\n%flag_first(\n     data  = vs\n   , where = (NOT MISSING(avisitn) AND NOT MISSING(aval))\n   , by    = usubjid paramcd avisitn\n   , order = ady atptn vsseq\n   , new   = anl02fl\n )",
+   "example": "* Copies the systolic records.;\nDATA vs;\n  SET advs;\n  WHERE paramcd = 'SYSBP';\nRUN;\n* Flags in ANL02FL the first record of each subject, parameter and visit by day and time point.;\n%flag_first(\n     data  = vs\n   , where = (NOT MISSING(avisitn) AND NOT MISSING(aval))\n   , by    = usubjid paramcd avisitn\n   , order = ady atptn vsseq\n   , new   = anl02fl\n )",
    "outputs": [
     "examples/flag_first.txt"
    ]
@@ -2374,7 +2374,7 @@
      "description": "yes: keep the work data sets _flag_if_any_*"
     }
    ],
-   "example": "DATA sl;\n  SET adsl;\n  KEEP usubjid eosstt;\nRUN;\n%flag_if_any(\n     data  = sl\n   , from  = sdtm.ds\n   , where = (dsdecod = 'COMPLETED')\n   , new   = complfl\n )",
+   "example": "* Copies the subjects with USUBJID and EOSSTT only.;\nDATA sl;\n  SET adsl;\n  KEEP usubjid eosstt;\nRUN;\n* Sets COMPLFL to Y for a subject with a disposition record COMPLETED, else to N.;\n%flag_if_any(\n     data  = sl\n   , from  = sdtm.ds\n   , where = (dsdecod = 'COMPLETED')\n   , new   = complfl\n )",
    "outputs": [
     "examples/flag_if_any.txt"
    ]
@@ -2518,7 +2518,7 @@
      "description": "yes: keep the work data sets _forestplot_*"
     }
    ],
-   "example": "%forestplot(\n     data     = hr_sub\n   , columns  = t14_2_1_cols\n   , estimate = hr\n   , within   = sex agegr1\n   , by       = trt01a\n   , scale    = log\n   , ref      = 1\n   , file     = &spl_out./figures/f_hr_sub\n   , out      = f_hr_sub\n )",
+   "example": "* Draws the hazard ratios of each subgroup on a log scale, with the reference line at 1.;\n%forestplot(\n     data     = hr_sub\n   , columns  = t14_2_1_cols\n   , estimate = hr\n   , within   = sex agegr1\n   , by       = trt01a\n   , scale    = log\n   , ref      = 1\n   , file     = &spl_out./figures/f_hr_sub\n   , out      = f_hr_sub\n )",
    "outputs": [
     "examples/forestplot.png"
    ]
@@ -2631,7 +2631,7 @@
      "description": "yes: keep the work data sets _freq_*"
     }
    ],
-   "example": "%freq(\n     data  = adsl\n   , var   = sex\n   , by    = trt01a\n   , total = yes\n   , label = \"Sex\"\n   , out   = sex_freq\n )\n%freq(\n     data  = adae\n   , denom = adsl\n   , where = (trtemfl = 'Y')\n   , var   = aebodsys aedecod\n   , by    = trt01a\n   , stats = n pct events\n   , out   = teae\n )\n%freq(\n     data   = adlb\n   , denom  = adsl\n   , where  = (avisit = 'Week 24')\n   , var    = paramcd bnrind anrind\n   , by     = trt01a\n   , levels = bnrind 'LOW' 'NORMAL' 'HIGH' anrind 'LOW' 'NORMAL' 'HIGH'\n   , out    = shift\n )\n%freq(\n     data      = adae\n   , denom     = adsl\n   , where     = (trtemfl = 'Y')\n   , var       = aedecod\n   , by        = trt01a\n   , threshold = 5\n   , order     = frequency\n   , out       = common\n )",
+   "example": "* Counts each sex in each group and in the Total: n and the percent of the subjects of the group.;\n%freq(\n     data  = adsl\n   , var   = sex\n   , by    = trt01a\n   , total = yes\n   , label = \"Sex\"\n   , out   = sex_freq\n )\n* Counts subjects and events of each term under its class: the percent uses the N of denom=.;\n%freq(\n     data  = adae\n   , denom = adsl\n   , where = (trtemfl = 'Y')\n   , var   = aebodsys aedecod\n   , by    = trt01a\n   , stats = n pct events\n   , out   = teae\n )\n* Counts the shift at Week 24 with planned levels: a level without a subject has a row of 0.;\n%freq(\n     data   = adlb\n   , denom  = adsl\n   , where  = (avisit = 'Week 24')\n   , var    = paramcd bnrind anrind\n   , by     = trt01a\n   , levels = bnrind 'LOW' 'NORMAL' 'HIGH' anrind 'LOW' 'NORMAL' 'HIGH'\n   , out    = shift\n )\n* Keeps the terms that reach 5 percent in a group, in the order of their subjects, the most first.;\n%freq(\n     data      = adae\n   , denom     = adsl\n   , where     = (trtemfl = 'Y')\n   , var       = aedecod\n   , by        = trt01a\n   , threshold = 5\n   , order     = frequency\n   , out       = common\n )\n* Adds sex as a second BY variable: the age groups of each group and sex, for a page per sex.;\n%freq(\n     data  = adsl\n   , var   = agegr1\n   , by    = trt01a sex\n   , total = yes\n   , label = \"Age group\"\n   , out   = agegr_sex\n )",
    "outputs": [
     "examples/freq.txt"
    ]
@@ -2666,7 +2666,7 @@
      "description": "The folder that gets the data sets: a path without quotes. The folder must exist."
     }
    ],
-   "example": "%import_xpt(\n     dir     = &spl_root./examples/data\n   , members = adsl adae advs adlb adtte adrs\n   , out     = &spl_root./examples/adam\n )",
+   "example": "* Copies the six ADaM transport files of the example data into SAS data sets of one folder.;\n%import_xpt(\n     dir     = &spl_root./examples/data\n   , members = adsl adae advs adlb adtte adrs\n   , out     = &spl_root./examples/adam\n )",
    "outputs": [
     "examples/import_xpt.txt"
    ]
@@ -2761,7 +2761,7 @@
      "description": "yes: keep the work data sets _interaction_genmod_*"
     }
    ],
-   "example": "%interaction_genmod(\n     data     = adsl\n   , where    = (trtdurd > 0)\n   , var      = teaecnt\n   , by       = trt01a\n   , factor   = sex\n   , exposure = trtdurd / 365.25\n   , dist     = negbin\n   , label    = \"Sex\"\n   , out      = ae_int\n )",
+   "example": "* Tests the treatment by sex interaction of the event counts in a negative binomial model.;\n%interaction_genmod(\n     data     = adsl\n   , where    = (trtdurd > 0)\n   , var      = teaecnt\n   , by       = trt01a\n   , factor   = sex\n   , exposure = trtdurd / 365.25\n   , dist     = negbin\n   , label    = \"Sex\"\n   , out      = ae_int\n )",
    "outputs": [
     "examples/interaction_genmod.txt"
    ]
@@ -2844,7 +2844,7 @@
      "description": "yes: keep the work data sets _interaction_glm_*"
     }
    ],
-   "example": "%interaction_glm(\n     data   = advs\n   , where  = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')\n   , var    = chg\n   , by     = trt01p\n   , factor = sex\n   , covars = base\n   , label  = \"Sex\"\n   , out    = sbp_int\n )",
+   "example": "* Tests the treatment by sex interaction of the change at Week 12, adjusted for baseline.;\n%interaction_glm(\n     data   = advs\n   , where  = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')\n   , var    = chg\n   , by     = trt01p\n   , factor = sex\n   , covars = base\n   , label  = \"Sex\"\n   , out    = sbp_int\n )",
    "outputs": [
     "examples/interaction_glm.txt"
    ]
@@ -2933,7 +2933,7 @@
      "description": "yes: keep the work data sets _interaction_logistic_*"
     }
    ],
-   "example": "%interaction_logistic(\n     data   = adsl\n   , var    = eosstt\n   , event  = \"DISCONTINUED\"\n   , by     = trt01a\n   , factor = sex\n   , covars = age\n   , label  = \"Sex\"\n   , out    = eos_int\n )",
+   "example": "* Tests the treatment by sex interaction of discontinuation in a logistic model with age.;\n%interaction_logistic(\n     data   = adsl\n   , var    = eosstt\n   , event  = \"DISCONTINUED\"\n   , by     = trt01a\n   , factor = sex\n   , covars = age\n   , label  = \"Sex\"\n   , out    = eos_int\n )",
    "outputs": [
     "examples/interaction_logistic.txt"
    ]
@@ -3034,7 +3034,7 @@
      "description": "yes: keep the work data sets _interaction_phreg_*"
     }
    ],
-   "example": "%interaction_phreg(\n     data   = adttde\n   , var    = aval\n   , by     = trt01a\n   , factor = sex\n   , label  = \"Sex\"\n   , out    = ttde_int\n )",
+   "example": "* Tests the treatment by sex interaction of the time to the event in a Cox model.;\n%interaction_phreg(\n     data   = adttde\n   , var    = aval\n   , by     = trt01a\n   , factor = sex\n   , label  = \"Sex\"\n   , out    = ttde_int\n )",
    "outputs": [
     "examples/interaction_phreg.txt"
    ]
@@ -3124,7 +3124,7 @@
      "description": "yes: keep the work data sets _km_*"
     }
    ],
-   "example": "%km(\n     data  = adttde\n   , var   = aval\n   , by    = trt01a\n   , label = \"Time to the first skin event (days)\"\n   , out   = ttde_km\n )\n%km(\n     data  = adtte\n   , where = (paramcd = 'OS')\n   , var   = aval\n   , by    = trt01p\n   , time  = 182\n   , stats = n=\"XX\" events=\"XX\" surv=\"XX.X\" lcl=\"XX.X\" ucl=\"XX.X\"\n   , out   = os_km\n )\n%km(\n     data     = adttde\n   , var      = aval\n   , by       = trt01a\n   , conftype = loglog\n   , level    = 0.90\n   , out      = ttde_km90\n )",
+   "example": "* Gives n, events, the median and its limits of each group: NE is a median not reached.;\n%km(\n     data  = adttde\n   , var   = aval\n   , by    = trt01a\n   , label = \"Time to the first skin event (days)\"\n   , out   = ttde_km\n )\n* Gives the percent of subjects alive at day 182 and its limits, with the patterns of stats=.;\n%km(\n     data  = adtte\n   , where = (paramcd = 'OS')\n   , var   = aval\n   , by    = trt01p\n   , time  = 182\n   , stats = n=\"XX\" events=\"XX\" surv=\"XX.X\" lcl=\"XX.X\" ucl=\"XX.X\"\n   , out   = os_km\n )\n* Uses conftype=loglog and a 90 percent level: the median stays, its limits change.;\n%km(\n     data     = adttde\n   , var      = aval\n   , by       = trt01a\n   , conftype = loglog\n   , level    = 0.90\n   , out      = ttde_km90\n )",
    "outputs": [
     "examples/km.txt"
    ]
@@ -3280,16 +3280,17 @@
      "description": "yes: keep the work data sets _kmplot_*"
     }
    ],
-   "example": "%kmplot(\n     data    = adttde\n   , columns = t14_2_1_cols\n   , time    = aval\n   , by      = trt01a\n   , median  = yes\n   , xlabel  = \"Days to the first skin event\"\n   , file    = &spl_out./figures/f_ttde\n   , out     = f_ttde\n )",
+   "example": "* Draws the curves with the number at risk and the median of each group, and keeps the numbers.;\n%kmplot(\n     data    = adttde\n   , columns = t14_2_1_cols\n   , time    = aval\n   , by      = trt01a\n   , median  = yes\n   , xlabel  = \"Days to the first skin event\"\n   , file    = &spl_out./figures/f_ttde\n   , out     = f_ttde\n   , outpar  = f_ttde_par\n )\n* Draws the figure again from out= and outpar= of the call before: no median, another label.;\n%kmplot(\n     plot   = f_ttde\n   , par    = f_ttde_par\n   , by     = trt01a\n   , median = no\n   , ylabel = \"Subjects without a skin event (%)\"\n   , file   = &spl_out./figures/f_ttde_again\n )",
    "outputs": [
-    "examples/kmplot.png"
+    "examples/kmplot.png",
+    "examples/kmplot_1.png"
    ]
   },
   {
    "name": "layout",
    "file": "sas/macros/layout.sas",
    "kind": "statistics",
-   "purpose": "Returns the display data set of a table: one row per printed line and one column per group. %print prints it; %table runs %columns, %ard, %layout and %print in one call. The display data set is the table as the shells show it: each row a printed line, each cell a text. %layout computes nothing: every number is the TEXT of a result. The rows:\n- Each block starts with its label, with a blank row between two blocks.\n- The levels of the groups other than the column variable are indented by two blanks each: a term under its class, a visit under its parameter, vs B under A.\n- The levels are in the order of their numeric twin (AVISITN for AVISIT, PARAMN for PARAMCD: the name with an N added), else of their values. A level of PARAMCD shows its PARAM.\n- A frequency block (only the statistics n, pct, events, lcl and ucl) has one line per category. Any other block has one line per kind of statistic, by the line table below.\n- The p-value of each category (a test of each term, in a block of the same label) stands in the row of its category.\n- A result has at most four groups besides the column variable and the page variable.\nThe columns:\n- C1 ... Cn: one column per group, with its header and N from %columns.\n- C99, All groups: the numbers of a result without the column variable, such as a p-value of all groups.\nThe line table: the order of a line, its label, then its template.\n- 0, a category of a frequency block: {n} {pct} {events} ({lcl}, {ucl})\n- 1, n: {n}\n- 2, Events: {events}\n- 2.5, Patient-years: {exposure}\n- 3, Mean (SD): {mean} ({sd}) [{se}]. With se and no sd the label is Mean (SE); with both, Mean (SD) [SE].\n- 4, Median: {median}\n- 5, Q1, Q3: {q1}, {q3}\n- 6, Min, Max: {min}, {max}\n- 7, LS mean (SE): {lsmean} ({lsmean_se})\n- 8, Difference (SE): {diff} ({diff_se})\n- 9, the estimate, labelled by its STAT (hr Hazard ratio, or Odds ratio, irr Rate ratio, rd Risk difference, rr Relative risk, rate Rate per 100 patient-years, else Estimate): {estimate}\n- 10, Confidence interval: ({lcl}, {ucl})\n- 11, p-value: {pval}\n- 11.5, Adjusted p-value: {padj}\n- 12, any other STAT, labelled by its name: {value}\nIn a template:\n- A part that is missing leaves out its piece with its brackets or its comma: a confidence interval without its upper limit prints the lower limit alone.\n- A TEXT that has the brackets of its piece already is not bracketed twice.\n- The counts of a frequency block are right aligned to the widest count.\nThe setup (setup=):\n- The global macro variable keeps the parameters of %print for out=: data=, by=row, var=c:, together=grp and label=row=\" \" with the labels of label=; also page=, rows=, file= and nodata= when they are given to %layout. A NOTE in the log shows it.\n- %print(&name.) prints the display data set again after a change. A parameter that is not in the setup is added after it: %print(&name., file=...).\n- A parameter that is in the setup cannot be given again, as SAS stops a call that has a keyword twice: give it to %layout, or write the whole %print call.\nWhen data= has no row, the display data set has no row, and %print prints the text of nodata=.",
+   "purpose": "Returns the display data set of a table: one row per printed line and one column per group. %print prints it; %table runs %columns, %ard, %layout and %print in one call. The display data set is the table as the shells show it: each row a printed line, each cell a text. %layout computes nothing: every number is the TEXT of a result. The rows:\n- Each block starts with its label, with a blank row between two blocks.\n- The levels of the groups other than the column variable are indented by two blanks each: a term under its class, a visit under its parameter, vs B under A.\n- The levels are in the order of their numeric twin (AVISITN for AVISIT, PARAMN for PARAMCD: the name with an N added), else of their values. A level of PARAMCD shows its PARAM.\n- A frequency block (only the statistics n, pct, events, lcl and ucl) has one line per category. Any other block has one line per kind of statistic, by the line table below.\n- The p-value of each category (a test of each term, in a block of the same label) stands in the row of its category.\n- A result has at most four groups besides the column variable and the page variable.\nThe columns:\n- C1 ... Cn: one column per group, with its header and N from %columns.\n- C99, All groups: the numbers of a result without the column variable, such as a p-value of all groups.\nThe line table: each line by its order and its label, then its template.\n- line 0 (a category of a frequency block): {n} {pct} {events} ({lcl}, {ucl})\n- line 1 (n): {n}\n- line 2 (Events): {events}\n- line 2.5 (Patient-years): {exposure}\n- line 3 (Mean (SD)): {mean} ({sd}) [{se}]. With se and no sd the label is Mean (SE); with both, Mean (SD) [SE].\n- line 4 (Median): {median}\n- line 5 (Q1, Q3): {q1}, {q3}\n- line 6 (Min, Max): {min}, {max}\n- line 7 (LS mean (SE)): {lsmean} ({lsmean_se})\n- line 8 (Difference (SE)): {diff} ({diff_se})\n- line 9 (the estimate, labelled by its STAT): {estimate}. The labels: STAT hr: Hazard ratio; STAT or: Odds ratio; STAT irr: Rate ratio; STAT rd: Risk difference; STAT rr: Relative risk; STAT rate: Rate per 100 patient-years; STAT estimate: Estimate.\n- line 10 (Confidence interval): ({lcl}, {ucl})\n- line 11 (p-value): {pval}\n- line 11.5 (Adjusted p-value): {padj}\n- line 12 (any other STAT, labelled by its name): {value}\nIn a template:\n- A part that is missing leaves out its piece with its brackets or its comma: a confidence interval without its upper limit prints the lower limit alone.\n- A TEXT that has the brackets of its piece already is not bracketed twice.\n- The counts of a frequency block are right aligned to the widest count.\nThe setup (setup=):\n- The global macro variable keeps the parameters of %print for out=: data=, by=row, var=c:, together=grp and label=row=\" \" with the labels of label=; also page=, rows=, file= and nodata= when they are given to %layout. A NOTE in the log shows it.\n- %print(&name.) prints the display data set again after a change. A parameter that is not in the setup is added after it: %print(&name., file=...).\n- A parameter that is in the setup cannot be given again, as SAS stops a call that has a keyword twice: give it to %layout, or write the whole %print call.\nWhen data= has no row, the display data set has no row, and %print prints the text of nodata=.",
    "procedure": "DATA steps, PROC FORMAT, PROC SORT, PROC TRANSPOSE",
    "proven": "the tables of the dummy study SYNHTN01 (every program ran with a clean log, also as a program without a macro, 12 of 12) and the cases of setup= in node tools/print_sas.ts; ran on SAS 9.4 M9, 2026-11-12; the 12 tables of the CDISC pilot (the p value of each term in T14_5_2), 2026-11-13",
    "output": "OUT: the display data set, one row per printed line: GRP (the rows that stay on one page: a block, or a level of its first group; a row of a value of all groups, such as a p-value in C99 only, has the GRP of the rows of its block before it), ROW (the label of the line, indented, with the format $CHARw.), C1 ... Cn (the cells, labelled with the header of their column) and C99 (All groups: only when a result has a number without the column variable). With page=: also the page variable (with its format of format=) and HEAD_C1 ... HEAD_Cn, the header of each column on its page; C1 ... Cn are then labelled with the column value. SETUP: with setup=, the global macro variable of that name.",
@@ -3369,7 +3370,7 @@
      "description": "yes: keep the work data sets _layout_*"
     }
    ],
-   "example": "%layout(\n     data    = t14_2_1\n   , columns = t14_2_1_cols\n   , var     = trt01a\n   , format  = sex $sexf.\n   , file    = &spl_out./tlf/t14_2_1\n   , setup   = t14_2_1_print\n   , out     = t14_2_1_display\n )",
+   "example": "* Makes the display data set: one row per printed line, one column per group, sex by its labels.;\n%layout(\n     data    = t14_2_1\n   , columns = t14_2_1_cols\n   , var     = trt01a\n   , format  = sex $sexf.\n   , file    = &spl_out./tlf/t14_2_1\n   , setup   = t14_2_1_print\n   , out     = t14_2_1_display\n )\n* Makes one page per sex: SEX and HEAD_C1 to HEAD_C4 hold the page and the N of each column on it.;\n%layout(\n     data    = t14_1_1\n   , columns = t14_1_1_cols\n   , var     = trt01a\n   , page    = sex\n   , format  = sex $sexf.\n   , file    = &spl_out./tlf/t14_1_1\n   , setup   = t14_1_1_print\n   , out     = t14_1_1_display\n )\n* Gives label= and rows= to the setup: the print call it keeps labels the last column p value.;\n%layout(\n     data    = t14_2_1\n   , columns = t14_2_1_cols\n   , var     = trt01a\n   , format  = sex $sexf.\n   , label   = c99=\"p-value\"\n   , rows    = 30\n   , file    = &spl_out./tlf/t14_2_1_label\n   , setup   = t14_2_1_label_print\n   , out     = t14_2_1_label_display\n )\n* Prints the display data set again with the call that the setup keeps.;\n%layout(\n     data    = t_sev50\n   , columns = t14_2_1_cols\n   , var     = trt01a\n   , file    = &spl_out./tlf/t_sev50\n   , nodata  = No subject under 50 had a severe event\n   , setup   = t_sev50_print\n   , out     = t_sev50_display\n )\n* Counts the severe events of the subjects under 50: there is none, so the result has no row.;\n%freq(\n    data  = adae\n  , denom = adsl\n  , where = (aesev = 'SEVERE' AND age < 50)\n  , var   = aedecod\n  , by    = trt01a\n  , out   = t_sev50\n)\n* Gives nodata= for a result with no row: the display data set has no row.;\n%layout(\n    data    = t_sev50\n  , columns = t14_2_1_cols\n  , var     = trt01a\n  , file    = &spl_out./tlf/t_sev50\n  , nodata  = No subject under 50 had a severe event\n  , setup   = t_sev50_print\n  , out     = t_sev50_display\n)\n* Prints the setup of the empty table: the page has the text of nodata= in place of the rows.;\n%print(&t_sev50_print.)",
    "outputs": [
     "examples/layout.txt"
    ]
@@ -3519,7 +3520,7 @@
      "description": "yes: keep the work data sets _lineplot_*"
     }
    ],
-   "example": "%lineplot(\n     data    = f_bp_mean\n   , columns = t14_2_1_cols\n   , x       = x\n   , y       = y\n   , by      = trt01a\n   , panel   = param\n   , lower   = lower\n   , upper   = upper\n   , band    = yes\n   , xformat = VISIT.\n   , ylabel  = \"Mean change from baseline (SE)\"\n   , ref     = 0\n   , file    = &spl_out./figures/f_bp_line\n   , out     = f_bp_line\n )",
+   "example": "* Draws the means that meanplot kept as lines, with a band between the limits.;\n%lineplot(\n     data    = f_bp_mean\n   , columns = t14_2_1_cols\n   , x       = x\n   , y       = y\n   , by      = trt01a\n   , panel   = param\n   , lower   = lower\n   , upper   = upper\n   , band    = yes\n   , xformat = VISIT.\n   , ylabel  = \"Mean change from baseline (SE)\"\n   , ref     = 0\n   , file    = &spl_out./figures/f_bp_line\n   , out     = f_bp_line\n )",
    "outputs": [
     "examples/lineplot.png"
    ]
@@ -3584,7 +3585,7 @@
      "description": "yes: keep the work data sets _locf_*"
     }
    ],
-   "example": "DATA vs;\n  SET advs;\n  WHERE paramcd = 'SYSBP' AND avisitn IN (0 4 12 24);\nRUN;\n%locf(\n     data    = vs\n   , windows = 0  \"Baseline\" .   1   1   \"<=1\"\n             # 4  \"Week 4\"   2   42  28  \"2-42\"\n             # 12 \"Week 12\"  43  126 84  \"43-126\"\n             # 24 \"Week 24\"  127 210 168 \"127-210\"\n   , where   = (paramcd = 'SYSBP')\n   , length  = $7\n )",
+   "example": "* Copies the systolic records of the analysis visits.;\nDATA vs;\n  SET advs;\n  WHERE paramcd = 'SYSBP' AND avisitn IN (0 4 12 24);\nRUN;\n* Carries the last value forward into a visit without a value: DTYPE is LOCF on the new records.;\n%locf(\n     data    = vs\n   , windows = 0  \"Baseline\" .   1   1   \"<=1\"\n             # 4  \"Week 4\"   2   42  28  \"2-42\"\n             # 12 \"Week 12\"  43  126 84  \"43-126\"\n             # 24 \"Week 24\"  127 210 168 \"127-210\"\n   , where   = (paramcd = 'SYSBP')\n   , length  = $7\n )",
    "outputs": [
     "examples/locf.txt"
    ]
@@ -3653,7 +3654,7 @@
      "name": "pairs",
      "default": "all",
      "required": false,
-     "description": "The pairs of groups to compare. all: each later group against each earlier one, in the order of order= (or of the values). Or the pairs separated by #, each the group first and then the group it is compared with, a value with a blank or a hyphen in quotes: pairs = \"Drug\" \"Placebo\" # \"High\" \"Low\". The old form \"A\"-\"B\" is still read."
+     "description": "The pairs of groups to compare. all: each later group against each earlier one, in the order of order= (or of the values). Or the pairs separated by #, each the group first and then the group it is compared with, a value with a blank or a hyphen in quotes: pairs = \"Drug\" \"Placebo\" # \"High\" \"Low\""
     },
     {
      "name": "order",
@@ -3692,7 +3693,7 @@
      "description": "yes: keep the work data sets _logistic_*"
     }
    ],
-   "example": "%logistic(\n     data   = adsl\n   , var    = eosstt\n   , event  = \"DISCONTINUED\"\n   , by     = trt01a\n   , covars = age\n   , class  = sex\n   , order  = trt01an\n   , out    = eos_or\n )\n%logistic(\n     data   = adsl\n   , var    = eosstt\n   , event  = \"DISCONTINUED\"\n   , by     = trt01a\n   , within = sex\n   , pairs  = \"Xanomeline High Dose\" \"Placebo\"\n            # \"Xanomeline Low Dose\"  \"Placebo\"\n   , out    = eos_or_sex\n )",
+   "example": "* Gives the odds ratio of discontinuation for each pair, adjusted for age and sex.;\n%logistic(\n     data   = adsl\n   , var    = eosstt\n   , event  = \"DISCONTINUED\"\n   , by     = trt01a\n   , covars = age\n   , class  = sex\n   , order  = trt01an\n   , out    = eos_or\n )\n* Gives the odds ratio against Placebo for each sex: the rows carry SEX.;\n%logistic(\n     data   = adsl\n   , var    = eosstt\n   , event  = \"DISCONTINUED\"\n   , by     = trt01a\n   , within = sex\n   , pairs  = \"Xanomeline High Dose\" \"Placebo\"\n            # \"Xanomeline Low Dose\"  \"Placebo\"\n   , out    = eos_or_sex\n )",
    "outputs": [
     "examples/logistic.txt"
    ]
@@ -3769,7 +3770,7 @@
      "description": "yes: keep the work data sets _logrank_*"
     }
    ],
-   "example": "%logrank(\n     data   = adttde\n   , var    = aval\n   , by     = trt01a\n   , strata = sex\n   , out    = ttde_test\n )",
+   "example": "* Tests the curves of the groups with the log rank test, stratified by sex: one p value.;\n%logrank(\n     data   = adttde\n   , var    = aval\n   , by     = trt01a\n   , strata = sex\n   , out    = ttde_test\n )",
    "outputs": [
     "examples/logrank.txt"
    ]
@@ -3831,7 +3832,7 @@
      "name": "pairs",
      "default": "all",
      "required": false,
-     "description": "The pairs of groups to compare. all: each later group against each earlier one, in the order of order= (or of the values). Or the pairs separated by #, each the group first and then the group it is compared with, a value with a blank or a hyphen in quotes: pairs = \"Drug\" \"Placebo\" # \"High\" \"Low\". The old form \"A\"-\"B\" is still read."
+     "description": "The pairs of groups to compare. all: each later group against each earlier one, in the order of order= (or of the values). Or the pairs separated by #, each the group first and then the group it is compared with, a value with a blank or a hyphen in quotes: pairs = \"Drug\" \"Placebo\" # \"High\" \"Low\""
     },
     {
      "name": "order",
@@ -3870,7 +3871,7 @@
      "description": "yes: keep the work data sets _lsmeans_*"
     }
    ],
-   "example": "%lsmeans(\n     data   = advs\n   , where  = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')\n   , var    = chg\n   , by     = trt01p\n   , covars = base\n   , class  = sex\n   , pairs  = all\n   , order  = trt01pn\n   , out    = sbp_ls\n )\n%lsmeans(\n     data   = advs\n   , where  = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')\n   , var    = chg\n   , by     = trt01p\n   , covars = base\n   , pairs  = \"Xanomeline High Dose\" \"Placebo\"\n            # \"Xanomeline Low Dose\"  \"Placebo\"\n   , order  = trt01pn\n   , level  = 0.90\n   , stats  = lsmean lsmean_se diff lcl ucl pval\n   , out    = sbp_ls90\n )",
+   "example": "* Gives the LS means and the difference of every pair at Week 12, adjusted for baseline and sex.;\n%lsmeans(\n     data   = advs\n   , where  = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')\n   , var    = chg\n   , by     = trt01p\n   , covars = base\n   , class  = sex\n   , pairs  = all\n   , order  = trt01pn\n   , out    = sbp_ls\n )\n* Compares two pairs against Placebo at a 90 percent level and keeps the statistics of stats=.;\n%lsmeans(\n     data   = advs\n   , where  = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')\n   , var    = chg\n   , by     = trt01p\n   , covars = base\n   , pairs  = \"Xanomeline High Dose\" \"Placebo\"\n            # \"Xanomeline Low Dose\"  \"Placebo\"\n   , order  = trt01pn\n   , level  = 0.90\n   , stats  = lsmean lsmean_se diff lcl ucl pval\n   , out    = sbp_ls90\n )",
    "outputs": [
     "examples/lsmeans.txt"
    ]
@@ -4032,7 +4033,7 @@
      "description": "yes: keep the work data sets _meanplot_*"
     }
    ],
-   "example": "%meanplot(\n     data    = advs\n   , columns = t14_2_1_cols\n   , where   = (paramcd IN ('SYSBP' 'DIABP') AND anl01fl = 'Y' AND avisitn < 99)\n   , y       = chg\n   , x       = avisitn\n   , by      = trt01a\n   , panel   = param\n   , ntable  = yes\n   , xformat = VISIT.\n   , ref     = 0\n   , file    = &spl_out./figures/f_bp_mean\n   , out     = f_bp_mean\n )",
+   "example": "* Draws the mean change and its SE at each visit, a panel per parameter, with the n of each point.;\n%meanplot(\n     data    = advs\n   , columns = t14_2_1_cols\n   , where   = (paramcd IN ('SYSBP' 'DIABP') AND anl01fl = 'Y' AND avisitn < 99)\n   , y       = chg\n   , x       = avisitn\n   , by      = trt01a\n   , panel   = param\n   , ntable  = yes\n   , xformat = VISIT.\n   , ref     = 0\n   , file    = &spl_out./figures/f_bp_mean\n   , out     = f_bp_mean\n )",
    "outputs": [
     "examples/meanplot.png"
    ]
@@ -4073,7 +4074,7 @@
      "description": "yes: keep the work data sets _merge_subject_*"
     }
    ],
-   "example": "DATA tt;\n  SET adtte;\n  KEEP usubjid paramcd aval cnsr;\nRUN;\n%merge_subject(\n     data = tt\n   , from = adsl\n   , vars = agegr1 race trtp=trt01p trtpn=trt01pn\n )",
+   "example": "* Copies the time to event records with four variables of their own.;\nDATA tt;\n  SET adtte;\n  KEEP usubjid paramcd aval cnsr;\nRUN;\n* Adds the age group, the race and the planned treatment of adsl by USUBJID, two of them renamed.;\n%merge_subject(\n     data = tt\n   , from = adsl\n   , vars = agegr1 race trtp=trt01p trtpn=trt01pn\n )",
    "outputs": [
     "examples/merge_subject.txt"
    ]
@@ -4172,7 +4173,7 @@
      "name": "pairs",
      "default": "all",
      "required": false,
-     "description": "The pairs of groups to compare. all: each later group against each earlier one, in the order of order= (or of the values). Or the pairs separated by #, each the group first and then the group it is compared with, a value with a blank or a hyphen in quotes: pairs = \"Drug\" \"Placebo\" # \"High\" \"Low\". The old form \"A\"-\"B\" is still read."
+     "description": "The pairs of groups to compare. all: each later group against each earlier one, in the order of order= (or of the values). Or the pairs separated by #, each the group first and then the group it is compared with, a value with a blank or a hyphen in quotes: pairs = \"Drug\" \"Placebo\" # \"High\" \"Low\""
     },
     {
      "name": "order",
@@ -4211,7 +4212,7 @@
      "description": "yes: keep the work data sets _mmrm_*"
     }
    ],
-   "example": "%mmrm(\n     data     = advs\n   , where    = (paramcd = 'SYSBP' AND anl01fl = 'Y' AND avisitn IN (4 8 12 16 24))\n   , var      = chg\n   , by       = trt01p\n   , visit    = avisit\n   , at       = \"Week 24\"\n   , model    = base trt01p avisit trt01p*avisit base*avisit\n   , type     = un\n   , fallback = toep\n   , pairs    = all\n   , order    = trt01pn\n   , out      = sbp_mmrm\n )",
+   "example": "* Fits the MMRM of the change at five visits and compares the groups at Week 24.;\n%mmrm(\n     data     = advs\n   , where    = (paramcd = 'SYSBP' AND anl01fl = 'Y' AND avisitn IN (4 8 12 16 24))\n   , var      = chg\n   , by       = trt01p\n   , visit    = avisit\n   , at       = \"Week 24\"\n   , model    = base trt01p avisit trt01p*avisit base*avisit\n   , type     = un\n   , fallback = toep\n   , pairs    = all\n   , order    = trt01pn\n   , out      = sbp_mmrm\n )",
    "outputs": [
     "examples/mmrm.txt"
    ]
@@ -4270,7 +4271,7 @@
      "description": "yes: keep the work data sets _param_wide_*"
     }
    ],
-   "example": "%param_wide(\n     data   = advs\n   , where  = (anl01fl = 'Y')\n   , params = sysbp diabp\n   , vars   = aval chg\n   , by     = usubjid avisitn\n   , out    = bp_wide\n )",
+   "example": "* Puts the value and the change of SYSBP and DIABP side by side: one row per subject and visit.;\n%param_wide(\n     data   = advs\n   , where  = (anl01fl = 'Y')\n   , params = sysbp diabp\n   , vars   = aval chg\n   , by     = usubjid avisitn\n   , out    = bp_wide\n )",
    "outputs": [
     "examples/param_wide.txt"
    ]
@@ -4347,7 +4348,7 @@
      "description": "yes: keep the work data sets _pick_*"
     }
    ],
-   "example": "DATA sl;\n  SET adsl;\n  KEEP usubjid trtsdt;\nRUN;\n%pick(\n     data   = sl\n   , from   = sdtm.ex\n   , value  = exstdtc\n   , order  = exstdtc exseq\n   , which  = first\n   , length = $10\n   , new    = exfstdtc\n )\n%pick(\n     data  = sl\n   , from  = sdtm.ex\n   , value = exdose\n   , order = exstdtc exseq\n   , which = last\n   , new   = exldose\n )",
+   "example": "* Copies the subjects with USUBJID and TRTSDT only.;\nDATA sl;\n  SET adsl;\n  KEEP usubjid trtsdt;\nRUN;\n* Takes the date of the first exposure record of each subject, as a text of 10.;\n%pick(\n     data   = sl\n   , from   = sdtm.ex\n   , value  = exstdtc\n   , order  = exstdtc exseq\n   , which  = first\n   , length = $10\n   , new    = exfstdtc\n )\n* Takes the dose of the last exposure record of each subject.;\n%pick(\n     data  = sl\n   , from  = sdtm.ex\n   , value = exdose\n   , order = exstdtc exseq\n   , which = last\n   , new   = exldose\n )",
    "outputs": [
     "examples/pick.txt"
    ]
@@ -4412,7 +4413,7 @@
      "description": "yes: keep the work data sets _pool_*"
     }
    ],
-   "example": "DATA sl;\n  SET adsl;\n  KEEP usubjid siteid trt01p;\nRUN;\n%pool(\n     data   = sl\n   , var    = siteid\n   , by     = trt01p\n   , min    = 3\n   , length = $3\n   , new    = sitegr1\n   , into   = 900\n )",
+   "example": "* Copies the subjects with their site and their planned treatment.;\nDATA sl;\n  SET adsl;\n  KEEP usubjid siteid trt01p;\nRUN;\n* Pools each site with fewer than 3 subjects in a group into the site group 900.;\n%pool(\n     data   = sl\n   , var    = siteid\n   , by     = trt01p\n   , min    = 3\n   , length = $3\n   , new    = sitegr1\n   , into   = 900\n )",
    "outputs": [
     "examples/pool.txt"
    ]
@@ -4489,7 +4490,7 @@
      "description": "yes: keep the work data sets _print_*"
     }
    ],
-   "example": "%print(\n     data     = t14_2_1_display\n   , by       = row\n   , var      = c:\n   , together = grp\n   , label    = %STR(row=\" \")\n   , file     = &spl_out./tlf/t14_2_1\n )\n%print(\n     data = adae\n   , by   = usubjid\n   , var  = trt01a aedecod astdt aesev\n   , file = &spl_out./listings/l14_5_1\n )",
+   "example": "* Prints the display data set as RTF and as a listing: the rows of one block stay on one page.;\n%print(\n     data     = t14_2_1_display\n   , by       = row\n   , var      = c:\n   , together = grp\n   , label    = %STR(row=\" \")\n   , file     = &spl_out./tlf/t14_2_1\n )\n* Prints a listing: USUBJID is the left column, shown once for each subject.;\n%print(\n     data = adae\n   , by   = usubjid\n   , var  = trt01a aedecod astdt aesev\n   , file = &spl_out./listings/l14_5_1\n )\n* Prints one page per sex: the N of each column is that of the page, and the title names the sex.;\nOPTIONS NOBYLINE;\nTITLE1 \"Table 14.1.1 Demographic characteristics by sex\";\nTITLE2 \"Sex: #BYVAL1\";\n%print(\n     data     = t14_1_1_display\n   , by       = row\n   , var      = c:\n   , page     = sex\n   , together = grp\n   , label    = %STR(row=\" \")\n   , file     = &spl_out./tlf/t14_1_1_page\n )\nOPTIONS BYLINE;",
    "outputs": [
     "examples/print.txt"
    ]
@@ -4633,7 +4634,7 @@
      "description": "yes: keep the work data sets _profileplot_*"
     }
    ],
-   "example": "%profileplot(\n     data    = adlb\n   , columns = t14_2_1_cols\n   , where   = (paramcd = 'ALT' AND anl01fl = 'Y' AND MISSING(dtype))\n   , x       = ady\n   , y       = aval\n   , by      = trt01a\n   , mean    = no\n   , file    = &spl_out./figures/f_alt_prof\n   , out     = f_alt_prof\n )",
+   "example": "* Draws the ALT of each subject over the study days: one line per subject, no mean.;\n%profileplot(\n     data    = adlb\n   , columns = t14_2_1_cols\n   , where   = (paramcd = 'ALT' AND anl01fl = 'Y' AND MISSING(dtype))\n   , x       = ady\n   , y       = aval\n   , by      = trt01a\n   , mean    = no\n   , file    = &spl_out./figures/f_alt_prof\n   , out     = f_alt_prof\n )",
    "outputs": [
     "examples/profileplot.png"
    ]
@@ -4722,7 +4723,7 @@
      "description": "yes: keep the work data sets _proportion_*"
     }
    ],
-   "example": "%proportion(\n     data   = adsl\n   , var    = eosstt\n   , by     = trt01a\n   , levels = eosstt 'COMPLETED' 'DISCONTINUED'\n   , ci     = clopper-pearson\n   , out    = eos_ci\n )\n%proportion(\n     data   = adrs\n   , denom  = adsl\n   , where  = (paramcd = 'BOR')\n   , var    = avalc\n   , by     = trt01a\n   , levels = avalc 'CR' 'PR'\n   , ci     = wilson\n   , out    = bor_ci\n )",
+   "example": "* Gives the percent that completed and that discontinued, each with its Clopper Pearson limits.;\n%proportion(\n     data   = adsl\n   , var    = eosstt\n   , by     = trt01a\n   , levels = eosstt 'COMPLETED' 'DISCONTINUED'\n   , ci     = clopper-pearson\n   , out    = eos_ci\n )\n* Gives the percent of the best responses CR and PR of the N of denom=, with Wilson limits.;\n%proportion(\n     data   = adrs\n   , denom  = adsl\n   , where  = (paramcd = 'BOR')\n   , var    = avalc\n   , by     = trt01a\n   , levels = avalc 'CR' 'PR'\n   , ci     = wilson\n   , out    = bor_ci\n )",
    "outputs": [
     "examples/proportion.txt"
    ]
@@ -4811,7 +4812,7 @@
      "description": "yes: keep the work data sets _rate_*"
     }
    ],
-   "example": "%rate(\n     data     = adae\n   , denom    = adsl(WHERE=(trtdurd > 0))\n   , where    = (trtemfl = 'Y')\n   , by       = trt01a\n   , exposure = trtdurd / 365.25\n   , out      = ae_rate\n )\n%rate(\n     data     = adae\n   , denom    = adsl(WHERE=(trtdurd > 0))\n   , where    = (trtemfl = 'Y')\n   , by       = trt01a\n   , exposure = trtdurd / 365.25\n   , count    = events\n   , out      = ae_events\n )\n%rate(\n     data     = adae\n   , denom    = adsl(WHERE=(trtdurd > 0))\n   , where    = (trtemfl = 'Y' AND aesev = 'SEVERE')\n   , by       = trt01a\n   , exposure = trtdurd / 365.25\n   , per      = 1000\n   , out      = ae_rate1000\n )",
+   "example": "* Gives the subjects with an event per 100 patient years, with the exposure and the limits.;\n%rate(\n     data     = adae\n   , denom    = adsl(WHERE=(trtdurd > 0))\n   , where    = (trtemfl = 'Y')\n   , by       = trt01a\n   , exposure = trtdurd / 365.25\n   , out      = ae_rate\n )\n* Counts the events, not the subjects, with count=events: a subject adds each of its events.;\n%rate(\n     data     = adae\n   , denom    = adsl(WHERE=(trtdurd > 0))\n   , where    = (trtemfl = 'Y')\n   , by       = trt01a\n   , exposure = trtdurd / 365.25\n   , count    = events\n   , out      = ae_events\n )\n* Gives the rate of severe events per 1000 patient years with per=1000.;\n%rate(\n     data     = adae\n   , denom    = adsl(WHERE=(trtdurd > 0))\n   , where    = (trtemfl = 'Y' AND aesev = 'SEVERE')\n   , by       = trt01a\n   , exposure = trtdurd / 365.25\n   , per      = 1000\n   , out      = ae_rate1000\n )",
    "outputs": [
     "examples/rate.txt"
    ]
@@ -4886,7 +4887,7 @@
      "name": "pairs",
      "default": "all",
      "required": false,
-     "description": "The pairs of groups to compare. all: each later group against each earlier one, in the order of order= (or of the values). Or the pairs separated by #, each the group first and then the group it is compared with, a value with a blank or a hyphen in quotes: pairs = \"Drug\" \"Placebo\" # \"High\" \"Low\". The old form \"A\"-\"B\" is still read."
+     "description": "The pairs of groups to compare. all: each later group against each earlier one, in the order of order= (or of the values). Or the pairs separated by #, each the group first and then the group it is compared with, a value with a blank or a hyphen in quotes: pairs = \"Drug\" \"Placebo\" # \"High\" \"Low\""
     },
     {
      "name": "order",
@@ -4925,7 +4926,7 @@
      "description": "yes: keep the work data sets _rateratio_*"
     }
    ],
-   "example": "%rateratio(\n     data     = adsl\n   , where    = (trtdurd > 0)\n   , var      = teaecnt\n   , by       = trt01a\n   , exposure = trtdurd / 365.25\n   , dist     = negbin\n   , order    = trt01an\n   , out      = ae_rr\n )",
+   "example": "* Compares the event counts in a negative binomial model: STAT irr is the rate ratio.;\n%rateratio(\n     data     = adsl\n   , where    = (trtdurd > 0)\n   , var      = teaecnt\n   , by       = trt01a\n   , exposure = trtdurd / 365.25\n   , dist     = negbin\n   , order    = trt01an\n   , out      = ae_rr\n )",
    "outputs": [
     "examples/rateratio.txt"
    ]
@@ -5020,7 +5021,7 @@
      "description": "yes: keep the work data sets _relchange_*"
     }
    ],
-   "example": "%relchange(\n     data  = adlb\n   , where = (paramcd = 'ALT' AND MISSING(dtype))\n   , value = lbstresn\n   , lo    = anrlo\n   , hi    = anrhi\n   , out   = alt_rel\n )",
+   "example": "* Adds a record per value: its change from the record before, relative to half the normal range.;\n%relchange(\n     data  = adlb\n   , where = (paramcd = 'ALT' AND MISSING(dtype))\n   , value = lbstresn\n   , lo    = anrlo\n   , hi    = anrhi\n   , out   = alt_rel\n )",
    "outputs": [
     "examples/relchange.txt"
    ]
@@ -5082,7 +5083,7 @@
      "name": "pairs",
      "default": "all",
      "required": false,
-     "description": "The pairs of groups to compare. all: each later group against each earlier one, in the order of order= (or of the values). Or the pairs separated by #, each the group first and then the group it is compared with, a value with a blank or a hyphen in quotes: pairs = \"Drug\" \"Placebo\" # \"High\" \"Low\". The old form \"A\"-\"B\" is still read."
+     "description": "The pairs of groups to compare. all: each later group against each earlier one, in the order of order= (or of the values). Or the pairs separated by #, each the group first and then the group it is compared with, a value with a blank or a hyphen in quotes: pairs = \"Drug\" \"Placebo\" # \"High\" \"Low\""
     },
     {
      "name": "order",
@@ -5094,7 +5095,7 @@
      "name": "measure",
      "default": "rd",
      "required": false,
-     "description": "The estimate: rd (risk difference), rr (relative risk) or or (odds ratio)"
+     "description": "The estimate of the group against the group it is compared with: rd, the risk difference, a difference of two proportions between -1 and 1 (0.25 is 25 percentage points), not of percents; rr, the relative risk, the ratio of the two risks; or or, the odds ratio, the ratio of the two odds. A ratio has no unit."
     },
     {
      "name": "ci",
@@ -5133,7 +5134,7 @@
      "description": "yes: keep the work data sets _risk_*"
     }
    ],
-   "example": "%risk(\n     data  = adsl\n   , var   = eosstt\n   , event = \"DISCONTINUED\"\n   , by    = trt01a\n   , order = trt01an\n   , ci    = newcombe\n   , out   = eos_rd\n )\n%risk(\n     data   = work.ae_flags\n   , var    = flag\n   , event  = \"Y\"\n   , by     = trt01a\n   , within = aebodsys aedecod\n   , pairs  = \"Xanomeline High Dose\" \"Placebo\"\n            # \"Xanomeline Low Dose\"  \"Placebo\"\n   , ci     = newcombe\n   , out    = ae_rd\n )\n%risk(\n     data    = adsl\n   , var     = eosstt\n   , event   = \"DISCONTINUED\"\n   , by      = trt01a\n   , order   = trt01an\n   , measure = rr\n   , out     = eos_rr\n )\n%risk(\n     data   = adsl\n   , var    = eosstt\n   , event  = \"DISCONTINUED\"\n   , by     = trt01a\n   , strata = sex\n   , order  = trt01an\n   , out    = eos_rd_mh\n )",
+   "example": "* Gives the risk difference of discontinuation of each pair, its Newcombe limits and p value.;\n%risk(\n     data  = adsl\n   , var   = eosstt\n   , event = \"DISCONTINUED\"\n   , by    = trt01a\n   , order = trt01an\n   , ci    = newcombe\n   , out   = eos_rd\n )\n* Gives the risk difference of each flagged term against Placebo, within its class and term.;\n%risk(\n     data   = work.ae_flags\n   , var    = flag\n   , event  = \"Y\"\n   , by     = trt01a\n   , within = aebodsys aedecod\n   , pairs  = \"Xanomeline High Dose\" \"Placebo\"\n            # \"Xanomeline Low Dose\"  \"Placebo\"\n   , ci     = newcombe\n   , out    = ae_rd\n )\n* Asks for the relative risk with measure=rr: the rows of STAT rr hold the ratio of the two risks.;\n%risk(\n     data    = adsl\n   , var     = eosstt\n   , event   = \"DISCONTINUED\"\n   , by      = trt01a\n   , order   = trt01an\n   , measure = rr\n   , out     = eos_rr\n )\n* Stratifies by sex: the risk difference is the Mantel Haenszel estimate over the strata.;\n%risk(\n     data   = adsl\n   , var    = eosstt\n   , event  = \"DISCONTINUED\"\n   , by     = trt01a\n   , strata = sex\n   , order  = trt01an\n   , out    = eos_rd_mh\n )",
    "outputs": [
     "examples/risk.txt"
    ]
@@ -5271,7 +5272,7 @@
      "description": "yes: keep the work data sets _scatterplot_*"
     }
    ],
-   "example": "%scatterplot(\n     data     = adlb\n   , columns  = t14_2_1_cols\n   , where    = (paramcd = 'ALT' AND avisit = 'Week 24')\n   , x        = base\n   , y        = aval\n   , by       = trt01a\n   , identity = yes\n   , file     = &spl_out./figures/f_alt_scat\n   , out      = f_alt_scat\n )",
+   "example": "* Draws the ALT at Week 24 against its baseline, with the line where the two are equal.;\n%scatterplot(\n     data     = adlb\n   , columns  = t14_2_1_cols\n   , where    = (paramcd = 'ALT' AND avisit = 'Week 24')\n   , x        = base\n   , y        = aval\n   , by       = trt01a\n   , identity = yes\n   , file     = &spl_out./figures/f_alt_scat\n   , out      = f_alt_scat\n )",
    "outputs": [
     "examples/scatterplot.png"
    ]
@@ -5300,7 +5301,7 @@
      "description": "The name of the stacked table"
     }
    ],
-   "example": "%stack(age_describe age_anova sex_freq sex_chisq, out=t14_2_1)\n%stack(hr_sex hr_age, out=hr_sub)",
+   "example": "* Stacks four results in the order of the table: RESULT and ORD tell where each row came from.;\n%stack(age_describe age_anova sex_freq sex_chisq, out=t14_2_1)\n* Stacks the hazard ratios by sex and by age group, for one forest plot.;\n%stack(hr_sex hr_age, out=hr_sub)\n* Stacks age and the age groups by sex: the results of a table with a page per sex.;\n%stack(age_sex agegr_sex, out=t14_1_1)",
    "outputs": [
     "examples/stack.txt"
    ]
@@ -5341,7 +5342,7 @@
      "description": "The output folder: a path without quotes. The macros write into its folders tlf, listings, figures and ard."
     }
    ],
-   "example": "%study(\n     CDISCPILOT01\n   , program = examples\n   , adam    = &spl_root./examples/adam\n   , out     = &spl_root./examples/out\n )",
+   "example": "* Starts the program of the examples: it sets SPL_STUDY, SPL_PROGRAM and SPL_OUT and opens ADAM.;\n%study(\n     CDISCPILOT01\n   , program = examples\n   , adam    = &spl_root./examples/adam\n   , out     = &spl_root./examples/out\n )",
    "outputs": [
     "examples/study.txt"
    ]
@@ -5394,7 +5395,7 @@
      "description": "yes: keep the work data sets _summarize_*"
     }
    ],
-   "example": "DATA sl;\n  SET adsl;\n  KEEP usubjid trtdurd;\nRUN;\n%summarize(\n     data  = sl\n   , from  = sdtm.ex\n   , value = exendy\n   , stat  = max\n   , new   = exlstdy\n )\n%summarize(\n     data  = sl\n   , from  = sdtm.ex\n   , value = exdose\n   , stat  = mean\n   , new   = exmdose\n )",
+   "example": "* Copies the subjects with USUBJID and TRTDURD only.;\nDATA sl;\n  SET adsl;\n  KEEP usubjid trtdurd;\nRUN;\n* Takes the largest end day of the exposure records of each subject.;\n%summarize(\n     data  = sl\n   , from  = sdtm.ex\n   , value = exendy\n   , stat  = max\n   , new   = exlstdy\n )\n* Takes the mean dose of the exposure records of each subject.;\n%summarize(\n     data  = sl\n   , from  = sdtm.ex\n   , value = exdose\n   , stat  = mean\n   , new   = exmdose\n )",
    "outputs": [
     "examples/summarize.txt"
    ]
@@ -5441,7 +5442,7 @@
      "description": "The name of the data set it writes"
     }
    ],
-   "example": "%summarize_groups(\n     data  = advs\n   , by    = usubjid paramcd\n   , vars  = aval chg\n   , stats = max min\n   , out   = vs_extremes\n )",
+   "example": "* Takes the largest AVAL and the smallest CHG of each subject and parameter: one record each.;\n%summarize_groups(\n     data  = advs\n   , by    = usubjid paramcd\n   , vars  = aval chg\n   , stats = max min\n   , out   = vs_extremes\n )",
    "outputs": [
     "examples/summarize_groups.txt"
    ]
@@ -5536,7 +5537,7 @@
      "description": "yes: keep the work data sets of the macros that %table calls"
     }
    ],
-   "example": "%table(\n     data   = t14_2_1\n   , n      = adsl\n   , var    = trt01a\n   , order  = trt01an\n   , total  = yes\n   , format = sex $sexf.\n   , file   = &spl_out./tlf/t14_2_1_table\n   , setup  = t14_2_1_table_print\n )",
+   "example": "* Runs columns, ard, layout and print in one call: the same table as the long program.;\n%table(\n     data   = t14_2_1\n   , n      = adsl\n   , var    = trt01a\n   , order  = trt01an\n   , total  = yes\n   , format = sex $sexf.\n   , file   = &spl_out./tlf/t14_2_1_table\n   , setup  = t14_2_1_table_print\n )",
    "outputs": [
     "examples/table.txt"
    ]
@@ -5667,7 +5668,7 @@
      "description": "yes: keep the work data sets of the macros that the long program calls"
     }
    ],
-   "example": "%table_ae(\n     data  = adam.adae\n   , adsl  = adam.adsl\n   , pop   = (saffl = 'Y')\n   , where = (trtemfl = 'Y')\n   , var   = aebodsys aedecod\n   , by    = trt01a\n   , order = trt01an\n   , sort  = frequency\n   , label = \"Treatment-emergent adverse events\"\n   , title = \"Table 14.5.2 Treatment-emergent adverse events by SOC and PT\"\n   , file  = &spl_out./tlf/t14_5_2\n )",
+   "example": "* Makes the table of events by class and term, the terms in the order of their subjects.;\n%table_ae(\n     data  = adam.adae\n   , adsl  = adam.adsl\n   , pop   = (saffl = 'Y')\n   , where = (trtemfl = 'Y')\n   , var   = aebodsys aedecod\n   , by    = trt01a\n   , order = trt01an\n   , sort  = frequency\n   , label = \"Treatment-emergent adverse events\"\n   , title = \"Table 14.5.2 Treatment-emergent adverse events by SOC and PT\"\n   , file  = &spl_out./tlf/t14_5_2\n )\n* Keeps the terms that reach 5 percent in a group, with the events and a Total column.;\n%table_ae(\n     data      = adae\n   , adsl      = adsl\n   , where     = (trtemfl = 'Y')\n   , var       = aedecod\n   , by        = trt01a\n   , order     = trt01an\n   , sort      = frequency\n   , threshold = 5\n   , total     = yes\n   , label     = \"Subjects with an event, n (%) and events\"\n   , stats     = n pct events\n   , title     = \"Table 14.5.3 Common treatment-emergent adverse events\"\n   , file      = &spl_out./tlf/t14_5_3\n )",
    "outputs": [
     "examples/table_ae.txt"
    ]
@@ -5834,7 +5835,7 @@
      "description": "yes: keep the work data sets of the macros that the long program calls"
     }
    ],
-   "example": "%table_model(\n     data     = advs\n   , adsl     = adsl\n   , where    = (paramcd = 'SYSBP' AND anl01fl = 'Y' AND avisitn < 99)\n   , covars   = base\n   , by       = trt01p\n   , at       = \"Week 12\"\n   , order    = trt01pn\n   , describe = base aval chg\n   , pairs    = \"Xanomeline High Dose\" \"Placebo\"\n   , title    = \"Table 14.3.1 ANCOVA of the change of systolic blood pressure at Week 12\"\n   , file     = &spl_out./tlf/t14_3_1\n )",
+   "example": "* Makes the ANCOVA table at Week 12: three descriptive blocks, then the LS means and difference.;\n%table_model(\n     data     = advs\n   , adsl     = adsl\n   , where    = (paramcd = 'SYSBP' AND anl01fl = 'Y' AND avisitn < 99)\n   , covars   = base\n   , by       = trt01p\n   , at       = \"Week 12\"\n   , order    = trt01pn\n   , describe = base aval chg\n   , pairs    = \"Xanomeline High Dose\" \"Placebo\"\n   , title    = \"Table 14.3.1 ANCOVA of the change of systolic blood pressure at Week 12\"\n   , file     = &spl_out./tlf/t14_3_1\n )\n* Uses method=mmrm on five visits: the LS means and the differences at Week 24.;\n%table_model(\n     data     = advs\n   , adsl     = adsl\n   , where    = (paramcd = 'SYSBP' AND anl01fl = 'Y' AND avisitn IN (4 8 12 16 24))\n   , covars   = base\n   , visit    = avisit\n   , by       = trt01p\n   , at       = \"Week 24\"\n   , order    = trt01pn\n   , method   = mmrm\n   , type     = un\n   , fallback = toep\n   , title    = \"Table 14.3.3 MMRM of the change of systolic blood pressure at Week 24\"\n   , file     = &spl_out./tlf/t14_3_3\n )",
    "outputs": [
     "examples/table_model.txt"
    ]
@@ -5971,7 +5972,7 @@
      "description": "yes: keep the work data sets of the macros that the long program calls"
     }
    ],
-   "example": "%table_response(\n     data   = adrs\n   , where  = (paramcd = 'RSP')\n   , var    = avalc\n   , by     = trt01a\n   , order  = trt01an\n   , diffci = newcombe\n   , title  = \"Table 14.3.2 Responders\"\n   , file   = &spl_out./tlf/t14_3_2\n )",
+   "example": "* Makes the table of the responders with their limits and the risk difference of each pair.;\n%table_response(\n     data   = adrs\n   , where  = (paramcd = 'RSP')\n   , var    = avalc\n   , by     = trt01a\n   , order  = trt01an\n   , diffci = newcombe\n   , title  = \"Table 14.3.2 Responders\"\n   , file   = &spl_out./tlf/t14_3_2\n )\n* Asks for the relative risk with Wilson limits, and the odds ratio adjusted for age.;\n%table_response(\n     data    = adrs\n   , where   = (paramcd = 'RSP')\n   , var     = avalc\n   , event   = \"Y\"\n   , by      = trt01a\n   , covars  = age\n   , order   = trt01an\n   , pairs   = \"Xanomeline High Dose\" \"Placebo\"\n             # \"Xanomeline Low Dose\"  \"Placebo\"\n   , ci      = wilson\n   , measure = rr\n   , title   = \"Table 14.3.4 Responders: relative risk and odds ratio adjusted for age\"\n   , file    = &spl_out./tlf/t14_3_4\n )",
    "outputs": [
     "examples/table_response.txt"
    ]
@@ -6108,7 +6109,7 @@
      "description": "yes: keep the work data sets of the macros that the long program calls"
     }
    ],
-   "example": "%table_shift(\n     data   = adlb\n   , where  = (avisit IN ('Week 12' 'Week 24'))\n   , within = paramcd avisit\n   , by     = trt01a\n   , order  = trt01an\n   , levels = 'LOW' 'NORMAL' 'HIGH'\n   , title  = \"Table 14.8.1 Shift from baseline of the normal range\"\n   , file   = &spl_out./tlf/t14_8_1\n )",
+   "example": "* Makes the shift table of the normal range at Week 12 and Week 24, with every planned level.;\n%table_shift(\n     data   = adlb\n   , where  = (avisit IN ('Week 12' 'Week 24'))\n   , within = paramcd avisit\n   , by     = trt01a\n   , order  = trt01an\n   , levels = 'LOW' 'NORMAL' 'HIGH'\n   , title  = \"Table 14.8.1 Shift from baseline of the normal range\"\n   , file   = &spl_out./tlf/t14_8_1\n )\n* Shifts to the highest value after baseline, with a label of the block and a Total column.;\n%table_shift(\n     data   = adlb\n   , adsl   = adsl\n   , where  = (avisit = 'POST-BASELINE MAXIMUM')\n   , within = paramcd\n   , by     = trt01a\n   , keep   = param\n   , order  = trt01an\n   , levels = 'LOW' 'NORMAL' 'HIGH'\n   , total  = yes\n   , label  = \"Baseline by the highest value after baseline\"\n   , title  = \"Table 14.8.2 Shift to the highest value after baseline\"\n   , file   = &spl_out./tlf/t14_8_2\n )",
    "outputs": [
     "examples/table_shift.txt"
    ]
@@ -6227,7 +6228,7 @@
      "description": "yes: keep the work data sets of the macros that the long program calls"
     }
    ],
-   "example": "%table_summary(\n     data   = adam.adsl\n   , where  = (saffl = 'Y')\n   , vars   = age agegr1# sex# race# ethnic#\n   , by     = trt01a\n   , order  = trt01an\n   , total  = yes\n   , format = sex $sexf.\n   , title  = \"Table 14.2.1 Demographic characteristics\" \"Safety population\"\n   , file   = &spl_out./tlf/t14_2_1_summary\n )",
+   "example": "* Makes the demographic table from one row per subject: age as numbers, the categories as rows.;\n%table_summary(\n     data   = adam.adsl\n   , where  = (saffl = 'Y')\n   , vars   = age agegr1# sex# race# ethnic#\n   , by     = trt01a\n   , order  = trt01an\n   , total  = yes\n   , format = sex $sexf.\n   , title  = \"Table 14.2.1 Demographic characteristics\" \"Safety population\"\n   , file   = &spl_out./tlf/t14_2_1_summary\n )\n* Names the blocks, plans a race with no subject and asks for Q1 and Q3: ASIAN has a row of 0.;\n%table_summary(\n     data     = adsl\n   , vars     = age trtdurd race#\n   , by       = trt01a\n   , order    = trt01an\n   , levels   = race 'WHITE' 'BLACK OR AFRICAN AMERICAN' 'ASIAN' 'AMERICAN INDIAN OR ALASKA NATIVE'\n   , catstats = n pct\n   , names    = age=\"Age (years)\" trtdurd=\"Duration of treatment (days)\" race=\"Race\"\n   , stats    = n mean sd median q1 q3 min max\n   , title    = \"Table 14.2.2 Age, duration of treatment and race\"\n   , file     = &spl_out./tlf/t14_2_2\n )",
    "outputs": [
     "examples/table_summary.txt"
    ]
@@ -6352,7 +6353,7 @@
      "description": "yes: keep the work data sets of the macros that the long program calls"
     }
    ],
-   "example": "%table_tte(\n     data  = adttde\n   , by    = trt01a\n   , order = trt01an\n   , pairs = \"Xanomeline High Dose\" \"Placebo\"\n   , title = \"Table 14.6.1 Time to the first skin event\"\n   , file  = &spl_out./tlf/t14_6_1\n )",
+   "example": "* Makes the table of the time to the event: the curves, the log rank test and the hazard ratio.;\n%table_tte(\n     data  = adttde\n   , by    = trt01a\n   , order = trt01an\n   , pairs = \"Xanomeline High Dose\" \"Placebo\"\n   , title = \"Table 14.6.1 Time to the first skin event\"\n   , file  = &spl_out./tlf/t14_6_1\n )\n* Takes the N of each column from adsl= and stratifies the test and the Cox model by sex.;\n%table_tte(\n     data   = adttde\n   , adsl   = adsl\n   , by     = trt01a\n   , strata = sex\n   , order  = trt01an\n   , title  = \"Table 14.6.2 Time to the first skin event, stratified by sex\"\n   , file   = &spl_out./tlf/t14_6_2\n )",
    "outputs": [
     "examples/table_tte.txt"
    ]
@@ -6501,7 +6502,7 @@
      "description": "yes: keep the work data sets of the macros that the long program calls"
     }
    ],
-   "example": "%table_visit(\n     data  = adam.advs\n   , adsl  = adam.adsl\n   , pop   = (saffl = 'Y')\n   , where = (paramcd = 'SYSBP' AND (ablfl = 'Y' OR anl01fl = 'Y'))\n   , vars  = aval chg\n   , by    = trt01a\n   , keep  = param paramn avisitn\n   , order = trt01an\n   , post  = chg\n   , title = \"Table 14.7.1 Systolic blood pressure by visit\"\n   , file  = &spl_out./tlf/t14_7_1\n )",
+   "example": "* Makes the table of the value at each visit and of its change after baseline.;\n%table_visit(\n     data  = adam.advs\n   , adsl  = adam.adsl\n   , pop   = (saffl = 'Y')\n   , where = (paramcd = 'SYSBP' AND (ablfl = 'Y' OR anl01fl = 'Y'))\n   , vars  = aval chg\n   , by    = trt01a\n   , keep  = param paramn avisitn\n   , order = trt01an\n   , post  = chg\n   , title = \"Table 14.7.1 Systolic blood pressure by visit\"\n   , file  = &spl_out./tlf/t14_7_1\n )\n* Names the blocks, asks for Q1 and Q3 and adds a Total column.;\n%table_visit(\n     data  = advs\n   , adsl  = adsl\n   , where = (paramcd = 'DIABP' AND (ablfl = 'Y' OR anl01fl = 'Y') AND avisitn IN (0 12 24))\n   , vars  = aval chg\n   , by    = trt01a\n   , keep  = param paramn avisitn\n   , order = trt01an\n   , post  = chg\n   , names = aval=\"Value\" chg=\"Change from baseline\"\n   , total = yes\n   , stats = n mean sd median q1 q3 min max\n   , title = \"Table 14.7.2 Diastolic blood pressure at Week 12 and Week 24\"\n   , file  = &spl_out./tlf/t14_7_2\n )",
    "outputs": [
     "examples/table_visit.txt"
    ]
@@ -6566,7 +6567,7 @@
      "description": "yes: keep the work data sets _termflags_*"
     }
    ],
-   "example": "%termflags(\n     data      = adae\n   , denom     = adsl\n   , where     = (trtemfl = 'Y')\n   , terms     = aebodsys aedecod\n   , by        = trt01a\n   , threshold = 5\n   , out       = ae_flags\n )",
+   "example": "* Flags each subject for each term that reaches 5 percent: FLAG is Y with the term, N without.;\n%termflags(\n     data      = adae\n   , denom     = adsl\n   , where     = (trtemfl = 'Y')\n   , terms     = aebodsys aedecod\n   , by        = trt01a\n   , threshold = 5\n   , out       = ae_flags\n )",
    "outputs": [
     "examples/termflags.txt"
    ]
@@ -6733,7 +6734,7 @@
      "description": "yes: keep the work data sets _tte_*"
     }
    ],
-   "example": "%tte(\n     subjects      = adsl\n   , events        = adae\n   , event         = trtemfl = 'Y' AND aebodsys = 'SKIN AND SUBCUTANEOUS TISSUE DISORDERS'\n   , date          = astdt\n   , start         = trtsdt\n   , censor_date   = trtedt\n   , seq           = aeseq\n   , censor_desc   = \"End of treatment\"\n   , censor_source = \"ADSL\"\n   , event_desc    = aedecod\n   , source        = \"ADAE\"\n   , paramcd       = \"TTDE\"\n   , out           = adttde\n )",
+   "example": "* Derives the time to the first skin event from the first dose: CNSR 0 is an event, 1 a censoring.;\n%tte(\n     subjects      = adsl\n   , events        = adae\n   , event         = trtemfl = 'Y' AND aebodsys = 'SKIN AND SUBCUTANEOUS TISSUE DISORDERS'\n   , date          = astdt\n   , start         = trtsdt\n   , censor_date   = trtedt\n   , seq           = aeseq\n   , censor_desc   = \"End of treatment\"\n   , censor_source = \"ADSL\"\n   , event_desc    = aedecod\n   , source        = \"ADAE\"\n   , paramcd       = \"TTDE\"\n   , out           = adttde\n )",
    "outputs": [
     "examples/tte.txt"
    ]
@@ -6777,7 +6778,7 @@
      "name": "pairs",
      "default": "all",
      "required": false,
-     "description": "Which groups to compare. all: each later group against each earlier one, in the order of order= (else of the values). Or the pairs, separated by #: in each pair the group first, then the group it is compared with, each value in quotes (pairs = \"Drug\" \"Placebo\" # \"High\" \"Low\"). The form \"A\"-\"B\" of version 1.0 is still read."
+     "description": "Which groups to compare. all: each later group against each earlier one, in the order of order= (else of the values). Or the pairs, separated by #: in each pair the group first, then the group it is compared with, each value in quotes (pairs = \"Drug\" \"Placebo\" # \"High\" \"Low\")"
     },
     {
      "name": "order",
@@ -6822,7 +6823,7 @@
      "description": "yes: keep the work data sets _ttest_*"
     }
    ],
-   "example": "%ttest(\n     data  = advs\n   , where = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')\n   , var   = chg\n   , by    = trt01p\n   , order = trt01pn\n   , out   = sbp_t\n )\n%ttest(\n     data      = advs\n   , where     = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')\n   , var       = chg\n   , by        = trt01p\n   , pairs     = \"Xanomeline High Dose\" \"Placebo\"\n               # \"Xanomeline Low Dose\"  \"Placebo\"\n   , variances = unequal\n   , out       = sbp_welch\n )",
+   "example": "* Compares each pair of groups with the pooled t test: the difference, its SE, limits and p value.;\n%ttest(\n     data  = advs\n   , where = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')\n   , var   = chg\n   , by    = trt01p\n   , order = trt01pn\n   , out   = sbp_t\n )\n* Uses the Welch test of unequal variances on two pairs: the SE, limits and p value change.;\n%ttest(\n     data      = advs\n   , where     = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')\n   , var       = chg\n   , by        = trt01p\n   , pairs     = \"Xanomeline High Dose\" \"Placebo\"\n               # \"Xanomeline Low Dose\"  \"Placebo\"\n   , variances = unequal\n   , out       = sbp_welch\n )",
    "outputs": [
     "examples/ttest.txt"
    ]
@@ -6851,7 +6852,7 @@
      "description": "The visits, separated by #. Each visit is \"VISIT\" AVISITN \"AVISIT\": the value of VISIT in quotes, then the analysis visit as a number and as a text (# \"WEEK 2\" 2 \"Week 2\")."
     }
    ],
-   "example": "DATA lb;\n  SET adlb;\n  WHERE paramcd = 'ALT' AND MISSING(dtype);\n  KEEP usubjid paramcd visit aval;\nRUN;\n%visits(\n     data   = lb\n   , visits = \"SCREENING 1\" 0  \"Baseline\"\n            # \"WEEK 2\"      2  \"Week 2\"\n            # \"WEEK 4\"      4  \"Week 4\"\n            # \"WEEK 6\"      6  \"Week 6\"\n            # \"WEEK 8\"      8  \"Week 8\"\n            # \"WEEK 12\"     12 \"Week 12\"\n            # \"WEEK 16\"     16 \"Week 16\"\n            # \"WEEK 20\"     20 \"Week 20\"\n            # \"WEEK 24\"     24 \"Week 24\"\n            # \"WEEK 26\"     26 \"Week 26\"\n )",
+   "example": "* Copies the ALT records that are not derived, without an analysis visit.;\nDATA lb;\n  SET adlb;\n  WHERE paramcd = 'ALT' AND MISSING(dtype);\n  KEEP usubjid paramcd visit aval;\nRUN;\n* Maps each collected visit to its analysis visit and its number: SCREENING 1 is the Baseline.;\n%visits(\n     data   = lb\n   , visits = \"SCREENING 1\" 0  \"Baseline\"\n            # \"WEEK 2\"      2  \"Week 2\"\n            # \"WEEK 4\"      4  \"Week 4\"\n            # \"WEEK 6\"      6  \"Week 6\"\n            # \"WEEK 8\"      8  \"Week 8\"\n            # \"WEEK 12\"     12 \"Week 12\"\n            # \"WEEK 16\"     16 \"Week 16\"\n            # \"WEEK 20\"     20 \"Week 20\"\n            # \"WEEK 24\"     24 \"Week 24\"\n            # \"WEEK 26\"     26 \"Week 26\"\n )",
    "outputs": [
     "examples/visits.txt"
    ]
@@ -6895,7 +6896,7 @@
      "name": "pairs",
      "default": "all",
      "required": false,
-     "description": "Which groups to compare. all: each later group against each earlier one, in the order of order= (else of the values). Or the pairs, separated by #: in each pair the group first, then the group it is compared with, each value in quotes (pairs = \"Drug\" \"Placebo\" # \"High\" \"Low\"). The form \"A\"-\"B\" of version 1.0 is still read."
+     "description": "Which groups to compare. all: each later group against each earlier one, in the order of order= (else of the values). Or the pairs, separated by #: in each pair the group first, then the group it is compared with, each value in quotes (pairs = \"Drug\" \"Placebo\" # \"High\" \"Low\")"
     },
     {
      "name": "order",
@@ -6940,7 +6941,7 @@
      "description": "yes: keep the work data sets _wilcoxon_*"
     }
    ],
-   "example": "%wilcoxon(\n     data  = advs\n   , where = (paramcd = 'DIABP' AND avisit = 'Week 12' AND anl01fl = 'Y')\n   , var   = chg\n   , by    = trt01p\n   , order = trt01pn\n   , out   = dbp_w\n )\n%wilcoxon(\n     data       = advs\n   , where      = (paramcd = 'DIABP' AND avisit = 'Week 12' AND anl01fl = 'Y')\n   , var        = chg\n   , by         = trt01p\n   , pairs      = \"Xanomeline High Dose\" \"Placebo\"\n   , correction = no\n   , out        = dbp_w_nocc\n )",
+   "example": "* Compares each pair with the Wilcoxon rank sum test and the Hodges Lehmann estimate.;\n%wilcoxon(\n     data  = advs\n   , where = (paramcd = 'DIABP' AND avisit = 'Week 12' AND anl01fl = 'Y')\n   , var   = chg\n   , by    = trt01p\n   , order = trt01pn\n   , out   = dbp_w\n )\n* Leaves out the continuity correction for one pair: only the p value changes.;\n%wilcoxon(\n     data       = advs\n   , where      = (paramcd = 'DIABP' AND avisit = 'Week 12' AND anl01fl = 'Y')\n   , var        = chg\n   , by         = trt01p\n   , pairs      = \"Xanomeline High Dose\" \"Placebo\"\n   , correction = no\n   , out        = dbp_w_nocc\n )",
    "outputs": [
     "examples/wilcoxon.txt"
    ]
@@ -6975,7 +6976,7 @@
      "description": "The numeric variable of the study day"
     }
    ],
-   "example": "DATA vs;\n  SET advs;\n  WHERE paramcd = 'SYSBP';\nRUN;\n%windows(\n     data    = vs\n   , windows = 0  \"Baseline\" .   1   1   \"<=1\"\n             # 4  \"Week 4\"   2   42  28  \"2-42\"\n             # 12 \"Week 12\"  43  126 84  \"43-126\"\n             # 24 \"Week 24\"  127 210 168 \"127-210\"\n   , day     = ady\n )",
+   "example": "* Copies the systolic records with only the variables the windows need: no old AVISIT or AVISITN.;\nDATA vs;\n  SET advs;\n  WHERE paramcd = 'SYSBP';\n  KEEP usubjid paramcd param adt ady aval vsseq;\nRUN;\n* Puts each record in the window of its study day, with the limits, the target and the distance.;\n%windows(\n     data    = vs\n   , windows = 0  \"Baseline\" .   1   1   \"<=1\"\n             # 4  \"Week 4\"   2   42  28  \"2-42\"\n             # 12 \"Week 12\"  43  126 84  \"43-126\"\n             # 24 \"Week 24\"  127 210 168 \"127-210\"\n   , day     = ady\n )",
    "outputs": [
     "examples/windows.txt"
    ]
@@ -7034,7 +7035,7 @@
      "description": "yes: keep the work data sets _worst_*"
     }
    ],
-   "example": "%worst(\n     data   = adae\n   , where  = (trtemfl = 'Y')\n   , var    = aesev\n   , by     = aebodsys aedecod\n   , levels = 'MILD' 'MODERATE' 'SEVERE'\n   , out    = ae_worst\n )",
+   "example": "* Keeps the records of each subject and term at the worst severity, the last value of levels=.;\n%worst(\n     data   = adae\n   , where  = (trtemfl = 'Y')\n   , var    = aesev\n   , by     = aebodsys aedecod\n   , levels = 'MILD' 'MODERATE' 'SEVERE'\n   , out    = ae_worst\n )",
    "outputs": [
     "examples/worst.txt"
    ]

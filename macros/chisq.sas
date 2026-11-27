@@ -53,6 +53,7 @@
 |
 | Example:
 |
+ * Tests sex across the groups: one row, the p value of the chi square test.;
  %chisq(
      data  = adsl
    , var   = sex
@@ -60,6 +61,7 @@
    , label = "Sex"
    , out   = sex_chisq
  )
+ * Runs the exact test of the normal range within each parameter: one p value per parameter.;
  %chisq(
      data   = adlb
    , where  = (avisit = 'Week 24')
@@ -89,6 +91,8 @@
 |                          number changes.
 | 27-NOV-2026 Sapling      1.9.1: The example result is sex_chisq, the name
 |                          %stack reads. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO chisq(

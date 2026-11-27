@@ -37,11 +37,13 @@
 |
 | Example:
 |
+ * Copies the ALT records that are not derived, without an analysis visit.;
  DATA lb;
    SET adlb;
    WHERE paramcd = 'ALT' AND MISSING(dtype);
    KEEP usubjid paramcd visit aval;
  RUN;
+ * Maps each collected visit to its analysis visit and its number: SCREENING 1 is the Baseline.;
  %visits(
      data   = lb
    , visits = "SCREENING 1" 0  "Baseline"
@@ -77,6 +79,8 @@
 |                          setup.sas for a later example. No number changes.
 | 27-NOV-2026 Sapling      1.9.1: the text says that a record of no visit keeps
 |                          an AVISIT that data= has already. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO visits(

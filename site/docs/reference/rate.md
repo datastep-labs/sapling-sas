@@ -32,7 +32,7 @@ Returns the exposure-adjusted incidence rate of each group, with its exact Poiss
 :   The subjects of the groups with their exposure: a data set with one row per subject, USUBJID and the variable of `by=`. *(required)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`trtemfl = 'Y'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (trtemfl = 'Y')`. *(optional)*
 
 `by=`
 :   The groups: one variable, in `data=` and in `denom=`. *(required)*
@@ -80,6 +80,8 @@ Use [%freq](freq.md) for the percent of subjects with an event, and [%rateratio]
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
 
+Gives the subjects with an event per 100 patient years, with the exposure and the limits.
+
 ```sas
 %rate(
      data     = adae
@@ -110,6 +112,8 @@ Xanomeline Low Dose   TRT01A         rate      372.02619134  372.03
 Xanomeline Low Dose   TRT01A         lcl       296.74266009  296.74
 Xanomeline Low Dose   TRT01A         ucl       460.59373936  460.59
 ```
+
+Counts the events, not the subjects, with count=events: a subject adds each of its events.
 
 ```sas
 %rate(
@@ -142,6 +146,8 @@ Xanomeline Low Dose   TRT01A         rate      1891.1331393  1891.13
 Xanomeline Low Dose   TRT01A         lcl       1715.9914371  1715.99
 Xanomeline Low Dose   TRT01A         ucl       2079.3019306  2079.30
 ```
+
+Gives the rate of severe events per 1000 patient years with per=1000.
 
 ```sas
 %rate(
@@ -183,11 +189,13 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 
 Describe the data: [%describe](describe.md), [%freq](freq.md), [%proportion](proportion.md), [%worst](worst.md), [%termflags](termflags.md).
 
-Named on this page: [%rateratio](rateratio.md), [%stack](stack.md), [%layout](layout.md).
+Named on this page: [%layout](layout.md), [%rateratio](rateratio.md).
+
+Guides that use %rate: [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

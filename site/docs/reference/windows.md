@@ -44,12 +44,17 @@ A record takes the first window, in the order of `windows=`, that holds its day.
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
 
+Copies the systolic records with only the variables the windows need: no old AVISIT or AVISITN.
+
 ```sas
 DATA vs;
   SET advs;
   WHERE paramcd = 'SYSBP';
+  KEEP usubjid paramcd param adt ady aval vsseq;
 RUN;
 ```
+
+Puts each record in the window of its study day, with the limits, the target and the distance.
 
 ```sas
 %windows(
@@ -89,6 +94,8 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 ## See also
 
 ADaM steps: [%merge_subject](merge_subject.md), [%pick](pick.md), [%summarize](summarize.md), [%summarize_groups](summarize_groups.md), [%baseline](baseline.md), [%flag_first](flag_first.md), [%flag_if_any](flag_if_any.md), [%visits](visits.md), [%locf](locf.md), [%relchange](relchange.md), [%param_wide](param_wide.md), [%pool](pool.md), [%tte](tte.md).
+
+Guides that use %windows: [Derive analysis visits, the baseline and the change from baseline](../how-to/derive-baseline.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

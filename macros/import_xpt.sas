@@ -37,6 +37,7 @@
 |
 | Example:
 |
+ * Copies the six ADaM transport files of the example data into SAS data sets of one folder.;
  %import_xpt(
      dir     = &spl_root./examples/data
    , members = adsl adae advs adlb adtte adrs
@@ -62,6 +63,8 @@
 |                          number changes.
 | 27-NOV-2026 Sapling      1.9.1: The header names no internal tool. No number
 |                          changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO import_xpt(

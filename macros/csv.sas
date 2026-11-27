@@ -35,6 +35,7 @@
 |
 | Example:
 |
+ * Writes the listing as a CSV file: the names of var= in the first line, then one line per record.;
  %csv(data=adae, var=trt01a usubjid aedecod astdt, file=l14_5_1)
 |
 |-------------------------------------------------------------------------------
@@ -53,6 +54,8 @@
 |                          changes.
 | 27-NOV-2026 Sapling      1.9.1: The header names no internal tool. No number
 |                          changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO csv(

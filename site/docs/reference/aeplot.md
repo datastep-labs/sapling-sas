@@ -50,7 +50,7 @@ Draws the percent and risk difference of each adverse event as PNG and RTF files
 :   The population: a data set with one row per subject and the variable of `by=`. *(required)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`trtemfl = 'Y'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (trtemfl = 'Y')`. *(optional)*
 
 `term=`
 :   The term of a row: one variable of `data=` (`term = aebodsys`). *(optional, default `AEDECOD`)*
@@ -115,6 +115,8 @@ Use [%barplot](barplot.md) for the percents of the categories of one variable wi
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `t14_2_1_cols` (made by the [example of %columns](columns.md#examples)).
 
+Draws the percent of each term of 5 percent or more and its risk difference against Placebo.
+
 ```sas
 %aeplot(
      data      = adae
@@ -145,11 +147,13 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Figures: [%kmplot](kmplot.md), [%forestplot](forestplot.md), [%meanplot](meanplot.md), [%lineplot](lineplot.md), [%boxplot](boxplot.md), [%barplot](barplot.md), [%profileplot](profileplot.md), [%scatterplot](scatterplot.md).
 
-Named on this page: [%termflags](termflags.md), [%risk](risk.md), [%columns](columns.md).
+Named on this page: [%columns](columns.md), [%risk](risk.md), [%termflags](termflags.md).
+
+Guides that use %aeplot: [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

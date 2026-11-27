@@ -48,7 +48,7 @@ Draws lines through given values, one line per group, as PNG and RTF files and r
 :   The data set of [%columns](columns.md): it gives the order of the groups and their colours. When not given, the groups come in the order of the data. *(optional)*
 
 `where=`
-:   The rows to use: a condition in parentheses, such as where = (`paramcd = 'SYSBP'`). *(optional)*
+:   The rows to use: a condition in parentheses, such as `where = (paramcd = 'SYSBP')`. *(optional)*
 
 `x=`
 :   The x: one numeric variable (`x = avisitn`). *(required)*
@@ -119,6 +119,8 @@ It computes nothing: use it for values computed before (the LS means of [%lsmean
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `f_bp_mean` (made by the [example of %meanplot](meanplot.md#examples)), `t14_2_1_cols` (made by the [example of %columns](columns.md#examples)).
 
+Draws the means that meanplot kept as lines, with a band between the limits.
+
 ```sas
 %lineplot(
      data    = f_bp_mean
@@ -153,11 +155,13 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Figures: [%kmplot](kmplot.md), [%forestplot](forestplot.md), [%meanplot](meanplot.md), [%boxplot](boxplot.md), [%barplot](barplot.md), [%aeplot](aeplot.md), [%profileplot](profileplot.md), [%scatterplot](scatterplot.md).
 
-Named on this page: [%lsmeans](lsmeans.md), [%mmrm](mmrm.md), [%columns](columns.md).
+Named on this page: [%columns](columns.md), [%lsmeans](lsmeans.md), [%mmrm](mmrm.md).
+
+Guides that use %lineplot: [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

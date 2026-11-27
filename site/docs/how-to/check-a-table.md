@@ -6,7 +6,8 @@ get a report that lists each difference.
 
 ## Before you start
 
-- Submit `examples/setup.sas`, or start your own program with `%study`.
+- Submit `examples/setup.sas`, or start your own program as [Use the macros in your own program](own-program.md)
+  shows.
 - Have the program of the table. It must write the numbers file with `%ard` (or `%table` with `file=`). The guide
   checks a table of age and sex as in the [tutorial](../tutorial/index.md).
 
@@ -178,8 +179,8 @@ Data Set Summary
 
 Dataset             Created          Modified  NVar    NObs
 
-WORK.PROD  27NOV26:11:03:37  27NOV26:11:03:37     9      44
-WORK.QC    27NOV26:11:03:37  27NOV26:11:03:37     5      44
+WORK.PROD  27NOV26:11:43:12  27NOV26:11:43:12     9      44
+WORK.QC    27NOV26:11:43:13  27NOV26:11:43:13     5      44
 
 Variables Summary
 

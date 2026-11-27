@@ -42,6 +42,8 @@ Use [%ard](ard.md) for the numbers of a table. The first line has the names of t
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
 
+Writes the listing as a CSV file: the names of var= in the first line, then one line per record.
+
 ```sas
 %csv(data=adae, var=trt01a usubjid aedecod astdt, file=l14_5_1)
 ```
@@ -99,6 +101,8 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 Build a table: [%stack](stack.md), [%columns](columns.md), [%ard](ard.md), [%layout](layout.md), [%print](print.md).
 
 Named on this page: [%study](study.md).
+
+Guides that use %csv: [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

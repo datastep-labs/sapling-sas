@@ -37,6 +37,7 @@
 |
 | Example:
 |
+ * Takes the largest AVAL and the smallest CHG of each subject and parameter: one record each.;
  %summarize_groups(
      data  = advs
    , by    = usubjid paramcd
@@ -59,6 +60,8 @@
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO summarize_groups(

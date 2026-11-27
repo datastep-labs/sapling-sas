@@ -31,7 +31,7 @@ Returns the differences of the LS means of pairs of groups in a linear model, wi
 :   The input data set, with USUBJID. *(required)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`paramcd = 'SYSBP'` AND `avisit = 'Week 12'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (paramcd = 'SYSBP' AND avisit = 'Week 12')`. *(optional)*
 
 `var=`
 :   The response: one numeric variable. *(required)*
@@ -49,7 +49,7 @@ Returns the differences of the LS means of pairs of groups in a linear model, wi
 :   The class factors besides the groups: variables separated by blanks (`class = sex`). *(optional)*
 
 `pairs=`
-:   The pairs of groups to compare. all: each later group against each earlier one, in the order of `order=` (or of the values). Or the pairs separated by #, each the group first and then the group it is compared with, a value with a blank or a hyphen in quotes: `pairs = "Drug"` "Placebo" # "High" "Low". The old form "A"-"B" is still read. *(optional, default `all`)*
+:   The pairs of groups to compare. all: each later group against each earlier one, in the order of `order=` (or of the values). Or the pairs separated by #, each the group first and then the group it is compared with, a value with a blank or a hyphen in quotes: `pairs = "Drug" "Placebo" # "High" "Low"`. *(optional, default `all`)*
 
 `order=`
 :   The order of the groups: one numeric variable with one value per group (`order = trt01pn`). *(optional)*
@@ -81,6 +81,8 @@ Use [%ancova](ancova.md) for the test of one numeric term, and [%mmrm](mmrm.md) 
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+
+Gives the LS means and the difference of every pair at Week 12, adjusted for baseline and sex.
 
 ```sas
 %lsmeans(
@@ -115,6 +117,8 @@ Xanomeline Low Dose   Placebo              TRT01P VERSUS         lcl      -5.076
 Xanomeline Low Dose   Placebo              TRT01P VERSUS         ucl      4.8155040297    4.8
 Xanomeline Low Dose   Placebo              TRT01P VERSUS         pval     0.9584423033  0.958
 ```
+
+Compares two pairs against Placebo at a 90 percent level and keeps the statistics of stats=.
 
 ```sas
 %lsmeans(
@@ -159,11 +163,13 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 
 Compare groups with a model: [%mmrm](mmrm.md), [%logistic](logistic.md), [%risk](risk.md), [%rateratio](rateratio.md).
 
-Named on this page: [%ancova](ancova.md), [%stack](stack.md), [%describe](describe.md).
+Named on this page: [%describe](describe.md), [%ancova](ancova.md).
+
+Guides that use %lsmeans: [Make an efficacy table with an ANCOVA](../how-to/efficacy-table.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

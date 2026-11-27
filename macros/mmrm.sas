@@ -62,7 +62,7 @@
 |             by #, each the group first and then the group it
 |             is compared with, a value with a blank or a hyphen
 |             in quotes: pairs = "Drug" "Placebo" # "High"
-|             "Low". The old form "A"-"B" is still read.
+|             "Low"
 | order       The order of the groups: one numeric variable with  Optional
 |             one value per group (order = trt01pn)
 | level       The confidence level of the limits: a number        0.95
@@ -100,6 +100,7 @@
 |
 | Example:
 |
+ * Fits the MMRM of the change at five visits and compares the groups at Week 24.;
  %mmrm(
      data     = advs
    , where    = (paramcd = 'SYSBP' AND anl01fl = 'Y' AND avisitn IN (4 8 12 16 24))
@@ -147,6 +148,8 @@
 |                          pattern takes its default pattern. No number changes.
 | 27-NOV-2026 Sapling      1.9.1: the text of the Note names the R package. No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO mmrm(

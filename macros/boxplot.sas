@@ -97,6 +97,7 @@
 |
 | Example:
 |
+ * Draws a box of the change of the systolic blood pressure at each visit for each group.;
  %boxplot(
      data    = advs
    , columns = t14_2_1_cols
@@ -125,6 +126,8 @@
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO boxplot(

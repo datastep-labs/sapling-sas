@@ -1,3 +1,0 @@
-ttde_test: 1 row
-GROUPS  BLOCK  STAT         VALUE  TEXT
-               pval  1.4463308E-6  <0.001

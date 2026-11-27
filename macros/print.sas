@@ -77,6 +77,7 @@
 |
 | Example:
 |
+ * Prints the display data set as RTF and as a listing: the rows of one block stay on one page.;
  %print(
      data     = t14_2_1_display
    , by       = row
@@ -85,12 +86,27 @@
    , label    = %STR(row=" ")
    , file     = &spl_out./tlf/t14_2_1
  )
+ * Prints a listing: USUBJID is the left column, shown once for each subject.;
  %print(
      data = adae
    , by   = usubjid
    , var  = trt01a aedecod astdt aesev
    , file = &spl_out./listings/l14_5_1
  )
+ * Prints one page per sex: the N of each column is that of the page, and the title names the sex.;
+ OPTIONS NOBYLINE;
+ TITLE1 "Table 14.1.1 Demographic characteristics by sex";
+ TITLE2 "Sex: #BYVAL1";
+ %print(
+     data     = t14_1_1_display
+   , by       = row
+   , var      = c:
+   , page     = sex
+   , together = grp
+   , label    = %STR(row=" ")
+   , file     = &spl_out./tlf/t14_1_1_page
+ )
+ OPTIONS BYLINE;
 |
 |-------------------------------------------------------------------------------
 | Change Log :
@@ -113,6 +129,8 @@
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; a
+|                          third call with page=. No number changes.
 |
 *******************************************************************************/
 %MACRO print(

@@ -27,7 +27,7 @@ Returns the p-value of the Pearson chi-square test of the groups against the cat
 :   The input data set: the records, with USUBJID. *(required)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`avisit = 'Week 24'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (avisit = 'Week 24')`. *(optional)*
 
 `var=`
 :   The categories of the response: one variable, numeric or character. *(required)*
@@ -67,6 +67,8 @@ Use [%fisher](fisher.md) for subjects with a record against subjects without (an
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
 
+Tests sex across the groups: one row, the p value of the chi square test.
+
 ```sas
 %chisq(
      data  = adsl
@@ -82,6 +84,8 @@ sex_chisq: 1 row
 GROUPS  BLOCK  STAT         VALUE   TEXT
         Sex    pval  0.2514896384  0.251
 ```
+
+Runs the exact test of the normal range within each parameter: one p value per parameter.
 
 ```sas
 %chisq(
@@ -110,11 +114,11 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 
 Test the groups: [%anova](anova.md), [%ttest](ttest.md), [%wilcoxon](wilcoxon.md), [%fisher](fisher.md), [%cmh](cmh.md), [%ancova](ancova.md), [%adjust](adjust.md).
 
-Named on this page: [%stack](stack.md).
+Guides that use %chisq: [Make a demographic table with tests](../how-to/demographic-table.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

@@ -58,6 +58,8 @@ nav:
       - tutorial/index.md
   - How-to guides:
       - how-to/index.md
+      - how-to/own-program.md
+      - how-to/run-the-examples.md
       - how-to/derive-baseline.md
       - how-to/demographic-table.md
       - how-to/adverse-event-table.md

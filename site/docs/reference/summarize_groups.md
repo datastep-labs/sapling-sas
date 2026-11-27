@@ -45,6 +45,8 @@ Use [%summarize](summarize.md) to add a summary of each subject's records to ano
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
 
+Takes the largest AVAL and the smallest CHG of each subject and parameter: one record each.
+
 ```sas
 %summarize_groups(
      data  = advs
@@ -86,6 +88,8 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 ## See also
 
 ADaM steps: [%merge_subject](merge_subject.md), [%pick](pick.md), [%summarize](summarize.md), [%baseline](baseline.md), [%flag_first](flag_first.md), [%flag_if_any](flag_if_any.md), [%windows](windows.md), [%visits](visits.md), [%locf](locf.md), [%relchange](relchange.md), [%param_wide](param_wide.md), [%pool](pool.md), [%tte](tte.md).
+
+Guides that use %summarize_groups: [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

@@ -53,6 +53,7 @@
 |
 | Example:
 |
+ * Flags each subject for each term that reaches 5 percent: FLAG is Y with the term, N without.;
  %termflags(
      data      = adae
    , denom     = adsl
@@ -81,6 +82,8 @@
 | 27-NOV-2026 Sapling      1.9.1: the text of the header for the manual: the
 |                          summary, the form of each parameter. No number
 |                          changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO termflags(

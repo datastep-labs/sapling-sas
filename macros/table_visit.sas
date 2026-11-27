@@ -103,6 +103,7 @@
 |
 | Example:
 |
+ * Makes the table of the value at each visit and of its change after baseline.;
  %table_visit(
      data  = adam.advs
    , adsl  = adam.adsl
@@ -115,6 +116,22 @@
    , post  = chg
    , title = "Table 14.7.1 Systolic blood pressure by visit"
    , file  = &spl_out./tlf/t14_7_1
+ )
+ * Names the blocks, asks for Q1 and Q3 and adds a Total column.;
+ %table_visit(
+     data  = advs
+   , adsl  = adsl
+   , where = (paramcd = 'DIABP' AND (ablfl = 'Y' OR anl01fl = 'Y') AND avisitn IN (0 12 24))
+   , vars  = aval chg
+   , by    = trt01a
+   , keep  = param paramn avisitn
+   , order = trt01an
+   , post  = chg
+   , names = aval="Value" chg="Change from baseline"
+   , total = yes
+   , stats = n mean sd median q1 q3 min max
+   , title = "Table 14.7.2 Diastolic blood pressure at Week 12 and Week 24"
+   , file  = &spl_out./tlf/t14_7_2
  )
 |
 |-------------------------------------------------------------------------------
@@ -133,6 +150,9 @@
 | 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; a
+|                          second call with other forms of its parameters. No
 |                          number changes.
 |
 *******************************************************************************/

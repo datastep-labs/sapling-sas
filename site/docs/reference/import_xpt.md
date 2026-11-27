@@ -37,6 +37,8 @@ The macro stands alone: a program can include it without the library (00_import.
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
 
+Copies the six ADaM transport files of the example data into SAS data sets of one folder.
+
 ```sas
 %import_xpt(
      dir     = &spl_root./examples/data
@@ -67,6 +69,8 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 ## See also
 
 Start a program: [%study](study.md).
+
+Guides that use %import_xpt: [Use the macros in your own program](../how-to/own-program.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

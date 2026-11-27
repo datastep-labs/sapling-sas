@@ -37,7 +37,7 @@ Draws the Kaplan-Meier curve of each group as PNG and RTF files and returns the 
 ## Parameters
 
 `data=`
-:   The input data set: one record per subject, such as a time-to-event data set. Required unless `plot=` is given. *(required)*
+:   The input data set: one record per subject, such as a time-to-event data set. Required unless `plot=` is given. *(required unless plot= is given)*
 
 `plot=`
 :   Draw again: the `out=` of an earlier %kmplot call, changed or not. It is drawn as it is, and no statistic is computed. Give it instead of `data=`. *(optional)*
@@ -49,10 +49,10 @@ Draws the Kaplan-Meier curve of each group as PNG and RTF files and returns the 
 :   The data set of [%columns](columns.md): it gives the order of the groups and their colours. When not given, the groups come in the order of the data. *(optional)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`anl01fl = 'Y'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (anl01fl = 'Y')`. *(optional)*
 
 `time=`
-:   The time variable: one numeric variable (`time = aval`). Required unless `plot=` is given. *(required)*
+:   The time variable: one numeric variable (`time = aval`). Required unless `plot=` is given. *(required unless plot= is given)*
 
 `cnsr=`
 :   The censoring variable: one numeric variable, 0 for an event and a positive value for a censoring (the ADaM CNSR: 1, 2 ... name the reason). A missing or negative value on a record used stops the macro with an ERROR. *(optional, default `CNSR`)*
@@ -125,6 +125,8 @@ Use [%km](km.md) for the Kaplan-Meier estimates in a table; %kmplot computes its
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#examples)), `t14_2_1_cols` (made by the [example of %columns](columns.md#examples)).
 
+Draws the curves with the number at risk and the median of each group, and keeps the numbers.
+
 ```sas
 %kmplot(
      data    = adttde
@@ -135,10 +137,26 @@ The examples run on the [example data](../tutorial/index.md#the-example-data) af
    , xlabel  = "Days to the first skin event"
    , file    = &spl_out./figures/f_ttde
    , out     = f_ttde
+   , outpar  = f_ttde_par
+ )
+```
+
+Draws the figure again from out= and outpar= of the call before: no median, another label.
+
+```sas
+%kmplot(
+     plot   = f_ttde
+   , par    = f_ttde_par
+   , by     = trt01a
+   , median = no
+   , ylabel = "Subjects without a skin event (%)"
+   , file   = &spl_out./figures/f_ttde_again
  )
 ```
 
 ![The figure that the example of %kmplot draws](../examples/kmplot.png)
+
+![The figure that the example of %kmplot draws](../examples/kmplot_1.png)
 
 ## Messages
 
@@ -154,11 +172,13 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Figures: [%forestplot](forestplot.md), [%meanplot](meanplot.md), [%lineplot](lineplot.md), [%boxplot](boxplot.md), [%barplot](barplot.md), [%aeplot](aeplot.md), [%profileplot](profileplot.md), [%scatterplot](scatterplot.md).
 
-Named on this page: [%km](km.md), [%columns](columns.md).
+Named on this page: [%columns](columns.md), [%km](km.md).
+
+Guides that use %kmplot: [Make a Kaplan-Meier figure with the number at risk](../how-to/kaplan-meier-figure.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

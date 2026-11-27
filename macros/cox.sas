@@ -62,8 +62,7 @@
 |             order= (or of the values). Or a list of pairs
 |             separated by #: the group first, then the group it
 |             is compared with, each value in quotes ("Drug"
-|             "Placebo" # "High" "Low"). The old form "A"-"B" of
-|             version 1.0 is still read.
+|             "Placebo" # "High" "Low")
 | order       The order of the groups: one numeric variable with  Optional
 |             one value per group (order = trt01pn)
 | ties        The method for tied times: efron, breslow, or       efron
@@ -98,6 +97,7 @@
 |
 | Example:
 |
+ * Gives the hazard ratio of each pair, stratified by sex, with its limits and p value.;
  %cox(
      data   = adttde
    , var    = aval
@@ -106,6 +106,7 @@
    , order  = trt01an
    , out    = ttde_hr
  )
+ * Gives the hazard ratio against Placebo for each sex: the rows carry SEX, for a forest plot.;
  %cox(
      data   = adttde
    , var    = aval
@@ -115,6 +116,7 @@
             # "Xanomeline Low Dose"  "Placebo"
    , out    = hr_sex
  )
+ * Gives the hazard ratio against Placebo for each age group.;
  %cox(
      data   = adttde
    , var    = aval
@@ -124,6 +126,7 @@
             # "Xanomeline Low Dose"  "Placebo"
    , out    = hr_age
  )
+ * Uses the Breslow ties and the p value of the log rank score test.;
  %cox(
      data   = adttde
    , var    = aval
@@ -172,6 +175,8 @@
 |                          on data with CNSR 0 and 1.
 | 27-NOV-2026 Sapling      1.9.1: an example with ties= and pvalue=logrank. No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO cox(

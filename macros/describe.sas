@@ -50,10 +50,9 @@
 |             name with its pattern of the printed number,        sd="XX.XX" median="XX.X"
 |             separated by blanks. The names are n, mean, sd,     min="XX" max="XX"
 |             median, min, max, q1, q3 and se. A name without a
-|             pattern takes its default pattern: XX for n,
-|             events, min and max; XX.X for mean, median, q1,
-|             q3, lsmean, diff, estimate, lcl and ucl; (XX.X%)
-|             for pct; X.XXX for pval; XX.XX for the others.
+|             pattern takes its default pattern: XX for n, min
+|             and max; XX.X for mean, median, q1 and q3; XX.XX
+|             for sd and se.
 | label       The label of the block in the table: a text in      Optional
 |             quotes. A block is the rows of one call in the
 |             table.
@@ -69,6 +68,7 @@
 |
 | Example:
 |
+ * Summarizes age in each group and in the Total: n, mean, SD, median, minimum and maximum.;
  %describe(
      data  = adsl
    , var   = age
@@ -77,6 +77,7 @@
    , label = "Age (years)"
    , out   = age_describe
  )
+ * Uses three BY variables: one row per group, parameter, visit and statistic, with PARAM kept.;
  %describe(
      data  = advs
    , where = (anl01fl = 'Y')
@@ -85,6 +86,7 @@
    , keep  = param avisitn
    , out   = vs
  )
+ * Adds the SE, Q1 and Q3 and calls the Total All subjects: the rows keep the order of stats=.;
  %describe(
      data  = advs
    , where = (paramcd = 'WEIGHT' AND ablfl = 'Y')
@@ -94,6 +96,15 @@
    , stats = n mean sd se median q1 q3 min="XX.X" max="XX.X"
    , label = "Weight at baseline (kg)"
    , out   = wt_describe
+ )
+ * Adds sex as a second BY variable: the rows of each group and sex, for a page per sex.;
+ %describe(
+     data  = adsl
+   , var   = age
+   , by    = trt01a sex
+   , total = yes
+   , label = "Age (years)"
+   , out   = age_sex
  )
 |
 |-------------------------------------------------------------------------------
@@ -124,6 +135,9 @@
 |                          decimals for min and max, and the Total named in
 |                          quotes; the text says that min and max print as whole
 |                          numbers by default. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; a
+|                          fourth call with a page variable (by= trt01a sex).
+|                          No number changes.
 |
 *******************************************************************************/
 %MACRO describe(

@@ -39,10 +39,10 @@ Makes a table of the subjects with adverse events by system organ class and pref
 :   The subjects: a data set with one row per subject. It gives the population and the N of each column, and its variables are merged onto the records by USUBJID. When not given, the N of a column is the subjects of its records. *(optional)*
 
 `pop=`
-:   The population: a condition on `adsl=` in parentheses, such as pop = (`saffl = 'Y'`). It is used only with `adsl=`. *(optional)*
+:   The population: a condition on `adsl=` in parentheses, such as `pop = (saffl = 'Y')`. It is used only with `adsl=`. *(optional)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`trtemfl = 'Y'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (trtemfl = 'Y')`. *(optional)*
 
 `var=`
 :   The variables of the rows, nested in their order and separated by blanks, such as `var = aebodsys aedecod`. *(required)*
@@ -94,7 +94,7 @@ Makes a table of the subjects with adverse events by system organ class and pref
 
 ## Result
 
-The data sets: &lt;name&gt;_ae (the result), &lt;name&gt; (the stacked results), &lt;name&gt;_cols, &lt;name&gt;_display, &lt;name&gt;_pop (with `adsl=`) and &lt;name&gt;_rec (with `adsl=` or `where=`). The files: &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file (only with `file=`). The global macro variable: the global macro variable &lt;name&gt;_print. With `show=`: the long program, in the log or in a file.
+The data sets: &lt;name&gt;_ae (the result), &lt;name&gt; (the stacked results), &lt;name&gt;_cols, &lt;name&gt;_display, &lt;name&gt;_pop (with `adsl=`) and &lt;name&gt;_rec (with `adsl=` or `where=`). The files: &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file (only with `file=`). The global macro variable: &lt;name&gt;_print. With `show=`: the long program, in the log or in a file.
 
 ## Details
 
@@ -110,6 +110,8 @@ The global macro variable &lt;name&gt;_print keeps the call of [%print](print.md
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+
+Makes the table of events by class and term, the terms in the order of their subjects.
 
 ```sas
 %table_ae(
@@ -171,6 +173,61 @@ Treatment-emergent adverse events
     EYE PRURITUS                                                        1 ( 1.2%)   0 ( 0.0%)            0 ( 0.0%)
 ```
 
+Keeps the terms that reach 5 percent in a group, with the events and a Total column.
+
+```sas
+%table_ae(
+     data      = adae
+   , adsl      = adsl
+   , where     = (trtemfl = 'Y')
+   , var       = aedecod
+   , by        = trt01a
+   , order     = trt01an
+   , sort      = frequency
+   , threshold = 5
+   , total     = yes
+   , label     = "Subjects with an event, n (%) and events"
+   , stats     = n pct events
+   , title     = "Table 14.5.3 Common treatment-emergent adverse events"
+   , file      = &spl_out./tlf/t14_5_3
+ )
+```
+
+```text
+tlf/t14_5_3.lst: 31 lines
+Table 14.5.3 Common treatment-emergent adverse events
+
+                                          Placebo        Xanomeline Low Dose  Xanomeline High Dose  Total
+                                          (N=86)         (N=96)               (N=72)                (N=254)
+-----------------------------------------------------------------------------------------------------------------
+
+Subjects with an event, n (%) and events
+  PRURITUS                                 8 ( 9.3%) 11  21 (21.9%) 31        25 (34.7%) 36         54 (21.3%) 78
+  APPLICATION SITE PRURITUS                6 ( 7.0%) 10  23 (24.0%) 33        21 (29.2%) 34         50 (19.7%) 77
+  ERYTHEMA                                 8 ( 9.3%) 12  14 (14.6%) 22        14 (19.4%) 22         36 (14.2%) 56
+  APPLICATION SITE ERYTHEMA                3 ( 3.5%) 3   13 (13.5%) 21        14 (19.4%) 22         30 (11.8%) 46
+  RASH                                     5 ( 5.8%) 9   13 (13.5%) 18         8 (11.1%) 13         26 (10.2%) 40
+  APPLICATION SITE DERMATITIS              5 ( 5.8%) 9    9 ( 9.4%) 15         7 ( 9.7%) 12         21 ( 8.3%) 36
+  APPLICATION SITE IRRITATION              3 ( 3.5%) 7    9 ( 9.4%) 18         9 (12.5%) 16         21 ( 8.3%) 41
+  DIZZINESS                                2 ( 2.3%) 3    9 ( 9.4%) 14        10 (13.9%) 14         21 ( 8.3%) 31
+  DIARRHOEA                                9 (10.5%) 10   5 ( 5.2%) 6          3 ( 4.2%) 3          17 ( 6.7%) 19
+  SINUS BRADYCARDIA                        2 ( 2.3%) 2    7 ( 7.3%) 10         8 (11.1%) 12         17 ( 6.7%) 24
+  HYPERHIDROSIS                            2 ( 2.3%) 2    4 ( 4.2%) 5          8 (11.1%) 10         14 ( 5.5%) 17
+  SKIN IRRITATION                          3 ( 3.5%) 4    6 ( 6.3%) 13         5 ( 6.9%) 8          14 ( 5.5%) 25
+  VOMITING                                 3 ( 3.5%) 3    4 ( 4.2%) 5          6 ( 8.3%) 8          13 ( 5.1%) 16
+  NASOPHARYNGITIS                          2 ( 2.3%) 4    4 ( 4.2%) 9          6 ( 8.3%) 8          12 ( 4.7%) 21
+  NAUSEA                                   3 ( 3.5%) 3    3 ( 3.1%) 5          6 ( 8.3%) 13         12 ( 4.7%) 21
+  APPLICATION SITE VESICLES                1 ( 1.2%) 2    5 ( 5.2%) 6          5 ( 6.9%) 5          11 ( 4.3%) 13
+  COUGH                                    1 ( 1.2%) 1    5 ( 5.2%) 7          5 ( 6.9%) 7          11 ( 4.3%) 15
+  FATIGUE                                  1 ( 1.2%) 2    5 ( 5.2%) 5          5 ( 6.9%) 5          11 ( 4.3%) 12
+  HEADACHE                                 3 ( 3.5%) 3    3 ( 3.1%) 4          5 ( 6.9%) 8          11 ( 4.3%) 15
+  MYOCARDIAL INFARCTION                    4 ( 4.7%) 4    2 ( 2.1%) 4          4 ( 5.6%) 8          10 ( 3.9%) 16
+  UPPER RESPIRATORY TRACT INFECTION        6 ( 7.0%) 12   1 ( 1.0%) 2          3 ( 4.2%) 5          10 ( 3.9%) 19
+  SYNCOPE                                  0 ( 0.0%) 0    5 ( 5.2%) 7          2 ( 2.8%) 3           7 ( 2.8%) 10
+  BLISTER                                  0 ( 0.0%) 0    5 ( 5.2%) 8          1 ( 1.4%) 2           6 ( 2.4%) 10
+  SALIVARY HYPERSECRETION                  0 ( 0.0%) 0    0 ( 0.0%) 0          4 ( 5.6%) 5           4 ( 1.6%) 5
+```
+
 ## Messages
 
 A wrong call writes the message and its fix to the log and stops. The macro also gives the [messages every macro shares](index.md#messages-every-macro-shares).
@@ -184,7 +241,9 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Tables in one call: [%table](table.md), [%table_summary](table_summary.md), [%table_visit](table_visit.md), [%table_shift](table_shift.md), [%table_response](table_response.md), [%table_model](table_model.md), [%table_tte](table_tte.md).
 
-Named on this page: [%freq](freq.md), [%stack](stack.md), [%columns](columns.md), [%layout](layout.md), [%print](print.md).
+Named on this page: [%freq](freq.md), [%layout](layout.md), [%stack](stack.md), [%columns](columns.md), [%print](print.md).
+
+Guides that use %table_ae: [Make an adverse event table](../how-to/adverse-event-table.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

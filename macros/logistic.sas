@@ -48,7 +48,7 @@
 |             by #, each the group first and then the group it
 |             is compared with, a value with a blank or a hyphen
 |             in quotes: pairs = "Drug" "Placebo" # "High"
-|             "Low". The old form "A"-"B" is still read.
+|             "Low"
 | order       The order of the groups: one numeric variable with  Optional
 |             one value per group (order = trt01pn)
 | level       The confidence level of the limits: a number        0.95
@@ -78,6 +78,7 @@
 |
 | Example:
 |
+ * Gives the odds ratio of discontinuation for each pair, adjusted for age and sex.;
  %logistic(
      data   = adsl
    , var    = eosstt
@@ -88,6 +89,7 @@
    , order  = trt01an
    , out    = eos_or
  )
+ * Gives the odds ratio against Placebo for each sex: the rows carry SEX.;
  %logistic(
      data   = adsl
    , var    = eosstt
@@ -126,6 +128,8 @@
 |                          takes its default pattern. No number changes.
 | 27-NOV-2026 Sapling      1.9.1: an example with within= and pairs=. No number
 |                          changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO logistic(

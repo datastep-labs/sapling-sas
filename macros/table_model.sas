@@ -133,6 +133,7 @@
 |
 | Example:
 |
+ * Makes the ANCOVA table at Week 12: three descriptive blocks, then the LS means and difference.;
  %table_model(
      data     = advs
    , adsl     = adsl
@@ -145,6 +146,22 @@
    , pairs    = "Xanomeline High Dose" "Placebo"
    , title    = "Table 14.3.1 ANCOVA of the change of systolic blood pressure at Week 12"
    , file     = &spl_out./tlf/t14_3_1
+ )
+ * Uses method=mmrm on five visits: the LS means and the differences at Week 24.;
+ %table_model(
+     data     = advs
+   , adsl     = adsl
+   , where    = (paramcd = 'SYSBP' AND anl01fl = 'Y' AND avisitn IN (4 8 12 16 24))
+   , covars   = base
+   , visit    = avisit
+   , by       = trt01p
+   , at       = "Week 24"
+   , order    = trt01pn
+   , method   = mmrm
+   , type     = un
+   , fallback = toep
+   , title    = "Table 14.3.3 MMRM of the change of systolic blood pressure at Week 24"
+   , file     = &spl_out./tlf/t14_3_3
  )
 |
 |-------------------------------------------------------------------------------
@@ -167,6 +184,9 @@
 |                          is that of the population. No number changes.
 | 27-NOV-2026 Sapling      1.9.1: the text of where= and model=; the text says
 |                          that the ANCOVA needs one record per subject. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; a
+|                          second call with other forms of its parameters. No
 |                          number changes.
 |
 *******************************************************************************/

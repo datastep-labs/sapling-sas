@@ -30,7 +30,7 @@ Returns the p-value of the treatment-by-subgroup interaction in a Poisson or neg
 :   The input data set: one record per subject, with USUBJID. *(required)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`ittfl = 'Y'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (ittfl = 'Y')`. *(optional)*
 
 `var=`
 :   The count: one numeric variable, such as the number of events of each subject. *(required)*
@@ -79,6 +79,8 @@ Use [%interaction_glm](interaction_glm.md) for a continuous variable, [%interact
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
 
+Tests the treatment by sex interaction of the event counts in a negative binomial model.
+
 ```sas
 %interaction_genmod(
      data     = adsl
@@ -107,11 +109,11 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 
 Subgroups: [%interaction_glm](interaction_glm.md), [%interaction_logistic](interaction_logistic.md), [%interaction_phreg](interaction_phreg.md).
 
-Named on this page: [%stack](stack.md).
+Guides that use %interaction_genmod: [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

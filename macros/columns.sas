@@ -65,6 +65,7 @@
 |
 | Example:
 |
+ * Makes the four columns with their N from adsl, the Total last, in the order of TRT01AN.;
  %columns(
      data  = t14_2_1
    , n     = adsl
@@ -72,6 +73,23 @@
    , order = trt01an
    , total = yes
    , out   = t14_2_1_cols
+ )
+ * Gives page=sex: one row per column and sex, the N of each column on the page of its sex.;
+ %columns(
+     data  = t14_1_1
+   , n     = adsl
+   , var   = trt01a
+   , order = trt01an
+   , page  = sex
+   , total = yes
+   , out   = t14_1_1_cols
+ )
+ * Leaves out n=: the columns have no N and come in the order of their values, the Total last.;
+ %columns(
+     data  = t14_2_1
+   , var   = trt01a
+   , total = yes
+   , out   = t14_2_1_cols_no_n
  )
 |
 |-------------------------------------------------------------------------------
@@ -95,6 +113,9 @@
 |                          changes.
 | 27-NOV-2026 Sapling      1.9.1: the N of a page in the text is that of the
 |                          example data. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; two
+|                          more calls: page= and a call without n=. No number
+|                          changes.
 |
 *******************************************************************************/
 %MACRO columns(

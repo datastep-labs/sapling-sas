@@ -42,12 +42,16 @@ Use [%pick](pick.md) when the other data set has more rows per subject and one o
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
 
+Copies the time to event records with four variables of their own.
+
 ```sas
 DATA tt;
   SET adtte;
   KEEP usubjid paramcd aval cnsr;
 RUN;
 ```
+
+Adds the age group, the race and the planned treatment of adsl by USUBJID, two of them renamed.
 
 ```sas
 %merge_subject(
@@ -89,6 +93,8 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 ## See also
 
 ADaM steps: [%pick](pick.md), [%summarize](summarize.md), [%summarize_groups](summarize_groups.md), [%baseline](baseline.md), [%flag_first](flag_first.md), [%flag_if_any](flag_if_any.md), [%windows](windows.md), [%visits](visits.md), [%locf](locf.md), [%relchange](relchange.md), [%param_wide](param_wide.md), [%pool](pool.md), [%tte](tte.md).
+
+Guides that use %merge_subject: [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

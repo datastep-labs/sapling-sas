@@ -1,7 +1,0 @@
-sbp_adj, the rows of the p-values where stat IN ('pval' 'padj'): 5 rows
-TRT01P                VERSUS               GROUPS         STAT         VALUE   TEXT
-Xanomeline High Dose  Placebo              TRT01P VERSUS  pval  0.0383969398  0.038
-Xanomeline High Dose  Xanomeline Low Dose  TRT01P VERSUS  pval  0.0707974243  0.071
-Xanomeline Low Dose   Placebo              TRT01P VERSUS  pval  0.9584423033  0.958
-Xanomeline High Dose  Placebo              TRT01P VERSUS  padj  0.0767938796  0.077
-Xanomeline Low Dose   Placebo              TRT01P VERSUS  padj  0.9584423033  0.958

@@ -110,6 +110,7 @@
 |
 | Example:
 |
+ * Draws the curves with the number at risk and the median of each group, and keeps the numbers.;
  %kmplot(
      data    = adttde
    , columns = t14_2_1_cols
@@ -119,6 +120,16 @@
    , xlabel  = "Days to the first skin event"
    , file    = &spl_out./figures/f_ttde
    , out     = f_ttde
+   , outpar  = f_ttde_par
+ )
+ * Draws the figure again from out= and outpar= of the call before: no median, another label.;
+ %kmplot(
+     plot   = f_ttde
+   , par    = f_ttde_par
+   , by     = trt01a
+   , median = no
+   , ylabel = "Subjects without a skin event (%)"
+   , file   = &spl_out./figures/f_ttde_again
  )
 |
 |-------------------------------------------------------------------------------
@@ -153,6 +164,10 @@
 |                          2 an event); a missing or negative CNSR on a record
 |                          used stops the macro with an ERROR. No number changes
 |                          on data with CNSR 0 and 1.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; the
+|                          first call keeps its drawing parameters (outpar=), a
+|                          second call draws the figure again from them (plot=,
+|                          par=). No number changes.
 |
 *******************************************************************************/
 %MACRO kmplot(

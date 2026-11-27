@@ -62,6 +62,7 @@
 |
 | Example:
 |
+ * Gives the percent that completed and that discontinued, each with its Clopper Pearson limits.;
  %proportion(
      data   = adsl
    , var    = eosstt
@@ -70,6 +71,7 @@
    , ci     = clopper-pearson
    , out    = eos_ci
  )
+ * Gives the percent of the best responses CR and PR of the N of denom=, with Wilson limits.;
  %proportion(
      data   = adrs
    , denom  = adsl
@@ -104,6 +106,8 @@
 |                          number changes.
 | 27-NOV-2026 Sapling      1.9.1: The text of stats=: a name without a pattern
 |                          takes its default pattern. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO proportion(

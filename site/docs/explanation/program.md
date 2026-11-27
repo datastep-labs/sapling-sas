@@ -5,9 +5,12 @@ sees the population, each block of the table, the columns, and the print. Nothin
 
 ## The order of the calls
 
-Every table program has the same five parts, in the same order.
+Every table program has the same five parts, in the same order, after the library is loaded (part 0).
 
 ```sas
+%LET spl_root = /studies/cdiscpilot01;                    /* 0. load the library  */
+%INCLUDE "&spl_root./macros/sapling.sas";
+
 %study(CDISCPILOT01, program = t14_2_01)                  /* 1. start the program */
 
 DATA itt;                                                 /* 2. the population    */
@@ -34,6 +37,9 @@ TITLE1 "Table 14-2.01 Summary of Demographic and Baseline Characteristics";
 %print(&t14_2_01_print.)                                  /* 5. the output        */
 ```
 
+0. **Load the library.** `spl_root` names the folder that holds `macros/`, and the loader `macros/sapling.sas`
+   includes every macro. A program of a study does this once, at the top; a program run in a session that has the
+   library already leaves it out. [Use the macros in your own program](../how-to/own-program.md) shows the steps.
 1. **Start.** `%study` sets the options of the program, the library `ADAM` and the output folder `&spl_out.`.
 2. **The population.** A plain DATA step selects the subjects. The macros do not hide a population inside a parameter.
 3. **The blocks.** Each block of the table is one call of one statistics macro: `%describe` for a number, `%freq` for

@@ -28,7 +28,7 @@ Adds the adjusted p-values of a family of pairs of groups to a result: one row p
 :   The groups: the variable of `data=` with the group of each pair (`by = trt01p`). *(required)*
 
 `family=`
-:   The pairs of the family in their order, separated by #: each the group first and then the group it is compared with, each value in quotes: `family = "High"` "Placebo" # "Low" "Placebo". The old form "A"-"B" is still read. *(required)*
+:   The pairs of the family in their order, separated by #: each the group first and then the group it is compared with, each value in quotes: `family = "High" "Placebo" # "Low" "Placebo"`. *(required)*
 
 `method=`
 :   The adjustment: bonferroni, holm, hochberg or hierarchy. *(required)*
@@ -66,6 +66,8 @@ Every row of `data=` with STAT pval and a pair of `family=` is one hypothesis of
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `sbp_ls` (made by the [example of %lsmeans](lsmeans.md#examples)).
 
+Adjusts the p values of the two comparisons against Placebo by Hochberg: PADJ after PVAL.
+
 ```sas
 %adjust(
      data   = sbp_ls
@@ -97,9 +99,11 @@ Test the groups: [%anova](anova.md), [%ttest](ttest.md), [%wilcoxon](wilcoxon.md
 
 Named on this page: [%lsmeans](lsmeans.md), [%mmrm](mmrm.md), [%cox](cox.md), [%logistic](logistic.md), [%risk](risk.md), [%rateratio](rateratio.md).
 
+Guides that use %adjust: [Run the examples of the reference](../how-to/run-the-examples.md).
+
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

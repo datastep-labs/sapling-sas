@@ -87,6 +87,7 @@
 |
 | Example:
 |
+ * Draws the means that meanplot kept as lines, with a band between the limits.;
  %lineplot(
      data    = f_bp_mean
    , columns = t14_2_1_cols
@@ -121,6 +122,8 @@
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO lineplot(

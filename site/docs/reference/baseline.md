@@ -54,12 +54,16 @@ The macro does not make the change from baseline: CHG = AVAL - BASE is a DATA st
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
 
+Copies the systolic records.
+
 ```sas
 DATA vs;
   SET advs;
   WHERE paramcd = 'SYSBP';
 RUN;
 ```
+
+Copies the value of the baseline record to BASE on each record of its subject and parameter.
 
 ```sas
 %baseline(
@@ -102,6 +106,8 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 ## See also
 
 ADaM steps: [%merge_subject](merge_subject.md), [%pick](pick.md), [%summarize](summarize.md), [%summarize_groups](summarize_groups.md), [%flag_first](flag_first.md), [%flag_if_any](flag_if_any.md), [%windows](windows.md), [%visits](visits.md), [%locf](locf.md), [%relchange](relchange.md), [%param_wide](param_wide.md), [%pool](pool.md), [%tte](tte.md).
+
+Guides that use %baseline: [Derive analysis visits, the baseline and the change from baseline](../how-to/derive-baseline.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

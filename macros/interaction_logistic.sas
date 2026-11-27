@@ -59,6 +59,7 @@
 |
 | Example:
 |
+ * Tests the treatment by sex interaction of discontinuation in a logistic model with age.;
  %interaction_logistic(
      data   = adsl
    , var    = eosstt
@@ -87,6 +88,8 @@
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO interaction_logistic(

@@ -58,12 +58,16 @@ A group of `var=` goes into the pooled group when it has fewer than `min=` recor
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
 
+Copies the subjects with their site and their planned treatment.
+
 ```sas
 DATA sl;
   SET adsl;
   KEEP usubjid siteid trt01p;
 RUN;
 ```
+
+Pools each site with fewer than 3 subjects in a group into the site group 900.
 
 ```sas
 %pool(
@@ -104,6 +108,8 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 ## See also
 
 ADaM steps: [%merge_subject](merge_subject.md), [%pick](pick.md), [%summarize](summarize.md), [%summarize_groups](summarize_groups.md), [%baseline](baseline.md), [%flag_first](flag_first.md), [%flag_if_any](flag_if_any.md), [%windows](windows.md), [%visits](visits.md), [%locf](locf.md), [%relchange](relchange.md), [%param_wide](param_wide.md), [%tte](tte.md).
+
+Guides that use %pool: [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

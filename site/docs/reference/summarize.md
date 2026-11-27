@@ -51,12 +51,16 @@ Use [%summarize_groups](summarize_groups.md) for one record per group instead of
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
 
+Copies the subjects with USUBJID and TRTDURD only.
+
 ```sas
 DATA sl;
   SET adsl;
   KEEP usubjid trtdurd;
 RUN;
 ```
+
+Takes the largest end day of the exposure records of each subject.
 
 ```sas
 %summarize(
@@ -67,6 +71,8 @@ RUN;
    , new   = exlstdy
  )
 ```
+
+Takes the mean dose of the exposure records of each subject.
 
 ```sas
 %summarize(
@@ -105,6 +111,8 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 ## See also
 
 ADaM steps: [%merge_subject](merge_subject.md), [%pick](pick.md), [%summarize_groups](summarize_groups.md), [%baseline](baseline.md), [%flag_first](flag_first.md), [%flag_if_any](flag_if_any.md), [%windows](windows.md), [%visits](visits.md), [%locf](locf.md), [%relchange](relchange.md), [%param_wide](param_wide.md), [%pool](pool.md), [%tte](tte.md).
+
+Guides that use %summarize: [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

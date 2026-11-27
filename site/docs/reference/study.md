@@ -41,6 +41,8 @@ Call it once, at the top of each program, before any other macro of the library.
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
 
+Starts the program of the examples: it sets SPL_STUDY, SPL_PROGRAM and SPL_OUT and opens ADAM.
+
 ```sas
 %study(
      CDISCPILOT01
@@ -67,6 +69,8 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 Start a program: [%import_xpt](import_xpt.md).
 
 Named on this page: [%ard](ard.md).
+
+Guides that use %study: [Use the macros in your own program](../how-to/own-program.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

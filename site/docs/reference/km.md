@@ -29,7 +29,7 @@ Returns the Kaplan-Meier summary of a time in each group: subjects, events, the 
 :   The input data set: one record per subject, with the time and the censoring variable. *(required)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`paramcd = 'TTDE'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (paramcd = 'TTDE')`. *(optional)*
 
 `var=`
 :   The time: one numeric variable, such as aval. *(required)*
@@ -79,6 +79,8 @@ Use [%kmplot](kmplot.md) to draw the curve, and [%table_tte](table_tte.md) for t
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#examples)).
 
+Gives n, events, the median and its limits of each group: NE is a median not reached.
+
 ```sas
 %km(
      data  = adttde
@@ -108,6 +110,8 @@ Xanomeline Low Dose   TRT01A  Time to the first skin event (days)  median     80
 Xanomeline Low Dose   TRT01A  Time to the first skin event (days)  lcl        51  51.0
 Xanomeline Low Dose   TRT01A  Time to the first skin event (days)  ucl            NE
 ```
+
+Gives the percent of subjects alive at day 182 and its limits, with the patterns of stats=.
 
 ```sas
 %km(
@@ -140,6 +144,8 @@ Xanomeline Low Dose   TRT01P         surv    98.245614035   98.2
 Xanomeline Low Dose   TRT01P         lcl     94.837376767   94.8
 Xanomeline Low Dose   TRT01P         ucl              100  100.0
 ```
+
+Uses conftype=loglog and a 90 percent level: the median stays, its limits change.
 
 ```sas
 %km(
@@ -184,11 +190,13 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Time to an event: [%logrank](logrank.md), [%cox](cox.md).
 
-Named on this page: [%kmplot](kmplot.md), [%table_tte](table_tte.md), [%stack](stack.md), [%describe](describe.md).
+Named on this page: [%describe](describe.md), [%kmplot](kmplot.md), [%table_tte](table_tte.md).
+
+Guides that use %km: [Make a Kaplan-Meier figure with the number at risk](../how-to/kaplan-meier-figure.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

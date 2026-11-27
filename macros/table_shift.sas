@@ -105,6 +105,7 @@
 |
 | Example:
 |
+ * Makes the shift table of the normal range at Week 12 and Week 24, with every planned level.;
  %table_shift(
      data   = adlb
    , where  = (avisit IN ('Week 12' 'Week 24'))
@@ -114,6 +115,21 @@
    , levels = 'LOW' 'NORMAL' 'HIGH'
    , title  = "Table 14.8.1 Shift from baseline of the normal range"
    , file   = &spl_out./tlf/t14_8_1
+ )
+ * Shifts to the highest value after baseline, with a label of the block and a Total column.;
+ %table_shift(
+     data   = adlb
+   , adsl   = adsl
+   , where  = (avisit = 'POST-BASELINE MAXIMUM')
+   , within = paramcd
+   , by     = trt01a
+   , keep   = param
+   , order  = trt01an
+   , levels = 'LOW' 'NORMAL' 'HIGH'
+   , total  = yes
+   , label  = "Baseline by the highest value after baseline"
+   , title  = "Table 14.8.2 Shift to the highest value after baseline"
+   , file   = &spl_out./tlf/t14_8_2
  )
 |
 |-------------------------------------------------------------------------------
@@ -132,6 +148,9 @@
 | 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; a
+|                          second call with other forms of its parameters. No
 |                          number changes.
 |
 *******************************************************************************/

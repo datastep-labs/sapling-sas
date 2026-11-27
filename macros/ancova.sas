@@ -61,6 +61,7 @@
 |
 | Example:
 |
+ * Tests a linear dose response of the change at Week 12, adjusted for baseline: one p value.;
  %ancova(
      data   = advs
    , where  = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')
@@ -97,6 +98,8 @@
 |                          number changes.
 | 27-NOV-2026 Sapling      1.9.1: the text says to give a where= that leaves one
 |                          record per subject. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO ancova(

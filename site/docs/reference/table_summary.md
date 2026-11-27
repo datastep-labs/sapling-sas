@@ -34,7 +34,7 @@ Makes a summary table of the subjects in one call, such as demographics: one blo
 :   The input data set: the subjects, one row per subject, such as adsl. *(required)*
 
 `where=`
-:   The population: a condition in parentheses, such as where = (`saffl = 'Y'`). *(optional)*
+:   The population: a condition in parentheses, such as `where = (saffl = 'Y')`. *(optional)*
 
 `vars=`
 :   The variables of the table in its order, separated by blanks: a name alone for a numeric variable, a name and # for a categorical one, such as `vars = age sex# agegr1#agegr1n`. *(required)*
@@ -85,7 +85,7 @@ Makes a summary table of the subjects in one call, such as demographics: one blo
 
 ## Result
 
-The data sets: &lt;name&gt;_&lt;variable&gt;_summ (the result of each variable), &lt;name&gt; (the stacked results), &lt;name&gt;_cols, &lt;name&gt;_display, and &lt;name&gt;_pop (only with `where=`). The files: &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file (only with `file=`). The global macro variable: the global macro variable &lt;name&gt;_print. With `show=`: the long program, in the log or in a file.
+The data sets: &lt;name&gt;_&lt;variable&gt;_summ (the result of each variable), &lt;name&gt; (the stacked results), &lt;name&gt;_cols, &lt;name&gt;_display, and &lt;name&gt;_pop (only with `where=`). The files: &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file (only with `file=`). The global macro variable: &lt;name&gt;_print. With `show=`: the long program, in the log or in a file.
 
 ## Details
 
@@ -107,6 +107,8 @@ The global macro variable &lt;name&gt;_print keeps the call of [%print](print.md
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+
+Makes the demographic table from one row per subject: age as numbers, the categories as rows.
 
 ```sas
 %table_summary(
@@ -155,6 +157,52 @@ Ethnicity
   NOT HISPANIC OR LATINO             83 (96.5%)   90 (93.8%)           69 (95.8%)           242 (95.3%)
 ```
 
+Names the blocks, plans a race with no subject and asks for Q1 and Q3: ASIAN has a row of 0.
+
+```sas
+%table_summary(
+     data     = adsl
+   , vars     = age trtdurd race#
+   , by       = trt01a
+   , order    = trt01an
+   , levels   = race 'WHITE' 'BLACK OR AFRICAN AMERICAN' 'ASIAN' 'AMERICAN INDIAN OR ALASKA NATIVE'
+   , catstats = n pct
+   , names    = age="Age (years)" trtdurd="Duration of treatment (days)" race="Race"
+   , stats    = n mean sd median q1 q3 min max
+   , title    = "Table 14.2.2 Age, duration of treatment and race"
+   , file     = &spl_out./tlf/t14_2_2
+ )
+```
+
+```text
+tlf/t14_2_2.lst: 25 lines
+Table 14.2.2 Age, duration of treatment and race
+
+                                    Placebo        Xanomeline Low Dose  Xanomeline High Dose
+                                    (N=86)         (N=96)               (N=72)
+--------------------------------------------------------------------------------------------
+
+Age (years)
+  n                                 86             96                   72
+  Mean (SD)                         75.2 (8.59)    76.0 (8.11)          73.8 (7.94)
+  Median                            76.0           78.0                 75.5
+  Q1, Q3                            69.0, 82.0     71.0, 82.0           70.0, 79.0
+  Min, Max                          52, 89         51, 88               56, 88
+
+Duration of treatment (days)
+  n                                 85             95                   72
+  Mean (SD)                         149.5 (60.35)  86.8 (70.47)         112.2 (65.52)
+  Median                            182.0          63.0                 96.5
+  Q1, Q3                            134.0, 183.0   22.0, 181.0          53.5, 183.0
+  Min, Max                          7, 210         1, 212               15, 200
+
+Race
+  WHITE                             78 (90.7%)     90 (93.8%)           62 (86.1%)
+  BLACK OR AFRICAN AMERICAN          8 ( 9.3%)      6 ( 6.3%)            9 (12.5%)
+  ASIAN                              0 ( 0.0%)      0 ( 0.0%)            0 ( 0.0%)
+  AMERICAN INDIAN OR ALASKA NATIVE   0 ( 0.0%)      0 ( 0.0%)            1 ( 1.4%)
+```
+
 ## Messages
 
 A wrong call writes the message and its fix to the log and stops. The macro also gives the [messages every macro shares](index.md#messages-every-macro-shares).
@@ -170,7 +218,9 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Tables in one call: [%table](table.md), [%table_ae](table_ae.md), [%table_visit](table_visit.md), [%table_shift](table_shift.md), [%table_response](table_response.md), [%table_model](table_model.md), [%table_tte](table_tte.md).
 
-Named on this page: [%describe](describe.md), [%freq](freq.md), [%stack](stack.md), [%columns](columns.md), [%layout](layout.md), [%print](print.md).
+Named on this page: [%freq](freq.md), [%layout](layout.md), [%describe](describe.md), [%stack](stack.md), [%columns](columns.md), [%print](print.md).
+
+Guides that use %table_summary: [Make a demographic table with tests](../how-to/demographic-table.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

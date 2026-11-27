@@ -33,7 +33,7 @@ Returns the risk difference, relative risk or odds ratio of pairs of groups, wit
 :   The input data set, with USUBJID: one record per subject, or per subject and term with `within=`. *(required)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`saffl = 'Y'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (saffl = 'Y')`. *(optional)*
 
 `var=`
 :   The response: one variable with two values, numeric or character. *(required)*
@@ -51,13 +51,13 @@ Returns the risk difference, relative risk or odds ratio of pairs of groups, wit
 :   The strata of the Mantel-Haenszel risk difference: variables separated by blanks. Only with measure=rd. *(optional)*
 
 `pairs=`
-:   The pairs of groups to compare. all: each later group against each earlier one, in the order of `order=` (or of the values). Or the pairs separated by #, each the group first and then the group it is compared with, a value with a blank or a hyphen in quotes: `pairs = "Drug"` "Placebo" # "High" "Low". The old form "A"-"B" is still read. *(optional, default `all`)*
+:   The pairs of groups to compare. all: each later group against each earlier one, in the order of `order=` (or of the values). Or the pairs separated by #, each the group first and then the group it is compared with, a value with a blank or a hyphen in quotes: `pairs = "Drug" "Placebo" # "High" "Low"`. *(optional, default `all`)*
 
 `order=`
 :   The order of the groups: one numeric variable with one value per group (`order = trt01an`). *(optional)*
 
 `measure=`
-:   The estimate: rd (risk difference), rr (relative risk) or or (odds ratio). *(optional, default `rd`)*
+:   The estimate of the group against the group it is compared with: rd, the risk difference, a difference of two proportions between -1 and 1 (0.25 is 25 percentage points), not of percents; rr, the relative risk, the ratio of the two risks; or or, the odds ratio, the ratio of the two odds. A ratio has no unit. *(optional, default `rd`)*
     Accepts: `rd`, `rr`, `or`.
 
 `ci=`
@@ -97,6 +97,8 @@ The p-value is that of Pearson's chi-square test without continuity correction. 
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `ae_flags` (made by the [example of %termflags](termflags.md#examples)).
 
+Gives the risk difference of discontinuation of each pair, its Newcombe limits and p value.
+
 ```sas
 %risk(
      data  = adsl
@@ -125,6 +127,8 @@ Xanomeline High Dose  Xanomeline Low Dose  TRT01A VERSUS         lcl   -0.253571
 Xanomeline High Dose  Xanomeline Low Dose  TRT01A VERSUS         ucl   0.0259371208  0.026
 Xanomeline High Dose  Xanomeline Low Dose  TRT01A VERSUS         pval  0.1118759331  0.112
 ```
+
+Gives the risk difference of each flagged term against Placebo, within its class and term.
 
 ```sas
 %risk(
@@ -160,6 +164,8 @@ Xanomeline High Dose  Placebo  GASTROINTESTINAL DISORDERS  NAUSEA               
 Xanomeline High Dose  Placebo  GASTROINTESTINAL DISORDERS  NAUSEA                 TRT01A VERSUS AEBODSYS AEDECOD         ucl   0.1382228882   0.138
 ```
 
+Asks for the relative risk with measure=rr: the rows of STAT rr hold the ratio of the two risks.
+
 ```sas
 %risk(
      data    = adsl
@@ -188,6 +194,8 @@ Xanomeline High Dose  Xanomeline Low Dose  TRT01A VERSUS         lcl   0.6817794
 Xanomeline High Dose  Xanomeline Low Dose  TRT01A VERSUS         ucl   1.0474707849  1.05
 Xanomeline High Dose  Xanomeline Low Dose  TRT01A VERSUS         pval  0.1118759331  0.112
 ```
+
+Stratifies by sex: the risk difference is the Mantel Haenszel estimate over the strata.
 
 ```sas
 %risk(
@@ -231,11 +239,13 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Compare groups with a model: [%lsmeans](lsmeans.md), [%mmrm](mmrm.md), [%logistic](logistic.md), [%rateratio](rateratio.md).
 
-Named on this page: [%fisher](fisher.md), [%stack](stack.md), [%termflags](termflags.md), [%describe](describe.md).
+Named on this page: [%termflags](termflags.md), [%describe](describe.md), [%fisher](fisher.md).
+
+Guides that use %risk: [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

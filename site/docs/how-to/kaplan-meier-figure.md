@@ -5,7 +5,8 @@ under the axis, the median of each group, and the log-rank p-value in a footnote
 
 ## Before you start
 
-- Submit `examples/setup.sas`, or start your own program with `%study`.
+- Submit `examples/setup.sas`, or start your own program as [Use the macros in your own program](own-program.md)
+  shows.
 - Have one record per subject with the time (`aval`) and the censoring variable (`cnsr`, 1 = censored). If your
   data have no such parameter yet, step 1 derives it.
 - Have the population, one row per subject (`adsl`), for the order of the curves.
@@ -71,11 +72,30 @@ Placebo curve has 85 subjects at risk of N=86, and the Xanomeline Low Dose curve
 
 ### 2. Summarize the curves and make the columns
 
-Call `%km` for the median of each group. Then call `%columns` on its result: the columns give the order of the
-curves and their colors.
+Call `%km` for the median of each group and its confidence interval:
 
 ```sas
 %km(data=ttskin, var=aval, by=trt01a, label="Time to the first skin event (days)", out=t_km)
+```
+
+```text
+t_km where stat NE 'n' AND stat NE 'events': 9 rows
+TRT01A                STAT    VALUE  TEXT
+Placebo               median         NE
+Placebo               lcl            NE
+Placebo               ucl            NE
+Xanomeline High Dose  median     57  57.0
+Xanomeline High Dose  lcl        46  46.0
+Xanomeline High Dose  ucl       177  177.0
+Xanomeline Low Dose   median     80  80.0
+Xanomeline Low Dose   lcl        51  51.0
+Xanomeline Low Dose   ucl            NE
+```
+
+`NE` is a median or a limit that the curve does not reach: the Placebo curve stays above 50%. Then call `%columns` on
+the result of `%km`: the columns give the order of the curves and their colors.
+
+```sas
 %columns(data=t_km, n=adsl, var=trt01a, order=trt01an, out=t_km_cols)
 ```
 
@@ -127,7 +147,7 @@ FOOTNOTE1 J=L "p-value of the log-rank test: &pval.";
  )
 ```
 
-![figures/f_ttskin.png](../img/figures_f_ttskin.png)
+![Figure 14.2.1 Time to the first skin event](../img/figures_f_ttskin.png)
 
 The number at risk under the axis counts the subjects whose time is the time of the tick or later. To choose the
 ticks, give their times in `times=`, such as `times = 0 30 60 90 120 150 180`.
@@ -145,22 +165,22 @@ RUN;
 
 ```text
 f_ttskin where kind = 'atrisk': 15 rows
-TRT01A                KIND      X   N
-Placebo               atrisk    0  85
-Placebo               atrisk   50  68
-Placebo               atrisk  100  55
-Placebo               atrisk  150  50
-Placebo               atrisk  200   0
-Xanomeline High Dose  atrisk    0  72
-Xanomeline High Dose  atrisk   50  33
-Xanomeline High Dose  atrisk  100  16
-Xanomeline High Dose  atrisk  150  16
-Xanomeline High Dose  atrisk  200   0
-Xanomeline Low Dose   atrisk    0  95
-Xanomeline Low Dose   atrisk   50  37
-Xanomeline Low Dose   atrisk  100  20
-Xanomeline Low Dose   atrisk  150  15
-Xanomeline Low Dose   atrisk  200   0
+TRT01A                  X   N
+Placebo                 0  85
+Placebo                50  68
+Placebo               100  55
+Placebo               150  50
+Placebo               200   0
+Xanomeline High Dose    0  72
+Xanomeline High Dose   50  33
+Xanomeline High Dose  100  16
+Xanomeline High Dose  150  16
+Xanomeline High Dose  200   0
+Xanomeline Low Dose     0  95
+Xanomeline Low Dose    50  37
+Xanomeline Low Dose   100  20
+Xanomeline Low Dose   150  15
+Xanomeline Low Dose   200   0
 ```
 
 ## Related

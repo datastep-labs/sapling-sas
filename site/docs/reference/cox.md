@@ -35,7 +35,7 @@ Returns the hazard ratio of pairs of groups from a Cox proportional hazards mode
 :   The input data set: one record per subject, with USUBJID, the time and the censoring variable. *(required)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`paramcd = 'TTDE'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (paramcd = 'TTDE')`. *(optional)*
 
 `var=`
 :   The time: one numeric variable, such as aval. *(required)*
@@ -59,7 +59,7 @@ Returns the hazard ratio of pairs of groups from a Cox proportional hazards mode
 :   The strata of the model, separated by blanks (`strata = sitegr1`). When not given, the model has no strata. *(optional)*
 
 `pairs=`
-:   The pairs of groups to compare. all: each later group against each earlier one, in the order of `order=` (or of the values). Or a list of pairs separated by #: the group first, then the group it is compared with, each value in quotes ("Drug" "Placebo" # "High" "Low"). The old form "A"-"B" of version 1.0 is still read. *(optional, default `all`)*
+:   The pairs of groups to compare. all: each later group against each earlier one, in the order of `order=` (or of the values). Or a list of pairs separated by #: the group first, then the group it is compared with, each value in quotes ("Drug" "Placebo" # "High" "Low"). *(optional, default `all`)*
 
 `order=`
 :   The order of the groups: one numeric variable with one value per group (`order = trt01pn`). *(optional)*
@@ -104,6 +104,8 @@ Use [%logrank](logrank.md) for the test of all groups together without a model, 
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#examples)).
 
+Gives the hazard ratio of each pair, stratified by sex, with its limits and p value.
+
 ```sas
 %cox(
      data   = adttde
@@ -131,6 +133,8 @@ Xanomeline Low Dose   Placebo              TRT01A VERSUS         lcl   1.8648836
 Xanomeline Low Dose   Placebo              TRT01A VERSUS         ucl   5.6156129982  5.62
 Xanomeline Low Dose   Placebo              TRT01A VERSUS         pval   0.000029663  <0.001
 ```
+
+Gives the hazard ratio against Placebo for each sex: the rows carry SEX, for a forest plot.
 
 ```sas
 %cox(
@@ -164,6 +168,8 @@ Xanomeline Low Dose   Placebo  M    TRT01A VERSUS SEX         lcl   2.1988056105
 Xanomeline Low Dose   Placebo  M    TRT01A VERSUS SEX         ucl   13.160521402  13.16
 ```
 
+Gives the hazard ratio against Placebo for each age group.
+
 ```sas
 %cox(
      data   = adttde
@@ -195,6 +201,8 @@ Xanomeline Low Dose   Placebo  >64     TRT01A VERSUS AGEGR1         hr    3.0497
 Xanomeline Low Dose   Placebo  >64     TRT01A VERSUS AGEGR1         lcl    1.708031955  1.71
 Xanomeline Low Dose   Placebo  >64     TRT01A VERSUS AGEGR1         ucl   5.4453164325  5.45
 ```
+
+Uses the Breslow ties and the p value of the log rank score test.
 
 ```sas
 %cox(
@@ -235,11 +243,13 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Time to an event: [%km](km.md), [%logrank](logrank.md).
 
-Named on this page: [%interaction_phreg](interaction_phreg.md), [%stack](stack.md), [%describe](describe.md).
+Named on this page: [%describe](describe.md), [%interaction_phreg](interaction_phreg.md).
+
+Guides that use %cox: [Make a Kaplan-Meier figure with the number at risk](../how-to/kaplan-meier-figure.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

@@ -50,10 +50,12 @@
 |
 | Example:
 |
+ * Copies the systolic records of the analysis visits.;
  DATA vs;
    SET advs;
    WHERE paramcd = 'SYSBP' AND avisitn IN (0 4 12 24);
  RUN;
+ * Carries the last value forward into a visit without a value: DTYPE is LOCF on the new records.;
  %locf(
      data    = vs
    , windows = 0  "Baseline" .   1   1   "<=1"
@@ -90,6 +92,8 @@
 | 27-NOV-2026 Sapling      1.9.1: The example first copies its records into a
 |                          data set of its own, so that it changes no data set of
 |                          setup.sas for a later example. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO locf(

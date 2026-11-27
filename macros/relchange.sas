@@ -69,6 +69,7 @@
 |
 | Example:
 |
+ * Adds a record per value: its change from the record before, relative to half the normal range.;
  %relchange(
      data  = adlb
    , where = (paramcd = 'ALT' AND MISSING(dtype))
@@ -99,6 +100,8 @@
 |                          %baseline. No number changes.
 | 27-NOV-2026 Sapling      1.9.1: the text says what the macro computes. No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO relchange(

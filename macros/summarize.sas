@@ -41,10 +41,12 @@
 |
 | Example:
 |
+ * Copies the subjects with USUBJID and TRTDURD only.;
  DATA sl;
    SET adsl;
    KEEP usubjid trtdurd;
  RUN;
+ * Takes the largest end day of the exposure records of each subject.;
  %summarize(
      data  = sl
    , from  = sdtm.ex
@@ -52,6 +54,7 @@
    , stat  = max
    , new   = exlstdy
  )
+ * Takes the mean dose of the exposure records of each subject.;
  %summarize(
      data  = sl
    , from  = sdtm.ex
@@ -77,6 +80,8 @@
 | 27-NOV-2026 Sapling      1.9.1: The example first copies its records into a
 |                          data set of its own, so that it changes no data set of
 |                          setup.sas for a later example. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO summarize(

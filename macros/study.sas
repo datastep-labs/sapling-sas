@@ -45,6 +45,7 @@
 |
 | Example:
 |
+ * Starts the program of the examples: it sets SPL_STUDY, SPL_PROGRAM and SPL_OUT and opens ADAM.;
  %study(
      CDISCPILOT01
    , program = examples
@@ -68,6 +69,8 @@
 |                          number changes.
 | 27-NOV-2026 Sapling      1.9.1: The header names no internal tool. No number
 |                          changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO study(

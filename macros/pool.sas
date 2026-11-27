@@ -40,10 +40,12 @@
 |
 | Example:
 |
+ * Copies the subjects with their site and their planned treatment.;
  DATA sl;
    SET adsl;
    KEEP usubjid siteid trt01p;
  RUN;
+ * Pools each site with fewer than 3 subjects in a group into the site group 900.;
  %pool(
      data   = sl
    , var    = siteid
@@ -72,6 +74,8 @@
 | 27-NOV-2026 Sapling      1.9.1: The example first copies its records into a
 |                          data set of its own, so that it changes no data set of
 |                          setup.sas for a later example. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO pool(

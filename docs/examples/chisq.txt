@@ -1,8 +1,0 @@
-sex_chisq: 1 row
-GROUPS  BLOCK  STAT         VALUE   TEXT
-        Sex    pval  0.2514896384  0.251
-
-nr_test: 2 rows
-PARAMCD  GROUPS   BLOCK  STAT         VALUE   TEXT
-ALT      PARAMCD         pval   0.530391367  0.530
-AST      PARAMCD         pval  0.8843208549  0.884

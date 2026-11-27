@@ -45,8 +45,7 @@
 | family      The pairs of the family in their order, separated   Required
 |             by #: each the group first and then the group it
 |             is compared with, each value in quotes: family =
-|             "High" "Placebo" # "Low" "Placebo". The old form
-|             "A"-"B" is still read.
+|             "High" "Placebo" # "Low" "Placebo"
 | method      The adjustment: bonferroni, holm, hochberg or       Required
 |             hierarchy
 | weights     The weights of a weighted Bonferroni test: one      Optional
@@ -66,6 +65,7 @@
 |
 | Example:
 |
+ * Adjusts the p values of the two comparisons against Placebo by Hochberg: PADJ after PVAL.;
  %adjust(
      data   = sbp_ls
    , by     = trt01p
@@ -97,6 +97,8 @@
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO adjust(

@@ -37,10 +37,12 @@
 |
 | Example:
 |
+ * Copies the subjects with USUBJID and EOSSTT only.;
  DATA sl;
    SET adsl;
    KEEP usubjid eosstt;
  RUN;
+ * Sets COMPLFL to Y for a subject with a disposition record COMPLETED, else to N.;
  %flag_if_any(
      data  = sl
    , from  = sdtm.ds
@@ -64,6 +66,8 @@
 | 27-NOV-2026 Sapling      1.9.1: The example first copies its records into a
 |                          data set of its own, so that it changes no data set of
 |                          setup.sas for a later example. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO flag_if_any(

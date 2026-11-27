@@ -42,6 +42,7 @@
 |
 | Example:
 |
+ * Puts the value and the change of SYSBP and DIABP side by side: one row per subject and visit.;
  %param_wide(
      data   = advs
    , where  = (anl01fl = 'Y')
@@ -68,6 +69,8 @@
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO param_wide(

@@ -49,16 +49,17 @@ listing). The programs of the proof (`proof/*/programs`) are complete examples.
 %INCLUDE "&spl_root./macros/sapling.sas";
 ```
 
-The manual of every macro, with its parameters and examples: [docs/macros.md](docs/macros.md) (the same as data:
-`macros/index.json`). Run the proof on your own SAS 9.4: [proof/run.sas](proof/run.sas).
+How to load the library in your own program: [Use the macros in your own program](https://datastep-labs.github.io/sapling-sas/how-to/own-program/).
+The reference of every macro, with its parameters, examples and their output: [the manual](https://datastep-labs.github.io/sapling-sas/reference/)
+(the same as data: `macros/index.json`). Run the proof on your own SAS 9.4: [proof/run.sas](proof/run.sas).
 
 ## Examples
 
 Every example of the manual runs on the example data in [examples/data](examples/data): data sets of the R packages
 pharmaverseadam and pharmaversesdtm (the subjects of the CDISC pilot study, [examples/data/NOTICE](examples/data/NOTICE)).
 Set `spl_root` in [examples/setup.sas](examples/setup.sas) to the folder of this repository and run it first: it reads
-the transport files and makes the WORK data sets the examples use. Then run any example of
-[docs/macros.md](docs/macros.md), in the order its section "The examples" lists (an example may use the results of the
+the transport files and makes the WORK data sets the examples use. Then run the examples of the reference in the order
+of [Run the examples of the reference](https://datastep-labs.github.io/sapling-sas/how-to/run-the-examples/) (an example may use the results of the
 ones before it). Under each example the manual shows what it gave on SAS 9.4: its result data sets, the listing of a
 table, the figure.
 

@@ -24,7 +24,7 @@ Returns the values of several parameters side by side: one record per group, wit
 :   The input data set, with PARAMCD and the BY variables, such as advs. *(required)*
 
 `where=`
-:   The records to read: a condition in parentheses, such as where = (`anl01fl = 'Y'`). *(optional)*
+:   The records to read: a condition in parentheses, such as `where = (anl01fl = 'Y')`. *(optional)*
 
 `params=`
 :   The parameter codes, separated by blanks (`params = sysbp diabp`). They are compared with PARAMCD in upper case. *(required)*
@@ -53,6 +53,8 @@ The variables of each parameter are named &lt;PARAMCD&gt;_&lt;VAR&gt;, such as S
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+
+Puts the value and the change of SYSBP and DIABP side by side: one row per subject and visit.
 
 ```sas
 %param_wide(
@@ -96,6 +98,8 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 ## See also
 
 ADaM steps: [%merge_subject](merge_subject.md), [%pick](pick.md), [%summarize](summarize.md), [%summarize_groups](summarize_groups.md), [%baseline](baseline.md), [%flag_first](flag_first.md), [%flag_if_any](flag_if_any.md), [%windows](windows.md), [%visits](visits.md), [%locf](locf.md), [%relchange](relchange.md), [%pool](pool.md), [%tte](tte.md).
+
+Guides that use %param_wide: [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

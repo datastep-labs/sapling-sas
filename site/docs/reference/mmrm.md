@@ -37,7 +37,7 @@ Returns the differences of the LS means of pairs of groups at one visit from a r
 :   The input data set: one record per subject and visit. *(required)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`paramcd = 'SYSBP'` AND `anl01fl = 'Y'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (paramcd = 'SYSBP' AND anl01fl = 'Y')`. *(optional)*
 
 `var=`
 :   The response: one numeric variable. *(required)*
@@ -73,7 +73,7 @@ Returns the differences of the LS means of pairs of groups at one visit from a r
 :   The estimation method: reml or ml. *(optional, default `reml`)*
 
 `pairs=`
-:   The pairs of groups to compare. all: each later group against each earlier one, in the order of `order=` (or of the values). Or the pairs separated by #, each the group first and then the group it is compared with, a value with a blank or a hyphen in quotes: `pairs = "Drug"` "Placebo" # "High" "Low". The old form "A"-"B" is still read. *(optional, default `all`)*
+:   The pairs of groups to compare. all: each later group against each earlier one, in the order of `order=` (or of the values). Or the pairs separated by #, each the group first and then the group it is compared with, a value with a blank or a hyphen in quotes: `pairs = "Drug" "Placebo" # "High" "Low"`. *(optional, default `all`)*
 
 `order=`
 :   The order of the groups: one numeric variable with one value per group (`order = trt01pn`). *(optional)*
@@ -109,6 +109,8 @@ Use [%lsmeans](lsmeans.md) for one record per subject, and [%ancova](ancova.md) 
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+
+Fits the MMRM of the change at five visits and compares the groups at Week 24.
 
 ```sas
 %mmrm(
@@ -159,11 +161,13 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Compare groups with a model: [%lsmeans](lsmeans.md), [%logistic](logistic.md), [%risk](risk.md), [%rateratio](rateratio.md).
 
-Named on this page: [%ancova](ancova.md), [%stack](stack.md), [%describe](describe.md).
+Named on this page: [%describe](describe.md), [%ancova](ancova.md).
+
+Guides that use %mmrm: [Make an efficacy table with an ANCOVA](../how-to/efficacy-table.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

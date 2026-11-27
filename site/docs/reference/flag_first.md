@@ -24,7 +24,7 @@ Flags the first or last record of each group, among the records that meet a cond
 :   The data set to change in place, such as advs. *(required)*
 
 `where=`
-:   The records that can be flagged: a condition in parentheses, such as where = (`anl01fl = 'Y'`). When not given, all records can be flagged. *(optional)*
+:   The records that can be flagged: a condition in parentheses, such as `where = (anl01fl = 'Y')`. When not given, all records can be flagged. *(optional)*
 
 `by=`
 :   The groups: variables separated by blanks (`by = usubjid paramcd`). *(required)*
@@ -55,12 +55,16 @@ Use [%pick](pick.md) to copy the value of such a record to a subject. Use [%flag
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
 
+Copies the systolic records.
+
 ```sas
 DATA vs;
   SET advs;
   WHERE paramcd = 'SYSBP';
 RUN;
 ```
+
+Flags in ANL02FL the first record of each subject, parameter and visit by day and time point.
 
 ```sas
 %flag_first(
@@ -99,6 +103,8 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 ## See also
 
 ADaM steps: [%merge_subject](merge_subject.md), [%pick](pick.md), [%summarize](summarize.md), [%summarize_groups](summarize_groups.md), [%baseline](baseline.md), [%flag_if_any](flag_if_any.md), [%windows](windows.md), [%visits](visits.md), [%locf](locf.md), [%relchange](relchange.md), [%param_wide](param_wide.md), [%pool](pool.md), [%tte](tte.md).
+
+Guides that use %flag_first: [Derive analysis visits, the baseline and the change from baseline](../how-to/derive-baseline.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

@@ -73,6 +73,7 @@
 |
 | Example:
 |
+ * Runs columns, ard, layout and print in one call: the same table as the long program.;
  %table(
      data   = t14_2_1
    , n      = adsl
@@ -99,6 +100,8 @@
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO table(

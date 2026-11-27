@@ -78,6 +78,8 @@ Use %table when the defaults of the four steps fit; call [%columns](columns.md),
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `t14_2_1` (made by the [example of %stack](stack.md#examples)).
 
+Runs columns, ard, layout and print in one call: the same table as the long program.
+
 ```sas
 %table(
      data   = t14_2_1
@@ -119,6 +121,8 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 Tables in one call: [%table_summary](table_summary.md), [%table_ae](table_ae.md), [%table_visit](table_visit.md), [%table_shift](table_shift.md), [%table_response](table_response.md), [%table_model](table_model.md), [%table_tte](table_tte.md).
 
 Named on this page: [%columns](columns.md), [%ard](ard.md), [%layout](layout.md), [%print](print.md), [%stack](stack.md).
+
+Guides that use %table: [Make an adverse event table](../how-to/adverse-event-table.md), [Check a table against an independent program](../how-to/check-a-table.md), [Make an efficacy table with an ANCOVA](../how-to/efficacy-table.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 

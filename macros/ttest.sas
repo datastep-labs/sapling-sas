@@ -44,8 +44,7 @@
 |             (else of the values). Or the pairs, separated by
 |             #: in each pair the group first, then the group it
 |             is compared with, each value in quotes (pairs =
-|             "Drug" "Placebo" # "High" "Low"). The form "A"-"B"
-|             of version 1.0 is still read.
+|             "Drug" "Placebo" # "High" "Low")
 | order       The order of the groups: one numeric variable with  Optional
 |             one value per group (order = trt01an)
 | variances   equal (Student's test, the Pooled row of PROC       equal
@@ -74,6 +73,7 @@
 |
 | Example:
 |
+ * Compares each pair of groups with the pooled t test: the difference, its SE, limits and p value.;
  %ttest(
      data  = advs
    , where = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')
@@ -82,6 +82,7 @@
    , order = trt01pn
    , out   = sbp_t
  )
+ * Uses the Welch test of unequal variances on two pairs: the SE, limits and p value change.;
  %ttest(
      data      = advs
    , where     = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')
@@ -121,6 +122,8 @@
 |                          number changes.
 | 27-NOV-2026 Sapling      1.9.1: an example with pairs= and variances=unequal.
 |                          No number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO ttest(

@@ -45,6 +45,7 @@
 |
 | Example:
 |
+ * Writes every number of the table and each column N to one CSV file: the full value and the text.;
  %ard(data=t14_2_1, columns=t14_2_1_cols, file=t14_2_1)
 |
 |-------------------------------------------------------------------------------
@@ -67,6 +68,8 @@
 | 27-NOV-2026 Sapling      1.9.1: The text says what the numbers file holds
 |                          (BEST32.). The header names no internal tool. No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO ard(

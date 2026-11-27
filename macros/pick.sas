@@ -56,10 +56,12 @@
 |
 | Example:
 |
+ * Copies the subjects with USUBJID and TRTSDT only.;
  DATA sl;
    SET adsl;
    KEEP usubjid trtsdt;
  RUN;
+ * Takes the date of the first exposure record of each subject, as a text of 10.;
  %pick(
      data   = sl
    , from   = sdtm.ex
@@ -69,6 +71,7 @@
    , length = $10
    , new    = exfstdtc
  )
+ * Takes the dose of the last exposure record of each subject.;
  %pick(
      data  = sl
    , from  = sdtm.ex
@@ -103,6 +106,8 @@
 |                          unique=yes names the parameters of the macro (unique=,
 |                          order=, which=); the text of unique=. No number
 |                          changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO pick(

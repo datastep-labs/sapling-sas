@@ -27,7 +27,7 @@ Returns the p-value of the log-rank test that compares the time to an event betw
 :   The input data set: one record per subject, with USUBJID, the time and the censoring variable. *(required)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`paramcd = 'TTDE'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (paramcd = 'TTDE')`. *(optional)*
 
 `var=`
 :   The time: one numeric variable, such as aval. *(required)*
@@ -66,6 +66,8 @@ Use [%km](km.md) for the medians of the groups, and [%cox](cox.md) for a hazard 
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#examples)).
 
+Tests the curves of the groups with the log rank test, stratified by sex: one p value.
+
 ```sas
 %logrank(
      data   = adttde
@@ -94,11 +96,11 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Time to an event: [%km](km.md), [%cox](cox.md).
 
-Named on this page: [%stack](stack.md).
+Guides that use %logrank: [Make a Kaplan-Meier figure with the number at risk](../how-to/kaplan-meier-figure.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

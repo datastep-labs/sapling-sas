@@ -5,7 +5,8 @@ characteristic. You get an RTF file, a text listing and a numbers file.
 
 ## Before you start
 
-- Submit `examples/setup.sas`, or start your own program with `%study`.
+- Submit `examples/setup.sas`, or start your own program as [Use the macros in your own program](own-program.md)
+  shows.
 - Make a data set of your population, one row per subject. The guide uses `adsl`, the safety population of the
   example data.
 - Decide which test each characteristic gets. The guide uses the analysis of variance for age, the chi-square test

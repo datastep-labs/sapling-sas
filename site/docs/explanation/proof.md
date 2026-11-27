@@ -38,7 +38,9 @@ that loses a row makes the proof fail.
 | pharmaverse examples | 1,965 | 1,953 | 12 | 0 |
 
 Every number, with the place in the reference it was read from and its verdict, is in the `results` folder of each
-suite of the repository.
+suite of the repository. The results page of each suite lists its outputs and their counts:
+[R Submission Pilot 1](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/RESULTS.md) and
+[pharmaverse examples](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pharmaverse/RESULTS.md).
 
 ## What the proof does not show
 

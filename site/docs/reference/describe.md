@@ -28,7 +28,7 @@ Returns the descriptive statistics of a numeric variable in each group: n, mean,
 :   The input data set. *(required)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`anl01fl = 'Y'`). When not given, all records are used. *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (anl01fl = 'Y')`. When not given, all records are used. *(optional)*
 
 `var=`
 :   The variable to describe: one numeric variable. *(required)*
@@ -46,7 +46,7 @@ Returns the descriptive statistics of a numeric variable in each group: n, mean,
 :   The definition of the quantiles: a number from 1 to 5, as QNTLDEF= of PROC MEANS (5 is the default of SAS). *(optional, default `5`)*
 
 `stats=`
-:   The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, mean, sd, median, min, max, q1, q3 and se. A name without a pattern takes its default pattern: XX for n, events, min and max; XX.X for mean, median, q1, q3, lsmean, diff, estimate, lcl and ucl; (XX.X%) for pct; X.XXX for pval; XX.XX for the others. *(optional, default `n="XX" mean="XX.X" sd="XX.XX" median="XX.X" min="XX" max="XX"`)*
+:   The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, mean, sd, median, min, max, q1, q3 and se. A name without a pattern takes its default pattern: XX for n, min and max; XX.X for mean, median, q1 and q3; XX.XX for sd and se. *(optional, default `n="XX" mean="XX.X" sd="XX.XX" median="XX.X" min="XX" max="XX"`)*
 
 `label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
@@ -69,6 +69,8 @@ Use [%freq](freq.md) for the subjects of each category of a variable. Only the v
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+
+Summarizes age in each group and in the Total: n, mean, SD, median, minimum and maximum.
 
 ```sas
 %describe(
@@ -101,6 +103,8 @@ Xanomeline High Dose  TRT01A  Age (years)  mean    73.777777778  73.8
 Xanomeline High Dose  TRT01A  Age (years)  sd      7.9438562002  7.94
 ```
 
+Uses three BY variables: one row per group, parameter, visit and statistic, with PARAM kept.
+
 ```sas
 %describe(
      data  = advs
@@ -131,6 +135,8 @@ Placebo  DIABP    Week 16           Diastolic Blood Pressure (mmHg)       16  TR
 Placebo  DIABP    Week 16           Diastolic Blood Pressure (mmHg)       16  TRT01A PARAMCD AVISIT         mean    74.253731343   74.3
 Placebo  DIABP    Week 16           Diastolic Blood Pressure (mmHg)       16  TRT01A PARAMCD AVISIT         sd      10.359219702  10.36
 ```
+
+Adds the SE, Q1 and Q3 and calls the Total All subjects: the rows keep the order of stats=.
 
 ```sas
 %describe(
@@ -165,6 +171,39 @@ Placebo       TRT01A  Weight at baseline (kg)  median         60.56   60.6
 Placebo       TRT01A  Weight at baseline (kg)  q1             53.52   53.5
 ```
 
+Adds sex as a second BY variable: the rows of each group and sex, for a page per sex.
+
+```sas
+%describe(
+     data  = adsl
+   , var   = age
+   , by    = trt01a sex
+   , total = yes
+   , label = "Age (years)"
+   , out   = age_sex
+ )
+```
+
+```text
+age_sex: the first 15 of 48 rows
+TRT01A   SEX  GROUPS      BLOCK        STAT           VALUE  TEXT
+Placebo  F    TRT01A SEX  Age (years)  n                 53    53
+Placebo  F    TRT01A SEX  Age (years)  mean    76.358490566  76.4
+Placebo  F    TRT01A SEX  Age (years)  sd      8.7334334151  8.73
+Placebo  F    TRT01A SEX  Age (years)  median            78  78.0
+Placebo  F    TRT01A SEX  Age (years)  min               59    59
+Placebo  F    TRT01A SEX  Age (years)  max               89    89
+Placebo  M    TRT01A SEX  Age (years)  n                 33    33
+Placebo  M    TRT01A SEX  Age (years)  mean    73.363636364  73.4
+Placebo  M    TRT01A SEX  Age (years)  sd      8.1463879335  8.15
+Placebo  M    TRT01A SEX  Age (years)  median            74  74.0
+Placebo  M    TRT01A SEX  Age (years)  min               52    52
+Placebo  M    TRT01A SEX  Age (years)  max               85    85
+Total    F    TRT01A SEX  Age (years)  n                143   143
+Total    F    TRT01A SEX  Age (years)  mean     75.65034965  75.7
+Total    F    TRT01A SEX  Age (years)  sd       8.193314641  8.19
+```
+
 ## Messages
 
 A wrong call writes the message and its fix to the log and stops. The macro also gives the [messages every macro shares](index.md#messages-every-macro-shares).
@@ -178,11 +217,11 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Describe the data: [%freq](freq.md), [%proportion](proportion.md), [%rate](rate.md), [%worst](worst.md), [%termflags](termflags.md).
 
-Named on this page: [%stack](stack.md).
+Guides that use %describe: [Make a demographic table with tests](../how-to/demographic-table.md), [Make an efficacy table with an ANCOVA](../how-to/efficacy-table.md), [Make one page per subgroup](../how-to/page-per-subgroup.md), [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 

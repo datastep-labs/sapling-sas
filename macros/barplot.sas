@@ -91,6 +91,7 @@
 |
 | Example:
 |
+ * Draws the percent of the subjects with each severity in each group, of the N of denom=.;
  %barplot(
      data    = adae
    , columns = t14_2_1_cols
@@ -117,6 +118,8 @@
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO barplot(

@@ -88,6 +88,7 @@
 |
 | Example:
 |
+ * Draws the ALT of each subject over the study days: one line per subject, no mean.;
  %profileplot(
      data    = adlb
    , columns = t14_2_1_cols
@@ -120,6 +121,8 @@
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+|                          comment line before it). No number changes.
 |
 *******************************************************************************/
 %MACRO profileplot(

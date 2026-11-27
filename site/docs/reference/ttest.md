@@ -29,7 +29,7 @@ Returns the difference of the means of each pair of groups, with its confidence 
 :   The input data set: one record per subject, with USUBJID. *(required)*
 
 `where=`
-:   The records to use: a condition in parentheses, such as where = (`avisit = 'Week 24'`). *(optional)*
+:   The records to use: a condition in parentheses, such as `where = (avisit = 'Week 24')`. *(optional)*
 
 `var=`
 :   The variable to compare: one numeric variable. *(required)*
@@ -38,7 +38,7 @@ Returns the difference of the means of each pair of groups, with its confidence 
 :   The groups: one character variable (trt01a, not trt01an). *(required)*
 
 `pairs=`
-:   Which groups to compare. all: each later group against each earlier one, in the order of `order=` (else of the values). Or the pairs, separated by #: in each pair the group first, then the group it is compared with, each value in quotes (`pairs = "Drug"` "Placebo" # "High" "Low"). The form "A"-"B" of version 1.0 is still read. *(optional, default `all`)*
+:   Which groups to compare. all: each later group against each earlier one, in the order of `order=` (else of the values). Or the pairs, separated by #: in each pair the group first, then the group it is compared with, each value in quotes (`pairs = "Drug" "Placebo" # "High" "Low"`). *(optional, default `all`)*
 
 `order=`
 :   The order of the groups: one numeric variable with one value per group (`order = trt01an`). *(optional)*
@@ -82,6 +82,8 @@ The macro uses one record per subject: when a subject has several records, the f
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
 
+Compares each pair of groups with the pooled t test: the difference, its SE, limits and p value.
+
 ```sas
 %ttest(
      data  = advs
@@ -112,6 +114,8 @@ Xanomeline High Dose  Xanomeline Low Dose  TRT01P VERSUS         lcl      -14.16
 Xanomeline High Dose  Xanomeline Low Dose  TRT01P VERSUS         ucl      0.2121895088    0.2
 Xanomeline High Dose  Xanomeline Low Dose  TRT01P VERSUS         pval     0.0569857411  0.057
 ```
+
+Uses the Welch test of unequal variances on two pairs: the SE, limits and p value change.
 
 ```sas
 %ttest(
@@ -153,11 +157,13 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Test the groups: [%anova](anova.md), [%wilcoxon](wilcoxon.md), [%chisq](chisq.md), [%fisher](fisher.md), [%cmh](cmh.md), [%ancova](ancova.md), [%adjust](adjust.md).
 
-Named on this page: [%lsmeans](lsmeans.md), [%stack](stack.md), [%describe](describe.md).
+Named on this page: [%describe](describe.md), [%lsmeans](lsmeans.md).
+
+Guides that use %ttest: [Run the examples of the reference](../how-to/run-the-examples.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R, compared on SAS by the tests of the library.
+Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
 
 The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
