@@ -1,0 +1,464 @@
+{
+ "schema": "sapling.sas-examples/1",
+ "sas": "9.04.01M9P060525",
+ "ran": "2026-11-27",
+ "order": [
+  "import_xpt",
+  "study",
+  "tte",
+  "describe",
+  "anova",
+  "freq",
+  "chisq",
+  "worst",
+  "termflags",
+  "fisher",
+  "cmh",
+  "proportion",
+  "risk",
+  "logistic",
+  "rate",
+  "rateratio",
+  "ancova",
+  "lsmeans",
+  "adjust",
+  "mmrm",
+  "ttest",
+  "wilcoxon",
+  "interaction_glm",
+  "interaction_logistic",
+  "interaction_genmod",
+  "km",
+  "logrank",
+  "cox",
+  "interaction_phreg",
+  "stack",
+  "columns",
+  "ard",
+  "layout",
+  "print",
+  "table",
+  "csv",
+  "kmplot",
+  "forestplot",
+  "meanplot",
+  "lineplot",
+  "boxplot",
+  "barplot",
+  "aeplot",
+  "profileplot",
+  "scatterplot",
+  "table_summary",
+  "table_ae",
+  "table_visit",
+  "table_model",
+  "table_response",
+  "table_tte",
+  "table_shift",
+  "merge_subject",
+  "pick",
+  "summarize",
+  "flag_if_any",
+  "pool",
+  "param_wide",
+  "summarize_groups",
+  "visits",
+  "windows",
+  "locf",
+  "baseline",
+  "flag_first",
+  "relchange"
+ ],
+ "macros": {
+  "import_xpt": {
+   "example": "940e0787187d2658",
+   "files": [
+    "examples/import_xpt.txt"
+   ]
+  },
+  "study": {
+   "example": "3ba8c5a277ab079d",
+   "files": [
+    "examples/study.txt"
+   ]
+  },
+  "tte": {
+   "example": "a7f699a07dbacce9",
+   "files": [
+    "examples/tte.txt"
+   ]
+  },
+  "describe": {
+   "example": "3bdfa357bb973143",
+   "files": [
+    "examples/describe.txt"
+   ]
+  },
+  "anova": {
+   "example": "53e38061c1ad1579",
+   "files": [
+    "examples/anova.txt"
+   ]
+  },
+  "freq": {
+   "example": "352fabd93af05e46",
+   "files": [
+    "examples/freq.txt"
+   ]
+  },
+  "chisq": {
+   "example": "3f483aee4eb4690b",
+   "files": [
+    "examples/chisq.txt"
+   ]
+  },
+  "worst": {
+   "example": "7b2eba71bcf13036",
+   "files": [
+    "examples/worst.txt"
+   ]
+  },
+  "termflags": {
+   "example": "0d77fc75b331c817",
+   "files": [
+    "examples/termflags.txt"
+   ]
+  },
+  "fisher": {
+   "example": "51092d561362265a",
+   "files": [
+    "examples/fisher.txt"
+   ]
+  },
+  "cmh": {
+   "example": "dc2a392e5b3f535c",
+   "files": [
+    "examples/cmh.txt"
+   ]
+  },
+  "proportion": {
+   "example": "5b816c163c1fddac",
+   "files": [
+    "examples/proportion.txt"
+   ]
+  },
+  "risk": {
+   "example": "0937f4e5f858cfcf",
+   "files": [
+    "examples/risk.txt"
+   ]
+  },
+  "logistic": {
+   "example": "c85ebc3149276525",
+   "files": [
+    "examples/logistic.txt"
+   ]
+  },
+  "rate": {
+   "example": "f81ea518a3c2bfda",
+   "files": [
+    "examples/rate.txt"
+   ]
+  },
+  "rateratio": {
+   "example": "e2fce803e86a835f",
+   "files": [
+    "examples/rateratio.txt"
+   ]
+  },
+  "ancova": {
+   "example": "b02ca790933d2a73",
+   "files": [
+    "examples/ancova.txt"
+   ]
+  },
+  "lsmeans": {
+   "example": "a2c67c6e60f76cc1",
+   "files": [
+    "examples/lsmeans.txt"
+   ]
+  },
+  "adjust": {
+   "example": "829c805f76002f7f",
+   "files": [
+    "examples/adjust.txt"
+   ]
+  },
+  "mmrm": {
+   "example": "1b644faf75fa0590",
+   "files": [
+    "examples/mmrm.txt"
+   ]
+  },
+  "ttest": {
+   "example": "bd743ebe8b580e93",
+   "files": [
+    "examples/ttest.txt"
+   ]
+  },
+  "wilcoxon": {
+   "example": "73f8e1cba782ef01",
+   "files": [
+    "examples/wilcoxon.txt"
+   ]
+  },
+  "interaction_glm": {
+   "example": "9d84ca399bc5599e",
+   "files": [
+    "examples/interaction_glm.txt"
+   ]
+  },
+  "interaction_logistic": {
+   "example": "ccbb7ad059dd71e8",
+   "files": [
+    "examples/interaction_logistic.txt"
+   ]
+  },
+  "interaction_genmod": {
+   "example": "7d3947e56b23b6ea",
+   "files": [
+    "examples/interaction_genmod.txt"
+   ]
+  },
+  "km": {
+   "example": "a977378986d64c03",
+   "files": [
+    "examples/km.txt"
+   ]
+  },
+  "logrank": {
+   "example": "0c00d2377957d061",
+   "files": [
+    "examples/logrank.txt"
+   ]
+  },
+  "cox": {
+   "example": "697e500097bf53a8",
+   "files": [
+    "examples/cox.txt"
+   ]
+  },
+  "interaction_phreg": {
+   "example": "b2f7c8dbe32cf414",
+   "files": [
+    "examples/interaction_phreg.txt"
+   ]
+  },
+  "stack": {
+   "example": "fceb960390269d2c",
+   "files": [
+    "examples/stack.txt"
+   ]
+  },
+  "columns": {
+   "example": "45963b359380d084",
+   "files": [
+    "examples/columns.txt"
+   ]
+  },
+  "ard": {
+   "example": "58a97288f8bfac40",
+   "files": [
+    "examples/ard.txt"
+   ]
+  },
+  "layout": {
+   "example": "67a5a0f27ed4e543",
+   "files": [
+    "examples/layout.txt"
+   ]
+  },
+  "print": {
+   "example": "f8cd1aeb2d5a1aaf",
+   "files": [
+    "examples/print.txt"
+   ]
+  },
+  "table": {
+   "example": "7fe9da13a849ba2b",
+   "files": [
+    "examples/table.txt"
+   ]
+  },
+  "csv": {
+   "example": "731e9f8343507105",
+   "files": [
+    "examples/csv.txt"
+   ]
+  },
+  "kmplot": {
+   "example": "dffdbd7920e304b5",
+   "files": [
+    "examples/kmplot.png"
+   ]
+  },
+  "forestplot": {
+   "example": "184c5d296cb9c458",
+   "files": [
+    "examples/forestplot.png"
+   ]
+  },
+  "meanplot": {
+   "example": "9beca8ce856a9a61",
+   "files": [
+    "examples/meanplot.png"
+   ]
+  },
+  "lineplot": {
+   "example": "27babdd44f2c3c9d",
+   "files": [
+    "examples/lineplot.png"
+   ]
+  },
+  "boxplot": {
+   "example": "969bd744545b8a74",
+   "files": [
+    "examples/boxplot.png"
+   ]
+  },
+  "barplot": {
+   "example": "71376a26c7f0f84f",
+   "files": [
+    "examples/barplot.png"
+   ]
+  },
+  "aeplot": {
+   "example": "0b6626daa0d7bedc",
+   "files": [
+    "examples/aeplot.png"
+   ]
+  },
+  "profileplot": {
+   "example": "4a4d72b9e18852c5",
+   "files": [
+    "examples/profileplot.png"
+   ]
+  },
+  "scatterplot": {
+   "example": "16c794b640f23d15",
+   "files": [
+    "examples/scatterplot.png"
+   ]
+  },
+  "table_summary": {
+   "example": "6c07caa98431f25a",
+   "files": [
+    "examples/table_summary.txt"
+   ]
+  },
+  "table_ae": {
+   "example": "43d9738bab2c0dd6",
+   "files": [
+    "examples/table_ae.txt"
+   ]
+  },
+  "table_visit": {
+   "example": "9b8b4ca077b71ce4",
+   "files": [
+    "examples/table_visit.txt"
+   ]
+  },
+  "table_model": {
+   "example": "778caf734fb5aa72",
+   "files": [
+    "examples/table_model.txt"
+   ]
+  },
+  "table_response": {
+   "example": "cecbe0436bb0dcc7",
+   "files": [
+    "examples/table_response.txt"
+   ]
+  },
+  "table_tte": {
+   "example": "1118cc37a42c7f69",
+   "files": [
+    "examples/table_tte.txt"
+   ]
+  },
+  "table_shift": {
+   "example": "54fba2380213c184",
+   "files": [
+    "examples/table_shift.txt"
+   ]
+  },
+  "merge_subject": {
+   "example": "1b6ca66e16f1bb5a",
+   "files": [
+    "examples/merge_subject.txt"
+   ]
+  },
+  "pick": {
+   "example": "06a00e74bae3aa6c",
+   "files": [
+    "examples/pick.txt"
+   ]
+  },
+  "summarize": {
+   "example": "cb09bc0b5631ae9c",
+   "files": [
+    "examples/summarize.txt"
+   ]
+  },
+  "flag_if_any": {
+   "example": "541b4f8f2f1278a8",
+   "files": [
+    "examples/flag_if_any.txt"
+   ]
+  },
+  "pool": {
+   "example": "2f90cc4c5c2d1a57",
+   "files": [
+    "examples/pool.txt"
+   ]
+  },
+  "param_wide": {
+   "example": "477e53e3fc50f577",
+   "files": [
+    "examples/param_wide.txt"
+   ]
+  },
+  "summarize_groups": {
+   "example": "9c9306b5243902e7",
+   "files": [
+    "examples/summarize_groups.txt"
+   ]
+  },
+  "visits": {
+   "example": "369030aef5ede585",
+   "files": [
+    "examples/visits.txt"
+   ]
+  },
+  "windows": {
+   "example": "292cd952258751fd",
+   "files": [
+    "examples/windows.txt"
+   ]
+  },
+  "locf": {
+   "example": "bd893c3e494c3ee2",
+   "files": [
+    "examples/locf.txt"
+   ]
+  },
+  "baseline": {
+   "example": "52d3049e6515decb",
+   "files": [
+    "examples/baseline.txt"
+   ]
+  },
+  "flag_first": {
+   "example": "8bc176cb35e04e9d",
+   "files": [
+    "examples/flag_first.txt"
+   ]
+  },
+  "relchange": {
+   "example": "65650a211283b1c2",
+   "files": [
+    "examples/relchange.txt"
+   ]
+  }
+ }
+}

@@ -3,17 +3,39 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : A time-to-event table in one call: the Kaplan-Meier summary of
-|                 each group (%km), the log-rank test (%logrank) and the hazard
-|                 ratio of pairs of groups from a Cox model (%cox). The macro
-|                 writes the long program of the table and runs it; it computes
-|                 nothing itself. The results <name>_km (<name>_surv with
-|                 time=), <name>_lr and <name>_cox, the table <name>,
-|                 <name>_cols and <name>_display stay, and the setup
-|                 <name>_print. show= gives the long program.
+| Macro Purpose : Makes a time-to-event table in one call: the Kaplan-Meier
+|                 summary, the log-rank test and the hazard ratios. Use %kmplot
+|                 for the Kaplan-Meier curves; to add or change a block, start
+|                 from its long program (show=). A block is the rows of one call
+|                 in the table. The table has these blocks:
+|                 - the subjects, the events, and the median time with its 95%
+|                   interval in each group (%km)
+|                 - with time=: the percent without an event at that time and
+|                   its limits (%km)
+|                 - the log-rank test of the groups (%logrank)
+|                 - the hazard ratio of each pair of groups from a Cox model,
+|                   with its interval and p-value (%cox)
+|                 The table has no Total column. The long program is the program
+|                 the macro writes and runs: the population, the records, one
+|                 call per block, %stack and %table, the calls a person would
+|                 write by hand. The macro computes nothing itself. These data
+|                 sets stay in WORK, for a change and a second print:
+|                 - <name>_km, <name>_surv, <name>_lr and <name>_cox: the
+|                   results, one row per number (the result shape, see %stack)
+|                 - <name>: the stacked results
+|                 - <name>_cols: the columns (%columns)
+|                 - <name>_display: the display data set, one row per printed
+|                   line (%layout)
+|                 The global macro variable <name>_print keeps the call of
+|                 %print: change <name>_display, then print again with
+|                 %print(&<name>_print.). CNSR 0 is an event and any positive
+|                 value is a censoring, as in ADaM, where the value names the
+|                 reason of the censoring: a CNSR of 2 is censored as 1 is. A
+|                 record used with a missing or negative CNSR stops the macro
+|                 with an ERROR.
 | Procedure     : none of its own (those of %km, %logrank, %cox, %table)
 | Proven        : node tools/tables_sas.ts (the same display data set as the
 |                 long program, on the made-up study SYNHTN01); ran on SAS
@@ -23,55 +45,80 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records (a data set with USUBJID)               Required
-| adsl        The subjects, one row per subject: the population   Optional
-|             and the N of the columns; its variables go to the
-|             records (blank: the records have all they need)
-| pop         The population: a condition on adsl= in parentheses Optional
-| where       The records to use: a condition in parentheses      Optional
-| var         The time                                            AVAL
-| cnsr        The censoring variable: 1 is censored               CNSR
-| by          The groups: a character variable, the columns       Required
-| time        A time: also the percent without an event at it and Optional
-|             its limits, a block of its own (<name>_surv, time=
-|             of %km); the median keeps its own limits
-| strata      The strata of the log-rank test and the Cox model   Optional
-| order       Its numeric twin (TRT01AN): the order of columns    Optional
-| pairs       The pairs of the hazard ratio: each group, then its Optional
-|             comparator, in quotes (blank: all pairs)
-| format      The labels of categories: variable and format, as   Optional
-|             in a FORMAT statement (format= of %layout)
+| data        The input data set: the records, with USUBJID       Required
+| adsl        The subjects: a data set with one row per subject.  Optional
+|             It gives the population and the N of each column,
+|             and its variables are merged onto the records by
+|             USUBJID. When not given, the N of a column is the
+|             subjects of its records.
+| pop         The population: a condition on adsl= in             Optional
+|             parentheses, such as pop = (saffl = 'Y'). It is
+|             used only with adsl=.
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (trtemfl = 'Y')
+| var         The time: one numeric variable                      AVAL
+| cnsr        The censoring variable: one numeric variable, 0     CNSR
+|             for an event and a positive value for a censoring
+|             (the ADaM CNSR: 1, 2 ... name the reason). A
+|             missing or negative value on a record used stops
+|             the macro with an ERROR.
+| by          The groups of the columns: one character variable,  Required
+|             such as by = trt01a
+| time        A time: adds a block with the percent without an    Optional
+|             event at that time and its limits (time= of %km),
+|             such as time = 182
+| strata      The strata of the log-rank test and of the Cox      Optional
+|             model: variables separated by blanks, such as
+|             strata = sitegr1
+| order       The numeric twin of by=, such as order = trt01an:   Optional
+|             it gives the order of the columns and of the
+|             groups in the comparisons
+| pairs       The pairs of groups to compare, separated by #:     Optional
+|             each group in quotes, then the group it is
+|             compared with ("Xanomeline High Dose" "Placebo").
+|             When not given, each later group is compared with
+|             each earlier one.
+| format      The labels of the categories: pairs of a variable   Optional
+|             and a format, as in a FORMAT statement (format =
+|             sex $sexf. race $racef.), as format= of %layout
 | name        The name of the table: the first part of the names  Optional
-|             of its data sets (default: the last part of file=)
-| show        yes: the long program in the log; a file: the long  no
-|             program is written there (and run)
-| title       The titles of the table: a text in quotes for each   Optional
-|             line (TITLE1, TITLE2 ...); blank: the TITLE
-|             statements of the program
-| footnote    The footnotes: a text in quotes for each line        Optional
-|             (FOOTNOTE1 ...); blank: those of the program
-| file        The output without its extension: <file>.rtf,       Optional
-|             <file>.lst and the numbers file (blank: no print)
-| debug       yes: keep the work data sets of the macros called   no
+|             of its data sets, such as name = t14_3_01. When
+|             not given, the last part of file= is used; without
+|             file=, name= is required.
+| show        yes: write the long program to the log. A file      no
+|             path, without quotes: write the long program to
+|             that file. In both cases the macro runs it.
+| title       The titles of the table: one text in quotes per     Optional
+|             line (TITLE1, TITLE2 ...). They hold for this
+|             table only. When not given, the TITLE statements
+|             in force in the program are used.
+| footnote    The footnotes of the table: one text in quotes per  Optional
+|             line (FOOTNOTE1, FOOTNOTE2 ...). They hold for
+|             this table only. When not given, the FOOTNOTE
+|             statements in force in the program are used.
+| file        The output file without its extension: the macro    Optional
+|             writes <file>.rtf, <file>.lst and the numbers
+|             file. When not given, nothing is printed.
+| debug       yes: keep the work data sets of the macros that     no
+|             the long program calls
 |-------------------------------------------------------------------------------
 |
 | Output        : DATA: <name>_km, <name>_surv (with time=), <name>_lr and
-|                 <name>_cox (the results), <name> (the table), <name>_cols,
-|                 <name>_display, <name>_pop and <name>_rec; FILE:
-|                 <file>.rtf, <file>.lst and the numbers
-|                 file (with file=); SETUP: the global macro variable
-|                 <name>_print; SHOW: the long program.
+|                 <name>_cox (the results), <name> (the stacked results),
+|                 <name>_cols, <name>_display, <name>_pop (with adsl=) and
+|                 <name>_rec (with adsl= or where=). FILE: <file>.rtf,
+|                 <file>.lst and the numbers file (only with file=). SETUP: the
+|                 global macro variable <name>_print. SHOW: the long program, in
+|                 the log or in a file.
 |
 | Example:
 |
  %table_tte(
-     data  = adam.adtte
-   , adsl  = adam.adsl
-   , pop   = (saffl = 'Y')
-   , where = (paramcd = 'TTAE')
+     data  = adttde
    , by    = trt01a
    , order = trt01an
-   , pairs = "Drug X 10 mg" "Placebo"
+   , pairs = "Xanomeline High Dose" "Placebo"
+   , title = "Table 14.6.1 Time to the first skin event"
    , file  = &spl_out./tlf/t14_6_1
  )
 |
@@ -90,6 +137,14 @@
 |                          (DEV-030: before, the limits of the survival were
 |                          printed beside the median); var=, cnsr=, by=, strata=
 |                          and order= are checked (DEV-031).
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: the text of cnsr=: 0 is an event and any
+|                          positive value a censoring, as %km, %logrank and %cox
+|                          now read it. No number changes on data with CNSR 0 and
+|                          1.
 |
 *******************************************************************************/
 %MACRO table_tte(
@@ -98,7 +153,7 @@
    , pop      =       /* The population: a condition on adsl= */
    , where    =       /* The records to use: a condition */
    , var      = AVAL  /* The time */
-   , cnsr     = CNSR  /* The censoring variable: 1 is censored */
+   , cnsr     = CNSR  /* The censoring variable: 0 = event, > 0 censored */
    , by       =       /* The groups: the columns */
    , time     =       /* Times: also the percent without event there */
    , strata   =       /* The strata of the test and the model */

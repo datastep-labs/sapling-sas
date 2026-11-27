@@ -3,18 +3,20 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : The flag of each row of occurrence data for every subject: one
-|                 record per subject of DENOM (with its group BY) and per term
-|                 (each combination of TERMS in the records), FLAG "Y" when the
-|                 subject has a record of the term and "N" when not. With
-|                 threshold= only the terms whose percent of the subjects of a
-|                 group reaches it in at least one group. It computes no
-|                 statistic: %risk then compares the groups on FLAG within each
-|                 term (within=TERMS), one record per subject, the subjects of
-|                 the group the denominator.
+| Macro Purpose : Returns one record per subject and term, with a flag that says
+|                 whether the subject has the term. Use it before %risk to
+|                 compare the groups on the subjects with a term; %freq counts
+|                 the subjects but gives no flag per subject. The macro computes
+|                 no statistic. A term is each combination of the values of
+|                 terms= in the records. FLAG is "Y" when the subject has a
+|                 record of the term and "N" when not. The subjects are those of
+|                 denom=: a subject with a record who is not in denom= is left
+|                 out. Then %risk compares the groups on FLAG within each term
+|                 (within= the variables of terms=), with the subjects of each
+|                 group as the denominator.
 | Procedure     : PROC SORT, MERGE, PROC SUMMARY
 | Proven        : the known answer of the method perterm (src/methods.ts, worked
 |                 out by tools/method_answers.R; node tools/methods_sas.ts); ran
@@ -24,24 +26,30 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records (the events)                            Required
-| denom       The subjects of the groups: one row per subject     Required
-|             (the population)
-| where       The records to use, a condition in parentheses      Optional
-| terms       The variables of a row (a term within its class);   Optional
-|             none: one row of all the records (a row of an
-|             overview: any event, a serious event)
-| by          The groups: a variable of DENOM                     Required
-| threshold   A percent: only the terms with this percent of the  Optional
-|             subjects of a group or more, in at least one group
-|             (the percent itself, not its rounded text)
-| out         The result: USUBJID, BY, TERMS and FLAG, sorted by  Required
-|             TERMS and USUBJID
-| debug       yes: keep the work data sets of the macro           no
-|             (_termflags_*)
+| data        The input data set: the records of the events,      Required
+|             with USUBJID
+| denom       The subjects of the groups: a data set with one     Required
+|             row per subject (the population), with USUBJID and
+|             the variable of by=
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (trtemfl = 'Y')
+| terms       The variables of a row: one or several, separated   Optional
+|             by blanks, nested in their order (terms = aebodsys
+|             aedecod: a term within its class). When not given,
+|             one row of all the records, such as "any event" of
+|             an overview table.
+| by          The groups: one variable of denom=                  Required
+| threshold   A percent (threshold = 5): keep only the terms      Optional
+|             with this percent of the subjects or more in at
+|             least one group. The macro compares the percent
+|             itself, not its rounded text. It needs terms=.
+| out         The name of the result data set                     Required
+| debug       yes: keep the work data sets _termflags_*           no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: one record per subject and term.
+| Output        : OUT: one record per subject of denom= and term: USUBJID, the
+|                 variable of by=, the variables of terms= and FLAG ("Y" or
+|                 "N"), sorted by the variables of terms= and USUBJID.
 |
 | Example:
 |
@@ -70,6 +78,9 @@
 |                          (the owner's rule 7). No number changes.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the text of the header for the manual: the
+|                          summary, the form of each parameter. No number
+|                          changes.
 |
 *******************************************************************************/
 %MACRO termflags(

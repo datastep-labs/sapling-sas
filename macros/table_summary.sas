@@ -3,19 +3,37 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : A summary table (demographics, baseline) in one call: you
-|                 name the variables, with # after a categorical one. The
-|                 macro writes the long program of the table (the population,
-|                 one %describe per continuous variable, one %freq per
-|                 categorical variable, %stack, %table) and runs it; it
-|                 computes nothing itself. The results <name>_<variable>_summ,
-|                 the table <name>, the columns <name>_cols and the display
-|                 data set <name>_display stay, and the setup <name>_print,
-|                 for a change and a second %print. show= gives the long
-|                 program, to read it or to go on from it by hand.
+| Macro Purpose : Makes a summary table of the subjects in one call, such as
+|                 demographics: one block per variable. Use %table_visit for the
+|                 values of records at each visit; to add a block that it does
+|                 not make, start from its long program (show=). A block is the
+|                 rows of one variable in the table. Name the variables in
+|                 vars=, in the order of the table:
+|                 - a name alone (age): a numeric variable, described by
+|                   %describe
+|                 - a name and # (sex#): a categorical variable, counted by
+|                   %freq
+|                 - a name, # and a numeric variable (agegr1#agegr1n): a
+|                   categorical variable whose categories are in the order of
+|                   that variable
+|                 A character variable without # stops the macro with an ERROR.
+|                 The long program is the program the macro writes and runs: the
+|                 population, one %describe or %freq per variable, %stack and
+|                 %table, the calls a person would write by hand. The macro
+|                 computes nothing itself. These data sets stay in WORK, for a
+|                 change and a second print:
+|                 - <name>_<variable>_summ: the result of each variable, one row
+|                   per number (the result shape, see %stack)
+|                 - <name>: the stacked results
+|                 - <name>_cols: the columns (%columns)
+|                 - <name>_display: the display data set, one row per printed
+|                   line (%layout)
+|                 The global macro variable <name>_print keeps the call of
+|                 %print: change <name>_display, then print again with
+|                 %print(&<name>_print.).
 | Procedure     : none of its own (those of %describe, %freq, %table)
 | Proven        : its cases of node tools/print_sas.ts (the same .lst and the
 |                 same numbers file as the long program); ran on SAS 9.4 M9,
@@ -25,58 +43,76 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The subjects, one row per subject (ADSL)            Required
-| where       The population: a condition in parentheses          Optional
-| vars        The variables in the order of the table. A name:    Required
-|             continuous (%describe). A name and #: categorical
-|             (%freq), sex#. A name, # and a numeric variable:
-|             the categories in the order of that variable,
-|             agegr1#agegr1n
-| by          The groups: a character variable, the columns       Required
-| order       Its numeric twin (TRT01AN): the order of columns    Optional
-| levels      The planned categories of some variables: a         Optional
-|             variable, its values (levels= of %freq)
-| total       yes: also all groups together, as Total             no
-| catstats    The statistics of a categorical variable            Optional
-|             (stats= of %freq)
-| names       The label of a block when it is not the label of    Optional
-|             the variable: age="Age (years)" sex="Sex"
-| format      The labels of categories: variable and format, as   Optional
-|             in a FORMAT statement (format= of %layout)
+| data        The input data set: the subjects, one row per       Required
+|             subject, such as adsl
+| where       The population: a condition in parentheses, such    Optional
+|             as where = (saffl = 'Y')
+| vars        The variables of the table in its order, separated  Required
+|             by blanks: a name alone for a numeric variable, a
+|             name and # for a categorical one, such as vars =
+|             age sex# agegr1#agegr1n
+| by          The groups of the columns: one character variable,  Required
+|             such as by = trt01a
+| order       The numeric twin of by=, such as order = trt01an:   Optional
+|             it gives the order of the columns
+| levels      The planned categories of some categorical          Optional
+|             variables: each variable, then its values in
+|             quotes (levels= of %freq), such as levels = sex
+|             'F' 'M'. A planned category has a row also without
+|             a subject.
+| total       yes: add the column Total, all groups together      no
+| catstats    The statistics of a categorical variable, each      Optional
+|             name with its pattern (stats= of %freq)
+| names       The labels of the blocks: pairs variable="text",    Optional
+|             separated by blanks, such as names = age="Age
+|             (years)". A block without a pair has the label of
+|             its variable, or its name.
+| format      The labels of the categories: pairs of a variable   Optional
+|             and a format, as in a FORMAT statement (format =
+|             sex $sexf. race $racef.), as format= of %layout
 | name        The name of the table: the first part of the names  Optional
-|             of its data sets (default: the last part of file=)
-| show        yes: the long program in the log; a file: the long  no
-|             program is written there (and run)
-| stats       The statistics of a continuous variable, each with  Optional
-|             its pattern (stats= of %describe)
-| title       The titles of the table: a text in quotes for each   Optional
-|             line (TITLE1, TITLE2 ...); blank: the TITLE
-|             statements of the program
-| footnote    The footnotes: a text in quotes for each line        Optional
-|             (FOOTNOTE1 ...); blank: those of the program
-| file        The output without its extension: <file>.rtf,       Optional
-|             <file>.lst and the numbers file (blank: nothing is
-|             printed)
-| debug       yes: keep the work data sets of the macros called   no
+|             of its data sets, such as name = t14_3_01. When
+|             not given, the last part of file= is used; without
+|             file=, name= is required.
+| show        yes: write the long program to the log. A file      no
+|             path, without quotes: write the long program to
+|             that file. In both cases the macro runs it.
+| stats       The statistics of a numeric variable, each name     Optional
+|             with its pattern (stats= of %describe)
+| title       The titles of the table: one text in quotes per     Optional
+|             line (TITLE1, TITLE2 ...). They hold for this
+|             table only. When not given, the TITLE statements
+|             in force in the program are used.
+| footnote    The footnotes of the table: one text in quotes per  Optional
+|             line (FOOTNOTE1, FOOTNOTE2 ...). They hold for
+|             this table only. When not given, the FOOTNOTE
+|             statements in force in the program are used.
+| file        The output file without its extension: the macro    Optional
+|             writes <file>.rtf, <file>.lst and the numbers
+|             file. When not given, nothing is printed.
+| debug       yes: keep the work data sets of the macros that     no
+|             the long program calls
 |-------------------------------------------------------------------------------
 |
-| Output        : DATA: <name>_<variable>_summ (one result per variable),
-|                 <name> (the table), <name>_cols, <name>_display, and
-|                 <name>_pop with where=; FILE: <file>.rtf, <file>.lst and the
-|                 numbers file (with file=); SETUP: the global macro variable
-|                 <name>_print for %print(&<name>_print.); SHOW: the long
-|                 program.
+| Output        : DATA: <name>_<variable>_summ (the result of each variable),
+|                 <name> (the stacked results), <name>_cols, <name>_display, and
+|                 <name>_pop (only with where=). FILE: <file>.rtf, <file>.lst
+|                 and the numbers file (only with file=). SETUP: the global
+|                 macro variable <name>_print. SHOW: the long program, in the
+|                 log or in a file.
 |
 | Example:
 |
  %table_summary(
-     data  = adsl
-   , where = (saffl = 'Y')
-   , vars  = age agegr1#agegr1n sex# race# ethnic#
-   , by    = trt01a
-   , order = trt01an
-   , total = yes
-   , file  = &spl_out./tlf/t14_2_1
+     data   = adam.adsl
+   , where  = (saffl = 'Y')
+   , vars   = age agegr1# sex# race# ethnic#
+   , by     = trt01a
+   , order  = trt01an
+   , total  = yes
+   , format = sex $sexf.
+   , title  = "Table 14.2.1 Demographic characteristics" "Safety population"
+   , file   = &spl_out./tlf/t14_2_1_summary
  )
 |
 |-------------------------------------------------------------------------------
@@ -89,6 +125,10 @@
 |                          %table and cleared after it; a missing folder of
 |                          show= is made. The license line; the example in the
 |                          house case. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO table_summary(

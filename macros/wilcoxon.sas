@@ -3,16 +3,25 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : The Wilcoxon rank-sum test of each pair of groups, one record
-|                 per subject (PROC NPAR1WAY, BY each pair, the group first):
-|                 the two-sided p-value of the normal approximation with the
-|                 continuity correction (pval; CORRECT=), the Hodges-Lehmann
-|                 estimate of the shift (estimate: the group minus the group it
-|                 is compared with) and its asymptotic (Moses) confidence limits
-|                 (lcl, ucl; HL).
+| Macro Purpose : Returns the p-value of the Wilcoxon rank-sum test of each pair
+|                 of groups, with the Hodges-Lehmann shift and its limits. Use
+|                 %ttest when the values are normal and the difference of the
+|                 means is wanted. The macro writes a result: a data set with
+|                 one row per number (the result shape, see %stack). The test
+|                 runs in PROC NPAR1WAY, BY each pair, the group first. The
+|                 statistics:
+|                 - pval: the two-sided p-value of the normal approximation,
+|                   with the continuity correction when correction=yes
+|                   (CORRECT=)
+|                 - estimate: the Hodges-Lehmann estimate of the shift, the
+|                   group minus the group it is compared with (HL)
+|                 - lcl, ucl: the asymptotic (Moses) confidence limits of the
+|                   shift
+|                 The macro uses one record per subject: when a subject has
+|                 several records, the first one.
 | Procedure     : PROC NPAR1WAY (WILCOXON, HL)
 | Proven        : the known answer of the method wilcoxon (src/methods.ts,
 |                 worked out by tools/method_answers.R; node
@@ -22,43 +31,63 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records                                         Required
-| where       The records to use, a condition in parentheses      Optional
-| var         The variable                                        Required
-| by          The groups: a character variable                    Required
-| pairs       all: each later group against each earlier one, in  all
-|             the order of ORDER; or the pairs separated by #,
-|             one pair per line, the group first, then the group
-|             it is compared with (a value with a blank or a
-|             hyphen in quotes): "Drug" "Placebo" # "High"
-|             "Low". The form "A"-"B" of version 1.0 is still
-|             read.
-| order       A numeric variable with one value per group: the    Optional
-|             order of the groups
-| correction  yes (default): the continuity correction of the     yes
-|             test; no
-| level       The confidence level (default 0.95)                 0.95
-| stats       The statistics, each with its pattern (default      estimate="XX.XX"
-|             estimate="XX.XX" lcl="XX.XX" ucl="XX.XX"            lcl="XX.XX" ucl="XX.XX"
-|             pval="X.XXX")                                       pval="X.XXX"
-| label       The label of the block in a table, in quotes        Optional
-| out         The result                                          Required
-| debug       yes: keep the work data sets of the macro           no
-|             (_wilcoxon_*)
+| data        The input data set: one record per subject, with    Required
+|             USUBJID
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (avisit = 'Week 24')
+| var         The variable to compare: one numeric variable       Required
+| by          The groups: one character variable (trt01a, not     Required
+|             trt01an)
+| pairs       Which groups to compare. all: each later group      all
+|             against each earlier one, in the order of order=
+|             (else of the values). Or the pairs, separated by
+|             #: in each pair the group first, then the group it
+|             is compared with, each value in quotes (pairs =
+|             "Drug" "Placebo" # "High" "Low"). The form "A"-"B"
+|             of version 1.0 is still read.
+| order       The order of the groups: one numeric variable with  Optional
+|             one value per group (order = trt01an)
+| correction  yes: the continuity correction of the normal        yes
+|             approximation; no: none
+| level       The confidence level: a number between 0 and 1      0.95
+|             (level = 0.90)
+| stats       The statistics, in the order of the rows: each      estimate="XX.XX"
+|             name with its pattern of the printed number,        lcl="XX.XX" ucl="XX.XX"
+|             separated by blanks. The names are estimate, lcl,   pval="X.XXX"
+|             ucl and pval. A name without a pattern takes its
+|             default pattern (n="XX", mean="XX.X", pval="X.XXX"
+|             ...; see %describe).
+| label       The label of the block in the table: a text in      Optional
+|             quotes. A block is the rows of one call in the
+|             table.
+| out         The name of the result data set                     Required
+| debug       yes: keep the work data sets _wilcoxon_*            no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: one row per pair and statistic (BY: the group, VERSUS: the
-|                 group it is compared with); GROUPS is BY VERSUS.
+| Output        : OUT: the result shape (see %stack), one row per pair and
+|                 statistic: the variable of by= (the group), VERSUS (the group
+|                 it is compared with), GROUPS (by= and VERSUS), BLOCK, STAT,
+|                 VALUE and TEXT. When no record qualifies, the result has no
+|                 row.
 |
 | Example:
 |
  %wilcoxon(
-     data  = adqs
-   , where = (paramcd = 'PAIN' AND avisit = 'Week 12')
+     data  = advs
+   , where = (paramcd = 'DIABP' AND avisit = 'Week 12' AND anl01fl = 'Y')
    , var   = chg
    , by    = trt01p
    , order = trt01pn
-   , out   = pain_w
+   , out   = dbp_w
+ )
+ %wilcoxon(
+     data       = advs
+   , where      = (paramcd = 'DIABP' AND avisit = 'Week 12' AND anl01fl = 'Y')
+   , var        = chg
+   , by         = trt01p
+   , pairs      = "Xanomeline High Dose" "Placebo"
+   , correction = no
+   , out        = dbp_w_nocc
  )
 |
 |-------------------------------------------------------------------------------
@@ -78,6 +107,16 @@
 |                          has is an error with its fix.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: The example analyses the records of anl01fl =
+|                          'Y' (one record per subject). The text of stats=: a
+|                          name without a pattern takes its default pattern. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: an example with one pair and correction=no. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO wilcoxon(

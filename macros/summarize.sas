@@ -3,13 +3,15 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : Give each subject a summary of its records in another data
-|                 set: the sum or the mean of a variable. A subject without a
-|                 record gets a missing value; a sum of only missing values is
-|                 missing.
+| Macro Purpose : Gives each subject the sum, mean, largest or smallest value of
+|                 a variable over its records in another data set. Use
+|                 %summarize_groups for one record per group instead of a new
+|                 variable on each subject. A subject with no record gets a
+|                 missing value. A sum of only missing values is missing. The
+|                 rows of data= keep their order.
 | Procedure     : PROC SUMMARY, MERGE
 | Proven        : the fixtures of the step kind derive.from.summary
 |                 (src/adam_steps.ts; node tools/adam_steps_sas.ts); ran on SAS
@@ -19,30 +21,43 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The working data set (changed in place)             Required
-| from        The data set of the records (prepare the value      Required
-|             with a DATA step)
-| value       The variable of FROM to summarize. To count         Required
-|             records, give a 0/1 variable and stat=sum; for
-|             "some record meets it" stat=max, for "every record
-|             meets it" stat=min.
-| stat        sum (default), mean, max or min                     sum
-| new         The variable to make                                Required
+| data        The data set to change in place, such as adsl       Required
+| from        The data set of the records, with USUBJID. When     Required
+|             the value is not a variable yet, make it first in
+|             a DATA step.
+| value       The numeric variable of from= to summarize. To      Required
+|             count records, give a 0/1 variable and stat=sum;
+|             for "some record meets it" use stat=max, for
+|             "every record meets it" stat=min.
+| stat        The statistic: sum, mean, max or min                sum
+| new         The name of the new variable                        Required
 | debug       yes: keep the work data sets _summarize_*           no
 |-------------------------------------------------------------------------------
 |
-| Output        : DATA: NEW on every row of a subject: the sum, mean,
-|                 maximum or minimum of VALUE over its records in FROM; missing
-|                 for a subject without a record.
+| Output        : DATA: data=, changed in place: the variable new= on every row
+|                 of a subject, with the sum, mean, maximum or minimum of value=
+|                 over its records in from=. A subject with no record gets a
+|                 missing value.
 |
 | Example:
 |
+ DATA sl;
+   SET adsl;
+   KEEP usubjid trtdurd;
+ RUN;
  %summarize(
-     data  = adsl
-   , from  = ex
-   , value = dose_days
-   , stat  = sum
-   , new   = cumdose
+     data  = sl
+   , from  = sdtm.ex
+   , value = exendy
+   , stat  = max
+   , new   = exlstdy
+ )
+ %summarize(
+     data  = sl
+   , from  = sdtm.ex
+   , value = exdose
+   , stat  = mean
+   , new   = exmdose
  )
 |
 |-------------------------------------------------------------------------------
@@ -55,6 +70,13 @@
 |                          number changes.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: The example first copies its records into a
+|                          data set of its own, so that it changes no data set of
+|                          setup.sas for a later example. No number changes.
 |
 *******************************************************************************/
 %MACRO summarize(

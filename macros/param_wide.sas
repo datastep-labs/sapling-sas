@@ -3,14 +3,16 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : The values of several parameters side by side: one record per
-|                 group of BY that has a record of every parameter of PARAMS,
-|                 with the variables VARS of each parameter as <PARAMCD>_<VAR>
-|                 (WEIGHT_AVAL). Two records of one parameter in a group are an
-|                 ERROR.
+| Macro Purpose : Returns the values of several parameters side by side: one
+|                 record per group, with the variables of each parameter. The
+|                 variables of each parameter are named <PARAMCD>_<VAR>, such as
+|                 SYSBP_AVAL. Only a group that has a record of every parameter
+|                 of params= gets a record. Two records of one parameter in a
+|                 group give an ERROR line that names the group. A code of
+|                 params= with no record stops the macro with an ERROR.
 | Procedure     : PROC SORT, MERGE
 | Proven        : the fixtures of the step kind computed (src/adam_steps.ts;
 |                 node tools/adam_steps_sas.ts); ran on SAS 9.4 M9, 2026-11-12
@@ -19,29 +21,34 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records (with PARAMCD and the BY variables)     Required
-| where       The records to read, a condition in parentheses     Optional
-| params      The parameter codes                                 Required
-| vars        The variables of each parameter to keep (AVAL)      Required
-| by          The groups (the subject and the visit)              Required
-| out         One record per group: BY, then <PARAMCD>_<VAR> for  Required
-|             each parameter and variable
+| data        The input data set, with PARAMCD and the BY         Required
+|             variables, such as advs
+| where       The records to read: a condition in parentheses,    Optional
+|             such as where = (anl01fl = 'Y')
+| params      The parameter codes, separated by blanks (params =  Required
+|             sysbp diabp). They are compared with PARAMCD in
+|             upper case.
+| vars        The variables to keep of each parameter, separated  Required
+|             by blanks (vars = aval chg)
+| by          The groups: variables separated by blanks, such as  Required
+|             the subject and the visit (by = usubjid avisitn)
+| out         The name of the data set it writes                  Required
 | debug       yes: keep the work data sets _param_wide_*          no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: one record per group of BY that has a record of every
-|                 parameter: BY, then <PARAMCD>_<VAR> for each parameter and
-|                 variable. Two records of one parameter in a group are an ERROR
-|                 that names the group.
+| Output        : OUT: one record per group that has a record of every
+|                 parameter: the BY variables, then <PARAMCD>_<VAR> for each
+|                 parameter and each variable of vars=.
 |
 | Example:
 |
  %param_wide(
-     data   = work.advs
-   , params = weight height
-   , vars   = aval
+     data   = advs
+   , where  = (anl01fl = 'Y')
+   , params = sysbp diabp
+   , vars   = aval chg
    , by     = usubjid avisitn
-   , out    = work._bmi
+   , out    = bp_wide
  )
 |
 |-------------------------------------------------------------------------------
@@ -57,6 +64,10 @@
 | 16-NOV-2026 Sapling      1.9.1: params= in any case (DEV-023: params=weight
 |                          reads PARAMCD WEIGHT); a code without a record stops
 |                          with the ERROR of the macro.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO param_wide(

@@ -3,12 +3,17 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : Pool small groups: a group (e.g. a site) that has fewer than
-|                 MIN subjects in one of the groups of BY (e.g. a treatment)
-|                 goes into one pooled group.
+| Macro Purpose : Pools small groups, such as sites, into one group: a new
+|                 variable that is the group, or the pooled value. A group of
+|                 var= goes into the pooled group when it has fewer than min=
+|                 records in one of the groups of by=, such as a treatment. The
+|                 macro counts records: in a data set with one record per
+|                 subject, such as adsl, these are the subjects. A group that
+|                 has no record in a group of by= counts 0 there and is pooled.
+|                 The rows of data= keep their order.
 | Procedure     : PROC FREQ, PROC SUMMARY, MERGE
 | Proven        : the fixtures of the step kind pool (src/adam_steps.ts; node
 |                 tools/adam_steps_sas.ts); ran on SAS 9.4 M9, 2026-11-12
@@ -17,26 +22,30 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The working data set (changed in place)             Required
-| var         The groups to pool (SITEID)                         Required
-| by          The variable whose every group must have MIN        Required
-|             subjects (the treatment)
-| min         The smallest number of subjects                     Required
-| length      The length of NEW, e.g. $3                          Optional
-| new         The variable to make: VAR, or INTO for a small      Required
-|             group
-| into        The value of the pooled group                       Required
+| data        The data set to change in place, one record per     Required
+|             subject, such as adsl
+| var         The variable of the groups to pool, such as siteid  Required
+| by          The variable whose every group must have min=       Required
+|             records in a group of var=, such as the treatment
+| min         The smallest number of records: a whole number      Required
+| length      The length of the new variable, such as $3          Optional
+| new         The name of the new variable: the value of var=,    Required
+|             or into= for a small group
+| into        The value of the pooled group, without quotes       Required
 | debug       yes: keep the work data sets _pool_*                no
 |-------------------------------------------------------------------------------
 |
-| Output        : DATA: NEW: the value of VAR, or INTO for a group of VAR
-|                 with fewer than MIN subjects in one of the groups of BY. The
-|                 rows keep their order.
+| Output        : DATA: data=, changed in place: the variable new=, with the
+|                 value of var=, or the value of into= for a small group.
 |
 | Example:
 |
+ DATA sl;
+   SET adsl;
+   KEEP usubjid siteid trt01p;
+ RUN;
  %pool(
-     data   = adsl
+     data   = sl
    , var    = siteid
    , by     = trt01p
    , min    = 3
@@ -57,6 +66,12 @@
 |                          case (names in lower case). No number changes.
 | 16-NOV-2026 Sapling      1.9.1: into= is checked as required (DEV-027). No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: the text of the header for the manual: the
+|                          summary, the form of each parameter. No number
+|                          changes.
+| 27-NOV-2026 Sapling      1.9.1: The example first copies its records into a
+|                          data set of its own, so that it changes no data set of
+|                          setup.sas for a later example. No number changes.
 |
 *******************************************************************************/
 %MACRO pool(

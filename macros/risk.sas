@@ -3,18 +3,26 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : The comparison of two proportions of each pair of groups, one
-|                 record per subject (PROC FREQ): the 2 x 2 table of the two
-|                 groups (the group first) and the event (event=) against the
-|                 rest. measure=rd: the risk difference (rd) with the interval
-|                 of ci=; measure=rr: the relative risk (rr), measure=or: the
-|                 odds ratio (or), each with the Wald interval of its logarithm;
-|                 the p-value of Pearson's chi-square test without continuity
-|                 correction (pval). With strata= the Mantel-Haenszel risk
-|                 difference (COMMONRISKDIFF, CL=MH) and the CMH test.
+| Macro Purpose : Returns the risk difference, relative risk or odds ratio of
+|                 pairs of groups, with its confidence interval and p-value. Use
+|                 %logistic for an odds ratio adjusted for covariates in a
+|                 model, and %fisher for only the p-value of an adverse event.
+|                 For each pair the macro makes the 2 x 2 table of the two
+|                 groups (the group first) by the event of event= against the
+|                 rest, one record per subject, with PROC FREQ. measure= gives
+|                 the estimate:
+|                 - rd: the risk difference, with the interval of ci=
+|                 - rr: the relative risk, with the Wald interval of its
+|                   logarithm
+|                 - or: the odds ratio, with the Wald interval of its logarithm
+|                 The p-value is that of Pearson's chi-square test without
+|                 continuity correction. With strata= the macro gives the
+|                 Mantel-Haenszel risk difference (COMMONRISKDIFF, CL=MH) and
+|                 the p-value of the CMH test. The macro writes a result: a data
+|                 set with one row per number (the result shape, see %stack).
 | Procedure     : PROC FREQ (RISKDIFF, RELRISK, CHISQ; COMMONRISKDIFF, CMH)
 | Proven        : the known answer of the methods riskdiff, riskratio,
 |                 oddsratio, perterm (src/methods.ts, worked out by
@@ -25,65 +33,98 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records                                         Required
-| where       The records to use, a condition in parentheses      Optional
-| var         The response: two values                            Required
-| event       The value that is the event, in quotes (default     "Y"
-|             "Y")
-| by          The groups: a character variable                    Required
-| within      One comparison in each group of these variables     Optional
-|             (each term of an adverse event table: the flags of
-|             %termflags)
-| strata      The strata variables of the Mantel-Haenszel risk    Optional
-|             difference
-| pairs       all: each later group against each earlier one, in  all
-|             the order of ORDER; or the pairs separated by #,
-|             one pair per line, the group first, then the group
-|             it is compared with (a value with a blank or a
-|             hyphen in quotes): "Drug" "Placebo" # "High"
-|             "Low". The form "A"-"B" of version 1.0 is still
-|             read.
-| order       A numeric variable with one value per group: the    Optional
-|             order of the groups
-| measure     rd (default), rr or or                              rd
-| ci          The interval of a risk difference: wald (default),  wald
-|             newcombe, miettinen-nurminen (CL=MN),
-|             agresti-caffo (CL=AC); with strata: mh
-| level       The confidence level (default 0.95)                 0.95
-| stats       The statistics, each with its pattern (default      Optional
-|             rd="X.XXX" lcl="X.XXX" ucl="X.XXX" pval="X.XXX";
-|             with measure=rr or or: rr= or or= "XX.XX")
-| label       The label of the block in a table, in quotes        Optional
-| out         The result                                          Required
-| debug       yes: keep the work data sets of the macro           no
-|             (_risk_*)
+| data        The input data set, with USUBJID: one record per    Required
+|             subject, or per subject and term with within=
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (saffl = 'Y')
+| var         The response: one variable with two values,         Required
+|             numeric or character
+| event       The value of var= that is the event, in quotes      "Y"
+|             (event = "DISCONTINUED")
+| by          The groups: one character variable                  Required
+| within      One comparison in each group of these variables,    Optional
+|             separated by blanks, such as each term of an
+|             adverse event table with the flags of %termflags
+|             (within = aebodsys aedecod)
+| strata      The strata of the Mantel-Haenszel risk difference:  Optional
+|             variables separated by blanks. Only with
+|             measure=rd.
+| pairs       The pairs of groups to compare. all: each later     all
+|             group against each earlier one, in the order of
+|             order= (or of the values). Or the pairs separated
+|             by #, each the group first and then the group it
+|             is compared with, a value with a blank or a hyphen
+|             in quotes: pairs = "Drug" "Placebo" # "High"
+|             "Low". The old form "A"-"B" is still read.
+| order       The order of the groups: one numeric variable with  Optional
+|             one value per group (order = trt01an)
+| measure     The estimate: rd (risk difference), rr (relative    rd
+|             risk) or or (odds ratio)
+| ci          The interval of a risk difference: wald, newcombe,  wald
+|             miettinen-nurminen (CL=MN) or agresti-caffo
+|             (CL=AC). With strata= the interval is always mh.
+| level       The confidence level of the interval: a number      0.95
+|             between 0 and 1
+| stats       The statistics, in the order of the rows: each      Optional
+|             name with the pattern of its printed number,
+|             separated by blanks. When not given: rd="X.XXX"
+|             lcl="X.XXX" ucl="X.XXX" pval="X.XXX"; for
+|             measure=rr or or, rr="XX.XX" or or="XX.XX" with
+|             lcl="XX.XX" ucl="XX.XX" pval="X.XXX". A name
+|             without a pattern takes its default pattern
+|             (n="XX", mean="XX.X", pval="X.XXX" ...; see
+|             %describe).
+| label       The label of the block in the table: a text in      Optional
+|             quotes. A block is the rows of one call in the
+|             table.
+| out         The name of the result data set                     Required
+| debug       yes: keep the work data sets _risk_*                no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: one row per pair and statistic (BY: the group, VERSUS: the
-|                 group it is compared with, and WITHIN); GROUPS is BY VERSUS
-|                 WITHIN.
+| Output        : OUT: the result shape (see %stack), one row per pair and
+|                 statistic: the group in the by= variable, the group it is
+|                 compared with in VERSUS, and the variables of within=. GROUPS
+|                 is the by= variable, VERSUS and the within= variables.
 |
 | Example:
 |
  %risk(
-     data  = adrs
-   , where = (paramcd = 'BOR')
-   , var   = crit1fl
-   , event = "Y"
-   , by    = trt01p
-   , order = trt01pn
+     data  = adsl
+   , var   = eosstt
+   , event = "DISCONTINUED"
+   , by    = trt01a
+   , order = trt01an
    , ci    = newcombe
-   , out   = resp_rd
+   , out   = eos_rd
  )
  %risk(
-     data   = adae
-   , var    = aoccfl
+     data   = work.ae_flags
+   , var    = flag
    , event  = "Y"
    , by     = trt01a
    , within = aebodsys aedecod
-   , pairs  = "Drug" "Placebo"
+   , pairs  = "Xanomeline High Dose" "Placebo"
+            # "Xanomeline Low Dose"  "Placebo"
    , ci     = newcombe
    , out    = ae_rd
+ )
+ %risk(
+     data    = adsl
+   , var     = eosstt
+   , event   = "DISCONTINUED"
+   , by      = trt01a
+   , order   = trt01an
+   , measure = rr
+   , out     = eos_rr
+ )
+ %risk(
+     data   = adsl
+   , var    = eosstt
+   , event  = "DISCONTINUED"
+   , by     = trt01a
+   , strata = sex
+   , order  = trt01an
+   , out    = eos_rd_mh
  )
 |
 |-------------------------------------------------------------------------------
@@ -105,6 +146,14 @@
 |                          has is an error with its fix.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: The text of stats=: a name without a pattern
+|                          takes its default pattern. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: examples with measure=rr and with strata=. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO risk(

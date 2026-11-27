@@ -3,12 +3,17 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : Flag one record of each group: the first (or last) one, among
-|                 the records that meet a condition. The other records keep a
-|                 blank flag.
+| Macro Purpose : Flags the first or last record of each group, among the
+|                 records that meet a condition, with Y. Use %pick to copy the
+|                 value of such a record to a subject. Use %flag_if_any to flag
+|                 the subjects that have any record that meets a condition. The
+|                 records of a group are sorted by order=. A missing sort key
+|                 sorts last. Records with equal keys keep their order. The
+|                 other records get a blank flag. The rows of data= keep their
+|                 order.
 | Procedure     : PROC SORT, MERGE
 | Proven        : the fixtures of the step kind flag.extreme (src/adam_steps.ts;
 |                 node tools/adam_steps_sas.ts); ran on SAS 9.4 M9, 2026-11-12
@@ -17,30 +22,37 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The working data set (changed in place)             Required
-| where       The records that can be chosen, a condition in      Optional
-|             parentheses
-| by          The groups                                          Required
-| order       The sort keys within a group; "descending" before   Required
-|             a key as in a BY statement. A missing key sorts
-|             last; records with equal keys keep their order.
-| which       first (default) or last                             first
-| new         The flag to make (Y on the chosen record)           Required
+| data        The data set to change in place, such as advs       Required
+| where       The records that can be flagged: a condition in     Optional
+|             parentheses, such as where = (anl01fl = 'Y'). When
+|             not given, all records can be flagged.
+| by          The groups: variables separated by blanks (by =     Required
+|             usubjid paramcd)
+| order       The sort keys within a group: variables separated   Required
+|             by blanks; write descending before a key as in a
+|             BY statement (order = descending adt)
+| which       first or last: the record of the group that gets    first
+|             the flag
+| new         The name of the flag variable to make               Required
 | debug       yes: keep the work data sets _flag_first_*          no
 |-------------------------------------------------------------------------------
 |
-| Output        : DATA: NEW: Y on the first (last) record of each group
-|                 among the records that meet where=; the others keep a blank
-|                 NEW. The rows keep their order.
+| Output        : DATA: data=, changed in place: the character variable new=
+|                 ($1), Y on the first (or last) record of each group among the
+|                 records that meet where=, blank on the other records.
 |
 | Example:
 |
+ DATA vs;
+   SET advs;
+   WHERE paramcd = 'SYSBP';
+ RUN;
  %flag_first(
-     data  = advs
+     data  = vs
    , where = (NOT MISSING(avisitn) AND NOT MISSING(aval))
    , by    = usubjid paramcd avisitn
-   , order = awtdiff ady vsseq
-   , new   = anl01fl
+   , order = ady atptn vsseq
+   , new   = anl02fl
  )
 |
 |-------------------------------------------------------------------------------
@@ -54,6 +66,13 @@
 | 13-NOV-2026 Sapling      1.7.1: order= is checked as required.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: The example first copies its records into a
+|                          data set of its own, so that it changes no data set of
+|                          setup.sas for a later example. No number changes.
 |
 *******************************************************************************/
 %MACRO flag_first(

@@ -3,13 +3,18 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : The subjects in each category of a variable in each group,
-|                 their percent of the subjects of the group, and the confidence
-|                 interval of that percent by a named method (PROC FREQ,
-|                 BINOMIAL): n, pct, lcl, ucl (the limits in percent, as pct).
+| Macro Purpose : Returns the percent of subjects in each category and group,
+|                 with its confidence interval by a method you name. Use %freq
+|                 for counts and percents without an interval. The macro writes
+|                 a result: a data set with one row per number (the result
+|                 shape, see %stack). The statistics are n, pct, and lcl and
+|                 ucl: the limits of the interval, in percent like pct. A
+|                 subject is counted once in each category. The percent is of
+|                 the subjects of the group in denom=. The interval comes from
+|                 the BINOMIAL option of PROC FREQ.
 | Procedure     : PROC FREQ (BINOMIAL)
 | Proven        : the known answer of the method propci (src/methods.ts, worked
 |                 out by tools/method_answers.R; node tools/methods_sas.ts); ran
@@ -19,33 +24,52 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records                                         Required
+| data        The input data set: the records, with USUBJID       Required
 | denom       The subjects of the percent: a data set with one    Optional
-|             row per subject and BY (default: the subjects of
-|             data=)
-| where       The records to use, a condition in parentheses      Optional
-| var         The category                                        Required
-| by          The groups: one variable                            Required
-| levels      The categories of the plan: the variable, then its  Optional
-|             values in quotes. A category without a subject
-|             shows with n = 0.
-| ci          The interval: clopper-pearson (default; the exact   clopper-pearson
-|             interval, CL=EXACT; exact is another name for it),
-|             wilson (the score interval, CL=WILSON), wald
-|             (CL=WALD), agresti-coull (CL=AGRESTICOULL)
-| level       The confidence level (default 0.95)                 0.95
-| stats       The statistics, each with its pattern (default      n="XX" pct="(XX.X%)"
-|             n="XX" pct="(XX.X%)" lcl="XX.X" ucl="XX.X")         lcl="XX.X" ucl="XX.X"
-| label       The label of the block in a table, in quotes        Optional
-| out         The result                                          Required
-| debug       yes: keep the work data sets of the macro           no
-|             (_proportion_*)
+|             row per subject and the variable of by=. When not
+|             given, the subjects of data= (without where=).
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (avisit = 'Week 24')
+| var         The category: one variable                          Required
+| by          The groups: one variable, the columns of the table  Required
+| levels      The planned categories: the variable, then its      Optional
+|             values in quotes (levels = avalc 'CR' 'PR'). A
+|             planned category without a subject shows with n =
+|             0.
+| ci          The method of the interval: clopper-pearson (the    clopper-pearson
+|             exact interval, CL=EXACT; exact is another name
+|             for it), wilson (the score interval, CL=WILSON),
+|             wald (CL=WALD) or agresti-coull (CL=AGRESTICOULL)
+| level       The confidence level: a number between 0 and 1      0.95
+|             (level = 0.90)
+| stats       The statistics, in the order of the rows: each      n="XX" pct="(XX.X%)"
+|             name with its pattern of the printed number,        lcl="XX.X" ucl="XX.X"
+|             separated by blanks. The names are n, pct, lcl and
+|             ucl. A name without a pattern takes its default
+|             pattern (n="XX", mean="XX.X", pval="X.XXX" ...;
+|             see %describe).
+| label       The label of the block in the table: a text in      Optional
+|             quotes. A block is the rows of one call in the
+|             table.
+| out         The name of the result data set                     Required
+| debug       yes: keep the work data sets _proportion_*          no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: one row per group, category and statistic; GROUPS is BY VAR.
+| Output        : OUT: the result shape (see %stack), one row per group,
+|                 category and statistic: the variables of by= and var=, GROUPS
+|                 (by= and var=), BLOCK, STAT, VALUE and TEXT. When no record
+|                 qualifies and levels= is not given, the result has no row.
 |
 | Example:
 |
+ %proportion(
+     data   = adsl
+   , var    = eosstt
+   , by     = trt01a
+   , levels = eosstt 'COMPLETED' 'DISCONTINUED'
+   , ci     = clopper-pearson
+   , out    = eos_ci
+ )
  %proportion(
      data   = adrs
    , denom  = adsl
@@ -53,7 +77,7 @@
    , var    = avalc
    , by     = trt01a
    , levels = avalc 'CR' 'PR'
-   , ci     = clopper-pearson
+   , ci     = wilson
    , out    = bor_ci
  )
 |
@@ -74,6 +98,12 @@
 |                          NOTE No data qualified, not ERRORs of PROC FREQ
 |                          (DEV-035); the header names exact as another name of
 |                          clopper-pearson (DEV-042). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: The text of stats=: a name without a pattern
+|                          takes its default pattern. No number changes.
 |
 *******************************************************************************/
 %MACRO proportion(

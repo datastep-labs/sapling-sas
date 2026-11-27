@@ -1,0 +1,71 @@
+sex_freq: the first 15 of 16 rows
+TRT01A                SEX  GROUPS      BLOCK  STAT         VALUE  TEXT
+Placebo               F    TRT01A SEX  Sex    n               53  53
+Placebo               F    TRT01A SEX  Sex    pct   61.627906977  (61.6%)
+Placebo               M    TRT01A SEX  Sex    n               33  33
+Placebo               M    TRT01A SEX  Sex    pct   38.372093023  (38.4%)
+Total                 F    TRT01A SEX  Sex    n              143  143
+Total                 F    TRT01A SEX  Sex    pct   56.299212598  (56.3%)
+Total                 M    TRT01A SEX  Sex    n              111  111
+Total                 M    TRT01A SEX  Sex    pct   43.700787402  (43.7%)
+Xanomeline High Dose  F    TRT01A SEX  Sex    n               35  35
+Xanomeline High Dose  F    TRT01A SEX  Sex    pct   48.611111111  (48.6%)
+Xanomeline High Dose  M    TRT01A SEX  Sex    n               37  37
+Xanomeline High Dose  M    TRT01A SEX  Sex    pct   51.388888889  (51.4%)
+Xanomeline Low Dose   F    TRT01A SEX  Sex    n               55  55
+Xanomeline Low Dose   F    TRT01A SEX  Sex    pct   57.291666667  (57.3%)
+Xanomeline Low Dose   M    TRT01A SEX  Sex    n               41  41
+
+teae: the first 15 of 2070 rows
+TRT01A   AEBODSYS           AEDECOD                               GROUPS                   BLOCK  STAT           VALUE  TEXT
+Placebo  CARDIAC DISORDERS  ATRIAL FIBRILLATION                   TRT01A AEBODSYS AEDECOD         n                  1  1
+Placebo  CARDIAC DISORDERS  ATRIAL FIBRILLATION                   TRT01A AEBODSYS AEDECOD         pct     1.1627906977  ( 1.2%)
+Placebo  CARDIAC DISORDERS  ATRIAL FIBRILLATION                   TRT01A AEBODSYS AEDECOD         events             1  1
+Placebo  CARDIAC DISORDERS  ATRIAL FLUTTER                        TRT01A AEBODSYS AEDECOD         n                  0  0
+Placebo  CARDIAC DISORDERS  ATRIAL FLUTTER                        TRT01A AEBODSYS AEDECOD         pct                0  ( 0.0%)
+Placebo  CARDIAC DISORDERS  ATRIAL FLUTTER                        TRT01A AEBODSYS AEDECOD         events             0  0
+Placebo  CARDIAC DISORDERS  ATRIAL HYPERTROPHY                    TRT01A AEBODSYS AEDECOD         n                  1  1
+Placebo  CARDIAC DISORDERS  ATRIAL HYPERTROPHY                    TRT01A AEBODSYS AEDECOD         pct     1.1627906977  ( 1.2%)
+Placebo  CARDIAC DISORDERS  ATRIAL HYPERTROPHY                    TRT01A AEBODSYS AEDECOD         events             2  2
+Placebo  CARDIAC DISORDERS  ATRIOVENTRICULAR BLOCK FIRST DEGREE   TRT01A AEBODSYS AEDECOD         n                  1  1
+Placebo  CARDIAC DISORDERS  ATRIOVENTRICULAR BLOCK FIRST DEGREE   TRT01A AEBODSYS AEDECOD         pct     1.1627906977  ( 1.2%)
+Placebo  CARDIAC DISORDERS  ATRIOVENTRICULAR BLOCK FIRST DEGREE   TRT01A AEBODSYS AEDECOD         events             1  1
+Placebo  CARDIAC DISORDERS  ATRIOVENTRICULAR BLOCK SECOND DEGREE  TRT01A AEBODSYS AEDECOD         n                  1  1
+Placebo  CARDIAC DISORDERS  ATRIOVENTRICULAR BLOCK SECOND DEGREE  TRT01A AEBODSYS AEDECOD         pct     1.1627906977  ( 1.2%)
+Placebo  CARDIAC DISORDERS  ATRIOVENTRICULAR BLOCK SECOND DEGREE  TRT01A AEBODSYS AEDECOD         events             1  1
+
+shift: the first 15 of 108 rows
+TRT01A   PARAMCD  BNRIND  ANRIND  BNRINDN  ANRINDN  GROUPS                        BLOCK  STAT         VALUE  TEXT
+Placebo  ALT      HIGH    HIGH          3        3  TRT01A PARAMCD BNRIND ANRIND         n                0  0
+Placebo  ALT      HIGH    HIGH          3        3  TRT01A PARAMCD BNRIND ANRIND         pct              0  ( 0.0%)
+Placebo  ALT      HIGH    LOW           3        1  TRT01A PARAMCD BNRIND ANRIND         n                0  0
+Placebo  ALT      HIGH    LOW           3        1  TRT01A PARAMCD BNRIND ANRIND         pct              0  ( 0.0%)
+Placebo  ALT      HIGH    NORMAL        3        2  TRT01A PARAMCD BNRIND ANRIND         n                3  3
+Placebo  ALT      HIGH    NORMAL        3        2  TRT01A PARAMCD BNRIND ANRIND         pct    3.488372093  ( 3.5%)
+Placebo  ALT      LOW     HIGH          1        3  TRT01A PARAMCD BNRIND ANRIND         n                0  0
+Placebo  ALT      LOW     HIGH          1        3  TRT01A PARAMCD BNRIND ANRIND         pct              0  ( 0.0%)
+Placebo  ALT      LOW     LOW           1        1  TRT01A PARAMCD BNRIND ANRIND         n                0  0
+Placebo  ALT      LOW     LOW           1        1  TRT01A PARAMCD BNRIND ANRIND         pct              0  ( 0.0%)
+Placebo  ALT      LOW     NORMAL        1        2  TRT01A PARAMCD BNRIND ANRIND         n                0  0
+Placebo  ALT      LOW     NORMAL        1        2  TRT01A PARAMCD BNRIND ANRIND         pct              0  ( 0.0%)
+Placebo  ALT      NORMAL  HIGH          2        3  TRT01A PARAMCD BNRIND ANRIND         n                2  2
+Placebo  ALT      NORMAL  HIGH          2        3  TRT01A PARAMCD BNRIND ANRIND         pct   2.3255813953  ( 2.3%)
+Placebo  ALT      NORMAL  LOW           2        1  TRT01A PARAMCD BNRIND ANRIND         n                1  1
+
+common: the first 15 of 144 rows
+TRT01A   AEDECOD                      AEDECODN  GROUPS          BLOCK  STAT         VALUE  TEXT
+Placebo  APPLICATION SITE DERMATITIS         6  TRT01A AEDECOD         n                5  5
+Placebo  APPLICATION SITE DERMATITIS         6  TRT01A AEDECOD         pct   5.8139534884  ( 5.8%)
+Placebo  APPLICATION SITE ERYTHEMA           4  TRT01A AEDECOD         n                3  3
+Placebo  APPLICATION SITE ERYTHEMA           4  TRT01A AEDECOD         pct    3.488372093  ( 3.5%)
+Placebo  APPLICATION SITE IRRITATION         7  TRT01A AEDECOD         n                3  3
+Placebo  APPLICATION SITE IRRITATION         7  TRT01A AEDECOD         pct    3.488372093  ( 3.5%)
+Placebo  APPLICATION SITE PRURITUS           2  TRT01A AEDECOD         n                6  6
+Placebo  APPLICATION SITE PRURITUS           2  TRT01A AEDECOD         pct    6.976744186  ( 7.0%)
+Placebo  APPLICATION SITE VESICLES          16  TRT01A AEDECOD         n                1  1
+Placebo  APPLICATION SITE VESICLES          16  TRT01A AEDECOD         pct   1.1627906977  ( 1.2%)
+Placebo  BLISTER                            24  TRT01A AEDECOD         n                0  0
+Placebo  BLISTER                            24  TRT01A AEDECOD         pct              0  ( 0.0%)
+Placebo  COUGH                              17  TRT01A AEDECOD         n                1  1
+Placebo  COUGH                              17  TRT01A AEDECOD         pct   1.1627906977  ( 1.2%)
+Placebo  DIARRHOEA                           9  TRT01A AEDECOD         n                9  9

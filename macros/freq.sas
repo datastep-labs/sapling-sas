@@ -6,11 +6,16 @@
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : Frequencies of subjects (PROC FREQ): the subjects of each
-|                 category in each group (n), their percent of the subjects of
-|                 the group (pct), and the records (events) when stats= asks for
-|                 them. A subject is counted once in each cell. Without var= the
-|                 cell is "a record at all".
+| Macro Purpose : Counts the subjects in each category and group, with their
+|                 percent of the subjects of the group. Use %proportion when the
+|                 percent needs a confidence interval, and %worst for the worst
+|                 grade of each subject. The macro writes a result: a data set
+|                 with one row per number (the result shape, see %stack). A
+|                 subject is counted once in each cell. A record with a missing
+|                 group or category is not counted. The percent is of the
+|                 subjects of the group in denom=. Without var=, the macro
+|                 counts the subjects with any record. The name events in stats=
+|                 adds the number of records of each cell.
 | Procedure     : PROC FREQ
 | Proven        : the known answer of the methods count, catsumm
 |                 (src/methods.ts, worked out by tools/method_answers.R; node
@@ -20,61 +25,78 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records                                         Required
+| data        The input data set: the records to count, with      Required
+|             USUBJID
 | denom       The subjects of each group: the N of the percent    Optional
-|             and the columns (default: DATA without WHERE). A
-|             data set, with options if needed:
-|             adsl(where=(...)).
-| where       The records to count, a condition in parentheses    Optional
-| var         The categories: variables, nested in their order    Optional
-|             (a term within its class)
-| by          The groups: variables. The first gives the columns  Required
-|             of a table, the others its rows or its pages (sex
-|             for page= of %layout)
-| keep        Variables to keep with the categories for their     Optional
-|             names and order: PARAM and PARAMN go with PARAMCD,
-|             AVISITN with AVISIT (a twin <V>N with V); the
-|             value of the first record of the category
+|             and the columns. A data set with one row per
+|             subject and the variables of by=; data set options
+|             are allowed: adsl(where=(saffl = 'Y')). When not
+|             given, the subjects of data= (without where=).
+| where       The records to count: a condition in parentheses,   Optional
+|             such as where = (trtemfl = 'Y')
+| var         The categories: one variable or several, separated  Optional
+|             by blanks, nested in their order (var = aebodsys
+|             aedecod: a term within its class). When not given,
+|             the macro counts the subjects with any record.
+| by          The groups: one variable or several, separated by   Required
+|             blanks. The first variable gives the columns of
+|             the table; the others give its rows or its pages
+|             (by = trt01a sex, with page= of %layout).
+| keep        Other variables to keep with the categories for     Optional
+|             their names and order, separated by blanks. PARAM
+|             and PARAMN go with PARAMCD, AVISITN with AVISIT,
+|             any <V>N with V. Each gets the value of the first
+|             record of its category.
 | levels      The planned categories of some variables of var=:   Optional
-|             each variable and its values. They show also
-|             without a subject; a record of another category is
-|             not counted. The categories of the other variables
-|             come from the records counted: a record of another
-|             category of a planned variable brings none. The
-|             rows of a planned variable V in the order given:
+|             each variable followed by its values in quotes
+|             (levels = bnrind 'LOW' 'NORMAL' 'HIGH'). A planned
+|             category shows also without a subject; a record of
+|             another category is not counted. The rows of a
+|             planned variable V follow the order given, through
 |             its twin VN (1, 2 ...) in out=, unless keep= has
-|             VN.
-| total       yes: also all groups of the first BY variable         no
-|             together, as the group "Total" (a text in quotes is
-|             another name for it); that variable a character
-|             variable. Default no.
-| threshold   A percent: only the categories with this percent    Optional
-|             of the subjects of a group or more, in at least
-|             one group (the percent itself, not its rounded
-|             text)
-| order       frequency: the rows of the variable ORDEROF in the  Optional
-|             order of their subjects, the most first (equal
-|             counts by their value), as its twin <V>N (%print
-|             orders the rows by it); default: the order of the
-|             values
-| orderof     The variable of VAR whose rows are ordered          Optional
-|             (default: the last of VAR; the term above a graded
-|             variable of %worst)
-| orderby     The group of BY whose subjects order the rows, in   Optional
-|             quotes (default: all the groups)
-| stats       The statistics, each with its pattern (default      n="XX" pct="(XX.X%)"
-|             n="XX" pct="(XX.X%)"); also events
-| label       The label of the block in a table, in quotes        Optional
-| out         The result                                          Required
-| debug       yes: keep the work data sets of the macro           no
-|             (_freq_*)
+|             VN. The categories of the other variables come
+|             from the records counted.
+| total       yes: add the group "Total", all groups of the       no
+|             first BY variable together. A text in quotes gives
+|             the Total another name ("All subjects"). The first
+|             BY variable must be character.
+| threshold   A percent (threshold = 5): keep only the            Optional
+|             categories with this percent of the subjects or
+|             more in at least one group (the Total counts as a
+|             group). The macro compares the percent itself, not
+|             its rounded text.
+| order       frequency: order the rows of orderof= by their      Optional
+|             subjects, the most first, and equal counts by
+|             their value. The rank goes into the twin <V>N, and
+|             %print orders the rows by it. When not given, the
+|             rows are in the order of the values.
+| orderof     The variable of var= whose rows order=frequency     Optional
+|             ranks: one variable. When not given, the last
+|             variable of var=.
+| orderby     The group whose subjects rank the rows for          Optional
+|             order=frequency: a value of the first BY variable,
+|             in quotes (orderby = "Placebo"). When not given,
+|             all groups together, without the Total.
+| stats       The statistics, in the order of the rows: each      n="XX" pct="(XX.X%)"
+|             name with its pattern of the printed number,
+|             separated by blanks. The names are n, pct and
+|             events. A name without a pattern takes its default
+|             pattern (n="XX", mean="XX.X", pval="X.XXX" ...;
+|             see %describe).
+| label       The label of the block in the table: a text in      Optional
+|             quotes. A block is the rows of one call in the
+|             table.
+| out         The name of the result data set                     Required
+| debug       yes: keep the work data sets _freq_*                no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: one row per group, category and statistic: BY and VAR (and
-|                 KEEP), GROUPS (their names), BLOCK, STAT, VALUE, TEXT. Every
-|                 group of DENOM has every category: n = 0 when no subject has
-|                 it. With levels= the twin <V>N of each planned variable (its
-|                 place in levels=); with order=frequency the twin of ORDEROF.
+| Output        : OUT: the result shape (see %stack), one row per group,
+|                 category and statistic: the variables of by= and var=, the
+|                 variables of keep=, GROUPS, BLOCK, STAT, VALUE and TEXT. Every
+|                 group of denom= has every category: n = 0 when no subject has
+|                 it. With levels=, the twin <V>N of each planned variable gives
+|                 its place in levels=; with order=frequency, the twin of
+|                 orderof= gives the rank.
 |
 | Example:
 |
@@ -84,7 +106,7 @@
    , by    = trt01a
    , total = yes
    , label = "Sex"
-   , out   = sex
+   , out   = sex_freq
  )
  %freq(
      data  = adae
@@ -96,8 +118,9 @@
    , out   = teae
  )
  %freq(
-     data   = adlbc
+     data   = adlb
    , denom  = adsl
+   , where  = (avisit = 'Week 24')
    , var    = paramcd bnrind anrind
    , by     = trt01a
    , levels = bnrind 'LOW' 'NORMAL' 'HIGH' anrind 'LOW' 'NORMAL' 'HIGH'
@@ -144,6 +167,13 @@
 |                          the first gives the columns and the Total, the
 |                          others the rows or the pages (by=trt01a sex). One
 |                          variable: no number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: The example result is sex_freq, the name %stack
+|                          reads. The text of stats=: a name without a pattern
+|                          takes its default pattern. No number changes.
 |
 *******************************************************************************/
 %MACRO freq(

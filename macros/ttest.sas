@@ -3,16 +3,26 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : The two-sample t-test of each pair of groups, one record per
-|                 subject (PROC TTEST, BY each pair, the group first): the
-|                 difference of the means (diff: the group minus the group it is
-|                 compared with), its standard error (diff_se), its confidence
-|                 limits (lcl, ucl) and the two-sided p-value (pval): Student's
-|                 with the pooled variance (variances=equal) or Welch's with
-|                 Satterthwaite's df (variances=unequal).
+| Macro Purpose : Returns the difference of the means of each pair of groups,
+|                 with its confidence limits and the t-test p-value. Use
+|                 %wilcoxon when the values are not normal, %anova for one test
+|                 of all the groups, and %lsmeans for a model with covariates.
+|                 The macro writes a result: a data set with one row per number
+|                 (the result shape, see %stack). The test is the two-sample
+|                 t-test of PROC TTEST, run BY each pair, the group first. The
+|                 statistics:
+|                 - diff: the mean of the group minus the mean of the group it
+|                   is compared with
+|                 - diff_se: the standard error of diff
+|                 - lcl, ucl: the confidence limits of diff
+|                 - pval: the two-sided p-value, of Student's test with the
+|                   pooled variance (variances=equal) or of Welch's test with
+|                   Satterthwaite's degrees of freedom (variances=unequal)
+|                 The macro uses one record per subject: when a subject has
+|                 several records, the first one.
 | Procedure     : PROC TTEST
 | Proven        : the known answer of the method ttest (src/methods.ts, worked
 |                 out by tools/method_answers.R; node tools/methods_sas.ts); ran
@@ -22,43 +32,65 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records                                         Required
-| where       The records to use, a condition in parentheses      Optional
-| var         The variable                                        Required
-| by          The groups: a character variable                    Required
-| pairs       all: each later group against each earlier one, in  all
-|             the order of ORDER; or the pairs separated by #,
-|             one pair per line, the group first, then the group
-|             it is compared with (a value with a blank or a
-|             hyphen in quotes): "Drug" "Placebo" # "High"
-|             "Low". The form "A"-"B" of version 1.0 is still
-|             read.
-| order       A numeric variable with one value per group: the    Optional
-|             order of the groups
-| variances   equal (default: the Pooled row) or unequal (the     equal
-|             Satterthwaite row)
-| level       The confidence level (default 0.95)                 0.95
-| stats       The statistics, each with its pattern (default      diff="XX.X"
-|             diff="XX.X" diff_se="XX.XX" lcl="XX.X" ucl="XX.X"   diff_se="XX.XX" lcl="XX.X"
-|             pval="X.XXX")                                       ucl="XX.X" pval="X.XXX"
-| label       The label of the block in a table, in quotes        Optional
-| out         The result                                          Required
-| debug       yes: keep the work data sets of the macro           no
-|             (_ttest_*)
+| data        The input data set: one record per subject, with    Required
+|             USUBJID
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (avisit = 'Week 24')
+| var         The variable to compare: one numeric variable       Required
+| by          The groups: one character variable (trt01a, not     Required
+|             trt01an)
+| pairs       Which groups to compare. all: each later group      all
+|             against each earlier one, in the order of order=
+|             (else of the values). Or the pairs, separated by
+|             #: in each pair the group first, then the group it
+|             is compared with, each value in quotes (pairs =
+|             "Drug" "Placebo" # "High" "Low"). The form "A"-"B"
+|             of version 1.0 is still read.
+| order       The order of the groups: one numeric variable with  Optional
+|             one value per group (order = trt01an)
+| variances   equal (Student's test, the Pooled row of PROC       equal
+|             TTEST) or unequal (Welch's test, the Satterthwaite
+|             row)
+| level       The confidence level: a number between 0 and 1      0.95
+|             (level = 0.90)
+| stats       The statistics, in the order of the rows: each      diff="XX.X"
+|             name with its pattern of the printed number,        diff_se="XX.XX" lcl="XX.X"
+|             separated by blanks. The names are diff, diff_se,   ucl="XX.X" pval="X.XXX"
+|             lcl, ucl and pval. A name without a pattern takes
+|             its default pattern (n="XX", mean="XX.X",
+|             pval="X.XXX" ...; see %describe).
+| label       The label of the block in the table: a text in      Optional
+|             quotes. A block is the rows of one call in the
+|             table.
+| out         The name of the result data set                     Required
+| debug       yes: keep the work data sets _ttest_*               no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: one row per pair and statistic (BY: the group, VERSUS: the
-|                 group it is compared with); GROUPS is BY VERSUS.
+| Output        : OUT: the result shape (see %stack), one row per pair and
+|                 statistic: the variable of by= (the group), VERSUS (the group
+|                 it is compared with), GROUPS (by= and VERSUS), BLOCK, STAT,
+|                 VALUE and TEXT. When no record qualifies, the result has no
+|                 row.
 |
 | Example:
 |
  %ttest(
      data  = advs
-   , where = (paramcd = 'SYSBP' AND avisit = 'Week 12')
+   , where = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')
    , var   = chg
    , by    = trt01p
    , order = trt01pn
    , out   = sbp_t
+ )
+ %ttest(
+     data      = advs
+   , where     = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')
+   , var       = chg
+   , by        = trt01p
+   , pairs     = "Xanomeline High Dose" "Placebo"
+               # "Xanomeline Low Dose"  "Placebo"
+   , variances = unequal
+   , out       = sbp_welch
  )
 |
 |-------------------------------------------------------------------------------
@@ -80,6 +112,15 @@
 |                          case (names in lower case). No number changes.
 | 16-NOV-2026 Sapling      1.9.1: a numeric by= stops with the ERROR of the
 |                          macro (DEV-048). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the text of the header for the manual: the
+|                          summary, the form of each parameter. No number
+|                          changes.
+| 27-NOV-2026 Sapling      1.9.1: The example analyses the records of anl01fl =
+|                          'Y' (one record per subject). The text of stats=: a
+|                          name without a pattern takes its default pattern. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: an example with pairs= and variances=unequal.
+|                          No number changes.
 |
 *******************************************************************************/
 %MACRO ttest(

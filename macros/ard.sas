@@ -3,38 +3,49 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : Every number of a table as a CSV file, with every digit: one
-|                 line per number with the result it comes from, its statistic
-|                 and the values of its groups (in the order of GROUPS), then
-|                 the number and its text. The N of each column comes first
-|                 (result N). It reads the results, never the printed page:
-|                 sapling sas check compares these numbers with those of R.
+| Macro Purpose : Writes every number of a table to a CSV file, the numbers
+|                 file. Use %csv for the records of a listing or the numbers of
+|                 a figure. The numbers file has one line per number: the result
+|                 it comes from, its statistic, the values of its groups, and
+|                 the number as stored and as printed. The number as stored is
+|                 the value as SAS keeps it, written with the format BEST32. (up
+|                 to 15 significant digits); the number as printed is the TEXT
+|                 of the result. It reads the results, never the printed page,
+|                 so that a second program, in SAS or R, can compare its numbers
+|                 with this file.
+|                 - With columns=, the first lines are the N of each column (the
+|                   result N).
+|                 - A number has the values of at most five groups (g1_value to
+|                   g5_value), in the order of GROUPS.
 | Procedure     : DATA steps (FILE, PUT)
-| Proven        : the tables of the dummy study SYNHTN01 (sapling sas check:
-|                 SAS CHECK PASS, 759 of 759 numbers); ran on SAS 9.4 M9,
+| Proven        : the tables of the dummy study SYNHTN01 (759 of 759 numbers the
+|                 same as those of a second program in R); ran on SAS 9.4 M9,
 |                 2026-11-12
 |
 | Input Parameters :
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The results (%stack)                                Required
-| columns     The columns (%columns): the N of each column        Optional
-| file        The name of the output, without extension (default: Optional
-|             the program that %study set; without %study it is
-|             required)
+| data        The stacked results (out= of %stack)                Required
+| columns     The columns (out= of %columns). When given, the N   Optional
+|             of each column comes first, as the result N.
+| file        The name of the numbers file, without its           Optional
+|             extension. When not given, it is the name of the
+|             program that %study set; without %study, file= is
+|             required.
 |-------------------------------------------------------------------------------
 |
-| Output        : FILE: <out>/ard/<file>.csv: result, stat, g1_value ...
-|                 g5_value, raw, formatted; the N of each column first (result
-|                 N), then every number of the results.
+| Output        : FILE: <out>/ard/<file>.csv, where <out> is the output folder
+|                 that %study set and <file> is in lower case. Its columns:
+|                 result, stat, g1_value ... g5_value, raw (the number with all
+|                 its digits) and formatted (the number as printed).
 |
 | Example:
 |
- %ard(data=t14_2_1, columns=t14_2_1_cols)
+ %ard(data=t14_2_1, columns=t14_2_1_cols, file=t14_2_1)
 |
 |-------------------------------------------------------------------------------
 | Change Log :
@@ -48,6 +59,13 @@
 |                          house case.
 | 16-NOV-2026 Sapling      1.9.1: data= is checked before file=; the header says
 |                          that file= is required without %study (DEV-012). No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: The text says what the numbers file holds
+|                          (BEST32.). The header names no internal tool. No
 |                          number changes.
 |
 *******************************************************************************/

@@ -3,80 +3,105 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : Lines through values given (the LS means of %lsmeans or %mmrm
-|                 by visit, a rate by month): one line per group, with the
-|                 interval of lower= and upper= as error bars (the groups a
-|                 little apart on the x axis) or as a band. Nothing is computed:
-|                 the figure draws the values of data=. One panel per value of
-|                 panel=.
+| Macro Purpose : Draws lines through given values, one line per group, as PNG
+|                 and RTF files and returns the numbers drawn. It computes
+|                 nothing: use it for values computed before (the LS means of
+|                 %lsmeans or %mmrm by visit, a rate by month), and %meanplot to
+|                 compute the mean of the records. The interval of lower= and
+|                 upper= is drawn as error bars, with the groups a little apart
+|                 on the x axis, or as a band. A row with a missing x, group or
+|                 panel is not used. To draw the figure again without computing,
+|                 give plot= the out= and par= the outpar= of an earlier call.
 | Procedure     : PROC SGPANEL
 | Proven        : its known answer in tools/figures_sas.ts (the values given);
 |                 not yet run on a SAS server
-| Note          : Draw again: plot= (an out= of %lineplot, changed or not) is
-|                 drawn as it is (an interval where LOWER has a value), and par=
-|                 (an outpar= of %lineplot) gives the drawing parameters:
+| Note          : Draw again: plot= takes the out= of an earlier %lineplot call,
+|                 changed or not, and draws it as it is, with no statistic
+|                 computed (an interval where LOWER has a value). par= takes the
+|                 outpar= of that call and gives the drawing parameters:
 |                 columns, by, panel, band, xformat, xlabel, ylabel, ref, file,
-|                 width, height. They change the picture, not the numbers; the
-|                 others choose the values, and with plot= a NOTE says each one
-|                 given is not used. A drawing parameter given in the call wins
-|                 over its row of par=, the row over the default of the table.
+|                 width, height. These change the picture, not the numbers. The
+|                 other parameters choose the values; with plot= the log has a
+|                 NOTE for each one given, as it is not used. A drawing
+|                 parameter given in the call wins over its row of par=, and the
+|                 row wins over the default of the table.
 |
 | Input Parameters :
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The values: one row per group and x                 Required
-| plot        Draw again: an out= of %lineplot (not with data=)   Optional
-| par         The drawing parameters: an outpar= of %lineplot     Optional
-| columns     The columns of %columns: the order of the groups    Optional
-|             and their colours (default: the order of the data)
-| where       The rows to use, a condition in parentheses         Optional
-| x           The x: a numeric variable (AVISITN)                 Required
-| y           The value                                           Required
-| by          The groups: one line each                           Required
-| panel       One panel per value of this variable,               Optional
-|             one under the other, each with its own y axis
-| lower       The lower end of the interval: a variable           Optional
-| upper       The upper end of the interval: a variable           Optional
-| band        yes: the interval as a band; no: as error bars      no
-| xformat     The format of the ticks of x (default: the format   Optional
-|             of x)
-| xlabel      The label of the x axis (default: the label of x)   Optional
-| ylabel      The label of the y axis (default: the label of y)   Optional
-| ref         Reference lines on the y axis: values               Optional
-| file        The output without its extension: <file>.png (300   Required
-|             dpi) and <file>.rtf
-| width       The width of the figure                             6.5in
-| height      The height of the figure                            4.5in
-| out         The numbers drawn                                   Optional
-| outpar      The drawing parameters: one row each                Optional
+| data        The input data set: one row per group and x         Required
+| plot        Draw again: the out= of an earlier %lineplot call,  Optional
+|             changed or not. It is drawn as it is, and no
+|             statistic is computed. Give it instead of data=.
+| par         The drawing parameters of an earlier %lineplot      Optional
+|             call: its outpar=. A drawing parameter given in
+|             the call wins over its row of par=.
+| columns     The data set of %columns: it gives the order of     Optional
+|             the groups and their colours. When not given, the
+|             groups come in the order of the data.
+| where       The rows to use: a condition in parentheses, such   Optional
+|             as where = (paramcd = 'SYSBP')
+| x           The x: one numeric variable (x = avisitn)           Required
+| y           The value: one numeric variable (y = estimate)      Required
+| by          The groups: one variable, one line per group        Required
+| panel       A variable: one panel per value, one under the      Optional
+|             other, each with its own y axis (panel = paramcd)
+| lower       The lower end of the interval: one numeric          Optional
+|             variable. Give upper= with it.
+| upper       The upper end of the interval: one numeric          Optional
+|             variable. Give lower= with it.
+| band        yes: draw the interval as a band; no: as error      no
+|             bars
+| xformat     The format of the ticks of x, as in a FORMAT        Optional
+|             statement (xformat = visfmt.). When not given, the
+|             format of x.
+| xlabel      The label of the x axis: a text in quotes. When     Optional
+|             not given, the label of x= (or its name).
+| ylabel      The label of the y axis: a text in quotes. When     Optional
+|             not given, the label of y= (or its name).
+| ref         Reference lines on the y axis: one value or         Optional
+|             several, separated by blanks (ref = 0 50)
+| file        The output file without its extension: the macro    Required
+|             writes <file>.png (300 dpi) and <file>.rtf
+| width       The width of the figure: a length with its unit     6.5in
+|             (width = 9in)
+| height      The height of the figure: a length with its unit    4.5in
+|             (height = 6in)
+| out         The name of the data set of the numbers drawn.      Optional
+|             When not given, they are not kept.
+| outpar      The name of the data set of the drawing             Optional
+|             parameters, one row each. Give it to par= of a
+|             later call to draw the figure again.
 | debug       yes: keep the work data sets _lineplot_*            no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: one row per panel, group and x: PANEL and BY, KIND line,
-|                 X, Y, LOWER, UPPER. OUTPAR: one row per drawing parameter in
-|                 the order of the table: PARAMETER ($32) its name, VALUE ($500)
-|                 its value as drawn (a label in quotes). FILE: <file>.png and
-|                 <file>.rtf.
+| Output        : OUT: one row per panel, group and x: the variables of panel=
+|                 and by=, KIND (line), X, Y, LOWER and UPPER. OUTPAR: one row
+|                 per drawing parameter, in the order of the table: PARAMETER
+|                 ($32), its name, and VALUE ($500), its value as drawn (a label
+|                 in quotes). FILE: <file>.png and <file>.rtf.
 |
 | Example:
 |
  %lineplot(
-     data    = lsm_chg
-   , columns = t14_3_1_cols
-   , x       = avisitn
-   , y       = estimate
-   , by      = trtp
-   , lower   = lcl
-   , upper   = ucl
+     data    = f_bp_mean
+   , columns = t14_2_1_cols
+   , x       = x
+   , y       = y
+   , by      = trt01a
+   , panel   = param
+   , lower   = lower
+   , upper   = upper
+   , band    = yes
    , xformat = VISIT.
-   , ylabel  = "LS mean change from baseline (95% CI)"
+   , ylabel  = "Mean change from baseline (SE)"
    , ref     = 0
-   , file    = &spl_out./figures/f14_3_2
-   , out     = f14_3_2
+   , file    = &spl_out./figures/f_bp_line
+   , out     = f_bp_line
  )
 |
 |-------------------------------------------------------------------------------
@@ -92,6 +117,10 @@
 |                          set apart (OFFSETMIN=, OFFSETMAX=): the outer groups
 |                          were cut. The license line; the example in the house
 |                          case. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO lineplot(

@@ -3,39 +3,53 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : Start a program: the ADaM library (read only), the output
-|                 folder and the name of the program (in the footnote of each
-|                 output), the options of the outputs.
+| Macro Purpose : Starts a program: sets the study, the program and the output
+|                 folder, opens the ADaM library, sets the options. Call it
+|                 once, at the top of each program, before any other macro of
+|                 the library. The ADaM library ADAM is read only. %ard names
+|                 the numbers file after the program when its file= is not
+|                 given. The options are those of the outputs: no date, no page
+|                 numbers, no centering, a blank for a missing value. The macro
+|                 also clears the TITLE and FOOTNOTE statements.
 | Procedure     : LIBNAME, OPTIONS
-| Proven        : every program of the dummy study SYNHTN01 (sapling sas run:
-|                 SAS RUN PASS; sapling sas check: SAS CHECK PASS, 570 of 570
-|                 numbers of R the same in SAS); ran on SAS 9.4 M9, 2026-11-12
+| Proven        : every program of the dummy study SYNHTN01 (every program ran
+|                 with a clean log; 570 of 570 numbers the same as those of a
+|                 second program in R); ran on SAS 9.4 M9, 2026-11-12
 |
 | Input Parameters :
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| id          The study (first, without a keyword)                Required
-| program     The name of this program: its outputs are named     Required
-|             after it
-| adam        The folder of the ADaM data sets (default           &spl_root./adam
-|             &spl_root./adam)
-| out         The output folder, with the folders tlf, listings,  &spl_root./out
-|             figures and ard (default &spl_root./out)
+| id          The name of the study: a text without quotes,       Required
+|             given first, without a keyword
+|             (%study(CDISCPILOT01, ...))
+| program     The name of this program, without quotes (program   Required
+|             = t14_2_01). %ard names the numbers file after it
+|             when its file= is not given
+| adam        The folder of the ADaM data sets: a path without    &spl_root./adam
+|             quotes. The macro opens it as the library ADAM,
+|             read only.
+| out         The output folder: a path without quotes. The       &spl_root./out
+|             macros write into its folders tlf, listings,
+|             figures and ard.
 |-------------------------------------------------------------------------------
 |
-| Output        : CODE: the population and the records in DATA steps, the statistics
-|                 macros (%describe, %freq, %ancova, ...), then %stack and
-|                 %print (a figure: its figure macro).
+| Output        : CODE: the global macro variables SPL_STUDY, SPL_PROGRAM (in
+|                 lower case) and SPL_OUT; the library ADAM (read only); the
+|                 options NODATE NONUMBER NOCENTER LS=160 PS=32767 MISSING=' '
+|                 VALIDVARNAME=upcase NOFMTERR FORMDLIM=' '; no TITLE and no
+|                 FOOTNOTE.
 |
 | Example:
 |
  %study(
      CDISCPILOT01
-   , program = t14_2_01
+   , program = examples
+   , adam    = &spl_root./examples/adam
+   , out     = &spl_root./examples/out
  )
 |
 |-------------------------------------------------------------------------------
@@ -48,6 +62,12 @@
 |                          number changes.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: The header names no internal tool. No number
+|                          changes.
 |
 *******************************************************************************/
 %MACRO study(

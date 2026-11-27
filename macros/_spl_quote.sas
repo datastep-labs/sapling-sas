@@ -3,15 +3,15 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
 | Macro Purpose : The value of a parameter as a text in single quotes, for a
 |                 DATA step: each single quote in it doubled, nothing in it
 |                 resolved. The code the macro writes holds the value itself
 |                 (SYMGET would read it when the step runs), so that the flat
-|                 program of sapling sas run --flat (the code without a macro)
-|                 has it too. An empty value gives a blank text.
+|                 program (the code the macros wrote, without a macro) has it
+|                 too. An empty value gives a blank text.
 | Used By       : %_spl_pairlist, the label= of the macros a
 |                 person calls (inner part)
 |
@@ -36,6 +36,8 @@
 |                          pairs and no labels: SYMGET read them at run time).
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: The header names no internal tool. No number
+|                          changes.
 |
 *******************************************************************************/
 %MACRO _spl_quote(

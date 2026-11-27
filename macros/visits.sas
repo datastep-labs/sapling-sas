@@ -3,12 +3,18 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : Give each record its analysis visit by its visit: AVISIT and
-|                 AVISITN. A record of a visit that is not in the list keeps
-|                 them missing.
+| Macro Purpose : Gives each record its analysis visit, AVISIT and AVISITN, from
+|                 the value of its variable VISIT. Use %windows when the
+|                 analysis visit comes from the study day of the record. The
+|                 value of VISIT must match exactly, in upper and lower case. A
+|                 record whose visit is not in visits= gets missing values only
+|                 when data= does not have AVISIT and AVISITN yet. When data=
+|                 has them already (from an earlier step), a record whose visit
+|                 is not in visits= keeps its old AVISIT and AVISITN: drop them
+|                 before the call when such a record must have none.
 | Procedure     : DATA steps (SET POINT=)
 | Proven        : the fixtures of the step kind windows.visit
 |                 (src/adam_steps.ts; node tools/adam_steps_sas.ts); ran on SAS
@@ -18,20 +24,36 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The working data set (changed in place)             Required
-| visits      The visits, # between them; a visit is "VISIT"      Required
-|             AVISITN "AVISIT"
+| data        The data set to change in place, with the variable  Required
+|             VISIT, such as adlb
+| visits      The visits, separated by #. Each visit is "VISIT"   Required
+|             AVISITN "AVISIT": the value of VISIT in quotes,
+|             then the analysis visit as a number and as a text
+|             (# "WEEK 2" 2 "Week 2").
 |-------------------------------------------------------------------------------
 |
-| Output        : DATA: AVISIT and AVISITN on each record of a visit in the
-|                 list; missing on the others.
+| Output        : DATA: data=, changed in place: AVISIT and AVISITN on each
+|                 record whose visit is in visits=, missing on the others.
 |
 | Example:
 |
+ DATA lb;
+   SET adlb;
+   WHERE paramcd = 'ALT' AND MISSING(dtype);
+   KEEP usubjid paramcd visit aval;
+ RUN;
  %visits(
-     data   = adlb
-   , visits = "SCREENING" 0 "Baseline"
-            # "WEEK 2"    2 "Week 2"
+     data   = lb
+   , visits = "SCREENING 1" 0  "Baseline"
+            # "WEEK 2"      2  "Week 2"
+            # "WEEK 4"      4  "Week 4"
+            # "WEEK 6"      6  "Week 6"
+            # "WEEK 8"      8  "Week 8"
+            # "WEEK 12"     12 "Week 12"
+            # "WEEK 16"     16 "Week 16"
+            # "WEEK 20"     20 "Week 20"
+            # "WEEK 24"     24 "Week 24"
+            # "WEEK 26"     26 "Week 26"
  )
 |
 |-------------------------------------------------------------------------------
@@ -46,6 +68,15 @@
 |                          rows), no data set of them. No number changes.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: The example first copies its records into a
+|                          data set of its own, so that it changes no data set of
+|                          setup.sas for a later example. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the text says that a record of no visit keeps
+|                          an AVISIT that data= has already. No number changes.
 |
 *******************************************************************************/
 %MACRO visits(

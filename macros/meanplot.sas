@@ -3,88 +3,116 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : The mean (or the median) of a variable at each visit in each
-|                 group, with its error bars (SE, SD, the confidence interval of
-|                 the mean, or Q1 and Q3 of the median), joined by lines; the
-|                 groups a little apart on the x axis so that their bars do not
-|                 overlap; with ntable=yes the n of each visit and group under
-|                 the axis. One panel per value of panel=.
+| Macro Purpose : Draws the mean or median of each group by visit as PNG and RTF
+|                 files and returns the numbers drawn. It computes the statistic
+|                 from the records; use %lineplot for values computed before
+|                 (the LS means of %mmrm by visit) and %profileplot for the line
+|                 of each subject. The error bars are the SE, the SD or the
+|                 confidence interval of the mean, or Q1 and Q3 of the median.
+|                 The points of a group are joined by a line, and the groups
+|                 stand a little apart on the x axis so that their bars do not
+|                 overlap. With ntable=yes, the n of each visit and group is
+|                 shown under the axis. The quantiles are those of PROC MEANS
+|                 with QNTLDEF=5 (R quantile type 2). A record with a missing
+|                 value, visit, group or panel is not used. To draw the figure
+|                 again without computing, give plot= the out= and par= the
+|                 outpar= of an earlier call.
 | Procedure     : PROC MEANS, PROC SGPANEL
 | Proven        : its known answer in tools/figures_sas.ts (means, SE, SD,
 |                 limits worked out by hand); not yet run on a SAS server
+| Note          : Draw again: plot= takes the out= of an earlier %meanplot call,
+|                 changed or not, and draws it as it is, with no statistic
+|                 computed (error bars where LOWER has a value). par= takes the
+|                 outpar= of that call and gives the drawing parameters:
+|                 columns, by, panel, connect, ntable, xformat, xlabel, ylabel,
+|                 ref, file, width, height. These change the picture, not the
+|                 numbers. The other parameters compute; with plot= the log has
+|                 a NOTE for each one given, as it is not used. A drawing
+|                 parameter given in the call wins over its row of par=, and the
+|                 row wins over the default of the table.
 |
 | Input Parameters :
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records                                         Required
-| plot        Draw again: an out= of %meanplot (not with data=)   Optional
-| par         The drawing parameters: an outpar= of %meanplot     Optional
-| columns     The columns of %columns: the order of the groups    Optional
-|             and their colours (default: the order of the data)
-| where       The records to use, a condition in parentheses      Optional
-| y           The variable                                        Required
-| x           The visit: a numeric variable (AVISITN); its ticks  Required
-|             are its values, printed with xformat=
-| by          The groups: one line each                           Required
-| panel       One panel per value of this variable (PARAMCD),     Optional
-|             one under the other, each with its own y axis
-| stat        mean or median                                      mean
-| error       The error bars: se, sd, ci (of the mean), iqr (Q1   se
-|             and Q3, of the median) or none
-| level       The confidence level of error=ci                    0.95
-| connect     yes: the points of a group joined by a line         yes
-| ntable      yes: the n of each visit and group under the axis   no
-| xformat     The format of the ticks of x (default: the format   Optional
-|             of x)
-| xlabel      The label of the x axis (default: the label of x)   Optional
-| ylabel      The label of the y axis (default: the statistic,    Optional
-|             the error bars and the label of y)
-| ref         Reference lines on the y axis: values               Optional
-| file        The output without its extension: <file>.png (300   Required
-|             dpi) and <file>.rtf
-| width       The width of the figure                             6.5in
-| height      The height of the figure                            4.5in
-| out         The numbers drawn                                   Optional
-| outpar      The drawing parameters: one row each                Optional
+| data        The input data set: one record per subject and      Required
+|             visit
+| plot        Draw again: the out= of an earlier %meanplot call,  Optional
+|             changed or not. It is drawn as it is, and no
+|             statistic is computed. Give it instead of data=.
+| par         The drawing parameters of an earlier %meanplot      Optional
+|             call: its outpar=. A drawing parameter given in
+|             the call wins over its row of par=.
+| columns     The data set of %columns: it gives the order of     Optional
+|             the groups and their colours. When not given, the
+|             groups come in the order of the data.
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (anl01fl = 'Y')
+| y           The variable to summarize: one numeric variable (y  Required
+|             = aval)
+| x           The visit: one numeric variable (x = avisitn). Its  Required
+|             values are the ticks, printed with xformat=.
+| by          The groups: one variable, one line per group        Required
+| panel       A variable: one panel per value, one under the      Optional
+|             other, each with its own y axis (panel = paramcd)
+| stat        The statistic: mean or median                       mean
+| error       The error bars: se, sd or ci for the mean; iqr (Q1  se
+|             and Q3) for the median; or none
+| level       The confidence level of error=ci: a number between  0.95
+|             0 and 1
+| connect     yes: join the points of a group by a line           yes
+| ntable      yes: show the n of each visit and group under the   no
+|             axis
+| xformat     The format of the ticks of x, as in a FORMAT        Optional
+|             statement (xformat = visfmt.). When not given, the
+|             format of x.
+| xlabel      The label of the x axis: a text in quotes. When     Optional
+|             not given, the label of x= (or its name).
+| ylabel      The label of the y axis: a text in quotes. When     Optional
+|             not given, the statistic, the error bars and the
+|             label of y=.
+| ref         Reference lines on the y axis: one value or         Optional
+|             several, separated by blanks (ref = 0 50)
+| file        The output file without its extension: the macro    Required
+|             writes <file>.png (300 dpi) and <file>.rtf
+| width       The width of the figure: a length with its unit     6.5in
+|             (width = 9in)
+| height      The height of the figure: a length with its unit    4.5in
+|             (height = 6in)
+| out         The name of the data set of the numbers drawn.      Optional
+|             When not given, they are not kept.
+| outpar      The name of the data set of the drawing             Optional
+|             parameters, one row each. Give it to par= of a
+|             later call to draw the figure again.
 | debug       yes: keep the work data sets _meanplot_*            no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: one row per panel, group and visit: PANEL and BY, KIND
-|                 (mean or median), X (the visit), Y (the statistic), LOWER and
-|                 UPPER (the ends of the error bar; missing with one value for
-|                 se, sd, ci), N. OUTPAR: one row per drawing parameter in the
-|                 order of the table: PARAMETER ($32) its name, VALUE ($500) its
-|                 value as drawn (a label in quotes). FILE: <file>.png and
-|                 <file>.rtf. The quantiles are those of PROC MEANS QNTLDEF=5 (R
-|                 type 2). Draw again: plot= (an out= of %meanplot, changed or
-|                 not) is drawn as it is, without a statistic (error bars where
-|                 LOWER has a value), and par= (an outpar= of %meanplot) gives
-|                 the drawing parameters: columns, by, panel, connect, ntable,
-|                 xformat, xlabel, ylabel, ref, file, width, height. They change
-|                 the picture, not the numbers; the others compute, and with
-|                 plot= a NOTE says each one given is not used. A drawing
-|                 parameter given in the call wins over its row of par=, the row
-|                 over the default of the table.
+| Output        : OUT: one row per panel, group and visit: the variables of
+|                 panel= and by=, KIND (mean or median), X (the visit), Y (the
+|                 statistic), LOWER and UPPER (the ends of the error bar;
+|                 missing for se, sd and ci when there is one value) and N.
+|                 OUTPAR: one row per drawing parameter, in the order of the
+|                 table: PARAMETER ($32), its name, and VALUE ($500), its value
+|                 as drawn (a label in quotes). FILE: <file>.png and <file>.rtf.
 |
 | Example:
 |
  %meanplot(
      data    = advs
-   , columns = t14_7_1_cols
-   , where   = (anl01fl = 'Y' AND avisitn > 0)
+   , columns = t14_2_1_cols
+   , where   = (paramcd IN ('SYSBP' 'DIABP') AND anl01fl = 'Y' AND avisitn < 99)
    , y       = chg
    , x       = avisitn
-   , by      = trta
+   , by      = trt01a
    , panel   = param
    , ntable  = yes
    , xformat = VISIT.
    , ref     = 0
-   , file    = &spl_out./figures/f14_7_1
-   , out     = f14_7_1
+   , file    = &spl_out./figures/f_bp_mean
+   , out     = f_bp_mean
  )
 |
 |-------------------------------------------------------------------------------
@@ -102,6 +130,10 @@
 |                          case. No number changes.
 | 16-NOV-2026 Sapling      1.9.1: a visit with one value has no bar and no note
 |                          of missing values (DEV-019). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO meanplot(

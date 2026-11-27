@@ -1,0 +1,7 @@
+eos_cmh: 1 row
+GROUPS  BLOCK                   STAT         VALUE  TEXT
+        Discontinued the study  pval  8.4616214E-8  <0.001
+
+agegr_cmh: 1 row
+GROUPS  BLOCK      STAT        VALUE   TEXT
+        Age group  pval  0.224684028  0.225

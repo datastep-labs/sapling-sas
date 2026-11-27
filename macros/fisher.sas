@@ -3,14 +3,18 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : Fisher's exact test of "subjects with a record against
-|                 subjects without" between groups (PROC FREQ): pval. Every
-|                 subject of DENOM is counted, with a record or without: the
-|                 usual test of an adverse event between treatments. With
-|                 exact=no the Pearson chi-square test of the same table.
+| Macro Purpose : Returns the p-value of Fisher's exact test of the subjects
+|                 with a record against the subjects without, between groups.
+|                 Use it for an adverse event between treatments; use %chisq for
+|                 the categories of a response, and %cmh for a test within
+|                 strata. Every subject of denom= counts, with a record in data=
+|                 or without. A subject with a missing group in denom= is not
+|                 used. With exact=no the macro gives the Pearson chi-square
+|                 test of the same table. The macro writes a result: a data set
+|                 with one row per number (the result shape, see %stack).
 | Procedure     : PROC FREQ (FISHER, CHISQ)
 | Proven        : the known answer of the method fisher (src/methods.ts, worked
 |                 out by tools/method_answers.R; node tools/methods_sas.ts); ran
@@ -20,24 +24,34 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records                                         Required
-| denom       The subjects (one row each, with BY): a data set,   Required
-|             with options if needed
-| where       The records to use, a condition in parentheses      Optional
-| by          The groups to compare: one variable, on DENOM       Required
-| within      One test in each group of these variables (each     Optional
-|             term)
-| exact       no: the chi-square test (default yes)               yes
-| stats       The statistic and its pattern (default              pval="X.XXX"
-|             pval="X.XXX")
-| label       The label of the block in a table, in quotes        Optional
-| out         The result                                          Required
-| debug       yes: keep the work data sets of the macro           no
-|             (_fisher_*)
+| data        The input data set: the records (adverse events),   Required
+|             with USUBJID
+| denom       The subjects, one row each, with USUBJID and the    Required
+|             variable of by=: a data set, with data set options
+|             if needed, such as denom = adsl(where = (saffl =
+|             'Y'))
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (trtemfl = 'Y')
+| by          The groups to compare: one variable of denom=       Required
+| within      One test in each group of these variables of        Optional
+|             data=, separated by blanks, such as each preferred
+|             term (within = aedecod)
+| exact       no: the Pearson chi-square test of the same table   yes
+|             instead of Fisher's exact test
+| stats       The statistic pval and the pattern of its printed   pval="X.XXX"
+|             number, such as stats = pval="X.XXXX"
+| label       The label of the block in the table: a text in      Optional
+|             quotes. A block is the rows of one call in the
+|             table.
+| out         The name of the result data set                     Required
+| debug       yes: keep the work data sets _fisher_*              no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: one row, or one per group of WITHIN (GROUPS: their names).
-|                 Where PROC FREQ makes no test the value is missing.
+| Output        : OUT: the result shape (see %stack): one row with STAT pval, or
+|                 one row per group of within= with the variables of within=.
+|                 GROUPS has the names of the within= variables. VALUE is
+|                 missing where no test can be made (one group, or all subjects
+|                 with a record, or none).
 |
 | Example:
 |
@@ -46,8 +60,8 @@
    , denom  = adsl
    , where  = (trtemfl = 'Y')
    , by     = trt01a
-   , within = aebodsys aedecod
-   , out    = pt_test
+   , within = aebodsys
+   , out    = soc_test
  )
 |
 |-------------------------------------------------------------------------------
@@ -66,6 +80,10 @@
 | 16-NOV-2026 Sapling      1.9.1: a table of one group or one column is not
 |                          tested: the value missing, no WARNING of ODS OUTPUT
 |                          (DEV-049). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO fisher(

@@ -1,0 +1,152 @@
+site_name: Sapling SAS macros
+site_description: SAS macros for the tables, listings and figures of clinical trials, proven against pharmaverse references.
+site_url: https://datastep-labs.github.io/sapling-sas/
+repo_url: https://github.com/datastep-labs/sapling-sas
+repo_name: datastep-labs/sapling-sas
+edit_uri: ""
+copyright: Copyright 2026 DataStep Labs. The macros are source available under a commercial license.
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - toc.follow
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/brightness-7
+        name: Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/brightness-4
+        name: Light mode
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+
+nav:
+  - Home: index.md
+  - Tutorial:
+      - tutorial/index.md
+  - How-to guides:
+      - how-to/index.md
+      - how-to/derive-baseline.md
+      - how-to/demographic-table.md
+      - how-to/adverse-event-table.md
+      - how-to/efficacy-table.md
+      - how-to/kaplan-meier-figure.md
+      - how-to/page-per-subgroup.md
+      - how-to/check-a-table.md
+  - Reference:
+      - reference/index.md
+      - Start a program:
+          - "%study": reference/study.md
+          - "%import_xpt": reference/import_xpt.md
+      - Describe the data:
+          - "%describe": reference/describe.md
+          - "%freq": reference/freq.md
+          - "%proportion": reference/proportion.md
+          - "%rate": reference/rate.md
+          - "%worst": reference/worst.md
+          - "%termflags": reference/termflags.md
+      - Test the groups:
+          - "%anova": reference/anova.md
+          - "%ttest": reference/ttest.md
+          - "%wilcoxon": reference/wilcoxon.md
+          - "%chisq": reference/chisq.md
+          - "%fisher": reference/fisher.md
+          - "%cmh": reference/cmh.md
+          - "%ancova": reference/ancova.md
+          - "%adjust": reference/adjust.md
+      - Compare groups with a model:
+          - "%lsmeans": reference/lsmeans.md
+          - "%mmrm": reference/mmrm.md
+          - "%logistic": reference/logistic.md
+          - "%risk": reference/risk.md
+          - "%rateratio": reference/rateratio.md
+      - Time to an event:
+          - "%km": reference/km.md
+          - "%logrank": reference/logrank.md
+          - "%cox": reference/cox.md
+      - Subgroups:
+          - "%interaction_glm": reference/interaction_glm.md
+          - "%interaction_logistic": reference/interaction_logistic.md
+          - "%interaction_genmod": reference/interaction_genmod.md
+          - "%interaction_phreg": reference/interaction_phreg.md
+      - Build a table:
+          - "%stack": reference/stack.md
+          - "%columns": reference/columns.md
+          - "%ard": reference/ard.md
+          - "%layout": reference/layout.md
+          - "%print": reference/print.md
+          - "%csv": reference/csv.md
+      - Tables in one call:
+          - "%table": reference/table.md
+          - "%table_summary": reference/table_summary.md
+          - "%table_ae": reference/table_ae.md
+          - "%table_visit": reference/table_visit.md
+          - "%table_shift": reference/table_shift.md
+          - "%table_response": reference/table_response.md
+          - "%table_model": reference/table_model.md
+          - "%table_tte": reference/table_tte.md
+      - Figures:
+          - "%kmplot": reference/kmplot.md
+          - "%forestplot": reference/forestplot.md
+          - "%meanplot": reference/meanplot.md
+          - "%lineplot": reference/lineplot.md
+          - "%boxplot": reference/boxplot.md
+          - "%barplot": reference/barplot.md
+          - "%aeplot": reference/aeplot.md
+          - "%profileplot": reference/profileplot.md
+          - "%scatterplot": reference/scatterplot.md
+      - ADaM steps:
+          - "%merge_subject": reference/merge_subject.md
+          - "%pick": reference/pick.md
+          - "%summarize": reference/summarize.md
+          - "%summarize_groups": reference/summarize_groups.md
+          - "%baseline": reference/baseline.md
+          - "%flag_first": reference/flag_first.md
+          - "%flag_if_any": reference/flag_if_any.md
+          - "%windows": reference/windows.md
+          - "%visits": reference/visits.md
+          - "%locf": reference/locf.md
+          - "%relchange": reference/relchange.md
+          - "%param_wide": reference/param_wide.md
+          - "%pool": reference/pool.md
+          - "%tte": reference/tte.md
+  - Glossary: glossary.md
+  - Explanation:
+      - explanation/index.md
+      - explanation/program.md
+      - explanation/result-shape.md
+      - explanation/numbers.md
+      - explanation/design.md
+      - explanation/proof.md

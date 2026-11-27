@@ -3,88 +3,117 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : The forest plot of results in the levels of subgroups: one row
-|                 per level under a heading row of its factor, the estimate as a
-|                 marker with its interval as a bar, a line at no difference, a
-|                 log axis for a ratio, and the estimate (lower, upper) as text
-|                 at the right. It draws results (of %cox, %logistic,
-|                 %rateratio, %lsmeans or %risk with within=), so that the
-|                 figure and the table of the same results cannot differ.
+| Macro Purpose : Draws a forest plot of estimates in subgroups as PNG and RTF
+|                 files and returns the numbers drawn. It computes no statistic:
+|                 it draws a result of %cox, %logistic, %rateratio, %lsmeans or
+|                 %risk called with within=, so the figure and the table of the
+|                 same result cannot differ. A result is the data set a
+|                 statistics macro writes, one row per number. For the test of
+|                 the treatment-by-subgroup interaction, use the %interaction_*
+|                 macros. Each factor of within= has a heading row, with one row
+|                 per level under it. The estimate is a marker and its
+|                 confidence interval a bar; a line marks no difference. A ratio
+|                 has a log axis (scale=log). With text=yes, the estimate and
+|                 its limits are also written as text at the right. To draw the
+|                 figure again without computing, give plot= the out= and par=
+|                 the outpar= of an earlier call.
 | Procedure     : PROC SUMMARY, PROC SGPLOT
 | Proven        : its known answer in tools/figures_sas.ts (made-up results,
 |                 arranged by hand); not yet run on a SAS server
-| Note          : Draw again: plot= (an out= of %forestplot, changed or not) is
-|                 drawn as it is, the factors, levels and pairs in the order of
-|                 its rows, each factor under the heading of its name; par= (an
-|                 outpar= of %forestplot) gives the drawing parameters: columns,
-|                 estimate (with plot= only the name over the text column),
-|                 scale, text, xlabel, ref, file, width, height. They change the
-|                 picture, not the numbers; the others compute, and with plot= a
-|                 NOTE says each one given is not used. A drawing parameter
-|                 given in the call wins over its row of par=, the row over the
-|                 default of the table.
+| Note          : Draw again: plot= takes the out= of an earlier %forestplot
+|                 call, changed or not, and draws it as it is, with no statistic
+|                 computed: the factors, levels and pairs in the order of its
+|                 rows, each factor under the heading of its name. par= takes
+|                 the outpar= of that call and gives the drawing parameters:
+|                 columns, estimate (with plot= only for the name over the text
+|                 column), scale, text, xlabel, ref, file, width, height. These
+|                 change the picture, not the numbers. The other parameters
+|                 compute; with plot= the log has a NOTE for each one given, as
+|                 it is not used. A drawing parameter given in the call wins
+|                 over its row of par=, and the row wins over the default of the
+|                 table.
 |
 | Input Parameters :
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The results: rows of STAT and VALUE (the result     Required
-|             shape), with the variables of within=
-| plot        Draw again: an out= of %forestplot (not with data=) Optional
-| par         The drawing parameters: an outpar= of %forestplot   Optional
-| columns     The columns of %columns: the order and colours of   Optional
-|             the groups of by=
-| where       The results to use, a condition in parentheses      Optional
-| estimate    The statistic of the estimate (hr, or, irr, rr, rd, Required
-|             diff)
-| lower       The statistic of the lower limit                    lcl
-| upper       The statistic of the upper limit                    ucl
-| within      The variables of the levels, one per factor, in the Required
-|             order of the rows; a row is the level of the first
-|             of them that has a value
-| group       A variable with the heading of each factor          Optional
-|             (default: the label of the variable of within=)
-| by          The group of a pair (the results with VERSUS: the   Optional
-|             pair is by= vs VERSUS); one colour per pair
-| scale       log (a ratio) or linear (a difference)              log
-| text        yes: the estimate (lower, upper) as text at the     yes
-|             right under the name of the statistic (HR (CI)),
-|             and the n when the results have a statistic n
-| xlabel      The label of the x axis                             "Estimate
+| data        The input data set: a result (rows of STAT and      Required
+|             VALUE) of a comparison called with within=, with
+|             the variables of within=
+| plot        Draw again: the out= of an earlier %forestplot      Optional
+|             call, changed or not. It is drawn as it is, and no
+|             statistic is computed. Give it instead of data=.
+| par         The drawing parameters of an earlier %forestplot    Optional
+|             call: its outpar=. A drawing parameter given in
+|             the call wins over its row of par=.
+| columns     The data set of %columns: it gives the order of     Optional
+|             the groups and their colours. When not given, the
+|             groups come in the order of the data.
+| where       The rows of the result to use: a condition in       Optional
+|             parentheses, such as where = (versus = 'Placebo')
+| estimate    The statistic of the estimate: a value of STAT,     Required
+|             such as hr, or, irr, rr, rd or diff
+| lower       The statistic of the lower limit: a value of STAT   lcl
+| upper       The statistic of the upper limit: a value of STAT   ucl
+| within      The factors: variables of the result separated by   Required
+|             blanks, one per factor, in the order of the rows
+|             (within = sex agegr1). A row belongs to the first
+|             of them that has a value.
+| group       A variable with the heading of each factor. When    Optional
+|             not given, the heading is the label of the
+|             variable of within=.
+| by          The group of a pair: a variable of the result.      Optional
+|             When the result has VERSUS, the pair is the group
+|             of by= against VERSUS. Each pair has its own
+|             colour.
+| scale       The scale of the x axis: log (for a ratio) or       log
+|             linear (for a difference)
+| text        yes: write the estimate and its limits, as          yes
+|             "estimate (lower, upper)", at the right under the
+|             name of the statistic, with the n when the result
+|             has a statistic n
+| xlabel      The label of the x axis: a text in quotes           "Estimate
 |                                                                 (95% CI)"
-| ref         The line of no difference: 1 for a ratio, 0 for a   1
-|             difference
-| file        The output without its extension: <file>.png (300   Required
-|             dpi) and <file>.rtf
-| width       The width of the figure                             6.5in
-| height      The height of the figure                            4.5in
-| out         The numbers drawn                                   Optional
-| outpar      The drawing parameters: one row each                Optional
+| ref         The line of no difference on the x axis: one        1
+|             value, 1 for a ratio or 0 for a difference
+| file        The output file without its extension: the macro    Required
+|             writes <file>.png (300 dpi) and <file>.rtf
+| width       The width of the figure: a length with its unit     6.5in
+|             (width = 9in)
+| height      The height of the figure: a length with its unit    4.5in
+|             (height = 6in)
+| out         The name of the data set of the numbers drawn.      Optional
+|             When not given, they are not kept.
+| outpar      The name of the data set of the drawing             Optional
+|             parameters, one row each. Give it to par= of a
+|             later call to draw the figure again.
 | debug       yes: keep the work data sets _forestplot_*          no
 |-------------------------------------------------------------------------------
 |
 | Output        : OUT: one row per level and pair: FACTOR (the variable of
-|                 within=), LEVEL (its value as printed), PAIR (by= vs VERSUS;
-|                 blank without by=), KIND estimate, X (the estimate), LOWER,
-|                 UPPER, N (missing unless the results have n). OUTPAR: one row
-|                 per drawing parameter in the order of the table: PARAMETER
-|                 ($32) its name, VALUE ($500) its value as drawn (a label in
-|                 quotes). FILE: <file>.png and <file>.rtf.
+|                 within=), LEVEL (its value as printed), PAIR (the group of by=
+|                 against VERSUS; blank without by=), KIND (estimate), X (the
+|                 estimate), LOWER, UPPER and N (missing when the result has no
+|                 statistic n). OUTPAR: one row per drawing parameter, in the
+|                 order of the table: PARAMETER ($32), its name, and VALUE
+|                 ($500), its value as drawn (a label in quotes). FILE:
+|                 <file>.png and <file>.rtf.
 |
 | Example:
 |
  %forestplot(
-     data     = t14_2_sg
+     data     = hr_sub
+   , columns  = t14_2_1_cols
    , estimate = hr
-   , within   = sex agegr1 race
-   , by       = trta
+   , within   = sex agegr1
+   , by       = trt01a
    , scale    = log
    , ref      = 1
-   , file     = &spl_out./figures/f14_2_sg
-   , out      = f14_2_sg
+   , file     = &spl_out./figures/f_hr_sub
+   , out      = f_hr_sub
  )
 |
 |-------------------------------------------------------------------------------
@@ -103,6 +132,10 @@
 |                          results is an error with its fix.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO forestplot(

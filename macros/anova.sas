@@ -3,11 +3,17 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : The one-way analysis of variance of a variable between groups
-|                 (PROC GLM): the F test of the model (pval).
+| Macro Purpose : Returns the p-value of the F test of a one-way analysis of
+|                 variance of a variable between the groups. Use %ttest or
+|                 %wilcoxon to compare pairs of groups, and %ancova when the
+|                 model has covariates. The macro writes a result: a data set
+|                 with one row per number (the result shape, see %stack). The
+|                 model is var= by by= (PROC GLM). The p-value is that of the
+|                 model, one test of all the groups together. A record with a
+|                 missing value or a missing group is not used.
 | Procedure     : PROC GLM
 | Proven        : the known answer of the method anova (src/methods.ts, worked
 |                 out by tools/method_answers.R; node tools/methods_sas.ts); ran
@@ -17,19 +23,23 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records                                         Required
-| where       The records to use, a condition in parentheses      Optional
-| var         The variable                                        Required
+| data        The input data set                                  Required
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (anl01fl = 'Y')
+| var         The variable to analyse: one numeric variable       Required
 | by          The groups to compare: one variable                 Required
-| stats       The statistic and its pattern (default              pval="X.XXX"
-|             pval="X.XXX")
-| label       The label of the block in a table, in quotes        Optional
-| out         The result                                          Required
-| debug       yes: keep the work data set of the macro            no
-|             (_anova_overall)
+| stats       The statistic with its pattern of the printed       pval="X.XXX"
+|             number: pval
+| label       The label of the block in the table: a text in      Optional
+|             quotes. A block is the rows of one call in the
+|             table.
+| out         The name of the result data set                     Required
+| debug       yes: keep the work data sets _anova_*               no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: one row, of all groups together (GROUPS is blank).
+| Output        : OUT: the result shape (see %stack), one row: STAT pval, with
+|                 GROUPS blank (all the groups together), BLOCK, VALUE and TEXT.
+|                 When no record qualifies, the result has no row.
 |
 | Example:
 |
@@ -38,7 +48,7 @@
    , var   = age
    , by    = trt01a
    , label = "Age (years)"
-   , out   = age_test
+   , out   = age_anova
  )
 |
 |-------------------------------------------------------------------------------
@@ -54,6 +64,11 @@
 |                          runs: the flat program has it. No number changes.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the text of the header for the manual: the
+|                          summary, the form of each parameter. No number
+|                          changes.
+| 27-NOV-2026 Sapling      1.9.1: The example result is age_anova, the name
+|                          %stack reads. No number changes.
 |
 *******************************************************************************/
 %MACRO anova(

@@ -3,15 +3,19 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : A logistic regression of a response with two values, one
-|                 record per subject (PROC LOGISTIC): the probability of the
-|                 event (event=) on the groups, the covariates and the class
-|                 factors. The odds ratio of pairs of groups from one fit (or),
-|                 its Wald confidence limits (lcl, ucl) and the Wald p-value of
-|                 the pair (pval).
+| Macro Purpose : Returns the odds ratios of pairs of groups from a logistic
+|                 regression, with their Wald confidence limits and p-values.
+|                 Use %risk for a risk difference, relative risk or odds ratio
+|                 from the 2 x 2 table of a pair, without a model. The model is
+|                 PROC LOGISTIC of a response with two values: the probability
+|                 of the event of event= on the groups, the class factors and
+|                 the covariates, one record per subject (the first with a
+|                 response). All pairs come from one fit. The macro writes a
+|                 result: a data set with one row per number (the result shape,
+|                 see %stack).
 | Procedure     : PROC LOGISTIC (LSMEANS)
 | Proven        : the known answer of the method logistic (src/methods.ts,
 |                 worked out by tools/method_answers.R; node
@@ -21,55 +25,78 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records                                         Required
-| where       The records to use, a condition in parentheses      Optional
-| var         The response: two values                            Required
-| event       The value that is the event, in quotes (default     "Y"
-|             "Y"; a number: "1"). PROC LOGISTIC alone models
-|             the first value in sort order.
-| by          The groups of the model: a character variable       Required
-| within      One model in each group of these variables (the     Optional
-|             levels of a subgroup)
-| covars      The covariates                                      Optional
-| class       The class factors                                   Optional
-| pairs       all: each later group against each earlier one, in  all
-|             the order of ORDER; or the pairs separated by #,
-|             one pair per line, the group first, then the group
-|             it is compared with (a value with a blank or a
-|             hyphen in quotes): "Drug" "Placebo" # "High"
-|             "Low". The form "A"-"B" of version 1.0 is still
-|             read.
-| order       A numeric variable with one value per group: the    Optional
-|             order of the groups
-| level       The confidence level (default 0.95)                 0.95
-| stats       The statistics, each with its pattern (default      or="XX.XX" lcl="XX.XX"
-|             or="XX.XX" lcl="XX.XX" ucl="XX.XX" pval="X.XXX")    ucl="XX.XX" pval="X.XXX"
-| label       The label of the block in a table, in quotes        Optional
-| out         The result                                          Required
-| debug       yes: keep the work data sets of the macro           no
-|             (_logistic_*)
+| data        The input data set, with USUBJID                    Required
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (paramcd = 'RESP')
+| var         The response: one variable with two values,         Required
+|             numeric or character
+| event       The value of var= that is the event, in quotes;     "Y"
+|             for a number also in quotes (event = "1"). PROC
+|             LOGISTIC alone models the first value in sort
+|             order.
+| by          The groups of the model: one character variable     Required
+| within      One model in each group of these variables,         Optional
+|             separated by blanks, such as the levels of a
+|             subgroup (within = sex)
+| covars      The covariates: numeric variables separated by      Optional
+|             blanks (covars = age)
+| class       The class factors besides the groups: variables     Optional
+|             separated by blanks (class = sex)
+| pairs       The pairs of groups to compare. all: each later     all
+|             group against each earlier one, in the order of
+|             order= (or of the values). Or the pairs separated
+|             by #, each the group first and then the group it
+|             is compared with, a value with a blank or a hyphen
+|             in quotes: pairs = "Drug" "Placebo" # "High"
+|             "Low". The old form "A"-"B" is still read.
+| order       The order of the groups: one numeric variable with  Optional
+|             one value per group (order = trt01pn)
+| level       The confidence level of the limits: a number        0.95
+|             between 0 and 1
+| stats       The statistics, in the order of the rows: each      or="XX.XX" lcl="XX.XX"
+|             name with the pattern of its printed number,        ucl="XX.XX" pval="X.XXX"
+|             separated by blanks. The names are or, lcl, ucl
+|             and pval. A name without a pattern takes its
+|             default pattern (n="XX", mean="XX.X", pval="X.XXX"
+|             ...; see %describe).
+| label       The label of the block in the table: a text in      Optional
+|             quotes. A block is the rows of one call in the
+|             table.
+| out         The name of the result data set                     Required
+| debug       yes: keep the work data sets _logistic_*            no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: one row per pair and statistic (BY: the group, VERSUS: the
-|                 group it is compared with); GROUPS is BY VERSUS (and WITHIN).
+| Output        : OUT: the result shape (see %stack), one row per pair and
+|                 statistic: the group in the by= variable, the group it is
+|                 compared with in VERSUS, and the variables of within=. GROUPS
+|                 is the by= variable, VERSUS and the within= variables.
 | Note          : The iterations go on until no parameter changes by more than
-|                 1E-10 (XCONV=; PROC LOGISTIC alone stops at a relative
-|                 gradient of 1E-8), so that the estimate is the maximum to the
-|                 digits R gives (the odds ratio 7 of a 2 x 2 table: 7, where
-|                 GCONV=1E-10 gave 6.9999907).
+|                 1E-10 (XCONV=). PROC LOGISTIC alone stops at a relative
+|                 gradient of 1E-8. So the estimate is the maximum to the digits
+|                 R gives: the odds ratio 7 of a 2 x 2 table is 7, where
+|                 GCONV=1E-10 gave 6.9999907.
 |
 | Example:
 |
  %logistic(
-     data   = adrs
-   , where  = (paramcd = 'BOR')
-   , var    = crit1fl
-   , event  = "Y"
-   , by     = trt01p
+     data   = adsl
+   , var    = eosstt
+   , event  = "DISCONTINUED"
+   , by     = trt01a
    , covars = age
    , class  = sex
-   , order  = trt01pn
-   , out    = resp_or
+   , order  = trt01an
+   , out    = eos_or
+ )
+ %logistic(
+     data   = adsl
+   , var    = eosstt
+   , event  = "DISCONTINUED"
+   , by     = trt01a
+   , within = sex
+   , pairs  = "Xanomeline High Dose" "Placebo"
+            # "Xanomeline Low Dose"  "Placebo"
+   , out    = eos_or_sex
  )
 |
 |-------------------------------------------------------------------------------
@@ -91,6 +118,14 @@
 |                          maximum to the last digits (the odds ratio 7 of a 2 x
 |                          2 table, not 6.9999907; DEV-041). The numbers change
 |                          after the sixth digit.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: The text of stats=: a name without a pattern
+|                          takes its default pattern. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: an example with within= and pairs=. No number
+|                          changes.
 |
 *******************************************************************************/
 %MACRO logistic(

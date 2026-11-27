@@ -1,0 +1,53 @@
+ttde_km: 15 rows
+TRT01A                GROUPS  BLOCK                                STAT    VALUE  TEXT
+Placebo               TRT01A  Time to the first skin event (days)  n          85  85
+Placebo               TRT01A  Time to the first skin event (days)  events     20  20
+Placebo               TRT01A  Time to the first skin event (days)  median         NE
+Placebo               TRT01A  Time to the first skin event (days)  lcl            NE
+Placebo               TRT01A  Time to the first skin event (days)  ucl            NE
+Xanomeline High Dose  TRT01A  Time to the first skin event (days)  n          72  72
+Xanomeline High Dose  TRT01A  Time to the first skin event (days)  events     39  39
+Xanomeline High Dose  TRT01A  Time to the first skin event (days)  median     57  57.0
+Xanomeline High Dose  TRT01A  Time to the first skin event (days)  lcl        46  46.0
+Xanomeline High Dose  TRT01A  Time to the first skin event (days)  ucl       177  177.0
+Xanomeline Low Dose   TRT01A  Time to the first skin event (days)  n          95  95
+Xanomeline Low Dose   TRT01A  Time to the first skin event (days)  events     39  39
+Xanomeline Low Dose   TRT01A  Time to the first skin event (days)  median     80  80.0
+Xanomeline Low Dose   TRT01A  Time to the first skin event (days)  lcl        51  51.0
+Xanomeline Low Dose   TRT01A  Time to the first skin event (days)  ucl            NE
+
+os_km: 15 rows
+TRT01P                GROUPS  BLOCK  STAT           VALUE   TEXT
+Placebo               TRT01P         n                 86     86
+Placebo               TRT01P         events             2      2
+Placebo               TRT01P         surv    97.148554337   97.1
+Placebo               TRT01P         lcl     93.189710174   93.2
+Placebo               TRT01P         ucl              100  100.0
+Xanomeline High Dose  TRT01P         n                 84     84
+Xanomeline High Dose  TRT01P         events             0      0
+Xanomeline High Dose  TRT01P         surv             100  100.0
+Xanomeline High Dose  TRT01P         lcl              100  100.0
+Xanomeline High Dose  TRT01P         ucl              100  100.0
+Xanomeline Low Dose   TRT01P         n                 84     84
+Xanomeline Low Dose   TRT01P         events             1      1
+Xanomeline Low Dose   TRT01P         surv    98.245614035   98.2
+Xanomeline Low Dose   TRT01P         lcl     94.837376767   94.8
+Xanomeline Low Dose   TRT01P         ucl              100  100.0
+
+ttde_km90: 15 rows
+TRT01A                GROUPS  BLOCK  STAT    VALUE  TEXT
+Placebo               TRT01A         n          85  85
+Placebo               TRT01A         events     20  20
+Placebo               TRT01A         median         NE
+Placebo               TRT01A         lcl            NE
+Placebo               TRT01A         ucl            NE
+Xanomeline High Dose  TRT01A         n          72  72
+Xanomeline High Dose  TRT01A         events     39  39
+Xanomeline High Dose  TRT01A         median     57  57.0
+Xanomeline High Dose  TRT01A         lcl        46  46.0
+Xanomeline High Dose  TRT01A         ucl       177  177.0
+Xanomeline Low Dose   TRT01A         n          95  95
+Xanomeline Low Dose   TRT01A         events     39  39
+Xanomeline Low Dose   TRT01A         median     80  80.0
+Xanomeline Low Dose   TRT01A         lcl        48  48.0
+Xanomeline Low Dose   TRT01A         ucl            NE

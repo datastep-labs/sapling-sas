@@ -3,15 +3,21 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : The Cochran-Mantel-Haenszel test of groups against categories
-|                 in strata (PROC FREQ), each subject once in each group,
-|                 category and stratum: pval. The test of general association,
-|                 or (statistic=rowmean) the test that the mean scores of the
-|                 groups differ, the scores being the values of the numeric
-|                 response.
+| Macro Purpose : Returns the p-value of the Cochran-Mantel-Haenszel test of the
+|                 groups against the categories of a response, within strata.
+|                 Use %chisq for the same test without strata. Each subject
+|                 counts once in each group, category and stratum. A record with
+|                 a missing group, category or value of within= is not used.
+|                 statistic= chooses the test:
+|                 - general: the test of general association
+|                 - rowmean: the test that the mean scores of the groups differ;
+|                   the scores are the values of the numeric response
+|                   (SCORES=TABLE)
+|                 The macro writes a result: a data set with one row per number
+|                 (the result shape, see %stack).
 | Procedure     : PROC FREQ (CMH)
 | Proven        : the known answer of the method cmh (src/methods.ts, worked out
 |                 by tools/method_answers.R; node tools/methods_sas.ts); ran on
@@ -21,36 +27,51 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records                                         Required
-| where       The records to use, a condition in parentheses      Optional
-| var         The categories (the response): one variable         Required
+| data        The input data set: the records, with USUBJID       Required
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (avisit = 'Week 24')
+| var         The categories of the response: one variable;       Required
+|             numeric for statistic=rowmean
 | by          The groups to compare: one variable                 Required
 | strata      The stratification variables, separated by blanks   Optional
-| within      One test in each group of these variables (a        Optional
-|             parameter, a visit)
-| statistic   general (default): general association; rowmean:    general
-|             row mean scores differ
-| stats       The statistic and its pattern (default              pval="X.XXX"
-|             pval="X.XXX")
-| label       The label of the block in a table, in quotes        Optional
-| out         The result                                          Required
-| debug       yes: keep the work data sets of the macro           no
-|             (_cmh_*)
+|             (strata = sitegr1). When not given, the test has
+|             one stratum.
+| within      One test in each group of these variables,          Optional
+|             separated by blanks, such as a parameter and a
+|             visit (within = paramcd avisit)
+| statistic   The test: general (general association) or rowmean  general
+|             (the mean scores of the groups differ)
+| stats       The statistic pval and the pattern of its printed   pval="X.XXX"
+|             number, such as stats = pval="X.XXXX"
+| label       The label of the block in the table: a text in      Optional
+|             quotes. A block is the rows of one call in the
+|             table.
+| out         The name of the result data set                     Required
+| debug       yes: keep the work data sets _cmh_*                 no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: one row, or one per group of WITHIN (GROUPS: their names).
-|                 Where PROC FREQ makes no test the value is missing.
+| Output        : OUT: the result shape (see %stack): one row with STAT pval, or
+|                 one row per group of within= with the variables of within=.
+|                 GROUPS has the names of the within= variables. VALUE is
+|                 missing where PROC FREQ makes no test.
 |
 | Example:
 |
  %cmh(
-     data      = adqscibc
-   , var       = aval
-   , by        = trt01p
-   , strata    = sitegr1
-   , within    = avisit
+     data   = adsl
+   , var    = eosstt
+   , by     = trt01a
+   , strata = sex
+   , label  = "Discontinued the study"
+   , out    = eos_cmh
+ )
+ %cmh(
+     data      = adsl
+   , var       = agegr1
+   , by        = trt01a
    , statistic = rowmean
-   , out       = cibic_test
+   , label     = "Age group"
+   , out       = agegr_cmh
  )
 |
 |-------------------------------------------------------------------------------
@@ -66,6 +87,12 @@
 |                          runs: the flat program has it. No number changes.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: an example with statistic=rowmean. No number
+|                          changes.
 |
 *******************************************************************************/
 %MACRO cmh(

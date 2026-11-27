@@ -3,24 +3,30 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : The adjusted p-values of a family of pairs of groups (the
-|                 hypotheses of a multiplicity block): the p-values (STAT =
-|                 pval) of a result of pairs (%lsmeans, %cox, %logistic, %risk,
-|                 %rateratio, %ttest, %wilcoxon), in the order of family=,
-|                 adjusted by method= (PROC MULTTEST INPVALUES=: bonferroni,
-|                 holm (STEPBON), hochberg; a DATA step: bonferroni with
-|                 weights, hierarchy, the fixed sequence: the largest p-value of
-|                 a hypothesis and those before it). The result is the input
-|                 with a row padj for each pair of the family. The family is
-|                 every p-value of data= of a pair of family=: when data= has a
-|                 pair in several rows (the terms, visits or subgroups of
-|                 WITHIN), all of them are adjusted together, as one family
-|                 (a pair in two terms: two hypotheses). For a family in each
-|                 term, call %adjust once per term on a data set of the rows
-|                 of that term (a DATA step with WHERE first).
+| Macro Purpose : Adds the adjusted p-values of a family of pairs of groups to a
+|                 result: one row padj per pair. Use it after %lsmeans, %mmrm,
+|                 %cox, %logistic, %risk, %rateratio, %ttest or %wilcoxon: it
+|                 reads their rows with STAT pval. The family is the hypotheses
+|                 of one multiplicity block: the pairs of family=, in their
+|                 order. method= gives the adjustment:
+|                 - bonferroni: Bonferroni (PROC MULTTEST); with weights=, the
+|                   weighted Bonferroni test in a DATA step (the p-value divided
+|                   by its weight, at most 1)
+|                 - holm: Holm, the step-down Bonferroni test (PROC MULTTEST
+|                   STEPBON)
+|                 - hochberg: Hochberg (PROC MULTTEST)
+|                 - hierarchy: the fixed sequence in a DATA step; each adjusted
+|                   p-value is the largest p-value of its hypothesis and of the
+|                   hypotheses before it
+|                 Every row of data= with STAT pval and a pair of family= is one
+|                 hypothesis of the family. When data= has a pair in several
+|                 rows (the terms, visits or subgroups of within=), all of them
+|                 are adjusted together, as one family. For a family in each
+|                 term, call %adjust once per term, on a data set with only the
+|                 rows of that term (a DATA step with WHERE first).
 | Procedure     : PROC MULTTEST (INPVALUES=); a DATA step
 | Proven        : the known answer of the method riskdiff (src/methods.ts,
 |                 worked out by tools/method_answers.R; node
@@ -31,36 +37,42 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        A result of pairs: BY, VERSUS, STAT, VALUE          Required
-| by          The groups: the variable of the group of each       Required
-|             pair
+| data        A result of pairs with the variables of by=,        Required
+|             VERSUS, STAT and VALUE: the out= of %lsmeans,
+|             %mmrm, %cox and the other macros of pairs
+| by          The groups: the variable of data= with the group    Required
+|             of each pair (by = trt01p)
 | family      The pairs of the family in their order, separated   Required
-|             by #, one pair per line, the group first, then the
-|             group it is compared with: "High" "Placebo" #
-|             "Low" "Placebo". The form "A"-"B" of version 1.0
-|             is still read.
-| method      bonferroni, holm, hochberg or hierarchy             Required
-| weights     The weight of each hypothesis of a weighted         Optional
-|             Bonferroni test, in the order of family=,
-|             separated by blanks
-| pattern     The pattern of the adjusted p-value (default        "X.XXX"
-|             "X.XXX")
-| out         The result                                          Required
-| debug       yes: keep the work data sets of the macro           no
-|             (_adjust_*)
+|             by #: each the group first and then the group it
+|             is compared with, each value in quotes: family =
+|             "High" "Placebo" # "Low" "Placebo". The old form
+|             "A"-"B" is still read.
+| method      The adjustment: bonferroni, holm, hochberg or       Required
+|             hierarchy
+| weights     The weights of a weighted Bonferroni test: one      Optional
+|             number per pair, in the order of family=,
+|             separated by blanks (weights = 0.8 0.2). Only with
+|             method=bonferroni.
+| pattern     The pattern of the printed adjusted p-value, in     "X.XXX"
+|             quotes
+| out         The name of the result data set                     Required
+| debug       yes: keep the work data sets _adjust_*              no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: the rows of data= and a row padj per pair of the family.
+| Output        : OUT: the rows of data=, then one row per pair of the family
+|                 with STAT padj, VALUE the adjusted p-value and TEXT the
+|                 printed value. When data= has no p-value of a pair of family=,
+|                 out= is data= as it is and the log has a NOTE.
 |
 | Example:
 |
  %adjust(
-     data   = resp_rd
+     data   = sbp_ls
    , by     = trt01p
-   , family = "High" "Placebo"
-            # "Low"  "Placebo"
+   , family = "Xanomeline High Dose" "Placebo"
+            # "Xanomeline Low Dose"  "Placebo"
    , method = hochberg
-   , out    = resp_rd
+   , out    = sbp_adj
  )
 |
 |-------------------------------------------------------------------------------
@@ -81,6 +93,10 @@
 |                          p-value has its length (>0.999, not >; DEV-045); the
 |                          header says that the family is every row of a pair of
 |                          family= (DEV-044). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO adjust(

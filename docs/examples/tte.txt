@@ -1,0 +1,17 @@
+adttde: the first 15 of 252 rows
+USUBJID      TRT01A                PARAMCD  TRTSDT   ADT        CNSR  AVAL  EVNTDESC           SRCDOM  SRCVAR  SRCSEQ
+01-701-1015  Placebo               TTDE     02JAN14  02JUL2014     1   182  End of treatment   ADSL    TRTEDT
+01-701-1023  Placebo               TTDE     05AUG12  07AUG2012     0     3  ERYTHEMA           ADAE    ASTDT        2
+01-701-1028  Xanomeline High Dose  TTDE     19JUL13  14JAN2014     1   180  End of treatment   ADSL    TRTEDT
+01-701-1033  Xanomeline Low Dose   TTDE     18MAR14  31MAR2014     1    14  End of treatment   ADSL    TRTEDT
+01-701-1034  Xanomeline High Dose  TTDE     01JUL14  30DEC2014     1   183  End of treatment   ADSL    TRTEDT
+01-701-1047  Placebo               TTDE     12FEB13  09MAR2013     1    26  End of treatment   ADSL    TRTEDT
+01-701-1097  Xanomeline Low Dose   TTDE     01JAN14  03JAN2014     0     3  ERYTHEMA           ADAE    ASTDT        1
+01-701-1111  Xanomeline Low Dose   TTDE     07SEP12  16SEP2012     1    10  End of treatment   ADSL    TRTEDT
+01-701-1115  Xanomeline Low Dose   TTDE     30NOV12  23JAN2013     1    55  End of treatment   ADSL    TRTEDT
+01-701-1118  Placebo               TTDE     12MAR14  09SEP2014     1   182  End of treatment   ADSL    TRTEDT
+01-701-1130  Placebo               TTDE     15FEB14  22MAY2014     0    97  PRURITUS           ADAE    ASTDT        7
+01-701-1133  Xanomeline High Dose  TTDE     28OCT12  28APR2013     1   183  End of treatment   ADSL    TRTEDT
+01-701-1146  Xanomeline High Dose  TTDE     20MAY13  26JUN2013     1    38  End of treatment   ADSL    TRTEDT
+01-701-1148  Xanomeline High Dose  TTDE     23AUG13  12FEB2014     0   174  ACTINIC KERATOSIS  ADAE    ASTDT       10
+01-701-1153  Placebo               TTDE     23SEP13  16MAR2014     1   175  End of treatment   ADSL    TRTEDT

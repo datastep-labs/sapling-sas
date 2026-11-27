@@ -3,79 +3,105 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : The values of two variables against each other (a shift plot of
-|                 baseline and post baseline values, two measures of a subject),
-|                 one colour and marker per group; with fit=linear the least
-|                 squares line of each group (its slope, intercept and R-square
-|                 in out=), with fit=loess the loess curve of SGPLOT (its
-|                 smoothing chosen by SGPLOT, not in out=); identity=yes the
-|                 line y = x. One panel per value of panel=.
+| Macro Purpose : Draws the values of two variables against each other as PNG
+|                 and RTF files and returns the numbers drawn. Use %profileplot
+|                 for the values of each subject over time. Typical uses are a
+|                 shift plot of the baseline and post-baseline values, or two
+|                 measures of a subject. Each group has its own colour and
+|                 marker. With fit=linear, the least squares line of each group
+|                 is drawn, and its slope, intercept and R-square are in out=.
+|                 With fit=loess, the loess curve of SGPLOT is drawn; SGPLOT
+|                 chooses its smoothing, and the curve is not in out=. With
+|                 identity=yes, the line y = x is drawn. A record with a missing
+|                 x, y, group or panel is not used. To draw the figure again
+|                 without computing, give plot= the out= and par= the outpar= of
+|                 an earlier call.
 | Procedure     : PROC REG, PROC SGPANEL
 | Proven        : its known answer in tools/figures_sas.ts (the points, and the
 |                 slope, intercept and R-square worked out by hand); not yet run
 |                 on a SAS server
-| Note          : Draw again: plot= (an out= of %scatterplot, changed or not) is
-|                 drawn as it is: its points, and the line of each row of KIND
-|                 fit over the X of the points of its group (a loess curve is
-|                 not in out= and is not drawn again); par= (an outpar= of
-|                 %scatterplot) gives the drawing parameters: columns, by,
-|                 panel, identity, xlabel, ylabel, ref, file, width, height.
-|                 They change the picture, not the numbers; the others compute,
-|                 and with plot= a NOTE says each one given is not used. A
-|                 drawing parameter given in the call wins over its row of par=,
-|                 the row over the default of the table.
+| Note          : Draw again: plot= takes the out= of an earlier %scatterplot
+|                 call, changed or not, and draws it as it is, with no statistic
+|                 computed: its points, and the line of each row of KIND fit
+|                 over the X of the points of its group (a loess curve is not in
+|                 out= and is not drawn again). par= takes the outpar= of that
+|                 call and gives the drawing parameters: columns, by, panel,
+|                 identity, xlabel, ylabel, ref, file, width, height. These
+|                 change the picture, not the numbers. The other parameters
+|                 compute; with plot= the log has a NOTE for each one given, as
+|                 it is not used. A drawing parameter given in the call wins
+|                 over its row of par=, and the row wins over the default of the
+|                 table.
 |
 | Input Parameters :
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records                                         Required
-| plot        Draw again: an out= of %scatterplot, not with       Optional
-|             data=
-| par         The drawing parameters: an outpar= of %scatterplot  Optional
-| columns     The columns of %columns: the order of the groups    Optional
-|             and their colours (default: the order of the data)
-| where       The records to use, a condition in parentheses      Optional
-| x           The variable of the x axis (BASE)                   Required
-| y           The variable of the y axis (AVAL)                   Required
-| by          The groups: one colour and marker each              Required
-| panel       One panel per value of this variable                Optional
-| fit         none, linear (a line per group) or loess            none
-| identity    yes: the line y = x                                 no
-| xlabel      The label of the x axis (default: the label of x)   Optional
-| ylabel      The label of the y axis (default: the label of y)   Optional
-| ref         Reference lines on the y axis: values               Optional
-| file        The output without its extension: <file>.png (300   Required
-|             dpi) and <file>.rtf
-| width       The width of the figure                             6.5in
-| height      The height of the figure                            4.5in
-| out         The numbers drawn                                   Optional
-| outpar      The drawing parameters: one row each                Optional
+| data        The input data set: one record per point            Required
+| plot        Draw again: the out= of an earlier %scatterplot     Optional
+|             call, changed or not. It is drawn as it is, and no
+|             statistic is computed. Give it instead of data=.
+| par         The drawing parameters of an earlier %scatterplot   Optional
+|             call: its outpar=. A drawing parameter given in
+|             the call wins over its row of par=.
+| columns     The data set of %columns: it gives the order of     Optional
+|             the groups and their colours. When not given, the
+|             groups come in the order of the data.
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (anl01fl = 'Y')
+| x           The variable of the x axis: one numeric variable    Required
+|             (x = base)
+| y           The variable of the y axis: one numeric variable    Required
+|             (y = aval)
+| by          The groups: one variable, one colour and marker     Required
+|             per group
+| panel       A variable: one panel per value (panel = sex)       Optional
+| fit         The line of each group: none, linear (the least     none
+|             squares line) or loess
+| identity    yes: draw the line y = x                            no
+| xlabel      The label of the x axis: a text in quotes. When     Optional
+|             not given, the label of x= (or its name).
+| ylabel      The label of the y axis: a text in quotes. When     Optional
+|             not given, the label of y= (or its name).
+| ref         Reference lines on the y axis: one value or         Optional
+|             several, separated by blanks (ref = 0 50)
+| file        The output file without its extension: the macro    Required
+|             writes <file>.png (300 dpi) and <file>.rtf
+| width       The width of the figure: a length with its unit     6.5in
+|             (width = 9in)
+| height      The height of the figure: a length with its unit    4.5in
+|             (height = 6in)
+| out         The name of the data set of the numbers drawn.      Optional
+|             When not given, they are not kept.
+| outpar      The name of the data set of the drawing             Optional
+|             parameters, one row each. Give it to par= of a
+|             later call to draw the figure again.
 | debug       yes: keep the work data sets _scatterplot_*         no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: PANEL and BY, KIND, X, Y; KIND point: one row per value;
-|                 with fit=linear KIND fit: one row per group with SLOPE,
-|                 INTERCEPT, RSQUARE and N (X and Y missing). OUTPAR: one row
-|                 per drawing parameter in the order of the table: PARAMETER
-|                 ($32) its name, VALUE ($500) its value as drawn (a label in
-|                 quotes). FILE: <file>.png and <file>.rtf.
+| Output        : OUT: the variables of panel= and by=, KIND, X and Y. A row of
+|                 KIND point is one value. With fit=linear, a row of KIND fit is
+|                 one panel and group, with SLOPE, INTERCEPT, RSQUARE and N (X
+|                 and Y missing). OUTPAR: one row per drawing parameter, in the
+|                 order of the table: PARAMETER ($32), its name, and VALUE
+|                 ($500), its value as drawn (a label in quotes). FILE:
+|                 <file>.png and <file>.rtf.
 |
 | Example:
 |
  %scatterplot(
-     data     = adlbc
-   , columns  = t14_6_cols
-   , where    = (paramcd = 'ALT' AND avisitn = 24)
+     data     = adlb
+   , columns  = t14_2_1_cols
+   , where    = (paramcd = 'ALT' AND avisit = 'Week 24')
    , x        = base
    , y        = aval
-   , by       = trta
+   , by       = trt01a
    , identity = yes
-   , file     = &spl_out./figures/f14_6_2
-   , out      = f14_6_2
+   , file     = &spl_out./figures/f_alt_scat
+   , out      = f_alt_scat
  )
 |
 |-------------------------------------------------------------------------------
@@ -96,6 +122,10 @@
 | 16-NOV-2026 Sapling      1.9.1: one PROC REG for each group, without BY: no
 |                          note Interactivity disabled (DEV-020). No number
 |                          changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO scatterplot(

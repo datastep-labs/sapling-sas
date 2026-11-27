@@ -6,100 +6,132 @@
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : The display data set of a table: one row per printed line, as
-|                 the shells have it. The label of a block, the levels of its
-|                 groups indented by two blanks each (a term under its class, a
-|                 visit under its parameter, vs B under A), the statistics of a
-|                 line put in the template of the line; one column per group
-|                 with its header and N from %columns, and the column All
-|                 groups for a p-value of all groups; the p-value of each
-|                 category (a test of each term, a block of the same label)
-|                 stands in the row of its category. A category that format=
-|                 names shows its label. It computes nothing: every number is
-|                 the TEXT of a result. The line table (Step 3), line: label =
-|                 template:
-|                 0 a category of a frequency block = {n} {pct} {events};
-|                 1 n = {n};
-|                 2 Events = {events};
-|                 2.5 Patient-years = {exposure};
-|                 3 Mean (SD) = {mean} ({sd}) [{se}] (se only: Mean (SE);
-|                 sd and se: Mean (SD) [SE]);
-|                 4 Median = {median};
-|                 5 Q1, Q3 = {q1}, {q3};
-|                 6 Min, Max = {min}, {max};
-|                 7 LS mean (SE) = {lsmean} ({lsmean_se});
-|                 8 Difference (SE) = {diff} ({diff_se});
-|                 9 the estimate by its STAT (hr Hazard ratio, or Odds ratio,
-|                 irr Rate ratio, rd Risk difference, rr Relative risk, rate
-|                 Rate per 100 patient-years, else Estimate) = {estimate};
-|                 10 Confidence interval = ({lcl}, {ucl});
-|                 11 p-value = {pval};
-|                 11.5 Adjusted p-value = {padj};
-|                 12 any other STAT, labelled by it = {value}.
-|                 A part that is missing leaves out its piece of the template
-|                 with its brackets or its comma (a confidence interval without
-|                 its upper limit prints the lower limit alone); a TEXT that
-|                 has the brackets of its piece already is not bracketed twice;
-|                 the counts of a frequency block are right aligned to the
-|                 widest count. With setup= it also keeps the %print call of
-|                 OUT in a global macro variable of that name: %print(&name.)
-|                 prints the display data set again after a change. The setup
-|                 holds data=, by=, var=, together= and label= (row=" " and
-|                 the labels of label=), and rows=, file= and nodata= when
-|                 they are given here. A parameter that is not in the setup is
-|                 added after it: %print(&name., file=...); one that is in it
-|                 cannot be given twice (SAS stops a call with a keyword given
-|                 twice): give it to %layout again, or write the %print call.
-|                 With page= (a BY variable of the results, such as SEX) the
-|                 table is one page per value: the page variable is no level
-|                 of the rows, each page starts with its first block, and the
-|                 header of each column on a page has the N of that page
-|                 (%columns with the same page=).
+| Macro Purpose : Returns the display data set of a table: one row per printed
+|                 line and one column per group. %print prints it; %table runs
+|                 %columns, %ard, %layout and %print in one call. The display
+|                 data set is the table as the shells show it: each row a
+|                 printed line, each cell a text. %layout computes nothing:
+|                 every number is the TEXT of a result. The rows:
+|                 - Each block starts with its label, with a blank row between
+|                   two blocks.
+|                 - The levels of the groups other than the column variable are
+|                   indented by two blanks each: a term under its class, a visit
+|                   under its parameter, vs B under A.
+|                 - The levels are in the order of their numeric twin (AVISITN
+|                   for AVISIT, PARAMN for PARAMCD: the name with an N added),
+|                   else of their values. A level of PARAMCD shows its PARAM.
+|                 - A frequency block (only the statistics n, pct, events, lcl
+|                   and ucl) has one line per category. Any other block has one
+|                   line per kind of statistic, by the line table below.
+|                 - The p-value of each category (a test of each term, in a
+|                   block of the same label) stands in the row of its category.
+|                 - A result has at most four groups besides the column variable
+|                   and the page variable.
+|                 The columns:
+|                 - C1 ... Cn: one column per group, with its header and N from
+|                   %columns.
+|                 - C99, All groups: the numbers of a result without the column
+|                   variable, such as a p-value of all groups.
+|                 The line table: the order of a line, its label, then its
+|                 template.
+|                 - 0, a category of a frequency block: {n} {pct} {events}
+|                   ({lcl}, {ucl})
+|                 - 1, n: {n}
+|                 - 2, Events: {events}
+|                 - 2.5, Patient-years: {exposure}
+|                 - 3, Mean (SD): {mean} ({sd}) [{se}]. With se and no sd the
+|                   label is Mean (SE); with both, Mean (SD) [SE].
+|                 - 4, Median: {median}
+|                 - 5, Q1, Q3: {q1}, {q3}
+|                 - 6, Min, Max: {min}, {max}
+|                 - 7, LS mean (SE): {lsmean} ({lsmean_se})
+|                 - 8, Difference (SE): {diff} ({diff_se})
+|                 - 9, the estimate, labelled by its STAT (hr Hazard ratio, or
+|                   Odds ratio, irr Rate ratio, rd Risk difference, rr Relative
+|                   risk, rate Rate per 100 patient-years, else Estimate):
+|                   {estimate}
+|                 - 10, Confidence interval: ({lcl}, {ucl})
+|                 - 11, p-value: {pval}
+|                 - 11.5, Adjusted p-value: {padj}
+|                 - 12, any other STAT, labelled by its name: {value}
+|                 In a template:
+|                 - A part that is missing leaves out its piece with its
+|                   brackets or its comma: a confidence interval without its
+|                   upper limit prints the lower limit alone.
+|                 - A TEXT that has the brackets of its piece already is not
+|                   bracketed twice.
+|                 - The counts of a frequency block are right aligned to the
+|                   widest count.
+|                 The setup (setup=):
+|                 - The global macro variable keeps the parameters of %print for
+|                   out=: data=, by=row, var=c:, together=grp and label=row=" "
+|                   with the labels of label=; also page=, rows=, file= and
+|                   nodata= when they are given to %layout. A NOTE in the log
+|                   shows it.
+|                 - %print(&name.) prints the display data set again after a
+|                   change. A parameter that is not in the setup is added after
+|                   it: %print(&name., file=...).
+|                 - A parameter that is in the setup cannot be given again, as
+|                   SAS stops a call that has a keyword twice: give it to
+|                   %layout, or write the whole %print call.
+|                 When data= has no row, the display data set has no row, and
+|                 %print prints the text of nodata=.
 | Procedure     : DATA steps, PROC FORMAT, PROC SORT, PROC TRANSPOSE
-| Proven        : the tables of the dummy study SYNHTN01 (sapling sas run: SAS
-|                 RUN PASS, flat programs 12 of 12) and the cases of setup= in
-|                 node tools/print_sas.ts; ran on SAS 9.4 M9, 2026-11-12; the
-|                 12 tables of the CDISC pilot (the p value of each term in
-|                 T14_5_2), 2026-11-13
+| Proven        : the tables of the dummy study SYNHTN01 (every program ran with
+|                 a clean log, also as a program without a macro, 12 of 12) and
+|                 the cases of setup= in node tools/print_sas.ts; ran on SAS 9.4
+|                 M9, 2026-11-12; the 12 tables of the CDISC pilot (the p value
+|                 of each term in T14_5_2), 2026-11-13
 |
 | Input Parameters :
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The results (%stack)                                Required
-| columns     The columns (%columns)                              Required
-| var         The column variable of the results (as var= of      Required
-|             %columns)
-| page        A BY variable of the results: one page per value    Optional
-|             (as page= of %columns), kept in the setup
-| format      The labels of categories: variable and format, as   Optional
-|             in a FORMAT statement (sex $sexf. race $racef.); a
-|             level of that variable shows its formatted value
-| label       Column labels for %print: name="text" pairs, kept   Optional
-|             in the setup after row=" "
-| rows        The rows of a page for %print, kept in the setup    Optional
-| file        The output for %print without its extension, kept   Optional
-|             in the setup
-| nodata      The text %print prints when there is no row, kept   Optional
-|             in the setup
+| data        The stacked results (out= of %stack)                Required
+| columns     The columns (out= of %columns): the place, the      Required
+|             header and the N of each column
+| var         The column variable of the results: the same        Required
+|             variable as var= of %columns
+| page        A group variable of the results, such as page =     Optional
+|             sex: one page per value, in the order of its
+|             numeric twin (SEXN), else of its values. It is no
+|             level of the rows; each page starts with its first
+|             block, and the header of a column on a page has
+|             the N of that page. Give %columns the same page=.
+|             It goes into the setup.
+| format      The labels of categories: pairs of a variable and   Optional
+|             a character format, as in a FORMAT statement
+|             (format = sex $sexf. race $racef.). A value that
+|             the format decodes shows its label.
+| label       Column labels for %print: name="text" pairs,        Optional
+|             separated by blanks. They go into the setup after
+|             row=" ".
+| rows        The rows of a page for %print (rows= of %print): a  Optional
+|             whole number. It goes into the setup.
+| file        The output of %print: a path without its extension  Optional
+|             (file= of %print). It goes into the setup.
+| nodata      The text that %print prints when there is no row    Optional
+|             (nodata= of %print). It goes into the setup.
 | setup       The name of a global macro variable that keeps the  Optional
-|             %print call of OUT (blank: none is made)
-| out         The display data set                                Required
+|             %print call of out=: a SAS name that does not
+|             start with SYS or SPL_. When not given, no setup
+|             is made.
+| out         The name of the display data set                    Required
 | debug       yes: keep the work data sets _layout_*              no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: one row per printed line: GRP (the rows that stay on one
-|                 page: a block, or a level of its first group), ROW (the
-|                 label, indented, format $CHARw.), C1 ... Cn (the cells,
-|                 labelled with the header of their column) and C99 (All
-|                 groups: only when a result has a p-value of all groups).
-|                 With page=: also the page variable (with its format of
-|                 format=) and HEAD_C1 ... HEAD_Cn, the header of each column
-|                 on its page; C1 ... Cn are labelled with the column value.
-|                 SETUP: with setup=, the global macro variable of that name:
-|                 the parameters of %print for OUT, such as data=t14_2_1_display,
-|                 by=row, var=c:, together=grp, label=row=" " (a NOTE in the log
-|                 shows it); print with %print(&name.).
+| Output        : OUT: the display data set, one row per printed line: GRP (the
+|                 rows that stay on one page: a block, or a level of its first
+|                 group; a row of a value of all groups, such as a p-value in
+|                 C99 only, has the GRP of the rows of its block before it), ROW
+|                 (the label of the line, indented, with the format $CHARw.), C1
+|                 ... Cn (the cells, labelled with the header of their column)
+|                 and C99 (All groups: only when a result has a number without
+|                 the column variable). With page=: also the page variable (with
+|                 its format of format=) and HEAD_C1 ... HEAD_Cn, the header of
+|                 each column on its page; C1 ... Cn are then labelled with the
+|                 column value. SETUP: with setup=, the global macro variable of
+|                 that name.
 |
 | Example:
 |
@@ -112,7 +144,6 @@
    , setup   = t14_2_1_print
    , out     = t14_2_1_display
  )
- %print(&t14_2_1_print.)
 |
 |-------------------------------------------------------------------------------
 | Change Log :
@@ -153,6 +184,16 @@
 | 27-NOV-2026 Sapling      1.9.1: page=: one page per value of a BY variable,
 |                          the header of each column with the N of its page.
 |                          Without page= no change.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: The header names no internal tool. No number
+|                          changes.
+| 27-NOV-2026 Sapling      1.9.1: a row of a value of all groups (C99 only, such
+|                          as the p-value of a block) has the GRP of the rows of
+|                          its block before it: a page break no longer separates
+|                          a p-value from its block. No number changes.
 |
 *******************************************************************************/
 %MACRO layout(
@@ -636,8 +677,10 @@
         rowno     = 0;
       END;
     %END;
-    /* the rows that stay on one page: a block, or a level of its first group */
-    IF FIRST.r1 THEN grp + 1;
+    /* the rows that stay on one page: a block, or a level of its first group; */
+    /* a row of a value of all groups (C99 only) stays with the rows of its block */
+    IF FIRST.r1 AND (grp = 0 OR block NE prevblock OR CMISS(OF c1-c&ncol.) < &ncol. OR c99 = ' ')
+      THEN grp + 1;
     isfirst{1} = FIRST.r1;
     isfirst{2} = FIRST.r2;
     isfirst{3} = FIRST.r3;

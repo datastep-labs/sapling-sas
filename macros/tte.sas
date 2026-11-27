@@ -3,13 +3,27 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : One time-to-event parameter in one call: for each subject the
-|                 first event, else the latest censoring. With end= an at-risk
-|                 period from START to END: only the events and censorings in it
-|                 count, else the subject is censored at the end of the period.
+| Macro Purpose : Returns one time-to-event parameter: for each subject the date
+|                 of the first event, or else of the latest censoring. It writes
+|                 the records of an ADTTE parameter; %km, %logrank and %cox then
+|                 analyse them. The rule:
+|                 - An event is a record of events= that meets event= and has a
+|                   date. The first event of a subject is taken; priority=
+|                   orders the events of one date.
+|                 - When a subject has no event, the latest censoring is taken:
+|                   the latest date of censors= (or of subjects=); on one date,
+|                   the last record.
+|                 - AVAL is ADT - START + 1, in days.
+|                 Without end=, every date counts, and a date before START
+|                 becomes START (as admiral does). A subject with no event and
+|                 no censoring gets no record. With end=, the at-risk period
+|                 runs from START to END: only the events and censorings in it
+|                 count, and a subject with neither is censored at END. An event
+|                 on the start day counts unless time= and start_time= are both
+|                 there and the event time is before the start time.
 | Procedure     : PROC SORT, MERGE
 | Proven        : the fixtures of the step kinds tte and tte.period
 |                 (src/adam_steps.ts; node tools/adam_steps_sas.ts); ran on SAS
@@ -19,88 +33,99 @@
 |
 | Name           Description                                      Default
 |-------------------------------------------------------------------------------
-| subjects       One record per subject (USUBJID) with START      Required
-|                (and END). The result keeps its variables: it
-|                must not have ADT, CNSR, AVAL or the values
-|                below.
-| events         The records the events come from: a data set     Required
-| censors        The records of the censorings: the latest date   Optional
-|                in the period (on one date the last record).
-|                Default: SUBJECTS.
-| event          Which records of EVENTS are events: a            Optional
-|                condition. Default: all.
-| date           The date of an event, a variable of EVENTS       Required
-|                (missing: no event)
-| time           The time of an event (seconds since midnight),   Optional
-|                a variable of EVENTS, for the start day
-| priority       Variables of EVENTS that order the events of     Optional
-|                one date (a missing value last). Default: the
-|                order of the data.
-| start          The start of the period and the origin of AVAL,  Required
-|                a date of SUBJECTS
-| start_time     The time of the start, of SUBJECTS: on the       Optional
-|                start day an event counts unless both times are
-|                there and the event time is before it
-| end            The end of the at-risk period, a date of         Optional
-|                SUBJECTS. Without END: no period, every date
-|                counts, a date before START is START (as
-|                admiral).
-| censor_date    The date of a censoring, of CENSORS (or of       Optional
-|                SUBJECTS)
-| seq            SRCSEQ of an event: a variable of EVENTS.        Optional
-|                Default: missing.
-| adtf           ADTF of an event: the flag of its date, a        Optional
-|                variable of EVENTS
-| atmf           ATMF of an event: the flag of its time, a        Optional
-|                variable of EVENTS
-| keep           Other variables of the record taken, in EVENTS   Optional
-|                and CENSORS both (the values of the rows that
-|                the program stacked before the call)
-| censor_cnsr    CNSR of a censoring: a number, or a variable of  1
-|                CENSORS
-| end_cnsr       CNSR at the end of the period                    1
+| subjects       The data set of the subjects, one record per     Required
+|                subject (USUBJID), with the start (and the end)
+|                of the period. The result keeps its variables,
+|                so it must not have ADT, CNSR, AVAL or the
+|                other variables the macro makes.
+| events         The data set of the records the events come      Required
+|                from, such as adae
+| censors        The data set of the records of the censorings,   Optional
+|                with censor_date=. When not given, the
+|                censorings come from subjects=.
+| event          The records of events= that are events: a        Optional
+|                condition, such as event = trtemfl = 'Y'. When
+|                not given, every record with a date is an
+|                event.
+| date           The date of an event: a numeric date variable    Required
+|                of events=. A record with a missing date is no
+|                event.
+| time           The time of an event: a numeric variable of      Optional
+|                events=, in seconds since midnight. It decides
+|                an event on the start day, and needs end=.
+| priority       The variables of events= that order the events   Optional
+|                of one date, separated by blanks; a missing
+|                value sorts last. When not given, the events of
+|                one date keep the order of the data.
+| start          The start of the period and the origin of AVAL:  Required
+|                a date variable of subjects=
+| start_time     The time of the start: a numeric variable of     Optional
+|                subjects=, in seconds since midnight. On the
+|                start day an event counts unless its time is
+|                before this time. It needs end=.
+| end            The end of the at-risk period: a date variable   Optional
+|                of subjects=. When not given, there is no
+|                period and every date counts.
+| censor_date    The date of a censoring: a date variable of      Optional
+|                censors= (or of subjects=)
+| seq            The variable of events= that gives SRCSEQ of an  Optional
+|                event, such as aeseq. When not given, SRCSEQ is
+|                missing.
+| adtf           The variable of events= that gives ADTF, the     Optional
+|                imputation flag of the date of an event
+| atmf           The variable of events= that gives ATMF, the     Optional
+|                imputation flag of the time of an event
+| keep           Other variables of the record taken, separated   Optional
+|                by blanks: they must be in events= and in
+|                censors= both
+| censor_cnsr    CNSR of a censoring: a number, or a numeric      1
+|                variable of censors=
+| end_cnsr       CNSR of a subject censored at the end of the     1
+|                period: a number
 | censor_desc    EVNTDESC of a censoring: a text in quotes, or a  Optional
-|                variable
-| censor_source  SRCDOM of a censoring of SUBJECTS and of the     Optional
-|                end of the period, in quotes; SRCVAR is then
-|                the name of CENSOR_DATE (of END)
-| end_desc       EVNTDESC at the end of the period                "End of at-risk
-|                                                                 period"
+|                variable of censors= (or of subjects=)
+| censor_source  SRCDOM of a censoring from subjects= and of a    Optional
+|                censoring at the end of the period: a text in
+|                quotes, such as "ADSL". SRCVAR is then the name
+|                of censor_date= (or of end=).
+| end_desc       EVNTDESC of a subject censored at the end of     "End of at-risk
+|                the period: a text in quotes                     period"
 | event_desc     EVNTDESC of an event: a text in quotes, or a     Optional
-|                variable of EVENTS
-| source         SRCDOM of an event, in quotes; SRCVAR is then    Optional
-|                the name of DATE
-| paramcd        PARAMCD, in quotes                               Required
-| out            The result (see Output)                          Required
+|                variable of events=, such as aedecod
+| source         SRCDOM of an event: a text in quotes, such as    Optional
+|                "ADAE". SRCVAR is then the name of date=.
+| paramcd        PARAMCD of the parameter: a text in quotes,      Required
+|                such as "TTDE"
+| out            The name of the data set it writes               Required
 | debug          yes: keep the work data sets _tte_*              no
 |-------------------------------------------------------------------------------
 |
 | Output        : OUT: one record per subject with an event, a censoring or
-|                 (with end=) a period: the variables of SUBJECTS, PARAMCD, ADT,
-|                 CNSR, AVAL (ADT - START + 1), ATM (with time=) and the values
-|                 above, in the order of SUBJECTS. With end= a subject without
-|                 START or without END gets no record and a WARNING that names it
-|                 (USUBJID=); a subject whose START is after its END gets no
-|                 record. Two records of a subject in SUBJECTS are an ERROR.
+|                 (with end=) a period, in the order of subjects=: the variables
+|                 of subjects=, PARAMCD, ADT, CNSR, AVAL, ATM (with time=),
+|                 EVNTDESC, SRCDOM, SRCVAR, SRCSEQ, ADTF and ATMF (when their
+|                 parameters are given) and the variables of keep=. With end=, a
+|                 subject with no START or no END gets no record and a WARNING
+|                 that names it; a subject whose START is after its END gets no
+|                 record. Two records of a subject in subjects= give an ERROR
+|                 line.
 |
 | Example:
 |
  %tte(
-     subjects      = work.adsl
-   , events        = adam.adlb
-   , event         = paramcd IN ('ALT', 'AST') AND r2a1hi >= 3
-   , date          = adt
-   , priority      = paramcd
+     subjects      = adsl
+   , events        = adae
+   , event         = trtemfl = 'Y' AND aebodsys = 'SKIN AND SUBCUTANEOUS TISSUE DISORDERS'
+   , date          = astdt
    , start         = trtsdt
-   , end           = dcutdt
-   , censor_date   = dcutdt
-   , seq           = aseq
-   , censor_desc   = "Cutoff date"
+   , censor_date   = trtedt
+   , seq           = aeseq
+   , censor_desc   = "End of treatment"
    , censor_source = "ADSL"
-   , event_desc    = "ALT/AST >= 3x ULN"
-   , source        = "ADLB"
-   , paramcd       = "DIL3X"
-   , out           = work.dil3x
+   , event_desc    = aedecod
+   , source        = "ADAE"
+   , paramcd       = "TTDE"
+   , out           = adttde
  )
 |
 |-------------------------------------------------------------------------------
@@ -118,6 +143,13 @@
 |                          No number changes.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: the message prints a macro variable, not a
+|                          macro expression: it reads the same in the log and in
+|                          the code. No number changes.
 |
 *******************************************************************************/
 %MACRO tte(
@@ -148,7 +180,7 @@
    , out           =        /* The result */
    , debug         = no     /* yes: keep the work data sets _tte_* */
 ) / DES = 'One time-to-event parameter: the first event, else the latest censoring (PROC SORT)';
-  %LOCAL t0 i dsn token keys made period evdrop;
+  %LOCAL t0 i dsn dsname token keys made period evdrop;
   %LET t0 = %_spl_begin(tte);
 
   /* Step 1: the parameters: the data sets exist, the variables are in them */
@@ -157,8 +189,9 @@
   %DO i = 1 %TO 3;
     %LET dsn = %SCAN(subjects events censors, &i.);
     %IF %LENGTH(%SUPERQ(&dsn.)) %THEN %DO;
-      %IF not %SYSFUNC(EXIST(%SCAN(%SUPERQ(&dsn.), 1, %STR(%()))) %THEN %DO;
-        %PUT %STR(ERR)OR: [tte] &dsn.=%SCAN(%SUPERQ(&dsn.), 1, %STR(%()) does not exist;
+      %LET dsname = %SCAN(%SUPERQ(&dsn.), 1, %STR(%());  /* the data set without its options */
+      %IF not %SYSFUNC(EXIST(&dsname.)) %THEN %DO;
+        %PUT %STR(ERR)OR: [tte] &dsn.=&dsname. does not exist;
         %PUT %STR(ERR)OR: [tte]   fix: give &dsn.= a data set that exists (make it first).;
         %RETURN;
       %END;

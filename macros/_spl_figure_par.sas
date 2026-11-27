@@ -3,7 +3,7 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
 | Macro Purpose : The parameters of a figure macro, before its checks. With
@@ -59,6 +59,9 @@
 |                          the figure macros).
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the message prints a macro variable, not a
+|                          macro expression: it reads the same in the log and in
+|                          the code. No number changes.
 |
 *******************************************************************************/
 %MACRO _spl_figure_par(
@@ -69,7 +72,7 @@
    , names   =   /* A local macro variable of the caller: the drawing parameters */
    , state   =   /* A local macro variable of the caller: 1 right, else 0 */
 ) / DES = 'Read par= and the defaults of a figure macro, and check plot=';
-  %LOCAL _i _item _name _list _given _miss _dsid _rc _ok;
+  %LOCAL _i _item _name _list _given _miss _dsid _rc _ok _shape;
   %LET &state. = 0;
 
   /* Step 1: the names of the drawing parameters, and those with a value in the call */
@@ -99,8 +102,9 @@
     %END;
     %LET _rc = %SYSFUNC(CLOSE(&_dsid.));
     %IF %LENGTH(&_miss.) %THEN %DO;
+      %LET _shape = %UPCASE(&shape.);  /* the variables of out= */
       %PUT %STR(ERR)OR: [&macro.] plot=&plot. has no variable &_miss.;
-      %PUT %STR(ERR)OR: [&macro.]   fix: give plot= the shape of out=: %UPCASE(&shape.).;
+      %PUT %STR(ERR)OR: [&macro.]   fix: give plot= the shape of out=: &_shape..;
       %RETURN;
     %END;
     %DO _i = 1 %TO %SYSFUNC(COUNTW(%SUPERQ(compute)%STR( ), %STR( ), q));

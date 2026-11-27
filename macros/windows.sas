@@ -3,14 +3,26 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : Put each record in its analysis window by its study day:
-|                 AVISIT, AVISITN, AWLO, AWHI, AWTARGET, AWRANGE, AWU (DAYS) and
-|                 AWTDIFF (the distance to the target day). A record in no
-|                 window keeps them missing. The first window (in the order of
-|                 AVISITN) that holds the day is taken.
+| Macro Purpose : Puts each record into its analysis window by its study day,
+|                 and gives it AVISIT, AVISITN and the window variables. Use
+|                 %visits when the analysis visit comes from the visit name of
+|                 the record, not from its study day. The macro writes these
+|                 variables:
+|                 - AVISIT and AVISITN: the analysis visit of the window
+|                 - AWLO, AWHI and AWTARGET: the first day, the last day and the
+|                   target day of the window
+|                 - AWRANGE: the window as a text; AWU: DAYS
+|                 - AWTDIFF: the distance of the study day to the target day
+|                 A record takes the first window, in the order of windows=,
+|                 that holds its day. A record with no window, or a missing day,
+|                 gets missing values only when data= does not have these
+|                 variables yet. When data= has them already (an AVISIT from an
+|                 earlier step), a record in no window keeps its old AVISIT,
+|                 AVISITN and window values: drop them before the call when such
+|                 a record must have none.
 | Procedure     : DATA steps (SET POINT=)
 | Proven        : the fixtures of the step kind windows.day (src/adam_steps.ts;
 |                 node tools/adam_steps_sas.ts); ran on SAS 9.4 M9, 2026-11-12
@@ -19,24 +31,30 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The working data set (changed in place)             Required
-| windows     The windows in the order of AVISITN, # between      Required
-|             them; a window is AVISITN "AVISIT" AWLO AWHI
-|             AWTARGET "AWRANGE" (a period: a limit that is open)
-| day         The study day (default ADY)                         ADY
+| data        The data set to change in place, such as advs       Required
+| windows     The windows in the order of AVISITN, separated by   Required
+|             #. Each window is AVISITN "AVISIT" AWLO AWHI
+|             AWTARGET "AWRANGE"; a period for AWLO or AWHI is a
+|             limit that is open (# 4 "Week 4" 2 42 28 "2-42").
+| day         The numeric variable of the study day               ADY
 |-------------------------------------------------------------------------------
 |
-| Output        : DATA: AVISIT, AVISITN, AWLO, AWHI, AWTARGET, AWRANGE, AWU
-|                 and AWTDIFF on each record in a window; missing on a record in
-|                 no window.
+| Output        : DATA: data=, changed in place: AVISIT, AVISITN, AWLO, AWHI,
+|                 AWTARGET, AWRANGE, AWU and AWTDIFF on each record in a window,
+|                 missing on a record in no window.
 |
 | Example:
 |
+ DATA vs;
+   SET advs;
+   WHERE paramcd = 'SYSBP';
+ RUN;
  %windows(
-     data    = advs
-   , windows = 0 "Baseline" .  1  1  "<=1"
-             # 4 "Week 4"   2  42 28 "2-42"
-             # 8 "Week 8"   43 70 56 "43-70"
+     data    = vs
+   , windows = 0  "Baseline" .   1   1   "<=1"
+             # 4  "Week 4"   2   42  28  "2-42"
+             # 12 "Week 12"  43  126 84  "43-126"
+             # 24 "Week 24"  127 210 168 "127-210"
    , day     = ady
  )
 |
@@ -52,6 +70,15 @@
 |                          rows), no data set of them. No number changes.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: The example first copies its records into a
+|                          data set of its own, so that it changes no data set of
+|                          setup.sas for a later example. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the text says that a record in no window keeps
+|                          an AVISIT that data= has already. No number changes.
 |
 *******************************************************************************/
 %MACRO windows(

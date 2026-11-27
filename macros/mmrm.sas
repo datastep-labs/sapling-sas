@@ -3,15 +3,24 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : The mixed model for repeated measures, one record per subject
-|                 and visit (PROC MIXED, REPEATED): at one visit the differences
-|                 of the LS means of pairs of groups (diff, diff_se, lcl, ucl,
-|                 pval) and, when stats= asks for them, the LS mean of each
-|                 group (lsmean, lsmean_se). When the covariance structure does
-|                 not converge the next one of fallback= is tried.
+| Macro Purpose : Returns the differences of the LS means of pairs of groups at
+|                 one visit from a repeated measures mixed model. Use %lsmeans
+|                 for one record per subject, and %ancova for the test of one
+|                 numeric term. The model is PROC MIXED with a REPEATED
+|                 statement: one record per subject and visit (the first with a
+|                 value). When the covariance structure of type= does not
+|                 converge, the macro tries the structures of fallback= in their
+|                 order. The log names the structure used, in a NOTE such as
+|                 "[mmrm] The covariance structure TYPE=un converged." (a
+|                 structure that did not converge has its own NOTE, and the
+|                 WARNING lines of PROC MIXED of that fit are not used). The
+|                 macro adds visit= to the class factors: class= needs only the
+|                 others. The LS mean of each group at the visit comes when
+|                 stats= asks for it. The macro writes a result: a data set with
+|                 one row per number (the result shape, see %stack).
 | Procedure     : PROC MIXED (REPEATED, LSMEANS)
 | Proven        : the known answer of the method mmrm (src/methods.ts, worked
 |                 out by tools/method_answers.R; node tools/methods_sas.ts); ran
@@ -21,73 +30,89 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records                                         Required
-| where       The records to use, a condition in parentheses      Optional
-| var         The response                                        Required
-| by          The groups: a character variable                    Required
-| visit       The repeated variable (REPEATED), a class factor    Required
-| at          The visit of the LS means, in quotes                Required
+| data        The input data set: one record per subject and      Required
+|             visit
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (paramcd = 'SYSBP' AND anl01fl =
+|             'Y')
+| var         The response: one numeric variable                  Required
+| by          The groups: one character variable                  Required
+| visit       The visit: one variable, the repeated factor of     Required
+|             the REPEATED statement. The macro adds it to the
+|             class factors.
+| at          The visit of the LS means and their differences: a  Required
+|             value of visit= in quotes (at = "Week 24")
 | class       The class factors besides the groups and the        Optional
-|             subject (the visit is one)
-| subject     The subject (default USUBJID)                       USUBJID
+|             subject: variables separated by blanks
+| subject     The subject: one variable                           USUBJID
 | model       The fixed effects: the MODEL statement after the    Required
-|             equal sign
-| type        The covariance structure: TYPE= of REPEATED         un
-|             (default un)
-| fallback    Other structures to try in their order, when one    Optional
-|             does not converge
-| ddfm        The degrees of freedom: DDFM= of MODEL (default     bw
-|             bw: between-within)
-| method      reml (default) or ml                                reml
-| pairs       all: each later group against each earlier one, in  all
-|             the order of ORDER; or the pairs separated by #,
-|             one pair per line, the group first, then the group
-|             it is compared with (a value with a blank or a
-|             hyphen in quotes): "Drug" "Placebo" # "High"
-|             "Low". The form "A"-"B" of version 1.0 is still
-|             read.
-| order       A numeric variable with one value per group: the    Optional
-|             order of the groups
-| level       The confidence level (default 0.95)                 0.95
-| stats       The statistics, as in %lsmeans                      diff="XX.X"
-|                                                                 diff_se="XX.XX" lcl="XX.X"
-|                                                                 ucl="XX.X" pval="X.XXX"
-| label       The label of the block in a table, in quotes        Optional
-| out         The result                                          Required
-| debug       yes: keep the work data sets of the macro           no
-|             (_mmrm_*)
+|             equal sign. It must have the term of the groups by
+|             visit: model = base trt01p avisit trt01p*avisit.
+| type        The covariance structure: TYPE= of REPEATED (un,    un
+|             cs, ar(1), toep ...)
+| fallback    Other covariance structures to try in their order   Optional
+|             when one does not converge, separated by blanks
+|             (fallback = toep cs)
+| ddfm        The degrees of freedom: DDFM= of MODEL (bw is       bw
+|             between-within, kr is Kenward-Roger)
+| method      The estimation method: reml or ml                   reml
+| pairs       The pairs of groups to compare. all: each later     all
+|             group against each earlier one, in the order of
+|             order= (or of the values). Or the pairs separated
+|             by #, each the group first and then the group it
+|             is compared with, a value with a blank or a hyphen
+|             in quotes: pairs = "Drug" "Placebo" # "High"
+|             "Low". The old form "A"-"B" is still read.
+| order       The order of the groups: one numeric variable with  Optional
+|             one value per group (order = trt01pn)
+| level       The confidence level of the limits: a number        0.95
+|             between 0 and 1
+| stats       The statistics, in the order of the rows: each      diff="XX.X"
+|             name with the pattern of its printed number,        diff_se="XX.XX" lcl="XX.X"
+|             separated by blanks. The names are diff, diff_se,   ucl="XX.X" pval="X.XXX"
+|             lcl, ucl, pval, lsmean and lsmean_se. A name
+|             without a pattern takes its default pattern
+|             (n="XX", mean="XX.X", pval="X.XXX" ...; see
+|             %describe).
+| label       The label of the block in the table: a text in      Optional
+|             quotes. A block is the rows of one call in the
+|             table.
+| out         The name of the result data set                     Required
+| debug       yes: keep the work data sets _mmrm_*                no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: as %lsmeans: the rows of the differences (BY, VERSUS) and of
-|                 the LS means.
+| Output        : OUT: the result shape (see %stack), as in %lsmeans. A row of a
+|                 difference has the group in the by= variable and the group it
+|                 is compared with in VERSUS; a row of an LS mean has VERSUS
+|                 blank. GROUPS is the by= variable and VERSUS. When no
+|                 structure converges, the macro stops with an ERROR and writes
+|                 no result.
 | Note          : The model is fitted by iteration: another program gives the
 |                 same numbers to about five digits, not to the last one. A
-|                 structure may converge in one engine and not in the other:
-|                 on visits very closely correlated PROC MIXED stops AR(1) with
-|                 an infinite likelihood where nlme (the R twin mmrm())
-|                 converges, so the same call may use the next structure of
-|                 fallback= in SAS. The NOTE "[mmrm] The covariance structure
-|                 TYPE=... converged" names the one used; the WARNING lines of
-|                 a fit that did not converge are followed by a NOTE that says
-|                 so.
+|                 structure may converge in one program and not in the other. On
+|                 visits that are very closely correlated, PROC MIXED stops
+|                 AR(1) with an infinite likelihood where the function mmrm() of
+|                 the R package sapling converges, so the same call may use the
+|                 next structure of fallback= in SAS. The NOTE "[mmrm] The
+|                 covariance structure TYPE=... converged" names the structure
+|                 used. The WARNING lines of a fit that did not converge are
+|                 followed by a NOTE that says so.
 |
 | Example:
 |
  %mmrm(
-     data     = adqsadas
-   , where    = (paramcd = 'ACTOT' AND anl01fl = 'Y')
+     data     = advs
+   , where    = (paramcd = 'SYSBP' AND anl01fl = 'Y' AND avisitn IN (4 8 12 16 24))
    , var      = chg
    , by       = trt01p
    , visit    = avisit
    , at       = "Week 24"
-   , class    = sitegr1 avisit
-   , model    = base sitegr1 trt01p avisit trt01p*avisit base*avisit
+   , model    = base trt01p avisit trt01p*avisit base*avisit
    , type     = un
    , fallback = toep
-   , ddfm     = bw
    , pairs    = all
    , order    = trt01pn
-   , out      = mmrm
+   , out      = sbp_mmrm
  )
 |
 |-------------------------------------------------------------------------------
@@ -112,6 +137,16 @@
 |                          after the WARNING lines of a fit that did not
 |                          converge; the header names the difference of the
 |                          engines (DEV-043). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: The example without class=avisit (visit= adds
+|                          it); the text says how the log names the covariance
+|                          structure used. The text of stats=: a name without a
+|                          pattern takes its default pattern. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the text of the Note names the R package. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO mmrm(

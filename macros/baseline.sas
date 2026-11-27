@@ -3,11 +3,19 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : Give every record of a group the value of the group's baseline
-|                 record (the one with the baseline flag).
+| Macro Purpose : Gives every record of a group the value of the group's
+|                 baseline record, as a new variable such as BASE. The macro
+|                 does not make the change from baseline: CHG = AVAL - BASE is a
+|                 DATA step after %baseline (see the how-to guide Derive
+|                 analysis visits, the baseline and the change from baseline).
+|                 The baseline record is the one whose flag= variable is 'Y'. A
+|                 group with no baseline record gets a missing value. The rows
+|                 of data= keep their order. When a group has two baseline
+|                 records, the log has an ERROR line that names the group, and
+|                 data= is not changed.
 | Procedure     : PROC SORT, MERGE
 | Proven        : the fixtures of the step kind baseline (src/adam_steps.ts;
 |                 node tools/adam_steps_sas.ts); ran on SAS 9.4 M9, 2026-11-12
@@ -16,28 +24,36 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The working data set (changed in place)             Required
-| value       The variable whose baseline value is taken (AVAL)   Required
-| by          The groups (one baseline record in each)            Required
-| flag        The baseline flag (default ABLFL = 'Y')             ABLFL
-| replace     yes: NEW is in the data already and is made again   no
-|             (default no)
-| new         The variable to make (BASE)                         Required
+| data        The data set to change in place, such as advs       Required
+| value       The variable whose baseline value is taken, such    Required
+|             as aval
+| by          The groups, each with one baseline record:          Required
+|             variables separated by blanks (by = usubjid
+|             paramcd)
+| flag        The baseline flag: a character variable that is     ABLFL
+|             'Y' on the baseline record
+| replace     yes: data= has the variable new= already; the       no
+|             macro drops it and makes it again
+| new         The name of the new variable, such as base          Required
 | debug       yes: keep the work data sets _baseline_*            no
 |-------------------------------------------------------------------------------
 |
-| Output        : DATA: NEW on every record: the VALUE of the baseline
-|                 record of its group (missing for a group without one); two
-|                 baseline records in a group are an ERROR that names the group.
-|                 The rows keep their order.
+| Output        : DATA: data=, changed in place: the variable new= on every
+|                 record, with the value of value= on the baseline record of its
+|                 group. A group with no baseline record gets a missing value.
 |
 | Example:
 |
+ DATA vs;
+   SET advs;
+   WHERE paramcd = 'SYSBP';
+ RUN;
  %baseline(
-     data  = advs
-   , value = aval
-   , by    = usubjid paramcd
-   , new   = base
+     data    = vs
+   , value   = aval
+   , by      = usubjid paramcd
+   , replace = yes
+   , new     = base
  )
 |
 |-------------------------------------------------------------------------------
@@ -52,6 +68,14 @@
 |                          case (names in lower case). No number changes.
 | 16-NOV-2026 Sapling      1.9.1: two baseline records in a group: the ERROR,
 |                          then data= is not changed (DEV-025).
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: The text says that CHG is a DATA step after
+|                          %baseline. The example first copies its records into a
+|                          data set of its own, so that it changes no data set of
+|                          setup.sas for a later example. No number changes.
 |
 *******************************************************************************/
 %MACRO baseline(

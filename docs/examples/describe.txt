@@ -1,0 +1,53 @@
+age_describe: the first 15 of 24 rows
+TRT01A                GROUPS  BLOCK        STAT           VALUE  TEXT
+Placebo               TRT01A  Age (years)  n                 86    86
+Placebo               TRT01A  Age (years)  mean    75.209302326  75.2
+Placebo               TRT01A  Age (years)  sd      8.5901671271  8.59
+Placebo               TRT01A  Age (years)  median            76  76.0
+Placebo               TRT01A  Age (years)  min               52    52
+Placebo               TRT01A  Age (years)  max               89    89
+Total                 TRT01A  Age (years)  n                254   254
+Total                 TRT01A  Age (years)  mean    75.086614173  75.1
+Total                 TRT01A  Age (years)  sd      8.2462338962  8.25
+Total                 TRT01A  Age (years)  median            77  77.0
+Total                 TRT01A  Age (years)  min               51    51
+Total                 TRT01A  Age (years)  max               89    89
+Xanomeline High Dose  TRT01A  Age (years)  n                 72    72
+Xanomeline High Dose  TRT01A  Age (years)  mean    73.777777778  73.8
+Xanomeline High Dose  TRT01A  Age (years)  sd      7.9438562002  7.94
+
+vs: the first 15 of 540 rows
+TRT01A   PARAMCD  AVISIT            PARAM                            AVISITN  GROUPS                 BLOCK  STAT           VALUE   TEXT
+Placebo  DIABP    End of Treatment  Diastolic Blood Pressure (mmHg)       99  TRT01A PARAMCD AVISIT         n                 74     74
+Placebo  DIABP    End of Treatment  Diastolic Blood Pressure (mmHg)       99  TRT01A PARAMCD AVISIT         mean    73.054054054   73.1
+Placebo  DIABP    End of Treatment  Diastolic Blood Pressure (mmHg)       99  TRT01A PARAMCD AVISIT         sd      10.172339465  10.17
+Placebo  DIABP    End of Treatment  Diastolic Blood Pressure (mmHg)       99  TRT01A PARAMCD AVISIT         median            72   72.0
+Placebo  DIABP    End of Treatment  Diastolic Blood Pressure (mmHg)       99  TRT01A PARAMCD AVISIT         min               50     50
+Placebo  DIABP    End of Treatment  Diastolic Blood Pressure (mmHg)       99  TRT01A PARAMCD AVISIT         max               99     99
+Placebo  DIABP    Week 12           Diastolic Blood Pressure (mmHg)       12  TRT01A PARAMCD AVISIT         n                 68     68
+Placebo  DIABP    Week 12           Diastolic Blood Pressure (mmHg)       12  TRT01A PARAMCD AVISIT         mean    72.588235294   72.6
+Placebo  DIABP    Week 12           Diastolic Blood Pressure (mmHg)       12  TRT01A PARAMCD AVISIT         sd      10.314799242  10.31
+Placebo  DIABP    Week 12           Diastolic Blood Pressure (mmHg)       12  TRT01A PARAMCD AVISIT         median            72   72.0
+Placebo  DIABP    Week 12           Diastolic Blood Pressure (mmHg)       12  TRT01A PARAMCD AVISIT         min               50     50
+Placebo  DIABP    Week 12           Diastolic Blood Pressure (mmHg)       12  TRT01A PARAMCD AVISIT         max               99     99
+Placebo  DIABP    Week 16           Diastolic Blood Pressure (mmHg)       16  TRT01A PARAMCD AVISIT         n                 67     67
+Placebo  DIABP    Week 16           Diastolic Blood Pressure (mmHg)       16  TRT01A PARAMCD AVISIT         mean    74.253731343   74.3
+Placebo  DIABP    Week 16           Diastolic Blood Pressure (mmHg)       16  TRT01A PARAMCD AVISIT         sd      10.359219702  10.36
+
+wt_describe: the first 15 of 36 rows
+TRT01A        GROUPS  BLOCK                    STAT           VALUE   TEXT
+All subjects  TRT01A  Weight at baseline (kg)  n                254    254
+All subjects  TRT01A  Weight at baseline (kg)  mean    66.595393701   66.6
+All subjects  TRT01A  Weight at baseline (kg)  sd      14.123258074  14.12
+All subjects  TRT01A  Weight at baseline (kg)  se      0.8861720266   0.89
+All subjects  TRT01A  Weight at baseline (kg)  median        66.455   66.5
+All subjects  TRT01A  Weight at baseline (kg)  q1             55.34   55.3
+All subjects  TRT01A  Weight at baseline (kg)  q3             77.11   77.1
+All subjects  TRT01A  Weight at baseline (kg)  min            34.02   34.0
+All subjects  TRT01A  Weight at baseline (kg)  max           107.96  108.0
+Placebo       TRT01A  Weight at baseline (kg)  n                 86     86
+Placebo       TRT01A  Weight at baseline (kg)  mean     62.75744186   62.8
+Placebo       TRT01A  Weight at baseline (kg)  sd      12.770388007  12.77
+Placebo       TRT01A  Weight at baseline (kg)  se      1.3770663537   1.38
+Placebo       TRT01A  Weight at baseline (kg)  median         60.56   60.6
+Placebo       TRT01A  Weight at baseline (kg)  q1             53.52   53.5

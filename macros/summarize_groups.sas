@@ -3,14 +3,14 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : One record per group of BY with a summary of each variable of
-|                 VARS over the records of the group: the sum, the mean, the
-|                 largest or the smallest value (a missing value of a BY
-|                 variable is a group of its own). A group without records has
-|                 no record.
+| Macro Purpose : Returns one record per group with the sum, mean, largest or
+|                 smallest value of each variable over the group. Use %summarize
+|                 to add a summary of each subject's records to another data
+|                 set. A missing value of a BY variable is a group of its own. A
+|                 sum or a mean of only missing values is missing.
 | Procedure     : PROC SUMMARY
 | Proven        : the fixtures of the step kind parameter (src/adam_steps.ts;
 |                 node tools/adam_steps_sas.ts); ran on SAS 9.4 M9, 2026-11-12
@@ -19,28 +19,30 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records (prepare the values with a DATA step;   Required
-|             a condition as 0 or 1)
-| by          The groups                                          Required
-| vars        The variables to summarize                          Required
-| stats       One statistic per variable, in the same order:      Required
-|             sum, mean, max or min. A sum or a mean of only
-|             missing values is missing.
-| out         One record per group: the BY variables and VARS     Required
-|             (their summaries)
+| data        The input data set. When a value is not a variable  Required
+|             yet (a condition as 0 or 1), make it first in a
+|             DATA step.
+| by          The groups: one variable or several, separated by   Required
+|             blanks (by = usubjid paramcd)
+| vars        The numeric variables to summarize, separated by    Required
+|             blanks
+| stats       One statistic for each variable of vars=, in the    Required
+|             same order, separated by blanks: sum, mean, max or
+|             min (stats = sum max)
+| out         The name of the data set it writes                  Required
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: one record per group of BY with the summary of each
-|                 variable of VARS (under its own name).
+| Output        : OUT: one record per group: the BY variables and the variables
+|                 of vars=, each with its summary under its own name.
 |
 | Example:
 |
  %summarize_groups(
-     data  = _recs
-   , by    = usubjid avisit
-   , vars  = _s1 _s2
-   , stats = max sum
-   , out   = _sums
+     data  = advs
+   , by    = usubjid paramcd
+   , vars  = aval chg
+   , stats = max min
+   , out   = vs_extremes
  )
 |
 |-------------------------------------------------------------------------------
@@ -53,6 +55,10 @@
 |                          number changes.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO summarize_groups(

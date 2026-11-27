@@ -3,78 +3,101 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : The profile of each subject: one thin line per subject through
-|                 its values by visit, in the colour and the line pattern of its
-|                 group; with mean=yes the mean of each group at each visit as
-|                 a thick line with markers. One panel per value of panel=.
+| Macro Purpose : Draws one line per subject through its values by visit as PNG
+|                 and RTF files and returns the numbers drawn. Use %meanplot for
+|                 the mean of each group alone, with error bars. Each line is
+|                 thin, in the colour and line pattern of the group of the
+|                 subject. With mean=yes, the mean of each group at each visit
+|                 is also drawn, as a thick line with markers. A record with a
+|                 missing visit, value, group or panel is not used. To draw the
+|                 figure again without computing, give plot= the out= and par=
+|                 the outpar= of an earlier call.
 | Procedure     : PROC MEANS, PROC SGPANEL
 | Proven        : its known answer in tools/figures_sas.ts (the values and the
 |                 means worked out by hand); not yet run on a SAS server
-| Note          : Draw again: plot= (an out= of %profileplot, changed or not) is
-|                 drawn as it is, and par= (an outpar= of %profileplot) gives
-|                 the drawing parameters: columns, subject, by, panel, mean (no:
-|                 the rows of KIND mean are not drawn), xformat, xlabel, ylabel,
-|                 ref, file, width, height. They change the picture, not the
-|                 numbers; the others compute, and with plot= a NOTE says each
-|                 one given is not used. A drawing parameter given in the call
-|                 wins over its row of par=, the row over the default of the
-|                 table.
+| Note          : Draw again: plot= takes the out= of an earlier %profileplot
+|                 call, changed or not, and draws it as it is, with no statistic
+|                 computed. par= takes the outpar= of that call and gives the
+|                 drawing parameters: columns, subject, by, panel, mean (no: the
+|                 rows of KIND mean are not drawn), xformat, xlabel, ylabel,
+|                 ref, file, width, height. These change the picture, not the
+|                 numbers. The other parameters compute; with plot= the log has
+|                 a NOTE for each one given, as it is not used. A drawing
+|                 parameter given in the call wins over its row of par=, and the
+|                 row wins over the default of the table.
 |
 | Input Parameters :
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records                                         Required
-| plot        Draw again: an out= of %profileplot, not with       Optional
-|             data=
-| par         The drawing parameters: an outpar= of %profileplot  Optional
-| columns     The columns of %columns: the order of the groups    Optional
-|             and their colours (default: the order of the data)
-| where       The records to use, a condition in parentheses      Optional
-| x           The visit: a numeric variable (AVISITN, ADY)        Required
-| y           The variable                                        Required
-| subject     The subject: one line each                          USUBJID
-| by          The groups: one colour each                         Required
-| panel       One panel per value of this variable, one under     Optional
-|             the other, each with its own y axis
-| mean        yes: the mean of each group as a thick line         no
-| xformat     The format of the ticks of x (default: the format   Optional
-|             of x)
-| xlabel      The label of the x axis (default: the label of x)   Optional
-| ylabel      The label of the y axis (default: the label of y)   Optional
-| ref         Reference lines on the y axis: values               Optional
-| file        The output without its extension: <file>.png (300   Required
-|             dpi) and <file>.rtf
-| width       The width of the figure                             6.5in
-| height      The height of the figure                            4.5in
-| out         The numbers drawn                                   Optional
-| outpar      The drawing parameters: one row each                Optional
+| data        The input data set: one record per subject and      Required
+|             visit
+| plot        Draw again: the out= of an earlier %profileplot     Optional
+|             call, changed or not. It is drawn as it is, and no
+|             statistic is computed. Give it instead of data=.
+| par         The drawing parameters of an earlier %profileplot   Optional
+|             call: its outpar=. A drawing parameter given in
+|             the call wins over its row of par=.
+| columns     The data set of %columns: it gives the order of     Optional
+|             the groups and their colours. When not given, the
+|             groups come in the order of the data.
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (anl01fl = 'Y')
+| x           The visit: one numeric variable (x = avisitn or x   Required
+|             = ady)
+| y           The value: one numeric variable (y = aval)          Required
+| subject     The subject: one variable, one line per subject     USUBJID
+| by          The groups: one variable, one colour per group      Required
+| panel       A variable: one panel per value, one under the      Optional
+|             other, each with its own y axis (panel = paramcd)
+| mean        yes: also draw the mean of each group as a thick    no
+|             line
+| xformat     The format of the ticks of x, as in a FORMAT        Optional
+|             statement (xformat = visfmt.). When not given, the
+|             format of x.
+| xlabel      The label of the x axis: a text in quotes. When     Optional
+|             not given, the label of x= (or its name).
+| ylabel      The label of the y axis: a text in quotes. When     Optional
+|             not given, the label of y= (or its name).
+| ref         Reference lines on the y axis: one value or         Optional
+|             several, separated by blanks (ref = 0 50)
+| file        The output file without its extension: the macro    Required
+|             writes <file>.png (300 dpi) and <file>.rtf
+| width       The width of the figure: a length with its unit     6.5in
+|             (width = 9in)
+| height      The height of the figure: a length with its unit    4.5in
+|             (height = 6in)
+| out         The name of the data set of the numbers drawn.      Optional
+|             When not given, they are not kept.
+| outpar      The name of the data set of the drawing             Optional
+|             parameters, one row each. Give it to par= of a
+|             later call to draw the figure again.
 | debug       yes: keep the work data sets _profileplot_*         no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: one row per point: PANEL, BY and SUBJECT, KIND (subject:
-|                 a value of a subject; mean: the mean of a group, SUBJECT
-|                 blank), X, Y, N (the values of a mean). OUTPAR: one row per
-|                 drawing parameter in the order of the table: PARAMETER ($32)
-|                 its name, VALUE ($500) its value as drawn (a label in quotes).
-|                 FILE: <file>.png and <file>.rtf.
+| Output        : OUT: one row per point: the variables of panel=, by= and
+|                 subject=, KIND, X, Y and N. KIND is subject for a value of a
+|                 subject, or mean for the mean of a group (the subject is then
+|                 blank); N is the number of values of a mean. OUTPAR: one row
+|                 per drawing parameter, in the order of the table: PARAMETER
+|                 ($32), its name, and VALUE ($500), its value as drawn (a label
+|                 in quotes). FILE: <file>.png and <file>.rtf.
 |
 | Example:
 |
  %profileplot(
-     data    = adlbc
-   , columns = t14_6_cols
-   , where   = (paramcd = 'ALT' AND anl01fl = 'Y')
+     data    = adlb
+   , columns = t14_2_1_cols
+   , where   = (paramcd = 'ALT' AND anl01fl = 'Y' AND MISSING(dtype))
    , x       = ady
    , y       = aval
-   , by      = trta
+   , by      = trt01a
    , mean    = no
-   , ref     = 40
-   , file    = &spl_out./figures/f14_6_1
-   , out     = f14_6_1
+   , file    = &spl_out./figures/f_alt_prof
+   , out     = f_alt_prof
  )
 |
 |-------------------------------------------------------------------------------
@@ -93,6 +116,10 @@
 |                          a subject line); the ticks are the visits.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO profileplot(

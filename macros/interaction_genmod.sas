@@ -3,18 +3,25 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : The test of the interaction of the treatment and a factor in a
-|                 count model with its exposure, one record per subject (PROC
-|                 GENMOD, the logarithm of the exposure the offset): Poisson or
-|                 negative binomial (the dispersion k estimated in each model),
-|                 the model of the groups, the covariates, the class factors and
-|                 the factor, against the same with the treatment-by-factor
-|                 terms. The likelihood-ratio test (pval): twice the difference
-|                 of the full log likelihoods of the two fits, with the
-|                 difference of the numbers of their estimated coefficients.
+| Macro Purpose : Returns the p-value of the treatment-by-subgroup interaction
+|                 in a Poisson or negative binomial model of a count. Use
+|                 %interaction_glm for a continuous variable,
+|                 %interaction_logistic for a response, and %interaction_phreg
+|                 for a time to an event. The macro writes a result: a data set
+|                 with one row per number (the result shape, see %stack). The
+|                 macro fits two models with PROC GENMOD, with the logarithm of
+|                 the exposure as the offset: the groups, the covariates, the
+|                 class factors and the factor; and the same model with the
+|                 treatment-by-factor terms. In a negative binomial model, each
+|                 fit estimates its own dispersion k. pval is the
+|                 likelihood-ratio test: twice the difference of the full log
+|                 likelihoods of the two fits, with the difference of the
+|                 numbers of their estimated coefficients. The models use one
+|                 record per subject: a record with a missing count, group or
+|                 level is not used.
 | Procedure     : PROC GENMOD
 | Proven        : the known answer of the methods interaction-poisson,
 |                 interaction-negbin (src/methods.ts, worked out by
@@ -25,38 +32,51 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records                                         Required
-| where       The records to use, a condition in parentheses      Optional
-| var         The count                                           Required
-| by          The groups of the model: a character variable       Required
-| factor      The factor of the subgroups: a variable whose       Required
-|             values are its levels
-| exposure    The exposure of each subject: a variable, or an     Required
-|             expression of it. Above 0.
-| covars      The covariates                                      Optional
-| class       The class factors                                   Optional
-| dist        poisson (default) or negbin                         poisson
-| stats       The statistic and its pattern (default              pval="X.XXX"
-|             pval="X.XXX")
-| label       The label of the block in a table, in quotes        Optional
-| out         The result                                          Required
-| debug       yes: keep the work data sets of the macro           no
-|             (_interaction_genmod_*)
+| data        The input data set: one record per subject, with    Required
+|             USUBJID
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (ittfl = 'Y')
+| var         The count: one numeric variable, such as the        Required
+|             number of events of each subject
+| by          The groups of the model, the treatment: one         Required
+|             variable
+| factor      The factor of the subgroups: one variable whose     Required
+|             values are its levels (factor = sex)
+| exposure    The exposure of each subject: a numeric variable,   Required
+|             or an expression of it (exposure = trtdurd /
+|             365.25). It must be above 0, because the offset is
+|             its logarithm.
+| covars      The numeric covariates of the model, separated by   Optional
+|             blanks (covars = base)
+| class       The other class factors of the model, separated by  Optional
+|             blanks (class = sitegr1)
+| dist        The distribution of the count: poisson or negbin    poisson
+|             (nb is accepted as another name of negbin)
+| stats       The statistic with its pattern of the printed       pval="X.XXX"
+|             number: pval
+| label       The label of the block in the table: a text in      Optional
+|             quotes. A block is the rows of one call in the
+|             table.
+| out         The name of the result data set                     Required
+| debug       yes: keep the work data sets _interaction_genmod_*  no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: one row, of all groups and levels together (GROUPS is blank).
+| Output        : OUT: the result shape (see %stack), one row for all groups and
+|                 levels together: GROUPS (blank), BLOCK, STAT (pval), VALUE and
+|                 TEXT.
 |
 | Example:
 |
  %interaction_genmod(
      data     = adsl
-   , var      = exacnt
-   , by       = trt01p
+   , where    = (trtdurd > 0)
+   , var      = teaecnt
+   , by       = trt01a
    , factor   = sex
-   , exposure = trtdur / 365.25
+   , exposure = trtdurd / 365.25
    , dist     = negbin
    , label    = "Sex"
-   , out      = sex_int
+   , out      = ae_int
  )
 |
 |-------------------------------------------------------------------------------
@@ -72,6 +92,10 @@
 |                          runs: the flat program has it. No number changes.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO interaction_genmod(

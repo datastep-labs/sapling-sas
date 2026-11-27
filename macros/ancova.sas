@@ -3,14 +3,23 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : A linear model of a variable, one record per subject (PROC
-|                 GLM): class factors, covariates and the tested term. The Type
-|                 III test of the tested term (pval); its coefficient, its
-|                 standard error and confidence limits (estimate, se, lcl, ucl)
-|                 when stats= asks for them.
+| Macro Purpose : Returns the Type III p-value of a numeric term in a linear
+|                 model, such as a test of dose response. Use %lsmeans for the
+|                 differences between pairs of groups, and %mmrm for a model of
+|                 repeated visits. The model is PROC GLM: the class factors, the
+|                 covariates and the tested term, one record per subject (the
+|                 first with a value; when where= leaves a second record of a
+|                 subject, the log has a NOTE with their number). Give a where=
+|                 that leaves one record per subject, such as one parameter at
+|                 one visit with anl01fl = 'Y'; otherwise each subject has the
+|                 first of its records in the order of data=, whichever it is.
+|                 The coefficient of the term, its standard error and its
+|                 confidence limits come when stats= asks for them. The macro
+|                 writes a result: a data set with one row per number (the
+|                 result shape, see %stack).
 | Procedure     : PROC GLM
 | Proven        : the known answer of the method ancova (src/methods.ts, worked
 |                 out by tools/method_answers.R; node tools/methods_sas.ts); ran
@@ -20,35 +29,46 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records                                         Required
-| where       The records to use, a condition in parentheses      Optional
-| var         The response                                        Required
-| covars      The covariates, separated by blanks                 Optional
-| class       The class factors, separated by blanks              Optional
-| test        The tested term: a numeric variable (a dose, a      Required
-|             treatment number)
-| level       The confidence level of the limits (default 0.95)   0.95
-| stats       The statistics, each with its pattern (default      pval="X.XXX"
-|             pval="X.XXX"); also estimate, se, lcl, ucl
-| label       The label of the block in a table, in quotes        Optional
-| out         The result                                          Required
-| debug       yes: keep the work data sets of the macro           no
-|             (_ancova_*)
+| data        The input data set, with USUBJID                    Required
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (paramcd = 'SYSBP' AND avisit =
+|             'Week 12')
+| var         The response: one numeric variable                  Required
+| covars      The covariates: numeric variables separated by      Optional
+|             blanks (covars = base)
+| class       The class factors: variables separated by blanks    Optional
+|             (class = sex)
+| test        The tested term: one numeric variable, such as a    Required
+|             dose or the number of a treatment (test = trt01pn)
+| level       The confidence level of the limits: a number        0.95
+|             between 0 and 1
+| stats       The statistics, in the order of the rows: each      pval="X.XXX"
+|             name with the pattern of its printed number,
+|             separated by blanks. The names are pval, estimate,
+|             se, lcl and ucl. A name without a pattern takes
+|             its default pattern (n="XX", mean="XX.X",
+|             pval="X.XXX" ...; see %describe).
+| label       The label of the block in the table: a text in      Optional
+|             quotes. A block is the rows of one call in the
+|             table.
+| out         The name of the result data set                     Required
+| debug       yes: keep the work data sets _ancova_*              no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: one row per statistic, of all subjects together (GROUPS is
-|                 blank).
+| Output        : OUT: the result shape (see %stack): one row per statistic, of
+|                 all subjects together (GROUPS is blank). STAT is pval,
+|                 estimate, se, lcl or ucl.
 |
 | Example:
 |
  %ancova(
      data   = advs
-   , where  = (paramcd = 'SYSBP' AND avisit = 'Week 12')
+   , where  = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')
    , var    = chg
    , covars = base
-   , class  = sitegr1
-   , test   = trtpn
-   , out    = chg_test
+   , test   = trt01pn
+   , label  = "Dose response"
+   , out    = sbp_dose
  )
 |
 |-------------------------------------------------------------------------------
@@ -64,6 +84,19 @@
 |                          runs: the flat program has it. No number changes.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a NOTE when where= leaves a second record of
+|                          a subject (the first is used, as before). No number
+|                          changes.
+| 27-NOV-2026 Sapling      1.9.1: The example analyses the records of anl01fl =
+|                          'Y' (one record per subject). The text of stats=: a
+|                          name without a pattern takes its default pattern. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: the text says to give a where= that leaves one
+|                          record per subject. No number changes.
 |
 *******************************************************************************/
 %MACRO ancova(
@@ -79,7 +112,7 @@
    , out    =                /* The result */
    , debug  = no             /* yes: keep the work data sets _ancova_* */
 ) / DES = 'The Type III test of a term in a linear model (PROC GLM)';
-  %LOCAL t0 cond;
+  %LOCAL t0 cond ndup;
   %LET t0 = %_spl_begin(ancova);
 
   /* Step 1: the parameters */
@@ -91,10 +124,15 @@
   %IF %LENGTH(%SUPERQ(where)) %THEN %LET cond = &cond. and &where.;  /* plus where= */
 
   /* Step 2: one record per subject with a value */
-  PROC SORT DATA=&data. OUT=_ancova_subjects NODUPKEY;
+  PROC SORT DATA=&data. OUT=_ancova_subjects NODUPKEY DUPOUT=_ancova_dups;
     WHERE &cond.;
     BY usubjid;
   RUN;
+  %LET ndup = %_spl_nobs(_ancova_dups);  /* the second records of a subject, dropped */
+  %IF &ndup. > 0 %THEN %DO;
+    %PUT NOTE: [ancova] &ndup. record(s) of where= are a second record of a subject:;
+    %PUT NOTE: [ancova]   the first record of each subject is used.;
+  %END;
 
   /* Step 3: no record qualified: the result without a row */
   %IF %_spl_nobs(_ancova_subjects) = 0 %THEN %DO;

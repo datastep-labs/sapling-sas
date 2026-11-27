@@ -3,31 +3,35 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : The records of a listing (or the numbers of a figure, out= of
-|                 a figure macro) as a CSV file: a line with the names of the
-|                 variables, then one line per record in the order of the
-|                 data. sapling sas check compares it with the listing or the
-|                 figure of R.
+| Macro Purpose : Writes the records of a listing, or the numbers of a figure,
+|                 to a CSV file. Use %ard for the numbers of a table. The first
+|                 line has the names of the variables, in upper case; then one
+|                 line per record, in the order of the data. The values are
+|                 written with their formats, so that a second program, in SAS
+|                 or R, can compare its listing or figure with this file.
 | Procedure     : DATA steps (FILE, PUT)
-| Proven        : the listings of the dummy study SYNHTN01 (sapling sas check:
-|                 listings the same in R and SAS); ran on SAS 9.4 M9,
+| Proven        : the listings of the dummy study SYNHTN01 (the same as the
+|                 listings of a second program in R); ran on SAS 9.4 M9,
 |                 2026-11-12
 |
 | Input Parameters :
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records of the listing                          Required
-| var         The variables of the listing                        Required
+| data        The records: the data set of the listing, or out=   Required
+|             of a figure macro
+| var         The variables to write: names separated by blanks,  Required
+|             in the order of the columns
 | folder      The folder in the outputs: listings or figures      listings
-| file        The name of the listing, without extension          Required
+| file        The name of the CSV file, without its extension     Required
 |-------------------------------------------------------------------------------
 |
-| Output        : FILE: <out>/<folder>/<file>.csv: the names of VAR, then one
-|                 line per record.
+| Output        : FILE: <out>/<folder>/<file>.csv, where <out> is the output
+|                 folder that %study set: a line with the names of var=, then
+|                 one line per record.
 |
 | Example:
 |
@@ -44,6 +48,11 @@
 | 16-NOV-2026 Sapling      1.9.0: a missing output folder is made, with a NOTE
 |                          (%_spl_folder). The license line; the example in the
 |                          house case.
+| 27-NOV-2026 Sapling      1.9.1: the text of the header for the manual: the
+|                          summary, the form of each parameter. No number
+|                          changes.
+| 27-NOV-2026 Sapling      1.9.1: The header names no internal tool. No number
+|                          changes.
 |
 *******************************************************************************/
 %MACRO csv(

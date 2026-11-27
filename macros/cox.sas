@@ -3,19 +3,29 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : A Cox proportional hazards model of a time, one record per
-|                 subject (PROC PHREG): the groups, the covariates and the class
-|                 factors, stratified by the strata (each combination of their
-|                 values a stratum with its own baseline hazard). The hazard
-|                 ratio of pairs of groups from one fit (hr), its Wald
-|                 confidence limits (lcl, ucl) and the Wald p-value of the pair
-|                 (pval). With pvalue=logrank the p-value is the log-rank test
-|                 of the two groups of the pair, stratified by the same strata
-|                 (PROC LIFETEST); the hazard ratio and its limits stay those of
-|                 the model.
+| Macro Purpose : Returns the hazard ratio of pairs of groups from a Cox
+|                 proportional hazards model, with its confidence limits and
+|                 p-value. Use %logrank for the test of all groups together
+|                 without a model, and %interaction_phreg for the test of a
+|                 treatment-by-subgroup interaction. The macro writes a result:
+|                 a data set with one row per number (the result shape, see
+|                 %stack). The model has the groups, the covariates and the
+|                 class factors. With strata=, each combination of the values of
+|                 the strata variables is a stratum with its own baseline
+|                 hazard. All pairs come from one fit: hr is the hazard ratio,
+|                 lcl and ucl are its Wald confidence limits, and pval is the
+|                 Wald p-value of the pair. With pvalue=logrank, pval is the
+|                 log-rank test of the two groups of the pair, in the same
+|                 strata (PROC LIFETEST); the hazard ratio and its limits stay
+|                 those of the model. The model uses one record per subject (in
+|                 each group of within=). CNSR 0 is an event and any positive
+|                 value is a censoring, as in ADaM, where the value names the
+|                 reason of the censoring: a CNSR of 2 is censored as 1 is. A
+|                 record used with a missing or negative CNSR stops the macro
+|                 with an ERROR.
 | Procedure     : PROC PHREG (LSMEANS); PROC LIFETEST for pvalue=logrank
 | Proven        : the known answer of the method cox (src/methods.ts, worked out
 |                 by tools/method_answers.R; node tools/methods_sas.ts); ran on
@@ -25,56 +35,104 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records                                         Required
-| where       The records to use, a condition in parentheses      Optional
-| var         The time                                            Required
-| by          The groups of the model: a character variable       Required
-| cnsr        The censoring variable: 1 = censored (default       CNSR
-|             CNSR)
-| within      One model in each group of these variables (the     Optional
-|             levels of a subgroup)
-| covars      The covariates                                      Optional
-| class       The class factors                                   Optional
-| strata      The strata variables, separated by blanks           Optional
-| pairs       all: each later group against each earlier one, in  all
-|             the order of ORDER; or the pairs separated by #,
-|             one pair per line, the group first, then the group
-|             it is compared with (a value with a blank or a
-|             hyphen in quotes): "Drug" "Placebo" # "High"
-|             "Low". The form "A"-"B" of version 1.0 is still
-|             read.
-| order       A numeric variable with one value per group: the    Optional
-|             order of the groups
-| ties        The likelihood of tied times: efron (default),      efron
-|             breslow, or exact (the discrete likelihood,
-|             TIES=DISCRETE; R coxph calls it exact)
-| pvalue      wald (default): the Wald test of the pair in the    wald
-|             model; logrank: the log-rank test of the two
-|             groups of the pair, in the strata
-| level       The confidence level (default 0.95)                 0.95
-| stats       The statistics, each with its pattern (default      hr="XX.XX" lcl="XX.XX"
-|             hr="XX.XX" lcl="XX.XX" ucl="XX.XX" pval="X.XXX")    ucl="XX.XX" pval="X.XXX"
-| label       The label of the block in a table, in quotes        Optional
-| out         The result                                          Required
-| debug       yes: keep the work data sets of the macro           no
-|             (_cox_*)
+| data        The input data set: one record per subject, with    Required
+|             USUBJID, the time and the censoring variable
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (paramcd = 'TTDE')
+| var         The time: one numeric variable, such as aval        Required
+| by          The groups of the model: one character variable     Required
+| cnsr        The censoring variable: one numeric variable, 0     CNSR
+|             for an event and a positive value for a censoring
+|             (the ADaM CNSR: 1, 2 ... name the reason). A
+|             missing or negative value on a record used stops
+|             the macro with an ERROR.
+| within      One model in each group of these variables,         Optional
+|             separated by blanks (within = sex for the levels
+|             of a subgroup). A record with a missing value of
+|             one of them is not used.
+| covars      The numeric covariates of the model, separated by   Optional
+|             blanks (covars = age)
+| class       The class factors of the model, separated by        Optional
+|             blanks (class = sitegr1)
+| strata      The strata of the model, separated by blanks        Optional
+|             (strata = sitegr1). When not given, the model has
+|             no strata.
+| pairs       The pairs of groups to compare. all: each later     all
+|             group against each earlier one, in the order of
+|             order= (or of the values). Or a list of pairs
+|             separated by #: the group first, then the group it
+|             is compared with, each value in quotes ("Drug"
+|             "Placebo" # "High" "Low"). The old form "A"-"B" of
+|             version 1.0 is still read.
+| order       The order of the groups: one numeric variable with  Optional
+|             one value per group (order = trt01pn)
+| ties        The method for tied times: efron, breslow, or       efron
+|             exact (TIES=DISCRETE of PROC PHREG, which coxph of
+|             R calls exact). discrete is accepted as another
+|             name of exact
+| pvalue      The p-value of each pair: wald (the Wald test of    wald
+|             the pair in the model) or logrank (the log-rank
+|             test of the two groups of the pair, in the
+|             strata). logrank is not possible with within=
+| level       The confidence level: a number between 0 and 1      0.95
+| stats       The statistics, in the order of the rows: each      hr="XX.XX" lcl="XX.XX"
+|             name with its pattern of the printed number,        ucl="XX.XX" pval="X.XXX"
+|             separated by blanks. The names are hr, lcl, ucl
+|             and pval. A name without a pattern takes its
+|             default pattern (n="XX", mean="XX.X", pval="X.XXX"
+|             ...; see %describe).
+| label       The label of the block in the table: a text in      Optional
+|             quotes. A block is the rows of one call in the
+|             table.
+| out         The name of the result data set                     Required
+| debug       yes: keep the work data sets _cox_*                 no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: one row per pair and statistic (BY: the group, VERSUS: the
-|                 group it is compared with); GROUPS is BY VERSUS (and WITHIN).
-| Note          : Sapling's default ties are Efron's (R coxph's default); PROC
-|                 PHREG alone uses Breslow's.
+| Output        : OUT: the result shape (see %stack), one row per pair and
+|                 statistic: the BY variable (the group), VERSUS (the group it
+|                 is compared with), the variables of within=, GROUPS, BLOCK,
+|                 STAT, VALUE and TEXT. GROUPS is the name of the BY variable,
+|                 VERSUS and the names of within=.
+| Note          : The ties of the library are Efron's, as in coxph of R; PROC
+|                 PHREG by itself uses Breslow's.
 |
 | Example:
 |
  %cox(
-     data   = adtte
-   , where  = (paramcd = 'PFS')
+     data   = adttde
    , var    = aval
-   , by     = trt01p
-   , strata = strat1 strat2
-   , order  = trt01pn
-   , out    = pfs_hr
+   , by     = trt01a
+   , strata = sex
+   , order  = trt01an
+   , out    = ttde_hr
+ )
+ %cox(
+     data   = adttde
+   , var    = aval
+   , by     = trt01a
+   , within = sex
+   , pairs  = "Xanomeline High Dose" "Placebo"
+            # "Xanomeline Low Dose"  "Placebo"
+   , out    = hr_sex
+ )
+ %cox(
+     data   = adttde
+   , var    = aval
+   , by     = trt01a
+   , within = agegr1
+   , pairs  = "Xanomeline High Dose" "Placebo"
+            # "Xanomeline Low Dose"  "Placebo"
+   , out    = hr_age
+ )
+ %cox(
+     data   = adttde
+   , var    = aval
+   , by     = trt01a
+   , pairs  = "Xanomeline High Dose" "Placebo"
+            # "Xanomeline Low Dose"  "Placebo"
+   , ties   = breslow
+   , pvalue = logrank
+   , out    = ttde_hr_lr
  )
 |
 |-------------------------------------------------------------------------------
@@ -101,6 +159,19 @@
 | 16-NOV-2026 Sapling      1.9.1: PLOTS=NONE only with ODS graphics on: no
 |                          WARNING when they are off (DEV-051). No number
 |                          changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: The text of stats=: a name without a pattern
+|                          takes its default pattern. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: CNSR as in ADaM: 0 is an event and any positive
+|                          value a censoring (before, only 1 was a censoring and
+|                          2 an event); a missing or negative CNSR on a record
+|                          used stops the macro with an ERROR. No number changes
+|                          on data with CNSR 0 and 1.
+| 27-NOV-2026 Sapling      1.9.1: an example with ties= and pvalue=logrank. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO cox(
@@ -108,7 +179,7 @@
    , where  =        /* The records to use: a condition in parentheses */
    , var    =        /* The time */
    , by     =        /* The groups of the model: a character variable */
-   , cnsr   = CNSR   /* The censoring variable: 1 = censored */
+   , cnsr   = CNSR   /* The censoring variable: 0 = event, > 0 censored */
    , within =        /* One model in each group of these variables */
    , covars =        /* The covariates */
    , class  =        /* The class factors */
@@ -124,7 +195,7 @@
    , out    =        /* The result */
    , debug  = no     /* yes: keep the work data sets _cox_* */
 ) / DES = 'The hazard ratio of pairs of groups from a Cox model (PROC PHREG)';
-  %LOCAL t0 cond chars method plots;
+  %LOCAL t0 cond chars method plots nbad;
   %LET t0 = %_spl_begin(cox);
 
   /* Step 1: the parameters */
@@ -157,8 +228,18 @@
     %IF %LENGTH(&within.) %THEN %DO;
       IF CMISS(OF &within.) = 0;
     %END;
+    /* CNSR 0 is an event; a positive value is a censoring, with its reason */
+    IF &cnsr. > 0 THEN _cens = 1;
+    ELSE               _cens = 0;
   RUN;
   PROC SORT DATA=_cox_records NODUPKEY; BY &within. usubjid; RUN;
+  /* a missing or negative CNSR is neither an event nor a censoring */
+  %LET nbad = %_spl_nobs(_cox_records(WHERE=(MISSING(&cnsr.) OR &cnsr. < 0)));
+  %IF &nbad. > 0 %THEN %DO;
+    %PUT %STR(ERR)OR: [cox] cnsr=&cnsr. is missing or negative on &nbad. record(s) used;
+    %PUT %STR(ERR)OR: [cox]   fix: give each record CNSR 0 (an event) or more (a censoring).;
+    %GOTO finish;
+  %END;
 
   /* Step 3: no record qualified: the result without a row */
   %IF %_spl_nobs(_cox_records) = 0 %THEN %DO;
@@ -174,7 +255,7 @@
       BY &within.;
     %END;
     CLASS &class. &by. / PARAM=GLM;
-    MODEL &var. * &cnsr.(1) = &by. &class. &covars. / ties = &method. xconv = 1E-12 gconv = 0;
+    MODEL &var. * _cens(1) = &by. &class. &covars. / ties = &method. xconv = 1E-12 gconv = 0;
     %IF %LENGTH(&strata.) %THEN %DO;
       STRATA &strata.;
     %END;
@@ -218,7 +299,7 @@
     ODS OUTPUT HomTests=_cox_logrank(WHERE=(test = 'Log-Rank') KEEP=_a _b test probchisq);
     PROC LIFETEST DATA=_cox_pairdata &plots.;
       BY _pair _a _b;
-      TIME &var. * &cnsr.(1);
+      TIME &var. * _cens(1);
       %IF %LENGTH(&strata.) %THEN %DO;
         STRATA &strata. / GROUP=&by.;
       %END;

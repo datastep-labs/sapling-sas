@@ -3,89 +3,122 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : The Kaplan-Meier curve of a time in each group: the survival in
-|                 percent as steps, a mark at each censored time, the number at
-|                 risk under the axis at its ticks (the subjects whose time is
-|                 that time or later), in the order of the groups; with
-|                 median=yes the median time of each group and its interval.
+| Macro Purpose : Draws the Kaplan-Meier curve of each group as PNG and RTF
+|                 files and returns the numbers drawn. Use %km for the
+|                 Kaplan-Meier estimates in a table; %kmplot computes its own
+|                 curve with PROC LIFETEST. The survival is in percent, drawn as
+|                 steps, with a mark at each censored time. Under the axis is
+|                 the number at risk at each tick: the subjects whose time is
+|                 that tick or later. With median=yes, the plot also shows the
+|                 median time of each group and its confidence interval (NE: not
+|                 reached). A record with a missing time, group or panel is not
+|                 used. CNSR 0 is an event and any positive value is a
+|                 censoring, as in ADaM, where the value names the reason of the
+|                 censoring: a CNSR of 2 is censored as 1 is. A record used with
+|                 a missing or negative CNSR stops the macro with an ERROR. To
+|                 draw the figure again without computing, give plot= the out=
+|                 and par= the outpar= of an earlier call.
 | Procedure     : PROC LIFETEST, PROC SUMMARY, PROC SGPANEL
 | Proven        : its known answer in tools/figures_sas.ts (survival and number
 |                 at risk worked out by hand); not yet run on a SAS server
-| Note          : Draw again: plot= (an out= of %kmplot, changed or not) is drawn
-|                 as it is, without a statistic, and par= (an outpar= of
-|                 %kmplot) gives the drawing parameters: columns, by, panel,
-|                 atrisk, median, level (with plot= only the heading of the
-|                 medians), xlabel, ylabel, ref, file, width, height. They
-|                 change the picture, not the numbers; the others compute, and
-|                 with plot= a NOTE says each one given is not used. A drawing
-|                 parameter given in the call wins over its row of par=, the
-|                 row over the default of the table. With plot= the ticks are
-|                 the x of the rows of KIND atrisk.
+| Note          : Draw again: plot= takes the out= of an earlier %kmplot call,
+|                 changed or not, and draws it as it is, with no statistic
+|                 computed. par= takes the outpar= of that call and gives the
+|                 drawing parameters: columns, by, panel, atrisk, median, level
+|                 (with plot= only for the heading of the medians), xlabel,
+|                 ylabel, ref, file, width, height. These change the picture,
+|                 not the numbers. The other parameters compute; with plot= the
+|                 log has a NOTE for each one given, as it is not used. A
+|                 drawing parameter given in the call wins over its row of par=,
+|                 and the row wins over the default of the table. With plot=,
+|                 the ticks are the X of the rows of KIND atrisk.
 |
 | Input Parameters :
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records: one per subject                        Required
-| plot        Draw again: an out= of %kmplot (not with data=)     Optional
-| par         The drawing parameters: an outpar= of %kmplot       Optional
-| columns     The columns of %columns: the order of the groups    Optional
-|             and their colours (default: the order of the data)
-| where       The records to use, a condition in parentheses      Optional
-| time        The time                                            Required
-| cnsr        The censoring variable: 1 = censored                CNSR
-| by          The groups: one curve each                          Required
-| panel       One panel per value of this variable                Optional
-| atrisk      yes: the number at risk under the axis              yes
-| times       The times of the ticks and of the number at risk,   Optional
-|             separated by blanks (default: from 0 by a step of
-|             1, 2, 2.5 or 5 times a power of 10, to the first
-|             tick at or after the last time)
-| median      yes: the median of each group and its interval as   no
-|             text in the plot
-| conftype    The interval of the median: CONFTYPE= of PROC       linear
-|             LIFETEST (linear, log, loglog, asinsqrt, logit), as
-|             %km
-| level       The confidence level                                0.95
-| xlabel      The label of the x axis (default: the label of      Optional
-|             time=)
-| ylabel      The label of the y axis                             "Survival (%)"
-| ref         Reference lines on the y axis: values               Optional
-| file        The output without its extension: <file>.png (300   Required
-|             dpi) and <file>.rtf
-| width       The width of the figure                             6.5in
-| height      The height of the figure                            4.5in
-| out         The numbers drawn                                   Optional
-| outpar      The drawing parameters: one row each                Optional
+| data        The input data set: one record per subject, such    Required
+|             as a time-to-event data set. Required unless plot=
+|             is given.
+| plot        Draw again: the out= of an earlier %kmplot call,    Optional
+|             changed or not. It is drawn as it is, and no
+|             statistic is computed. Give it instead of data=.
+| par         The drawing parameters of an earlier %kmplot call:  Optional
+|             its outpar=. A drawing parameter given in the call
+|             wins over its row of par=.
+| columns     The data set of %columns: it gives the order of     Optional
+|             the groups and their colours. When not given, the
+|             groups come in the order of the data.
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (anl01fl = 'Y')
+| time        The time variable: one numeric variable (time =     Required
+|             aval). Required unless plot= is given.
+| cnsr        The censoring variable: one numeric variable, 0     CNSR
+|             for an event and a positive value for a censoring
+|             (the ADaM CNSR: 1, 2 ... name the reason). A
+|             missing or negative value on a record used stops
+|             the macro with an ERROR.
+| by          The groups: one variable, one curve per group       Required
+| panel       A variable: one panel per value (panel = sex)       Optional
+| atrisk      yes: show the number at risk under the axis         yes
+| times       The ticks of the x axis and the times of the        Optional
+|             number at risk: numbers separated by blanks (times
+|             = 0 30 60 90). When not given, the ticks go from 0
+|             by a round step (1, 2, 2.5 or 5 times a power of
+|             10) to the first tick at or after the longest
+|             time.
+| median      yes: show the median time of each group and its     no
+|             confidence interval as text in the plot
+| conftype    The type of the confidence interval of the median,  linear
+|             as CONFTYPE= of PROC LIFETEST: linear, log,
+|             loglog, asinsqrt or logit
+| level       The confidence level of the interval of the         0.95
+|             median: a number between 0 and 1
+| xlabel      The label of the x axis: a text in quotes. When     Optional
+|             not given, the label of time= (or its name).
+| ylabel      The label of the y axis: a text in quotes           "Survival (%)"
+| ref         Reference lines on the y axis: one value or         Optional
+|             several, separated by blanks (ref = 0 50)
+| file        The output file without its extension: the macro    Required
+|             writes <file>.png (300 dpi) and <file>.rtf
+| width       The width of the figure: a length with its unit     6.5in
+|             (width = 9in)
+| height      The height of the figure: a length with its unit    4.5in
+|             (height = 6in)
+| out         The name of the data set of the numbers drawn.      Optional
+|             When not given, they are not kept.
+| outpar      The name of the data set of the drawing             Optional
+|             parameters, one row each. Give it to par= of a
+|             later call to draw the figure again.
 | debug       yes: keep the work data sets _kmplot_*              no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: one row per number drawn: PANEL and BY, KIND, X, Y, LOWER,
-|                 UPPER, N, CENSORED. KIND curve: X a time (0 and each time
-|                 with an event or a censoring), Y the survival in percent after
-|                 it, CENSORED 1 when a subject is censored at it. KIND atrisk:
-|                 X a tick, N the number at risk. KIND median: X the median,
-|                 LOWER and UPPER its limits (missing: not reached). OUTPAR:
-|                 one row per drawing parameter in the order of the table,
-|                 PARAMETER ($32) its name and VALUE ($500) its value as drawn
-|                 (a label in quotes). FILE: <file>.png and <file>.rtf.
+| Output        : OUT: one row per number drawn, with the variables of panel=
+|                 and by=, KIND, X, Y, LOWER, UPPER, N and CENSORED. In a row of
+|                 KIND curve, X is a time (0 and each time with an event or a
+|                 censoring), Y the survival in percent after it, and CENSORED
+|                 is 1 when a subject is censored at it. In a row of KIND
+|                 atrisk, X is a tick and N the number at risk. In a row of KIND
+|                 median, X is the median and LOWER and UPPER its limits
+|                 (missing: not reached). OUTPAR: one row per drawing parameter,
+|                 in the order of the table: PARAMETER ($32), its name, and
+|                 VALUE ($500), its value as drawn (a label in quotes). FILE:
+|                 <file>.png and <file>.rtf.
 |
 | Example:
 |
  %kmplot(
-     data    = adtte
-   , columns = t14_1_cols
-   , where   = (paramcd = 'TTDE')
+     data    = adttde
+   , columns = t14_2_1_cols
    , time    = aval
-   , cnsr    = cnsr
-   , by      = trta
+   , by      = trt01a
    , median  = yes
-   , xlabel  = "Days to the first dermatologic event"
-   , file    = &spl_out./figures/f14_1
-   , out     = f14_1
+   , xlabel  = "Days to the first skin event"
+   , file    = &spl_out./figures/f_ttde
+   , out     = f_ttde
  )
 |
 |-------------------------------------------------------------------------------
@@ -108,6 +141,18 @@
 | 16-NOV-2026 Sapling      1.9.1: PLOTS=NONE only with ODS graphics on: no
 |                          WARNING when they are off (DEV-051). No number
 |                          changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: The text of data= and time= (required unless
+|                          plot= is given) and of conftype= (the values it
+|                          accepts). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: CNSR as in ADaM: 0 is an event and any positive
+|                          value a censoring (before, only 1 was a censoring and
+|                          2 an event); a missing or negative CNSR on a record
+|                          used stops the macro with an ERROR. No number changes
+|                          on data with CNSR 0 and 1.
 |
 *******************************************************************************/
 %MACRO kmplot(
@@ -117,7 +162,7 @@
    , columns  =      /* The columns of %columns: order and colours */
    , where    =      /* The records to use: a condition in parentheses */
    , time     =      /* The time */
-   , cnsr     =      /* The censoring variable: 1 = censored (CNSR) */
+   , cnsr     =      /* The censoring variable: 0 = event (CNSR) */
    , by       =      /* The groups: one curve each */
    , panel    =      /* One panel per value of this variable */
    , atrisk   =      /* yes (default): the number at risk under the axis */
@@ -135,7 +180,7 @@
    , outpar   =      /* The drawing parameters: one row each */
    , debug    = no   /* yes: keep the work data sets _kmplot_* */
 ) / DES = 'Kaplan-Meier curves with the number at risk (PROC LIFETEST, PROC SGPANEL)';
-  %LOCAL t0 i cond chars pby listing tcomma ngroup ok drawn src xvar plots;
+  %LOCAL t0 i cond chars pby listing tcomma ngroup ok drawn src xvar plots nbad;
   %LET t0 = %_spl_begin(kmplot);
 
   /* Step 1: the parameters */
@@ -184,7 +229,7 @@
   %IF %LENGTH(&panel.) %THEN %LET pby = &panel.;  /* with panel=: the panel variable */
   %IF %LENGTH(&out.) = 0 %THEN %LET out = _kmplot_out;         /* out= not asked: not kept */
   /* the records that count */
-  %LET cond = not missing(&time.) and not missing(&cnsr.) and not missing(&by.);
+  %LET cond = not missing(&time.) and not missing(&by.);
   %IF %LENGTH(&panel.) %THEN %LET cond = &cond. and not missing(&panel.);  /* with a panel */
   %IF %LENGTH(%SUPERQ(where)) %THEN %LET cond = &cond. and &where.;        /* plus where= */
 
@@ -222,8 +267,18 @@
     SET &data.;
     WHERE &cond.;
     _panel = 1;
-    KEEP &panel. &by. &time. &cnsr. _panel;
+    /* CNSR 0 is an event; a positive value is a censoring, with its reason */
+    IF &cnsr. > 0 THEN _cens = 1;
+    ELSE               _cens = 0;
+    KEEP &panel. &by. &time. &cnsr. _cens _panel;
   RUN;
+  /* a missing or negative CNSR is neither an event nor a censoring */
+  %LET nbad = %_spl_nobs(_kmplot_records(WHERE=(MISSING(&cnsr.) OR &cnsr. < 0)));
+  %IF &nbad. > 0 %THEN %DO;
+    %PUT %STR(ERR)OR: [kmplot] cnsr=&cnsr. is missing or negative on &nbad. record(s) used;
+    %PUT %STR(ERR)OR: [kmplot]   fix: give each record CNSR 0 (an event) or more (a censoring).;
+    %GOTO finish;
+  %END;
 
   /* Step 5: no record qualified: the figure that says so and out= without a row */
   %IF %_spl_nobs(_kmplot_records) = 0 %THEN %DO;
@@ -277,7 +332,7 @@
   PROC LIFETEST DATA=_kmplot_records OUTSURV=_kmplot_surv CONFTYPE=&conftype.
                 ALPHA=%SYSEVALF(1 - &level.) &plots.;
     BY &panel. &by.;
-    TIME &time. * &cnsr.(1);
+    TIME &time. * _cens(1);
   RUN;
   ODS EXCLUDE NONE;
 

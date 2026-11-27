@@ -1,0 +1,5 @@
+the global macro variables where scope = 'GLOBAL' AND name IN ('SPL_STUDY' 'SPL_PROGRAM' 'SPL_OUT'): 3 rows
+NAME         VALUE
+SPL_OUT      /path/to/sapling-sas/examples/out
+SPL_PROGRAM  examples
+SPL_STUDY    CDISCPILOT01

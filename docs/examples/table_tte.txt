@@ -1,0 +1,21 @@
+tlf/t14_6_1.lst: 20 lines
+Table 14.6.1 Time to the first skin event
+
+                                                        Placebo   Xanomeline Low Dose  Xanomeline High Dose  All
+                                                        (N=85)    (N=95)               (N=72)                groups
+-------------------------------------------------------------------------------------------------------------------
+
+Kaplan-Meier: subjects, events, median time and 95% CI
+  n                                                     85        95                   72
+  Events                                                20        39                   39
+  Median                                                NE        80.0                 57.0
+  Confidence interval                                   (NE, NE)  (51.0, NE)           (46.0, 177.0)
+
+Log-rank test
+  p-value                                                                                                    <0.001
+
+Cox model: hazard ratio (95% CI) and p-value
+  vs Placebo
+    Hazard ratio                                                                       3.59
+    Confidence interval                                                                (2.09, 6.19)
+    p-value                                                                            <0.001

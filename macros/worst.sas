@@ -3,17 +3,20 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : The records of each subject at its worst level (the maximum
-|                 severity or toxicity grade): for each subject and each value
-|                 of BY (a term, or nothing: all its records), only the records
-|                 whose VAR is the highest of LEVELS, in their order from the
-|                 least to the most severe. A record whose VAR is not one of
-|                 LEVELS (a missing grade) is never the worst and is left out.
-|                 It computes no statistic: %freq then counts each subject once
-|                 in each row, at its worst level.
+| Macro Purpose : Keeps the records of each subject at its worst level, such as
+|                 the highest severity or toxicity grade. Use it before %freq,
+|                 so that %freq counts each subject once in each row, at its
+|                 worst level; the macro computes no statistic. The worst level
+|                 is the value of var= that comes last in levels= (levels= goes
+|                 from the least to the most severe). The macro looks for it for
+|                 each subject in each row of by=, or in all the records of the
+|                 subject when by= is not given. A record whose value is not in
+|                 levels=, such as a missing grade, is never the worst and is
+|                 left out. When a subject has several records at its worst
+|                 level, all of them stay.
 | Procedure     : PROC SORT, a DATA step (BY, FIRST.)
 | Proven        : the known answer of the method catsumm with worst=
 |                 (src/methods.ts, counted by hand; R ars_worst gives the same,
@@ -24,21 +27,27 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records                                         Required
-| where       The records to use, a condition in parentheses      Optional
-| var         The graded variable                                 Required
-| by          The variables of a row (the worst of each subject   Optional
-|             in each row); default: none (the worst of all the
-|             records of the subject)
-| levels      Its values from the least to the most severe        Required
-|             (texts in quotes, numbers without)
-| out         The records kept (all the variables of DATA)        Required
-| debug       yes: keep the work data sets of the macro           no
-|             (_worst_*)
+| data        The input data set: the records, with USUBJID       Required
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (trtemfl = 'Y')
+| var         The graded variable: one variable, character or     Required
+|             numeric (var = aesev)
+| by          The variables of a row: one or several, separated   Optional
+|             by blanks (by = aebodsys aedecod). The macro keeps
+|             the worst records of each subject in each row.
+|             When not given, the worst of all the records of
+|             the subject.
+| levels      The values of var= from the least to the most       Required
+|             severe, separated by blanks: texts in quotes,
+|             numbers without (levels = 'MILD' 'MODERATE'
+|             'SEVERE')
+| out         The name of the data set of the records kept        Required
+| debug       yes: keep the work data sets _worst_*               no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: the records of DATA at the worst level of each subject and
-|                 row.
+| Output        : OUT: the records of data= at the worst level of each subject
+|                 and row, with all the variables of data=, sorted by USUBJID
+|                 and the variables of by=.
 |
 | Example:
 |
@@ -64,6 +73,9 @@
 |                          on the known answer of catsumm with worst=.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the text of the header for the manual: the
+|                          summary, the form of each parameter. No number
+|                          changes.
 |
 *******************************************************************************/
 %MACRO worst(

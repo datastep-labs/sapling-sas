@@ -1,0 +1,34 @@
+sbp_ls: 15 rows
+TRT01P                VERSUS               GROUPS         BLOCK  STAT            VALUE   TEXT
+Xanomeline High Dose  Placebo              TRT01P VERSUS         diff     -5.237880107   -5.2
+Xanomeline High Dose  Placebo              TRT01P VERSUS         diff_se  2.5065985028   2.51
+Xanomeline High Dose  Placebo              TRT01P VERSUS         lcl      -10.19207069  -10.2
+Xanomeline High Dose  Placebo              TRT01P VERSUS         ucl      -0.283689527   -0.3
+Xanomeline High Dose  Placebo              TRT01P VERSUS         pval     0.0383969398  0.038
+Xanomeline High Dose  Xanomeline Low Dose  TRT01P VERSUS         diff     -5.107252039   -5.1
+Xanomeline High Dose  Xanomeline Low Dose  TRT01P VERSUS         diff_se  2.8059410396   2.81
+Xanomeline High Dose  Xanomeline Low Dose  TRT01P VERSUS         lcl      -10.65308104  -10.7
+Xanomeline High Dose  Xanomeline Low Dose  TRT01P VERSUS         ucl      0.4385769613    0.4
+Xanomeline High Dose  Xanomeline Low Dose  TRT01P VERSUS         pval     0.0707974243  0.071
+Xanomeline Low Dose   Placebo              TRT01P VERSUS         diff     -0.130628069   -0.1
+Xanomeline Low Dose   Placebo              TRT01P VERSUS         diff_se  2.5025212718   2.50
+Xanomeline Low Dose   Placebo              TRT01P VERSUS         lcl      -5.076760167   -5.1
+Xanomeline Low Dose   Placebo              TRT01P VERSUS         ucl      4.8155040297    4.8
+Xanomeline Low Dose   Placebo              TRT01P VERSUS         pval     0.9584423033  0.958
+
+sbp_ls90: 14 rows
+TRT01P                VERSUS   GROUPS         BLOCK  STAT              VALUE   TEXT
+Placebo                        TRT01P VERSUS         lsmean      -3.19678836   -3.2
+Placebo                        TRT01P VERSUS         lsmean_se  1.5750339768   1.58
+Xanomeline High Dose           TRT01P VERSUS         lsmean     -8.924823955   -8.9
+Xanomeline High Dose           TRT01P VERSUS         lsmean_se  2.0294106838   2.03
+Xanomeline Low Dose            TRT01P VERSUS         lsmean      -3.11464901   -3.1
+Xanomeline Low Dose            TRT01P VERSUS         lsmean_se  2.0295585525   2.03
+Xanomeline High Dose  Placebo  TRT01P VERSUS         diff       -5.728035595   -5.7
+Xanomeline High Dose  Placebo  TRT01P VERSUS         lcl        -9.980368028  -10.0
+Xanomeline High Dose  Placebo  TRT01P VERSUS         ucl        -1.475703163   -1.5
+Xanomeline High Dose  Placebo  TRT01P VERSUS         pval       0.0272855793  0.027
+Xanomeline Low Dose   Placebo  TRT01P VERSUS         diff       0.0821393501    0.1
+Xanomeline Low Dose   Placebo  TRT01P VERSUS         lcl        -4.170619641   -4.2
+Xanomeline Low Dose   Placebo  TRT01P VERSUS         ucl        4.3348983413    4.3
+Xanomeline Low Dose   Placebo  TRT01P VERSUS         pval       0.9745379028  0.975

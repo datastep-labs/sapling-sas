@@ -1,0 +1,17 @@
+vs: the first 15 of 2926 rows
+USUBJID      PARAMCD  AVISIT            ABLFL  AVAL  BASE
+01-701-1015  SYSBP                              131   130
+01-701-1015  SYSBP                              138   130
+01-701-1015  SYSBP    Baseline          Y       130   130
+01-701-1015  SYSBP                              137   130
+01-701-1015  SYSBP    Week 2                    114   130
+01-701-1015  SYSBP    Week 4                    138   130
+01-701-1015  SYSBP                              138   130
+01-701-1015  SYSBP    Week 6                    148   130
+01-701-1015  SYSBP    Week 8                    138   130
+01-701-1015  SYSBP    Week 12                   139   130
+01-701-1015  SYSBP    End of Treatment          139   130
+01-701-1015  SYSBP    Week 16                   163   130
+01-701-1015  SYSBP    Week 20                   137   130
+01-701-1015  SYSBP    Week 24                   129   130
+01-701-1015  SYSBP    Week 26                   127   130

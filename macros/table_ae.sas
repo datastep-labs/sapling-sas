@@ -3,17 +3,28 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : A table of adverse events (or other occurrences) in one call:
-|                 the subjects with a record in each level of var= (system organ
-|                 class, preferred term), with their percent of the population.
-|                 The macro writes the long program of the table (the
-|                 population, the records, one %freq, %stack, %table) and runs
-|                 it; it computes nothing itself. The result <name>_ae, the
-|                 table <name>, <name>_cols and <name>_display stay, and the
-|                 setup <name>_print. show= gives the long program.
+| Macro Purpose : Makes a table of the subjects with adverse events by system
+|                 organ class and preferred term in one call. Use it for any
+|                 count of subjects by nested levels of records; to add a block
+|                 that it does not make, start from its long program (show=).
+|                 The long program is the program the macro writes and runs: the
+|                 population, the records, one %freq, %stack and %table, the
+|                 calls a person would write by hand. The macro computes nothing
+|                 itself. A subject is counted once in each row, and the percent
+|                 is of the subjects of the group. These data sets stay in WORK,
+|                 for a change and a second print:
+|                 - <name>_ae: the result, one row per number (the result shape,
+|                   see %stack)
+|                 - <name>: the stacked results
+|                 - <name>_cols: the columns (%columns)
+|                 - <name>_display: the display data set, one row per printed
+|                   line (%layout)
+|                 The global macro variable <name>_print keeps the call of
+|                 %print: change <name>_display, then print again with
+|                 %print(&<name>_print.).
 | Procedure     : none of its own (those of %freq, %table)
 | Proven        : node tools/tables_sas.ts (the same display data set as the
 |                 long program, on the made-up study SYNHTN01); ran on SAS
@@ -23,43 +34,68 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records (a data set with USUBJID)               Required
-| adsl        The subjects, one row per subject: the population   Optional
-|             and the N of the columns; its variables go to the
-|             records (blank: the records have all they need)
-| pop         The population: a condition on adsl= in parentheses Optional
-| where       The records to use: a condition in parentheses      Optional
-| var         The levels of the rows: variables, nested in their  Required
-|             order (aebodsys aedecod)
-| by          The groups: a character variable, the columns       Required
-| order       Its numeric twin (TRT01AN): the order of columns    Optional
-| sort        frequency: the rows by their subjects (order= of    Optional
-|             %freq); blank: by their names
-| threshold   A percent: only the rows that reach it in a group   Optional
-| total       yes: also all groups together, as Total             no
-| format      The labels of categories: variable and format, as   Optional
-|             in a FORMAT statement (format= of %layout)
+| data        The input data set: the records, with USUBJID       Required
+| adsl        The subjects: a data set with one row per subject.  Optional
+|             It gives the population and the N of each column,
+|             and its variables are merged onto the records by
+|             USUBJID. When not given, the N of a column is the
+|             subjects of its records.
+| pop         The population: a condition on adsl= in             Optional
+|             parentheses, such as pop = (saffl = 'Y'). It is
+|             used only with adsl=.
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (trtemfl = 'Y')
+| var         The variables of the rows, nested in their order    Required
+|             and separated by blanks, such as var = aebodsys
+|             aedecod
+| by          The groups of the columns: one character variable,  Required
+|             such as by = trt01a
+| order       The numeric twin of by=, such as order = trt01an:   Optional
+|             it gives the order of the columns
+| sort        frequency: the rows of the last variable of var=    Optional
+|             in the order of their subjects, the most first
+|             (order=frequency of %freq). When not given, the
+|             rows are in the order of their values.
+| threshold   A percent: keep only the rows whose percent of      Optional
+|             subjects reaches it in at least one group
+|             (threshold= of %freq), such as threshold = 5
+| total       yes: add the column Total, all groups together      no
+| format      The labels of the categories: pairs of a variable   Optional
+|             and a format, as in a FORMAT statement (format =
+|             sex $sexf. race $racef.), as format= of %layout
 | name        The name of the table: the first part of the names  Optional
-|             of its data sets (default: the last part of file=)
-| show        yes: the long program in the log; a file: the long  no
-|             program is written there (and run)
-| label       The label of the block, in quotes                   Optional
-| stats       The statistics, each with its pattern (stats= of    Optional
-|             %freq)
-| title       The titles of the table: a text in quotes for each   Optional
-|             line (TITLE1, TITLE2 ...); blank: the TITLE
-|             statements of the program
-| footnote    The footnotes: a text in quotes for each line        Optional
-|             (FOOTNOTE1 ...); blank: those of the program
-| file        The output without its extension: <file>.rtf,       Optional
-|             <file>.lst and the numbers file (blank: no print)
-| debug       yes: keep the work data sets of the macros called   no
+|             of its data sets, such as name = t14_3_01. When
+|             not given, the last part of file= is used; without
+|             file=, name= is required.
+| show        yes: write the long program to the log. A file      no
+|             path, without quotes: write the long program to
+|             that file. In both cases the macro runs it.
+| label       The label of the block in the table: a text in      Optional
+|             quotes
+| stats       The statistics, each name with its pattern,         Optional
+|             separated by blanks (stats= of %freq), such as
+|             stats = n pct events
+| title       The titles of the table: one text in quotes per     Optional
+|             line (TITLE1, TITLE2 ...). They hold for this
+|             table only. When not given, the TITLE statements
+|             in force in the program are used.
+| footnote    The footnotes of the table: one text in quotes per  Optional
+|             line (FOOTNOTE1, FOOTNOTE2 ...). They hold for
+|             this table only. When not given, the FOOTNOTE
+|             statements in force in the program are used.
+| file        The output file without its extension: the macro    Optional
+|             writes <file>.rtf, <file>.lst and the numbers
+|             file. When not given, nothing is printed.
+| debug       yes: keep the work data sets of the macros that     no
+|             the long program calls
 |-------------------------------------------------------------------------------
 |
-| Output        : DATA: <name>_ae (the result), <name> (the table), <name>_cols,
-|                 <name>_display, <name>_pop and <name>_rec; FILE: <file>.rtf,
-|                 <file>.lst and the numbers file (with file=); SETUP: the
-|                 global macro variable <name>_print; SHOW: the long program.
+| Output        : DATA: <name>_ae (the result), <name> (the stacked results),
+|                 <name>_cols, <name>_display, <name>_pop (with adsl=) and
+|                 <name>_rec (with adsl= or where=). FILE: <file>.rtf,
+|                 <file>.lst and the numbers file (only with file=). SETUP: the
+|                 global macro variable <name>_print. SHOW: the long program, in
+|                 the log or in a file.
 |
 | Example:
 |
@@ -73,6 +109,7 @@
    , order = trt01an
    , sort  = frequency
    , label = "Treatment-emergent adverse events"
+   , title = "Table 14.5.2 Treatment-emergent adverse events by SOC and PT"
    , file  = &spl_out./tlf/t14_5_2
  )
 |
@@ -88,6 +125,10 @@
 |                          house case. No number changes.
 | 16-NOV-2026 Sapling      1.9.1: var=, by= and order= are checked before the
 |                          long program (DEV-031). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO table_ae(

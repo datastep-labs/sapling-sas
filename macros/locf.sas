@@ -3,14 +3,23 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : Last observation carried forward into the analysis windows, as
-|                 new records (ADaM: DTYPE = 'LOCF'). For each window after the
-|                 first one after baseline in which a group has no analysed
-|                 record: a copy of the last analysed record before it, moved to
-|                 that window. Baseline is not carried.
+| Macro Purpose : Adds last-observation-carried-forward records (DTYPE = 'LOCF')
+|                 to the analysis windows in which a group has no analysed
+|                 record. Use %windows first: it gives each record the AVISITN
+|                 of its window. The rule:
+|                 - An analysed record has flag= equal to 'Y' and a window after
+|                   baseline.
+|                 - For each window, from the second window after baseline on,
+|                   that has no analysed record of the group, the macro copies
+|                   the last analysed record before it and moves the copy to
+|                   that window.
+|                 - Baseline is not carried forward, and the first window after
+|                   baseline is not filled.
+|                 The new records get the window variables of their window and
+|                 DTYPE = 'LOCF'; the other records get a blank DTYPE.
 | Procedure     : PROC SORT, a DATA step (SET POINT=)
 | Proven        : the fixtures of the step kind impute (src/adam_steps.ts; node
 |                 tools/adam_steps_sas.ts); ran on SAS 9.4 M9, 2026-11-12
@@ -19,29 +28,40 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The working data set (changed in place; the new     Required
-|             records are added)
-| windows     The windows, as windows= of %windows (baseline and  Required
-|             one or more after it)
-| where       The records LOCF is for, a condition in             Optional
-|             parentheses
-| by          The groups (default USUBJID PARAMCD)                USUBJID PARAMCD
-| flag        The flag of the analysed records (default ANL01FL   ANL01FL
-|             = 'Y')
-| day         The study day (default ADY)                         ADY
-| length      The length of DTYPE (default $8)                    $8
+| data        The data set to change in place, such as advs: the  Required
+|             new records are added to it
+| windows     The windows, in the form of windows= of %windows:   Required
+|             baseline first, then one window or more after it
+| where       The records to carry forward: a condition in        Optional
+|             parentheses, such as where = (paramcd = 'SYSBP').
+|             When not given, all analysed records count.
+| by          The groups, each carried forward by itself:         USUBJID PARAMCD
+|             variables separated by blanks
+| flag        The flag of the analysed records: a character       ANL01FL
+|             variable that is 'Y' on them
+| day         The numeric variable of the study day: it gives     ADY
+|             AWTDIFF of a new record
+| length      The length of DTYPE, such as $8                     $8
 | debug       yes: keep the work data sets _locf_*                no
 |-------------------------------------------------------------------------------
 |
-| Output        : DATA: sorted by the groups, AVISITN and DTYPE (the new order of
-|                 the records).
+| Output        : DATA: data=, changed in place: the new records are added, and
+|                 all records are sorted by the groups, AVISITN and DTYPE.
 |
 | Example:
 |
+ DATA vs;
+   SET advs;
+   WHERE paramcd = 'SYSBP' AND avisitn IN (0 4 12 24);
+ RUN;
  %locf(
-     data    = adqs
-   , windows = &advs_windows.
-   , where   = (paramcd = 'ACTOT')
+     data    = vs
+   , windows = 0  "Baseline" .   1   1   "<=1"
+             # 4  "Week 4"   2   42  28  "2-42"
+             # 12 "Week 12"  43  126 84  "43-126"
+             # 24 "Week 24"  127 210 168 "127-210"
+   , where   = (paramcd = 'SYSBP')
+   , length  = $7
  )
 |
 |-------------------------------------------------------------------------------
@@ -60,6 +80,16 @@
 |                          case (names in lower case). No number changes.
 | 16-NOV-2026 Sapling      1.9.1: the header names no variable _ROW (DEV-024).
 |                          No change of the code.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: DTYPE gets its length before the records are
+|                          read: data= with DTYPE of another length gave a
+|                          WARNING. The text of the header for the manual: the
+|                          summary, the form of each parameter. No number
+|                          changes.
+| 27-NOV-2026 Sapling      1.9.1: The example first copies its records into a
+|                          data set of its own, so that it changes no data set of
+|                          setup.sas for a later example. No number changes.
 |
 *******************************************************************************/
 %MACRO locf(
@@ -102,9 +132,9 @@
 
   /* Step 3: a copy of the record before each empty window, moved to that window */
   DATA _locf_new;
+    LENGTH dtype &length.;
     SET _locf_records;
     BY &by. DESCENDING avisitn;
-    LENGTH dtype &length.;
     RETAIN _later;
     _this = avisitn;
     IF first.&lastby. THEN _later = CONSTANT('big');   /* no analysed record after this one */

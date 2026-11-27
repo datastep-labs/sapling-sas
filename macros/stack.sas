@@ -3,44 +3,52 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : Put results one under another: the blocks of a table, in the
-|                 order given.
+| Macro Purpose : Stacks results one under another into one table, a block per
+|                 result, in the order given. Call it before %columns, %ard and
+|                 %layout, which read the stacked table. A result is the data
+|                 set that a statistics macro writes (%describe, %freq, a test
+|                 or a model): one row per number. Every result has the same
+|                 variables, the result shape:
+|                 - the group variables, as in the data (TRT01A, AEDECOD, AVISIT
+|                   ...); VERSUS: the group that a difference is made with
+|                 - GROUPS: the names of the group variables, in their order
+|                 - BLOCK: the label of the block
+|                 - STAT: the name of the statistic (n, pct, mean, pval ...)
+|                 - VALUE: the number
+|                 - TEXT: the number as printed
+|                 A block is the rows of one call in the table: the rows of one
+|                 result, under its label. A DATA step of your own can write a
+|                 result in the same shape. Each variable gets the longest
+|                 length it has in the results, so that no text is cut.
 | Procedure     : a DATA step (SET INDSNAME=)
-| Proven        : the tables of the dummy study SYNHTN01 (sapling sas run: SAS
-|                 RUN PASS; sapling sas check: SAS CHECK PASS, 570 of 570
-|                 numbers of R the same in SAS); ran on SAS 9.4 M9, 2026-11-12
+| Proven        : the tables of the dummy study SYNHTN01 (every program ran with
+|                 a clean log; 570 of 570 numbers the same as those of a second
+|                 program in R); ran on SAS 9.4 M9, 2026-11-12
 |
 | Input Parameters :
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| results     The results (of %describe, %freq, a test or a       Required
-|             model, or a DATA step of your own in the same
-|             shape), separated by blanks
-| out         The table                                           Required
+| results     The results to stack: data set names separated by   Required
+|             blanks, in the order of the blocks (without a
+|             keyword)
+| out         The name of the stacked table                       Required
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: all rows, with RESULT (the name of the result each row comes
-|                 from) and ORD (its place in the list: 1, 2, ...; a result
-|                 without a row keeps its number, and a result named twice has
-|                 the place of its first name). %layout lays the blocks out in
-|                 this order. Each variable has the
-|                 longest length it has in the results: no text is cut.
-| Note          : The result shape (every statistics macro writes it): the group
-|                 variables as in the data (TRT01A, AEDECOD, AVISIT ...; VERSUS:
-|                 the group a difference is made with), GROUPS (their names, in
-|                 order), BLOCK (the label of the block), STAT (n, pct, mean,
-|                 pval ...), VALUE (the number), TEXT (the number as printed).
+| Output        : OUT: all rows of the results in the result shape, with two
+|                 more variables: RESULT, the name of the result that the row
+|                 comes from, and ORD, the place of that result in the list (1,
+|                 2, ...). A result with no row keeps its number. A result named
+|                 twice has the place of its first name. %layout lays out the
+|                 blocks in the order of ORD.
 |
 | Example:
 |
- %stack(
-     age sex race
-   , out = t14_2_01
- )
+ %stack(age_describe age_anova sex_freq sex_chisq, out=t14_2_1)
+ %stack(hr_sex hr_age, out=hr_sub)
 |
 |-------------------------------------------------------------------------------
 | Change Log :
@@ -59,6 +67,15 @@
 | 16-NOV-2026 Sapling      1.9.1: a result that does not exist stops with the
 |                          ERROR of the macro (DEV-005); ORD is the place of the
 |                          result in the list (DEV-006). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: The example names the results of the examples
+|                          of %describe, %anova, %freq and %chisq. The header
+|                          names no internal tool. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the message of a result that does not exist is
+|                          two lines, the fault and its fix. No number changes.
 |
 *******************************************************************************/
 %MACRO stack(
@@ -73,7 +90,8 @@
   %DO i = 1 %TO %SYSFUNC(COUNTW(&results., %STR( )));
     %LET ds = %SCAN(%SCAN(&results., &i., %STR( )), 1, %STR(%());
     %IF not %SYSFUNC(EXIST(&ds.)) and not %SYSFUNC(EXIST(&ds., VIEW)) %THEN %DO;
-      %PUT %STR(ERR)OR: [stack] results=&ds. does not exist: give results= results that exist.;
+      %PUT %STR(ERR)OR: [stack] results=&ds. does not exist;
+      %PUT %STR(ERR)OR: [stack]   fix: give results= results that exist (make them first).;
       %RETURN;
     %END;
     /* the full name of each result, as INDSNAME gives it: its place in the list */

@@ -3,19 +3,40 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : A table of a continuous endpoint in one call: the descriptive
-|                 statistics of the variables of describe= at the visit of at=,
-|                 then the LS means and the differences of pairs of groups from
-|                 an ANCOVA (%lsmeans, method=ancova) or from a mixed model for
-|                 repeated measures over all visits (%mmrm, method=mmrm). The
-|                 macro writes the long program of the table and runs it; it
-|                 computes nothing itself. The results <name>_<variable> and
-|                 <name>_ancova or <name>_mmrm, the table <name>, <name>_cols
-|                 and <name>_display stay, and the setup <name>_print. show=
-|                 gives the long program.
+| Macro Purpose : Makes a table of a continuous endpoint in one call:
+|                 descriptive statistics, and the LS means of a model. Use
+|                 %table_visit for the statistics at every visit without a
+|                 model; to add or change a block, start from its long program
+|                 (show=). A block is the rows of one call in the table. The
+|                 table has these blocks:
+|                 - one block per variable of describe=: its descriptive
+|                   statistics on the records of the visit of at= (%describe)
+|                 - with method=ancova: the LS means and the differences of
+|                   pairs of groups from an ANCOVA on the records of the visit
+|                   of at= (%lsmeans)
+|                 - with method=mmrm: the same from a mixed model for repeated
+|                   measures over all visits, at the visit of at= (%mmrm)
+|                 With method=ancova, the records of the visit of at= must be
+|                 one record per subject: give where= the parameter and the
+|                 analysis flag, as %lsmeans uses the first record of a subject
+|                 (with a NOTE when it leaves one out). The table has no Total
+|                 column. The long program is the program the macro writes and
+|                 runs: the population, the records, one call per block, %stack
+|                 and %table, the calls a person would write by hand. The macro
+|                 computes nothing itself. These data sets stay in WORK, for a
+|                 change and a second print:
+|                 - <name>_<variable> and <name>_ancova or <name>_mmrm: the
+|                   results, one row per number (the result shape, see %stack)
+|                 - <name>: the stacked results
+|                 - <name>_cols: the columns (%columns)
+|                 - <name>_display: the display data set, one row per printed
+|                   line (%layout)
+|                 The global macro variable <name>_print keeps the call of
+|                 %print: change <name>_display, then print again with
+|                 %print(&<name>_print.).
 | Procedure     : none of its own (those of %describe, %lsmeans, %mmrm, %table)
 | Proven        : node tools/tables_sas.ts (the same display data set as the
 |                 long program, on the made-up study SYNHTN01); ran on SAS
@@ -25,68 +46,104 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records (a data set with USUBJID)               Required
-| adsl        The subjects, one row per subject: the population   Optional
-|             and the N of the columns; its variables go to the
-|             records (blank: the records have all they need)
-| pop         The population: a condition on adsl= in parentheses Optional
-| where       The records to use: a condition in parentheses      Optional
-| var         The response                                        CHG
-| covars      The covariates of the model (base)                  Optional
-| visit       The visit                                           AVISIT
-| by          The groups: a character variable, the columns       Required
-| at          The visit of the table, in quotes ("Week 12"): the  Optional
-|             records of the descriptive blocks and the ANCOVA,
-|             the visit of the LS means of the MMRM
-| order       Its numeric twin (TRT01AN): the order of columns    Optional
-| describe    Variables with a descriptive block before the model Optional
-|             (base aval chg)
-| method      ancova (%lsmeans) or mmrm (%mmrm; at= is required)  ancova
-| model       The fixed effects of the MMRM (default: covars= by= Optional
-|             visit= by=*visit=)
-| type        The covariance structure of the MMRM                un
-| fallback    Other structures to try, in their order             Optional
-| pairs       The pairs compared: each group, then the group it   Optional
-|             is compared with, in quotes (blank: all pairs)
-| names       The label of a block when it is not the label of    Optional
-|             the variable: chg="Change from baseline"
-| format      The labels of categories: variable and format, as   Optional
-|             in a FORMAT statement (format= of %layout)
+| data        The input data set: the records, with USUBJID       Required
+| adsl        The subjects: a data set with one row per subject.  Optional
+|             It gives the population and the N of each column,
+|             and its variables are merged onto the records by
+|             USUBJID. When not given, the N of a column is the
+|             subjects of its records.
+| pop         The population: a condition on adsl= in             Optional
+|             parentheses, such as pop = (saffl = 'Y'). It is
+|             used only with adsl=.
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (paramcd = 'SYSBP')
+| var         The response: one numeric variable                  CHG
+| covars      The covariates of the model, separated by blanks,   Optional
+|             such as covars = base
+| visit       The variable of the visit: one variable             AVISIT
+| by          The groups of the columns: one character variable,  Required
+|             such as by = trt01a
+| at          The visit of the table: a value of visit= in        Optional
+|             quotes, such as at = "Week 24". It selects the
+|             records of the descriptive blocks and of the
+|             ANCOVA, and the visit of the LS means of the MMRM.
+|             When not given, the ANCOVA uses all records.
+| order       The numeric twin of by=, such as order = trt01an:   Optional
+|             it gives the order of the columns and of the
+|             groups in the comparisons
+| describe    The variables with a descriptive block before the   Optional
+|             model, separated by blanks, such as describe =
+|             base aval chg
+| method      ancova (%lsmeans) or mmrm (%mmrm, which needs at=)  ancova
+| model       The fixed effects of the MMRM, separated by         Optional
+|             blanks. When not given: the covariates, the by=
+|             variable, the visit= variable and the interaction
+|             of the two (such as trt01p*avisit).
+| type        The covariance structure of the MMRM: TYPE= of the  un
+|             REPEATED statement, such as un, cs, ar(1) or toep
+|             (type= of %mmrm)
+| fallback    Other covariance structures of the MMRM to try in   Optional
+|             their order when one does not converge, separated
+|             by blanks, such as fallback = toep cs
+| pairs       The pairs of groups to compare, separated by #:     Optional
+|             each group in quotes, then the group it is
+|             compared with ("Xanomeline High Dose" "Placebo").
+|             When not given, each later group is compared with
+|             each earlier one.
+| names       The labels of the blocks: pairs variable="text",    Optional
+|             separated by blanks, such as names = chg="Change
+|             from baseline". A block without a pair has the
+|             label of its variable, or its name.
+| format      The labels of the categories: pairs of a variable   Optional
+|             and a format, as in a FORMAT statement (format =
+|             sex $sexf. race $racef.), as format= of %layout
 | name        The name of the table: the first part of the names  Optional
-|             of its data sets (default: the last part of file=)
-| show        yes: the long program in the log; a file: the long  no
-|             program is written there (and run)
-| stats       The statistics of the model, each with its pattern  Optional
-|             (default: the LS means, their difference with its
-|             SE and limits, the p-value)
-| title       The titles of the table: a text in quotes for each   Optional
-|             line (TITLE1, TITLE2 ...); blank: the TITLE
-|             statements of the program
-| footnote    The footnotes: a text in quotes for each line        Optional
-|             (FOOTNOTE1 ...); blank: those of the program
-| file        The output without its extension: <file>.rtf,       Optional
-|             <file>.lst and the numbers file (blank: no print)
-| debug       yes: keep the work data sets of the macros called   no
+|             of its data sets, such as name = t14_3_01. When
+|             not given, the last part of file= is used; without
+|             file=, name= is required.
+| show        yes: write the long program to the log. A file      no
+|             path, without quotes: write the long program to
+|             that file. In both cases the macro runs it.
+| stats       The statistics of the model block, each name with   Optional
+|             its pattern. When not given: the LS means with
+|             their SE, the difference with its SE and limits,
+|             and the p-value.
+| title       The titles of the table: one text in quotes per     Optional
+|             line (TITLE1, TITLE2 ...). They hold for this
+|             table only. When not given, the TITLE statements
+|             in force in the program are used.
+| footnote    The footnotes of the table: one text in quotes per  Optional
+|             line (FOOTNOTE1, FOOTNOTE2 ...). They hold for
+|             this table only. When not given, the FOOTNOTE
+|             statements in force in the program are used.
+| file        The output file without its extension: the macro    Optional
+|             writes <file>.rtf, <file>.lst and the numbers
+|             file. When not given, nothing is printed.
+| debug       yes: keep the work data sets of the macros that     no
+|             the long program calls
 |-------------------------------------------------------------------------------
 |
 | Output        : DATA: <name>_<variable> (the descriptive results),
-|                 <name>_ancova or <name>_mmrm, <name> (the table), <name>_cols,
-|                 <name>_display, <name>_at with at=, and <name>_pop and
-|                 <name>_rec with adsl= or where=; FILE: <file>.rtf, <file>.lst
-|                 and the numbers file (with file=); SETUP: the global macro
-|                 variable <name>_print; SHOW: the long program.
+|                 <name>_ancova or <name>_mmrm (the result of the model), <name>
+|                 (the stacked results), <name>_cols, <name>_display, <name>_at
+|                 (with at=), <name>_pop (with adsl=) and <name>_rec (with adsl=
+|                 or where=). FILE: <file>.rtf, <file>.lst and the numbers file
+|                 (only with file=). SETUP: the global macro variable
+|                 <name>_print. SHOW: the long program, in the log or in a file.
 |
 | Example:
 |
  %table_model(
      data     = advs
-   , where    = (paramcd = 'SYSBP' AND anl01fl = 'Y' AND avisitn > 0)
+   , adsl     = adsl
+   , where    = (paramcd = 'SYSBP' AND anl01fl = 'Y' AND avisitn < 99)
    , covars   = base
+   , by       = trt01p
    , at       = "Week 12"
+   , order    = trt01pn
    , describe = base aval chg
-   , by       = trtp
-   , order    = trtpn
-   , pairs    = "Drug X 10 mg" "Placebo"
+   , pairs    = "Xanomeline High Dose" "Placebo"
+   , title    = "Table 14.3.1 ANCOVA of the change of systolic blood pressure at Week 12"
    , file     = &spl_out./tlf/t14_3_1
  )
 |
@@ -102,6 +159,15 @@
 |                          house case. No number changes.
 | 16-NOV-2026 Sapling      1.9.1: var=, by= and order= are checked before the
 |                          long program (DEV-031). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: The example gives adsl=: the N of the columns
+|                          is that of the population. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the text of where= and model=; the text says
+|                          that the ANCOVA needs one record per subject. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO table_model(

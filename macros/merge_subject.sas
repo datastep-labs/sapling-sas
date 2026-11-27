@@ -3,12 +3,16 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : Copy variables from another data set by subject (USUBJID). The
-|                 other data set has one row per subject; the rows of DATA stay
-|                 as they are, in their order.
+| Macro Purpose : Copies variables from a data set with one row per subject to
+|                 every row of that subject, matched by USUBJID. Use %pick when
+|                 the other data set has more rows per subject and one of them
+|                 gives the value. The rows of data= keep their order. A subject
+|                 that from= does not have gets missing values. The macro stops
+|                 with an ERROR when from= has two rows of one subject, or when
+|                 a variable of vars= is not in from=.
 | Procedure     : PROC SORT, MERGE
 | Proven        : the fixtures of the step kinds copy, period
 |                 (src/adam_steps.ts; node tools/adam_steps_sas.ts); ran on SAS
@@ -18,23 +22,30 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The working data set (changed in place)             Required
-| from        The data set to copy from                           Required
-| vars        The variables, separated by blanks; NEW=OLD copies  Required
-|             under another name
+| data        The data set to change in place, such as adsl or    Required
+|             adae
+| from        The data set to copy from: one row per subject,     Required
+|             with USUBJID
+| vars        The variables to copy, separated by blanks.         Required
+|             new=old copies the variable old under the name new
+|             (vars = trtsdt trt01a=arm)
 | debug       yes: keep the work data sets _merge_subject_*       no
 |-------------------------------------------------------------------------------
 |
-| Output        : DATA: the variables of FROM of its subject on every row,
-|                 in the order of its rows; a subject not in FROM gets missing
-|                 values.
+| Output        : DATA: data=, changed in place: the variables of vars= added to
+|                 every row, with the values of the subject in from=. A subject
+|                 not in from= gets missing values.
 |
 | Example:
 |
+ DATA tt;
+   SET adtte;
+   KEEP usubjid paramcd aval cnsr;
+ RUN;
  %merge_subject(
-     data = advs
-   , from = adam.adsl
-   , vars = age sex trtp=trt01p trtpn=trt01pn
+     data = tt
+   , from = adsl
+   , vars = agegr1 race trtp=trt01p trtpn=trt01pn
  )
 |
 |-------------------------------------------------------------------------------
@@ -51,6 +62,16 @@
 |                          case (names in lower case). No number changes.
 | 16-NOV-2026 Sapling      1.9.1: vars= is checked against from= (DEV-026). No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: The example first copies its records into a
+|                          data set of its own, so that it changes no data set of
+|                          setup.sas for a later example. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the message prints a macro variable, not a
+|                          macro expression: it reads the same in the log and in
+|                          the code. No number changes.
 |
 *******************************************************************************/
 %MACRO merge_subject(
@@ -59,7 +80,7 @@
    , vars  =     /* The variables; NEW=OLD copies under another name */
    , debug = no  /* yes: keep the work data sets _merge_subject_* */
 ) / DES = 'Copy variables from another data set by subject (PROC SORT, MERGE)';
-  %LOCAL t0 i item new old keep rename twice dsid bad;
+  %LOCAL t0 i item new old keep rename twice dsid bad fromds;
   %LET t0 = %_spl_begin(merge_subject);
 
   /* Step 1: the parameters; the variables to keep and to rename */
@@ -84,7 +105,8 @@
     %LET dsid = %SYSFUNC(CLOSE(&dsid.));
   %END;
   %IF %LENGTH(&bad.) %THEN %DO;
-    %PUT %STR(ERR)OR: [merge_subject] vars=&bad. is not a variable of %SCAN(&from., 1, %STR(%());
+    %LET fromds = %SCAN(&from., 1, %STR(%());  /* from= without its options */
+    %PUT %STR(ERR)OR: [merge_subject] vars=&bad. is not a variable of &fromds.;
     %PUT %STR(ERR)OR: [merge_subject]   fix: give vars= variables of from= (new=old to rename one).;
     %RETURN;
   %END;

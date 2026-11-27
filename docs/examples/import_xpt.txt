@@ -1,0 +1,8 @@
+the data sets of &spl_root./examples/adam where libname = 'ADAM': 6 rows
+MEMNAME   NOBS  NVAR
+ADAE      1191   109
+ADLB      5008    36
+ADRS       508    21
+ADSL       306    58
+ADTTE      512    24
+ADVS     10140    32

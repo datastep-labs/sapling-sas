@@ -6,44 +6,62 @@
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : The columns of a table: each value of the column variable in
-|                 the results (and in the population), in the order of ORDER
-|                 (else of the values), the total last; the N of each column
-|                 from the population (its subjects, the total all of them) and
-|                 the header of the column with its N: Placebo|(N=86).
-|                 With page= the columns are the same on each page (each
-|                 value of the page variable) and the N of a column is the
-|                 N of its page: Placebo|(N=40) on the page of the males.
+| Macro Purpose : Returns the columns of a table: one row per column, with its N
+|                 and the header that shows the N. A header is the value, a |
+|                 and the N: Placebo|(N=86). %layout reads it to place each
+|                 number and to label each column; the N comes from the
+|                 population of n=, not from the counts of %freq.
+|                 - The columns are the values of the column variable in the
+|                   results and in the population.
+|                 - They are in the order of the numeric twin of order=, else of
+|                   their values; the Total is last.
+|                 - The N of a column is the number of subjects of n= with its
+|                   value; the N of the Total is all subjects of n=.
+|                 - Without n= the columns have no N, and the header is the
+|                   value alone.
+|                 - With page= each page has the same columns, and the N of a
+|                   column is the N of its page: with page = sex on the example
+|                   data, Placebo|(N=33) on the page of the males and
+|                   Placebo|(N=53) on the page of the females.
 | Procedure     : PROC SUMMARY
-| Proven        : the tables of the dummy study SYNHTN01 (sapling sas check:
-|                 the N of every column the same as R); ran on SAS 9.4 M9,
+| Proven        : the tables of the dummy study SYNHTN01 (the N of every column
+|                 the same as that of a second program in R); ran on SAS 9.4 M9,
 |                 2026-11-12
 |
 | Input Parameters :
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The results (%stack)                                Required
-| n           The population, one row per subject (USUBJID): its  Optional
-|             subjects of each column are the N in the header
-| var         The column variable: the first BY of the statistics Required
-|             macros
-| order       Its numeric twin in N= (TRT01AN): the order of the  Optional
-|             columns (default: the order of the values)
-| page        A variable of the results and of N= (SEX): one page Optional
-|             per value; the N of a column is the N of its page
-| total       yes: the results have the group Total (total=yes of no
-|             the statistics macros): the last column, its N all
-|             subjects of N=. A text in quotes is another name.
-| out         The columns                                         Required
+| data        The stacked results (out= of %stack)                Required
+| n           The population: a data set with USUBJID and the     Optional
+|             column variable, such as adsl. Each subject counts
+|             once in the N of its column. When not given, the
+|             columns have no N.
+| var         The column variable: one variable, the first        Required
+|             variable of by= of the statistics macros (var =
+|             trt01a)
+| order       The numeric twin of var= in n=, such as order =     Optional
+|             trt01an: the columns are in its order. When not
+|             given, the columns are in the order of their
+|             values.
+| page        A variable of the results and of n=, such as page   Optional
+|             = sex: one page per value. The N of a column is
+|             then the N of its page. Give %layout the same
+|             page=.
+| total       yes: the results have the group Total (total = yes  no
+|             of the statistics macros); it is the last column,
+|             and its N is all subjects of n=. A text in quotes
+|             is the other name that the statistics macros gave
+|             the Total.
+| out         The name of the data set of the columns             Required
 | debug       yes: keep the work data sets _columns_*             no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: one row per column: COL (1, 2, ...), COLVALUE (the
-|                 value), BIGN (the N) and HEADER (the value, a | and (N=86):
-|                 the split character of %print). With page=: one row per
-|                 page and column, the page variable first, BIGN the N of the
-|                 page (0: no subject of the column on the page).
+| Output        : OUT: one row per column: COL (its number: 1, 2 ...), COLVALUE
+|                 (the value of var=), BIGN (the N) and HEADER (the value, a |
+|                 and (N=86); %print splits a header at the |). With page=: one
+|                 row per page and column, the page variable first; BIGN is the
+|                 N of the page (0: no subject of the column on the page).
 |
 | Example:
 |
@@ -54,15 +72,6 @@
    , order = trt01an
    , total = yes
    , out   = t14_2_1_cols
- )
- %columns(
-     data  = t14_1_1
-   , n     = adsl
-   , var   = trt01a
-   , order = trt01an
-   , page  = sex
-   , total = yes
-   , out   = t14_1_1_cols
  )
 |
 |-------------------------------------------------------------------------------
@@ -78,6 +87,14 @@
 | 27-NOV-2026 Sapling      1.9.1: page=: the columns on each page of a page
 |                          variable, the N of each column that of its page.
 |                          Without page= no change.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: The header names no internal tool. No number
+|                          changes.
+| 27-NOV-2026 Sapling      1.9.1: the N of a page in the text is that of the
+|                          example data. No number changes.
 |
 *******************************************************************************/
 %MACRO columns(

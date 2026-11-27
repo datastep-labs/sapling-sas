@@ -3,11 +3,18 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : Give each subject the value of its first (or last) record in
-|                 another data set.
+| Macro Purpose : Gives each subject the value of its first or last record in
+|                 another data set, as a new variable. Use %merge_subject when
+|                 the other data set has one row per subject. Use %flag_first to
+|                 flag a record instead of copying a value. The records of a
+|                 subject are sorted by order=, and which= takes the first or
+|                 the last one. A missing sort key sorts last. The rows of data=
+|                 keep their order. A subject with no record in from= gets a
+|                 missing value. When data= has the variable new= already, the
+|                 new values replace it and the log says so.
 | Procedure     : PROC SORT, MERGE
 | Proven        : the fixtures of the step kinds derive.from.one,
 |                 derive.from.extreme, ice (src/adam_steps.ts; node
@@ -17,40 +24,58 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The working data set (changed in place)             Required
-| from        The data set of the records. Prepare it with a      Required
-|             DATA step when the value or a sort key is not a
-|             variable yet (a date of a text, a difference).
-| value       The variable of FROM that gives the value           Required
-| order       The sort keys within a subject; "descending"        Optional
-|             before a key as in a BY statement. A missing key
-|             sorts last. Without order: the first record as the
-|             data are.
-| which       first (default) or last                             first
-| length      The length of a text variable, e.g. $40             Optional
-| format      The format, e.g. date9                              Optional
-| unique      yes: each subject has at most one record in FROM    no
-|             (the plan names one record and no order); two
-|             records are an ERROR. Default no.
-| new         The variable to make                                Required
+| data        The data set to change in place, such as adsl       Required
+| from        The data set of the records, with USUBJID. When     Required
+|             the value or a sort key is not a variable yet (a
+|             date from a text, a difference), make it first in
+|             a DATA step.
+| value       The variable of from= that gives the value          Required
+| order       The sort keys within a subject: variables           Optional
+|             separated by blanks; write descending before a key
+|             as in a BY statement (order = descending astdt).
+|             When not given, the records keep the order they
+|             have in from=.
+| which       first or last: the record of the subject that       first
+|             gives the value
+| length      The length of the new variable when it is a text,   Optional
+|             such as $40
+| format      The format of the new variable, such as date9       Optional
+| unique      yes: each subject must have at most one record in   no
+|             from=, so that no order is needed. Two records of
+|             a subject give an ERROR line that names the
+|             subject.
+| new         The name of the new variable                        Required
 | debug       yes: keep the work data sets _pick_*                no
 |-------------------------------------------------------------------------------
 |
-| Output        : DATA: NEW on every row of a subject: the value of its
-|                 first (or last) record in FROM; missing for a subject without
-|                 a record. With unique=yes two records of a subject are an
-|                 ERROR that names the subject.
+| Output        : DATA: data=, changed in place: the variable new= on every row
+|                 of a subject, with the value of its first (or last) record in
+|                 from=. A subject with no record gets a missing value. With
+|                 unique=yes, a subject with two records gets an ERROR line that
+|                 names it.
 |
 | Example:
 |
+ DATA sl;
+   SET adsl;
+   KEEP usubjid trtsdt;
+ RUN;
  %pick(
-     data   = adsl
-   , from   = ex
-   , value  = exstdt
-   , order  = exstdt exseq
+     data   = sl
+   , from   = sdtm.ex
+   , value  = exstdtc
+   , order  = exstdtc exseq
    , which  = first
-   , format = date9.
-   , new    = trtsdt
+   , length = $10
+   , new    = exfstdtc
+ )
+ %pick(
+     data  = sl
+   , from  = sdtm.ex
+   , value = exdose
+   , order = exstdtc exseq
+   , which = last
+   , new   = exldose
  )
 |
 |-------------------------------------------------------------------------------
@@ -67,6 +92,17 @@
 |                          replaced, with a NOTE (a subject without a value kept
 |                          its old value). The license line; the example in the
 |                          house case.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: The example first copies its records into a
+|                          data set of its own, so that it changes no data set of
+|                          setup.sas for a later example. No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the message of two records of a subject with
+|                          unique=yes names the parameters of the macro (unique=,
+|                          order=, which=); the text of unique=. No number
+|                          changes.
 |
 *******************************************************************************/
 %MACRO pick(
@@ -115,7 +151,8 @@
       BY usubjid;
       IF FIRST.usubjid AND NOT LAST.usubjid THEN DO;
         PUT "ERR" "OR: [pick] more than one record in from=&from. of " usubjid=;
-        PUT "ERR" "OR: [pick]   fix: write first= or last= in the SAP (order=, which=): " usubjid=;
+        PUT "ERR" "OR: [pick]   fix: give unique=no with order= and which= (the record "
+            "to keep), or remove the duplicate records: " usubjid=;
       END;
     RUN;
   %END;

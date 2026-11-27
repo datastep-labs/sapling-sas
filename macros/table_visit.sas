@@ -3,17 +3,29 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : A table by visit in one call (vital signs, laboratory values):
-|                 the descriptive statistics of each variable of vars= in each
-|                 group, parameter and visit. The macro writes the long program
-|                 of the table (the population, the records, one %describe per
-|                 variable, %stack, %table) and runs it; it computes nothing
-|                 itself. The results <name>_<variable>, the table <name>,
-|                 <name>_cols and <name>_display stay, and the setup
-|                 <name>_print. show= gives the long program.
+| Macro Purpose : Makes a table of the descriptive statistics of each variable
+|                 by group, parameter and visit in one call. Use it for vital
+|                 signs or laboratory values over the visits; use %table_summary
+|                 for one row per subject, and %table_model for a model at one
+|                 visit. A block is the rows of one variable of vars= in the
+|                 table: one %describe of the records with by= the group, the
+|                 parameter and the visit. The long program is the program the
+|                 macro writes and runs: the population, the records, one
+|                 %describe per variable, %stack and %table, the calls a person
+|                 would write by hand. The macro computes nothing itself. These
+|                 data sets stay in WORK, for a change and a second print:
+|                 - <name>_<variable>: the result of each variable, one row per
+|                   number (the result shape, see %stack)
+|                 - <name>: the stacked results
+|                 - <name>_cols: the columns (%columns)
+|                 - <name>_display: the display data set, one row per printed
+|                   line (%layout)
+|                 The global macro variable <name>_print keeps the call of
+|                 %print: change <name>_display, then print again with
+|                 %print(&<name>_print.).
 | Procedure     : none of its own (those of %describe, %table)
 | Proven        : node tools/tables_sas.ts (the same display data set as the
 |                 long program, on the made-up study SYNHTN01); ran on SAS
@@ -23,49 +35,71 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records (a data set with USUBJID)               Required
-| adsl        The subjects, one row per subject: the population   Optional
-|             and the N of the columns; its variables go to the
-|             records (blank: the records have all they need)
-| pop         The population: a condition on adsl= in parentheses Optional
-| where       The records to use: a condition in parentheses      Optional
-| vars        The variables: a block of each (aval chg)           Required
-| by          The groups: a character variable, the columns       Required
-| param       The parameter                                       PARAMCD
-| visit       The visit                                           AVISIT
-| keep        Variables kept for the names and the order of the   Optional
-|             rows (param paramn avisitn)
-| order       Its numeric twin (TRT01AN): the order of columns    Optional
-| post        The variables of vars= whose block has only the     Optional
-|             records of postwhere= (chg)
+| data        The input data set: the records, with USUBJID       Required
+| adsl        The subjects: a data set with one row per subject.  Optional
+|             It gives the population and the N of each column,
+|             and its variables are merged onto the records by
+|             USUBJID. When not given, the N of a column is the
+|             subjects of its records.
+| pop         The population: a condition on adsl= in             Optional
+|             parentheses, such as pop = (saffl = 'Y'). It is
+|             used only with adsl=.
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (trtemfl = 'Y')
+| vars        The numeric variables to describe, separated by     Required
+|             blanks: one block each, such as vars = aval chg
+| by          The groups of the columns: one character variable,  Required
+|             such as by = trt01a
+| param       The variable of the parameter: one variable         PARAMCD
+| visit       The variable of the visit: one variable             AVISIT
+| keep        Other variables to keep for the names and the       Optional
+|             order of the rows, separated by blanks (keep= of
+|             %describe), such as keep = param paramn avisitn
+| order       The numeric twin of by=, such as order = trt01an:   Optional
+|             it gives the order of the columns
+| post        The variables of vars= whose block uses only the    Optional
+|             records of postwhere=, separated by blanks, such
+|             as post = chg
 | postwhere   The records after baseline: a condition in          (ablfl NE 'Y')
 |             parentheses
-| names       The label of a block when it is not the label of    Optional
-|             the variable: chg="Change from baseline"
-| total       yes: also all groups together, as Total             no
-| format      The labels of categories: variable and format, as   Optional
-|             in a FORMAT statement (format= of %layout)
+| names       The labels of the blocks: pairs variable="text",    Optional
+|             separated by blanks, such as names = chg="Change
+|             from baseline". A block without a pair has the
+|             label of its variable, or its name.
+| total       yes: add the column Total, all groups together      no
+| format      The labels of the categories: pairs of a variable   Optional
+|             and a format, as in a FORMAT statement (format =
+|             sex $sexf. race $racef.), as format= of %layout
 | name        The name of the table: the first part of the names  Optional
-|             of its data sets (default: the last part of file=)
-| show        yes: the long program in the log; a file: the long  no
-|             program is written there (and run)
-| stats       The statistics, each with its pattern (stats= of    Optional
-|             %describe)
-| title       The titles of the table: a text in quotes for each   Optional
-|             line (TITLE1, TITLE2 ...); blank: the TITLE
-|             statements of the program
-| footnote    The footnotes: a text in quotes for each line        Optional
-|             (FOOTNOTE1 ...); blank: those of the program
-| file        The output without its extension: <file>.rtf,       Optional
-|             <file>.lst and the numbers file (blank: no print)
-| debug       yes: keep the work data sets of the macros called   no
+|             of its data sets, such as name = t14_3_01. When
+|             not given, the last part of file= is used; without
+|             file=, name= is required.
+| show        yes: write the long program to the log. A file      no
+|             path, without quotes: write the long program to
+|             that file. In both cases the macro runs it.
+| stats       The statistics, each name with its pattern,         Optional
+|             separated by blanks (stats= of %describe)
+| title       The titles of the table: one text in quotes per     Optional
+|             line (TITLE1, TITLE2 ...). They hold for this
+|             table only. When not given, the TITLE statements
+|             in force in the program are used.
+| footnote    The footnotes of the table: one text in quotes per  Optional
+|             line (FOOTNOTE1, FOOTNOTE2 ...). They hold for
+|             this table only. When not given, the FOOTNOTE
+|             statements in force in the program are used.
+| file        The output file without its extension: the macro    Optional
+|             writes <file>.rtf, <file>.lst and the numbers
+|             file. When not given, nothing is printed.
+| debug       yes: keep the work data sets of the macros that     no
+|             the long program calls
 |-------------------------------------------------------------------------------
 |
-| Output        : DATA: <name>_<variable> (one result per variable), <name> (the
-|                 table), <name>_cols, <name>_display, <name>_pop and
-|                 <name>_rec; FILE: <file>.rtf, <file>.lst and the numbers file
-|                 (with file=); SETUP: the global macro variable <name>_print;
-|                 SHOW: the long program.
+| Output        : DATA: <name>_<variable> (the result of each variable), <name>
+|                 (the stacked results), <name>_cols, <name>_display, <name>_pop
+|                 (with adsl=) and <name>_rec (with adsl= or where=). FILE:
+|                 <file>.rtf, <file>.lst and the numbers file (only with file=).
+|                 SETUP: the global macro variable <name>_print. SHOW: the long
+|                 program, in the log or in a file.
 |
 | Example:
 |
@@ -73,12 +107,13 @@
      data  = adam.advs
    , adsl  = adam.adsl
    , pop   = (saffl = 'Y')
-   , where = (anl01fl = 'Y')
+   , where = (paramcd = 'SYSBP' AND (ablfl = 'Y' OR anl01fl = 'Y'))
    , vars  = aval chg
    , by    = trt01a
-   , order = trt01an
    , keep  = param paramn avisitn
+   , order = trt01an
    , post  = chg
+   , title = "Table 14.7.1 Systolic blood pressure by visit"
    , file  = &spl_out./tlf/t14_7_1
  )
 |
@@ -94,6 +129,10 @@
 |                          house case. No number changes.
 | 16-NOV-2026 Sapling      1.9.1: vars=, by=, param=, visit=, keep= and order=
 |                          are checked before the long program (DEV-031). No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
 |                          number changes.
 |
 *******************************************************************************/

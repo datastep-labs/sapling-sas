@@ -1,0 +1,3 @@
+ttde_int: 1 row
+GROUPS  BLOCK  STAT         VALUE   TEXT
+        Sex    pval  0.0656344881  0.066

@@ -3,90 +3,115 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : The adverse events of the subjects as two panels side by side
-|                 that share the axis of the terms: at the left the percent of
-|                 the subjects of each group with the term (dots), at the right
-|                 the risk difference of each group against the reference
-|                 group with its interval and a line at 0. The flags are those
-|                 of %termflags, the risk differences those of %risk (ci=,
-|                 level=), so that the figure and a table made with them cannot
-|                 differ. The terms: those of threshold=, sorted by sort=, at
-|                 most max= of them.
+| Macro Purpose : Draws the percent and risk difference of each adverse event as
+|                 PNG and RTF files and returns the numbers drawn. Use %barplot
+|                 for the percents of the categories of one variable without a
+|                 difference. The figure has two panels side by side that share
+|                 the axis of the terms. The left panel shows the percent of the
+|                 subjects of each group with the term, as dots. The right panel
+|                 shows the risk difference of each group against the reference
+|                 group, with its confidence interval and a line at 0. The flags
+|                 are those of %termflags and the risk differences those of
+|                 %risk (ci=, level=), so the figure and a table made with them
+|                 cannot differ. The terms are those that reach threshold=, in
+|                 the order of sort=, at most max= of them. To draw the figure
+|                 again without computing, give plot= the out= and par= the
+|                 outpar= of an earlier call.
 | Procedure     : PROC SUMMARY, PROC SGPANEL (and PROC FREQ in %risk)
 | Proven        : its known answer in tools/figures_sas.ts (percents and Wald
 |                 intervals worked out by hand); not yet run on a SAS server
-| Note          : Draw again: plot= (an out= of %aeplot, changed or not) is
-|                 drawn as it is, the terms from the top in the order of their
-|                 first row (to drop or move a term, change its rows); par= (an
-|                 outpar= of %aeplot) gives the drawing parameters: columns,
-|                 term, by, xlabel, file, width, height. They change the
-|                 picture, not the numbers; the others compute (sort= and max=
-|                 choose the rows of out= and their order), and with plot= a
-|                 NOTE says each one given is not used. A drawing parameter
-|                 given in the call wins over its row of par=, the row over the
-|                 default of the table.
+| Note          : Draw again: plot= takes the out= of an earlier %aeplot call,
+|                 changed or not, and draws it as it is, with no statistic
+|                 computed: the terms from the top in the order of their first
+|                 row (to drop or move a term, change its rows). par= takes the
+|                 outpar= of that call and gives the drawing parameters:
+|                 columns, term, by, xlabel, file, width, height. These change
+|                 the picture, not the numbers. The other parameters compute
+|                 (sort= and max= choose the rows of out= and their order); with
+|                 plot= the log has a NOTE for each one given, as it is not
+|                 used. A drawing parameter given in the call wins over its row
+|                 of par=, and the row wins over the default of the table.
 |
 | Input Parameters :
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The adverse event records                           Required
-| plot        Draw again: an out= of %aeplot (not with data=)     Optional
-| par         The drawing parameters: an outpar= of %aeplot       Optional
-| columns     The columns of %columns: the order of the groups    Optional
-|             and their colours (default: the order of denom=)
-| denom       The population: one row per subject with by=        Required
-| where       The records to use, a condition in parentheses      Optional
-|             (TRTEMFL = 'Y')
-| term        The term of a row                                   AEDECOD
-| by          The groups: a character variable of denom=          Required
-| reference   The reference group: a value of by=, in quotes      Required
-| threshold   A percent: only the terms with this percent of the  Optional
-|             subjects of a group or more, in at least one group
+| data        The input data set: the adverse event records       Required
+| plot        Draw again: the out= of an earlier %aeplot call,    Optional
+|             changed or not. It is drawn as it is, and no
+|             statistic is computed. Give it instead of data=.
+| par         The drawing parameters of an earlier %aeplot call:  Optional
+|             its outpar=. A drawing parameter given in the call
+|             wins over its row of par=.
+| columns     The data set of %columns: it gives the order of     Optional
+|             the groups and their colours. When not given, the
+|             groups come in the order of denom=.
+| denom       The population: a data set with one row per         Required
+|             subject and the variable of by=
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (trtemfl = 'Y')
+| term        The term of a row: one variable of data= (term =    AEDECOD
+|             aebodsys)
+| by          The groups: one character variable of denom=        Required
+| reference   The reference group of the risk difference: a       Required
+|             value of by=, in quotes (reference = 'Placebo')
+| threshold   A percent: only the terms that this percent of the  Optional
+|             subjects of a group or more have, in at least one
+|             group (threshold = 5)
 | sort        The order of the terms from the top: difference     difference
-|             (the risk difference of the first group that is not
-|             the reference, largest first), frequency (the
-|             percent of all subjects, largest first) or
-|             alphabetical
-| ci          The interval of the risk difference: ci= of %risk   wald
-| level       The confidence level                                0.95
-| max         The most terms shown (the first in sort=)           30
-| xlabel      The heading of the right panel (default: Risk       Optional
-|             difference (%) with 95% CI, the level of level=)
-| file        The output without its extension: <file>.png (300   Required
-|             dpi) and <file>.rtf
-| width       The width of the figure                             6.5in
-| height      The height of the figure                            4.5in
-| out         The numbers drawn                                   Optional
-| outpar      The drawing parameters: one row each                Optional
+|             (the risk difference of the first group that is
+|             not the reference, the largest first), frequency
+|             (the percent of all subjects, the largest first)
+|             or alphabetical
+| ci          The type of the interval of the risk difference,    wald
+|             as ci= of %risk
+| level       The confidence level: a number between 0 and 1      0.95
+| max         The most terms to show: a positive whole number.    30
+|             The first terms in the order of sort= are shown.
+| xlabel      The heading of the right panel: a text in quotes.   Optional
+|             When not given, Risk difference (%) with 95% CI,
+|             with the level of level=.
+| file        The output file without its extension: the macro    Required
+|             writes <file>.png (300 dpi) and <file>.rtf
+| width       The width of the figure: a length with its unit     6.5in
+|             (width = 9in)
+| height      The height of the figure: a length with its unit    4.5in
+|             (height = 6in)
+| out         The name of the data set of the numbers drawn.      Optional
+|             When not given, they are not kept.
+| outpar      The name of the data set of the drawing             Optional
+|             parameters, one row each. Give it to par= of a
+|             later call to draw the figure again.
 | debug       yes: keep the work data sets _aeplot_*              no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: TERM and BY, KIND, X, LOWER, UPPER, N. KIND percent: one
-|                 row per term and group, X the percent of its subjects, N the
-|                 subjects with the term. KIND difference: one row per term and
-|                 group that is not the reference, X the risk difference in
-|                 percent (100 x RD of %risk), LOWER and UPPER its limits in
-|                 percent. OUTPAR: one row per drawing parameter in the order of
-|                 the table: PARAMETER ($32) its name, VALUE ($500) its value as
-|                 drawn (a label in quotes). FILE: <file>.png and <file>.rtf.
+| Output        : OUT: the variable of term=, the variable of by=, KIND, X,
+|                 LOWER, UPPER and N. A row of KIND percent is one term and
+|                 group: X is the percent of its subjects and N the subjects
+|                 with the term. A row of KIND difference is one term and group
+|                 that is not the reference: X is the risk difference in percent
+|                 (100 x RD of %risk), and LOWER and UPPER its limits in
+|                 percent. OUTPAR: one row per drawing parameter, in the order
+|                 of the table: PARAMETER ($32), its name, and VALUE ($500), its
+|                 value as drawn (a label in quotes). FILE: <file>.png and
+|                 <file>.rtf.
 |
 | Example:
 |
  %aeplot(
      data      = adae
-   , columns   = t14_5_1_cols
+   , columns   = t14_2_1_cols
    , denom     = adsl
    , where     = (trtemfl = 'Y')
    , term      = aedecod
-   , by        = trta
+   , by        = trt01a
    , reference = "Placebo"
    , threshold = 5
-   , file      = &spl_out./figures/f14_5_3
-   , out       = f14_5_3
+   , file      = &spl_out./figures/f_ae_risk
+   , out       = f_ae_risk
  )
 |
 |-------------------------------------------------------------------------------
@@ -104,6 +129,10 @@
 |                          the macro (%_spl_figure_par). No number changes.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO aeplot(

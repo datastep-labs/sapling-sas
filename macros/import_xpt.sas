@@ -3,38 +3,44 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : Read SAS transport files (XPORT version 5) into SAS data sets.
+| Macro Purpose : Copies SAS transport files (XPORT version 5, .xpt) into SAS
+|                 data sets in a folder. The macro stands alone: a program can
+|                 include it without the library (00_import.sas). So it calls no
+|                 other macro of the library and writes no begin and end lines
+|                 in the log. A member is read from <dir>/<member>.xpt; when
+|                 that file does not exist, from the same name in lower case.
 | Procedure     : LIBNAME XPORT, PROC COPY
-| Proven        : the ADaM and SDTM transport files (sapling sas run, sapling
-|                 sas adam run) of the dummy study SYNHTN01 (sapling sas run:
-|                 SAS RUN PASS; sapling sas check: SAS CHECK PASS, 570 of 570
-|                 numbers of R the same in SAS); ran on SAS 9.4 M9, 2026-11-12
+| Proven        : the ADaM and SDTM transport files of the dummy study SYNHTN01
+|                 (every program ran with a clean log; 570 of 570 numbers the
+|                 same as those of a second program in R); ran on SAS 9.4 M9,
+|                 2026-11-12
 |
 | Input Parameters :
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| dir         The folder of the transport files (<member>.xpt)    Required
-| members     The names of the data sets, separated by blanks:    Required
-|             the file <member>.xpt, else in lower case (VTXC
-|             reads vtxc.xpt)
-| out         The folder the data sets are written to             Required
+| dir         The folder of the transport files: a path without   Required
+|             quotes
+| members     The names of the data sets to read: one name or     Required
+|             several, separated by blanks (members = dm ae vs).
+|             The file of VTXC is VTXC.xpt or, when that does
+|             not exist, vtxc.xpt.
+| out         The folder that gets the data sets: a path without  Required
+|             quotes. The folder must exist.
 |-------------------------------------------------------------------------------
 |
-| Output        : FILE: the data sets <out>/<member>.sas7bdat. The macro stands alone:
-|                 a program includes it without the library (00_import.sas), so
-|                 it calls no other macro of the library and writes no begin and
-|                 end lines.
+| Output        : FILE: one data set <out>/<member>.sas7bdat for each name of
+|                 members=.
 |
 | Example:
 |
  %import_xpt(
-     dir     = /DATA/htn3/xpt
-   , members = adsl adae advs
-   , out     = /DATA/htn3/adam
+     dir     = &spl_root./examples/data
+   , members = adsl adae advs adlb adtte adrs
+   , out     = &spl_root./examples/adam
  )
 |
 |-------------------------------------------------------------------------------
@@ -50,6 +56,12 @@
 | 16-NOV-2026 Sapling      1.9.1: one ERROR and its fix for each missing
 |                          parameter (DEV-011); members= finds <member>.xpt also
 |                          in lower case (DEV-010). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: The header names no internal tool. No number
+|                          changes.
 |
 *******************************************************************************/
 %MACRO import_xpt(

@@ -6,23 +6,34 @@
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : Print a table or a listing: one PROC REPORT into an RTF file
-|                 and a monospace listing beside it. A table is printed from
-|                 its display data set (%layout), a listing from its records.
-|                 The BY columns come first, a repeated value shown once; the
-|                 VAR columns follow, numbers right, text left as written.
-|                 ODS wraps and pages the RTF; the rows of one TOGETHER value
-|                 stay on one page of the listing when they fit in ROWS.
-|                 The parameters of a table can come from the setup of %layout
-|                 (setup=): %print(&name.) prints its display data set again
-|                 after a change; a parameter that is not in the setup is
-|                 added after it: %print(&name., file=...). A keyword given
-|                 twice stops the call (SAS): change it in %layout.
-|                 page= prints one page (or more) per value of a variable,
-|                 into the same two files: the report of each value under a
-|                 BY statement, so that a title of the program can name it
-|                 (OPTIONS NOBYLINE and TITLE2 "Sex: #BYVAL1"); a column X
-|                 with a variable HEAD_X has the header of its page from it.
+| Macro Purpose : Prints a table or a listing with one PROC REPORT into an RTF
+|                 file and a monospace listing file. It prints a table from its
+|                 display data set (%layout), and a listing from its records;
+|                 %table runs %columns, %ard, %layout and %print in one call.
+|                 - The BY columns come first, and a repeated value is shown
+|                   once. The VAR columns follow: numbers right aligned, text
+|                   left aligned as written (its leading blanks kept).
+|                 - A text column of var= wider than 40 characters wraps at a
+|                   width of 40.
+|                 - The header of a column is its pair of label=, else its
+|                   HEAD_X variable on the page (with page=), else the label of
+|                   the variable. A | in a header splits it into lines.
+|                 - ODS wraps and pages the RTF. The rows of one value of
+|                   together= stay on one page of the listing when they fit in
+|                   rows=; a group that does not fit in what is left of a page
+|                   starts a new page.
+|                 - A table that is too wide for a page goes on in a second
+|                   part, and the last BY column is repeated there.
+|                 - With page=, each value of the page variable gets its own
+|                   pages, in the same two files, under a BY statement, so that
+|                   a title can name the value (OPTIONS NOBYLINE and TITLE2
+|                   "Sex: #BYVAL1").
+|                 - With no row, the report has one row: the text of nodata=.
+|                 The setup of %layout (setup=) holds the parameters of a table:
+|                 %print(&name.) prints its display data set again after a
+|                 change. A parameter that is not in the setup is added after
+|                 it: %print(&name., file=...). SAS stops a call that has a
+|                 parameter twice: change that parameter in %layout.
 | Procedure     : PROC REPORT
 | Proven        : its cases of node tools/print_sas.ts (PRINT SAS PASS: 18 cases)
 |                 and the tables and listings of the dummy study SYNHTN01
@@ -32,30 +43,37 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The rows: the display data set of %layout, or the   Required
-|             records of a listing
-| by          The left columns, printed first: a repeated value   Optional
-|             shown once
-| var         The other columns, in print order; a list such as   Required
-|             c: or c1-c5 is allowed
-| page        A variable: a new page for each value, its value    Optional
-|             for #BYVAL1 of a title; a variable HEAD_X gives the
-|             header of the column X on the page of its row
-| together    A variable: the rows of one value stay on one page  Optional
-| label       Column labels: name="text" pairs; | splits a header Optional
-|             (default: the labels of the variables)
-| rows        The rows of a page, for together=                   40
-| file        The output without its extension: <file>.rtf and    Required
-|             <file>.lst
+| data        The rows to print: the display data set of          Required
+|             %layout, or the records of a listing
+| by          The left columns, printed first: variables          Optional
+|             separated by blanks. A repeated value is shown
+|             once.
+| var         The other columns, in the order of the print:       Required
+|             variables separated by blanks. A list such as c:
+|             or c1-c5 is allowed.
+| page        A variable: each value starts a new page, and       Optional
+|             #BYVAL1 in a title prints the value. A variable
+|             HEAD_X gives the header of the column X on the
+|             page of its row.
+| together    A variable: the rows of one value stay on one       Optional
+|             page, such as together = grp of %layout
+| label       Column labels: name="text" pairs, separated by      Optional
+|             blanks, such as %STR(row=" "). A | splits a header
+|             into lines. When not given, the labels of the
+|             variables are used.
+| rows        The rows of a page for together=: a positive whole  40
+|             number
+| file        The output: a path without its extension. The       Required
+|             macro writes <file>.rtf and <file>.lst.
 | nodata      The text printed when there is no row               No data
 |                                                                 qualified
 | debug       yes: keep the work data sets _print_*               no
 |-------------------------------------------------------------------------------
 |
 | Output        : FILE: <file>.rtf (style journal, landscape) and <file>.lst
-|                 (the LISTING destination), under the titles and footnotes
-|                 of the program; no row: the text of nodata=. With page=:
-|                 the pages of each value in the order of the rows.
+|                 (the LISTING destination), under the titles and footnotes of
+|                 the program. With page=: the pages of each value, in the order
+|                 of the rows.
 |
 | Example:
 |
@@ -67,15 +85,11 @@
    , label    = %STR(row=" ")
    , file     = &spl_out./tlf/t14_2_1
  )
- %print(data=adae, by=trt01a usubjid, var=aedecod astdt aesev, file=&spl_out./listings/l14_5_1)
  %print(
-     data     = t14_1_1_display
-   , by       = row
-   , var      = c:
-   , page     = sex
-   , together = grp
-   , label    = %STR(row=" ")
-   , file     = &spl_out./tlf/t14_1_1
+     data = adae
+   , by   = usubjid
+   , var  = trt01a aedecod astdt aesev
+   , file = &spl_out./listings/l14_5_1
  )
 |
 |-------------------------------------------------------------------------------
@@ -95,6 +109,10 @@
 |                          variable, in the same files, its value for a
 |                          title (#BYVAL1), the headers of its page from
 |                          HEAD_X. Without page= no change.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO print(

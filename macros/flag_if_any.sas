@@ -3,11 +3,14 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : Flag the subjects that have a record in another data set that
-|                 meets a condition.
+| Macro Purpose : Flags with Y every row of each subject that has a record in
+|                 another data set that meets a condition. Use %flag_first to
+|                 flag one record of each group instead of a subject. The other
+|                 subjects get N, or a blank with else=blank. The rows of data=
+|                 keep their order.
 | Procedure     : PROC SORT, MERGE
 | Proven        : the fixtures of the step kinds flag.condition, flag.any
 |                 (src/adam_steps.ts; node tools/adam_steps_sas.ts); ran on SAS
@@ -17,24 +20,29 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The working data set (changed in place)             Required
-| from        The data set of the records                         Required
-| where       The condition on FROM, in parentheses               Required
-| else        The value of the other subjects: N (default) or     N
-|             blank
-| new         The flag to make: Y for a subject with such a       Required
-|             record
+| data        The data set to change in place, such as adsl       Required
+| from        The data set of the records, with USUBJID, such as  Required
+|             adae
+| where       The condition on the records of from=, in           Required
+|             parentheses, such as where = (aesev = 'SEVERE')
+| else        The value for the other subjects: N, or blank for   N
+|             a blank value
+| new         The name of the flag variable to make               Required
 | debug       yes: keep the work data sets _flag_if_any_*         no
 |-------------------------------------------------------------------------------
 |
-| Output        : DATA: NEW: Y on every row of a subject that has such a
-|                 record in FROM, else N (or blank with else=blank), in the
-|                 order of its rows.
+| Output        : DATA: data=, changed in place: the character variable new=
+|                 ($1) on every row of a subject, Y when the subject has such a
+|                 record in from=, N (or blank) when not.
 |
 | Example:
 |
+ DATA sl;
+   SET adsl;
+   KEEP usubjid eosstt;
+ RUN;
  %flag_if_any(
-     data  = adsl
+     data  = sl
    , from  = sdtm.ds
    , where = (dsdecod = 'COMPLETED')
    , new   = complfl
@@ -50,6 +58,12 @@
 |                          number changes.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the text of the header for the manual: the
+|                          summary, the form of each parameter. No number
+|                          changes.
+| 27-NOV-2026 Sapling      1.9.1: The example first copies its records into a
+|                          data set of its own, so that it changes no data set of
+|                          setup.sas for a later example. No number changes.
 |
 *******************************************************************************/
 %MACRO flag_if_any(

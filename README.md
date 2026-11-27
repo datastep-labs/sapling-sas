@@ -3,6 +3,9 @@
 A SAS macro library for the tables, listings and figures of clinical trials, and its proof: the macros give the same
 numbers as public pharmaverse references, number by number.
 
+**The manual: [https://datastep-labs.github.io/sapling-sas/](https://datastep-labs.github.io/sapling-sas/)**: a tutorial, how-to guides, a reference page for every macro with
+its example and the real output of that example, and the explanation of the design and the proof.
+
 **2,181 of 2,196 numbers of the references are the same in SAS**; 14 more differ for a reason that is explained and
 checked, and 1 is a statistic no macro makes. Nothing is left unexplained.
 
@@ -48,6 +51,16 @@ listing). The programs of the proof (`proof/*/programs`) are complete examples.
 
 The manual of every macro, with its parameters and examples: [docs/macros.md](docs/macros.md) (the same as data:
 `macros/index.json`). Run the proof on your own SAS 9.4: [proof/run.sas](proof/run.sas).
+
+## Examples
+
+Every example of the manual runs on the example data in [examples/data](examples/data): data sets of the R packages
+pharmaverseadam and pharmaversesdtm (the subjects of the CDISC pilot study, [examples/data/NOTICE](examples/data/NOTICE)).
+Set `spl_root` in [examples/setup.sas](examples/setup.sas) to the folder of this repository and run it first: it reads
+the transport files and makes the WORK data sets the examples use. Then run any example of
+[docs/macros.md](docs/macros.md), in the order its section "The examples" lists (an example may use the results of the
+ones before it). Under each example the manual shows what it gave on SAS 9.4: its result data sets, the listing of a
+table, the figure.
 
 ## License
 

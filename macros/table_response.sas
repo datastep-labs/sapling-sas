@@ -3,19 +3,35 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : A table of a binary response in one call: the subjects with
-|                 the event and their percent with its interval in each group
-|                 (%proportion), the comparison of pairs of groups (%risk: risk
-|                 difference, relative risk or odds ratio, with its test), and
-|                 with covars= the odds ratio adjusted for them (%logistic). The
-|                 macro writes the long program of the table and runs it; it
-|                 computes nothing itself. The results <name>_prop,
-|                 <name>_<measure> and <name>_adj, the table <name>, <name>_cols
-|                 and <name>_display stay, and the setup <name>_print. show=
-|                 gives the long program.
+| Macro Purpose : Makes a response table in one call: the responders in each
+|                 group, and the comparisons of pairs of groups. Use %table_ae
+|                 to count the subjects by levels of events; to add or change a
+|                 block, start from its long program (show=). A block is the
+|                 rows of one call in the table. The table has these blocks:
+|                 - the responders, n (%), and the interval of the percent
+|                   (%proportion)
+|                 - with measure= rd, rr or or: the risk difference, the
+|                   relative risk or the odds ratio of each pair, with its
+|                   interval and p-value (%risk)
+|                 - with covars=: the odds ratio adjusted for the covariates,
+|                   with its interval and p-value (%logistic)
+|                 The table has no Total column. The long program is the program
+|                 the macro writes and runs: the population, the records, one
+|                 call per block, %stack and %table, the calls a person would
+|                 write by hand. The macro computes nothing itself. These data
+|                 sets stay in WORK, for a change and a second print:
+|                 - <name>_prop, <name>_<measure> and <name>_adj: the results,
+|                   one row per number (the result shape, see %stack)
+|                 - <name>: the stacked results
+|                 - <name>_cols: the columns (%columns)
+|                 - <name>_display: the display data set, one row per printed
+|                   line (%layout)
+|                 The global macro variable <name>_print keeps the call of
+|                 %print: change <name>_display, then print again with
+|                 %print(&<name>_print.).
 | Procedure     : none of its own (those of %proportion, %risk, %logistic, %table)
 | Proven        : node tools/tables_sas.ts (the same display data set as the
 |                 long program, on the made-up study SYNHTN01); ran on SAS
@@ -25,58 +41,86 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records (a data set with USUBJID)               Required
-| adsl        The subjects, one row per subject: the population   Optional
-|             and the N of the columns; its variables go to the
-|             records (blank: the records have all they need)
-| pop         The population: a condition on adsl= in parentheses Optional
-| where       The records to use: a condition in parentheses      Optional
-| var         The response: a variable with two values            Required
-| event       The value that is the event, in quotes              "Y"
-| by          The groups: a character variable, the columns       Required
-| covars      Covariates: also the odds ratio adjusted for them   Optional
-|             (%logistic)
-| order       Its numeric twin (TRT01AN): the order of columns    Optional
-| pairs       The pairs compared: each group, then the group it   Optional
-|             is compared with, in quotes; # between pairs
-|             (blank: all pairs)
-| ci          The interval of the percent (ci= of %proportion)    clopper-pearson
-| measure     rd, rr or or: the comparison of %risk; none: no     rd
-|             comparison
-| diffci      The interval of a risk difference (ci= of %risk)    wald
-| format      The labels of categories: variable and format, as   Optional
-|             in a FORMAT statement (format= of %layout)
+| data        The input data set: the records, with USUBJID       Required
+| adsl        The subjects: a data set with one row per subject.  Optional
+|             It gives the population and the N of each column,
+|             and its variables are merged onto the records by
+|             USUBJID. When not given, the N of a column is the
+|             subjects of its records.
+| pop         The population: a condition on adsl= in             Optional
+|             parentheses, such as pop = (saffl = 'Y'). It is
+|             used only with adsl=.
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (trtemfl = 'Y')
+| var         The response: one variable with two values          Required
+| event       The value of var= that is the event: a text in      "Y"
+|             quotes
+| by          The groups of the columns: one character variable,  Required
+|             such as by = trt01a
+| covars      The covariates, separated by blanks, such as        Optional
+|             covars = sitegr1: they add a block with the odds
+|             ratio adjusted for them (%logistic). When not
+|             given, there is no such block.
+| order       The numeric twin of by=, such as order = trt01an:   Optional
+|             it gives the order of the columns and of the
+|             groups in the comparisons
+| pairs       The pairs of groups to compare, separated by #:     Optional
+|             each group in quotes, then the group it is
+|             compared with ("Xanomeline High Dose" "Placebo").
+|             When not given, each later group is compared with
+|             each earlier one.
+| ci          The interval of the percent of responders:          clopper-pearson
+|             clopper-pearson, wilson, wald or agresti-coull
+|             (ci= of %proportion)
+| measure     rd (the risk difference), rr (the relative risk)    rd
+|             or or (the odds ratio): the comparison of %risk;
+|             none: no comparison
+| diffci      The interval of a risk difference: wald, newcombe,  wald
+|             miettinen-nurminen or agresti-caffo (ci= of
+|             %risk). It is used only with measure = rd.
+| format      The labels of the categories: pairs of a variable   Optional
+|             and a format, as in a FORMAT statement (format =
+|             sex $sexf. race $racef.), as format= of %layout
 | name        The name of the table: the first part of the names  Optional
-|             of its data sets (default: the last part of file=)
-| show        yes: the long program in the log; a file: the long  no
-|             program is written there (and run)
-| title       The titles of the table: a text in quotes for each   Optional
-|             line (TITLE1, TITLE2 ...); blank: the TITLE
-|             statements of the program
-| footnote    The footnotes: a text in quotes for each line        Optional
-|             (FOOTNOTE1 ...); blank: those of the program
-| file        The output without its extension: <file>.rtf,       Optional
-|             <file>.lst and the numbers file (blank: no print)
-| debug       yes: keep the work data sets of the macros called   no
+|             of its data sets, such as name = t14_3_01. When
+|             not given, the last part of file= is used; without
+|             file=, name= is required.
+| show        yes: write the long program to the log. A file      no
+|             path, without quotes: write the long program to
+|             that file. In both cases the macro runs it.
+| title       The titles of the table: one text in quotes per     Optional
+|             line (TITLE1, TITLE2 ...). They hold for this
+|             table only. When not given, the TITLE statements
+|             in force in the program are used.
+| footnote    The footnotes of the table: one text in quotes per  Optional
+|             line (FOOTNOTE1, FOOTNOTE2 ...). They hold for
+|             this table only. When not given, the FOOTNOTE
+|             statements in force in the program are used.
+| file        The output file without its extension: the macro    Optional
+|             writes <file>.rtf, <file>.lst and the numbers
+|             file. When not given, nothing is printed.
+| debug       yes: keep the work data sets of the macros that     no
+|             the long program calls
 |-------------------------------------------------------------------------------
 |
-| Output        : DATA: <name>_prop, <name>_<measure> and <name>_adj (the
-|                 results), <name> (the table), <name>_cols, <name>_display, and
-|                 <name>_pop and <name>_rec with adsl= or where=; FILE:
-|                 <file>.rtf, <file>.lst and the numbers file (with file=);
-|                 SETUP: the global macro variable <name>_print; SHOW: the long
-|                 program.
+| Output        : DATA: <name>_prop, <name>_<measure> (with a measure) and
+|                 <name>_adj (with covars=), the results; <name> (the stacked
+|                 results), <name>_cols, <name>_display, <name>_pop (with adsl=)
+|                 and <name>_rec (with adsl= or where=). FILE: <file>.rtf,
+|                 <file>.lst and the numbers file (only with file=). SETUP: the
+|                 global macro variable <name>_print. SHOW: the long program, in
+|                 the log or in a file.
 |
 | Example:
 |
  %table_response(
      data   = adrs
+   , where  = (paramcd = 'RSP')
    , var    = avalc
-   , by     = trtp
-   , order  = trtpn
-   , pairs  = "Drug X 10 mg" "Placebo"
+   , by     = trt01a
+   , order  = trt01an
    , diffci = newcombe
-   , covars = base
+   , title  = "Table 14.3.2 Responders"
    , file   = &spl_out./tlf/t14_3_2
  )
 |
@@ -95,6 +139,10 @@
 | 16-NOV-2026 Sapling      1.9.1: measure=or no longer stops at a macro %IF
 |                          (DEV-029); var=, by= and order= are checked before
 |                          the long program (DEV-031).
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO table_response(

@@ -6,13 +6,20 @@
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : A linear model of a variable, one record per subject (PROC
-|                 MIXED without a random effect: least squares): covariates,
-|                 class factors and the groups. The differences of the LS means
-|                 of pairs of groups (diff, diff_se, lcl, ucl, pval) and, when
-|                 stats= asks for them, the LS mean of each group (lsmean,
-|                 lsmean_se) and its confidence limits (lsmean_lcl,
-|                 lsmean_ucl).
+| Macro Purpose : Returns the differences of the LS means of pairs of groups in
+|                 a linear model, with confidence limits and p-values. Use
+|                 %ancova for the test of one numeric term, and %mmrm for
+|                 repeated visits of a subject. The model is PROC MIXED without
+|                 a random effect (least squares): the covariates, the class
+|                 factors and the groups, one record per subject (the first with
+|                 a value; when where= leaves a second record of a subject, the
+|                 log has a NOTE with their number). Give a where= that leaves
+|                 one record per subject, such as one parameter at one visit
+|                 with anl01fl = 'Y'; otherwise each subject has the first of
+|                 its records in the order of data=, whichever it is. The LS
+|                 mean of each group comes when stats= asks for it. The macro
+|                 writes a result: a data set with one row per number (the
+|                 result shape, see %stack).
 | Procedure     : PROC MIXED (LSMEANS)
 | Proven        : the known answer of the method lsmeans (src/methods.ts, worked
 |                 out by tools/method_answers.R; node tools/methods_sas.ts); ran
@@ -22,49 +29,73 @@
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
-| data        The records                                         Required
-| where       The records to use, a condition in parentheses      Optional
-| var         The response                                        Required
-| by          The groups of the model: a character variable       Required
-| within      One model in each group of these variables          Optional
-| covars      The covariates                                      Optional
-| class       The class factors                                   Optional
-| pairs       all: each later group against each earlier one, in  all
-|             the order of ORDER; or the pairs separated by #,
-|             one pair per line, the group first, then the group
-|             it is compared with (a value with a blank or a
-|             hyphen in quotes): "Drug" "Placebo" # "High"
-|             "Low". The form "A"-"B" of version 1.0 is still
-|             read.
-| order       A numeric variable with one value per group: the    Optional
-|             order of the groups
-| level       The confidence level (default 0.95)                 0.95
-| stats       The statistics, each with its pattern (default      diff="XX.X"
-|             diff="XX.X" diff_se="XX.XX" lcl="XX.X" ucl="XX.X"   diff_se="XX.XX" lcl="XX.X"
-|             pval="X.XXX"); also lsmean, lsmean_se, lsmean_lcl   ucl="XX.X" pval="X.XXX"
-|             and lsmean_ucl
-| label       The label of the block in a table, in quotes        Optional
-| out         The result                                          Required
-| debug       yes: keep the work data sets of the macro           no
-|             (_lsmeans_*)
+| data        The input data set, with USUBJID                    Required
+| where       The records to use: a condition in parentheses,     Optional
+|             such as where = (paramcd = 'SYSBP' AND avisit =
+|             'Week 12')
+| var         The response: one numeric variable                  Required
+| by          The groups of the model: one character variable     Required
+| within      One model in each group of these variables,         Optional
+|             separated by blanks (within = paramcd)
+| covars      The covariates: numeric variables separated by      Optional
+|             blanks (covars = base)
+| class       The class factors besides the groups: variables     Optional
+|             separated by blanks (class = sex)
+| pairs       The pairs of groups to compare. all: each later     all
+|             group against each earlier one, in the order of
+|             order= (or of the values). Or the pairs separated
+|             by #, each the group first and then the group it
+|             is compared with, a value with a blank or a hyphen
+|             in quotes: pairs = "Drug" "Placebo" # "High"
+|             "Low". The old form "A"-"B" is still read.
+| order       The order of the groups: one numeric variable with  Optional
+|             one value per group (order = trt01pn)
+| level       The confidence level of the limits: a number        0.95
+|             between 0 and 1
+| stats       The statistics, in the order of the rows: each      diff="XX.X"
+|             name with the pattern of its printed number,        diff_se="XX.XX" lcl="XX.X"
+|             separated by blanks. The names are diff, diff_se,   ucl="XX.X" pval="X.XXX"
+|             lcl, ucl, pval, lsmean, lsmean_se, lsmean_lcl and
+|             lsmean_ucl. A name without a pattern takes its
+|             default pattern (n="XX", mean="XX.X", pval="X.XXX"
+|             ...; see %describe).
+| label       The label of the block in the table: a text in      Optional
+|             quotes. A block is the rows of one call in the
+|             table.
+| out         The name of the result data set                     Required
+| debug       yes: keep the work data sets _lsmeans_*             no
 |-------------------------------------------------------------------------------
 |
-| Output        : OUT: the rows of the differences (BY: the group, VERSUS: the group
-|                 it is compared with) and of the LS means (VERSUS blank);
-|                 GROUPS is BY VERSUS WITHIN.
+| Output        : OUT: the result shape (see %stack). A row of a difference has
+|                 the group in the by= variable and the group it is compared
+|                 with in VERSUS; a row of an LS mean has VERSUS blank. GROUPS
+|                 is the by= variable, VERSUS and the within= variables.
 |
 | Example:
 |
  %lsmeans(
-     data   = adqsadas
-   , where  = (paramcd = 'ACTOT' AND avisit = 'Week 24')
+     data   = advs
+   , where  = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')
    , var    = chg
    , by     = trt01p
    , covars = base
-   , class  = sitegr1
+   , class  = sex
    , pairs  = all
    , order  = trt01pn
-   , out    = pairs
+   , out    = sbp_ls
+ )
+ %lsmeans(
+     data   = advs
+   , where  = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')
+   , var    = chg
+   , by     = trt01p
+   , covars = base
+   , pairs  = "Xanomeline High Dose" "Placebo"
+            # "Xanomeline Low Dose"  "Placebo"
+   , order  = trt01pn
+   , level  = 0.90
+   , stats  = lsmean lsmean_se diff lcl ucl pval
+   , out    = sbp_ls90
  )
 |
 |-------------------------------------------------------------------------------
@@ -87,6 +118,20 @@
 | 27-NOV-2026 Sapling      1.9.1: lsmean_lcl and lsmean_ucl, the confidence
 |                          limits of each LS mean (PROC MIXED, LSMEANS / CL).
 |                          No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+|                          (sas/examples). The text of the header for the
+|                          manual: the summary, the form of each parameter. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: a NOTE when where= leaves a second record of
+|                          a subject (the first is used, as before). No number
+|                          changes.
+| 27-NOV-2026 Sapling      1.9.1: The example analyses the records of anl01fl =
+|                          'Y' (one record per subject). The text of stats=: a
+|                          name without a pattern takes its default pattern. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.9.1: an example with pairs=, level= and stats= with
+|                          the LS means; the text says to give a where= that
+|                          leaves one record per subject. No number changes.
 |
 *******************************************************************************/
 %MACRO lsmeans(
@@ -106,7 +151,7 @@
    , out    =       /* The result */
    , debug  = no    /* yes: keep the work data sets _lsmeans_* */
 ) / DES = 'The differences of the LS means of pairs of groups in a linear model (PROC MIXED)';
-  %LOCAL t0 i item cond chars mstats dstats rows;
+  %LOCAL t0 i item cond chars mstats dstats rows ndup;
   %LET t0 = %_spl_begin(lsmeans);
 
   /* Step 1: the parameters; the statistics of the LS means and those of the differences */
@@ -134,7 +179,12 @@
     WHERE &cond.;
     IF CMISS(OF &within. &by.) = 0;
   RUN;
-  PROC SORT DATA=_lsmeans_records NODUPKEY; BY &within. usubjid; RUN;
+  PROC SORT DATA=_lsmeans_records NODUPKEY DUPOUT=_lsmeans_dups; BY &within. usubjid; RUN;
+  %LET ndup = %_spl_nobs(_lsmeans_dups);  /* the second records of a subject, dropped */
+  %IF &ndup. > 0 %THEN %DO;
+    %PUT NOTE: [lsmeans] &ndup. record(s) of where= are a second record of a subject:;
+    %PUT NOTE: [lsmeans]   the first record of each subject is used.;
+  %END;
 
   /* Step 3: no record qualified: the result without a row */
   %IF %_spl_nobs(_lsmeans_records) = 0 %THEN %DO;

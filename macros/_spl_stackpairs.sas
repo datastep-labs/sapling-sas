@@ -3,7 +3,7 @@
 | SAS Version   : SAS 9.4
 | Macro Version : 1.9.1
 | Created By    : Sapling
-| Date          : 16NOV2026
+| Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
 | Macro Purpose : The records of each pair of groups asked for, one under the
@@ -60,6 +60,9 @@
 |                          an error (macro=, PAIRSOK of the caller).
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
+| 27-NOV-2026 Sapling      1.9.1: the message prints a macro variable, not a
+|                          macro expression: it reads the same in the log and in
+|                          the code. No number changes.
 |
 *******************************************************************************/
 %MACRO _spl_stackpairs(
@@ -70,7 +73,7 @@
    , macro   =   /* The macro that calls (for the message) */
    , out     =   /* The records of each pair */
 ) / DES = 'The records of each pair of groups asked for, one under the other';
-  %LOCAL nogroup;
+  %LOCAL nogroup group;
 
   /* Step 1: the pairs asked for: _A against _B */
   %IF %QUPCASE(%SUPERQ(pairs)) = ALL %THEN %DO;
@@ -126,7 +129,8 @@
     DATA _NULL_;
       CALL SYMPUTX('pairsok', 0);
     RUN;
-    %PUT %STR(ERR)OR: [&macro.] pairs= names the group "%SUPERQ(nogroup)", and no record has it.;
+    %LET group = %SUPERQ(nogroup);  /* the group that no record has */
+    %PUT %STR(ERR)OR: [&macro.] pairs= names the group "&group.", and no record has it.;
     %PUT %STR(ERR)OR: [&macro.]   fix: give pairs= the values of &by. as the data have them.;
   %END;
 
