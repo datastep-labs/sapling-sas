@@ -90,7 +90,7 @@ Returns the hazard ratio of pairs of groups from a Cox proportional hazards mode
 
 ## Result
 
-The data set of `out=`: the [result shape](../explanation/result-shape.md), one row per pair and statistic: the BY variable (the group), VERSUS (the group it is compared with), the variables of `within=`, GROUPS, BLOCK, STAT, VALUE and TEXT. GROUPS is the name of the BY variable, VERSUS and the names of `within=`.
+The data set of `out=`: the [result shape](../explanation/result-shape.md), one row per pair and statistic: the BY variable (the group), VERSUS (the group it is compared with), the variables of `within=`, GROUPS, BLOCK, STAT, VALUE and TEXT. hr is the hazard of the group over the hazard of VERSUS (a hazard ratio below 1: fewer events in the group, as its hazard is lower), lcl and ucl its confidence limits, pval its p-value. With pairs=all the group is the later one in the order of `order=`. GROUPS is the name of the BY variable, VERSUS and the names of `within=`.
 
 ## Details
 
@@ -102,7 +102,7 @@ Use [%logrank](logrank.md) for the test of all groups together without a model, 
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#examples)).
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Gives the hazard ratio of each pair, stratified by sex, with its limits and p value.
 
@@ -202,7 +202,7 @@ Xanomeline Low Dose   Placebo  >64     TRT01A VERSUS AGEGR1         lcl    1.708
 Xanomeline Low Dose   Placebo  >64     TRT01A VERSUS AGEGR1         ucl   5.4453164325  5.45
 ```
 
-Uses the Breslow ties and the p value of the log rank score test.
+Uses the Breslow ties, and as p value the log rank test of the two groups of each pair.
 
 ```sas
 %cox(
@@ -245,12 +245,12 @@ Time to an event: [%km](km.md), [%logrank](logrank.md).
 
 Named on this page: [%describe](describe.md), [%interaction_phreg](interaction_phreg.md).
 
-Guides that use %cox: [Make a Kaplan-Meier figure with the number at risk](../how-to/kaplan-meier-figure.md), [Run the examples of the reference](../how-to/run-the-examples.md).
-
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
+Checked against its known answer (on a small data set, the numbers worked out independently in R); ran on SAS 9.4 M9, 2026-11-12.
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+The known answers and test cases are kept with the development of the library, not in this repository.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 [Source of %cox](https://github.com/datastep-labs/sapling-sas/blob/main/macros/cox.sas)

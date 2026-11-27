@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : table_tte.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -37,9 +37,9 @@
 |                 record used with a missing or negative CNSR stops the macro
 |                 with an ERROR.
 | Procedure     : none of its own (those of %km, %logrank, %cox, %table)
-| Proven        : node tools/tables_sas.ts (the same display data set as the
-|                 long program, on the made-up study SYNHTN01); ran on SAS
-|                 9.4 M9, 2026-11-13
+| Proven        : Checked against its long program, written out by hand: the
+|                 same display data set (PROC COMPARE), on a made-up study; ran
+|                 on SAS 9.4 M9, 2026-11-13
 |
 | Input Parameters :
 |
@@ -109,11 +109,15 @@
 |                 <name>_rec (with adsl= or where=). FILE: <file>.rtf,
 |                 <file>.lst and the numbers file (only with file=). SETUP: the
 |                 global macro variable <name>_print. SHOW: the long program, in
-|                 the log or in a file.
+|                 the log or in a file. In the printed table, a comparison is in
+|                 the column of the group, on the rows under "vs" and the group
+|                 it is compared with: the hazard ratio is the hazard of the
+|                 column group over the hazard of the group on the row (below 1:
+|                 fewer events in the column group).
 |
 | Example:
 |
- * Makes the table of the time to the event: the curves, the log rank test and the hazard ratio.;
+ * Makes the table of the time to the event: Kaplan Meier, the log rank test and the hazard ratio.;
  %table_tte(
      data  = adttde
    , by    = trt01a
@@ -148,17 +152,21 @@
 |                          (DEV-030: before, the limits of the survival were
 |                          printed beside the median); var=, cnsr=, by=, strata=
 |                          and order= are checked (DEV-031).
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: the text of cnsr=: 0 is an event and any
+| 27-NOV-2026 Sapling      1.10.0: the text of cnsr=: 0 is an event and any
 |                          positive value a censoring, as %km, %logrank and %cox
 |                          now read it. No number changes on data with CNSR 0 and
 |                          1.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example; a
 |                          second call with other forms of its parameters. No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.10.0: The direction of a hazard ratio in the
+|                          printed table; the caption of the first example names
+|                          the Kaplan-Meier summary (no curve); Proven in plain
+|                          words, for the published manual. No number changes.
 |
 *******************************************************************************/
 %MACRO table_tte(

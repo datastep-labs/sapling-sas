@@ -4,8 +4,10 @@ In this tutorial you make a table of age and sex by treatment, from the example 
 call at a time and look at what each call made. It takes about fifteen minutes.
 
 You need SAS 9.4 and a copy of the repository
-[datastep-labs/sapling-sas](https://github.com/datastep-labs/sapling-sas). You may run the tutorial and the examples
-to evaluate the macros; using them in your own work needs a license (see the README of the repository).
+[datastep-labs/sapling-sas](https://github.com/datastep-labs/sapling-sas). The terms of use of the macros are in the
+[LICENSE](https://github.com/datastep-labs/sapling-sas/blob/main/LICENSE) of the repository. The whole tutorial is also
+one program, [examples/tutorial.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/tutorial.sas): you
+learn more by submitting the steps one at a time, as below.
 
 ## The example data
 

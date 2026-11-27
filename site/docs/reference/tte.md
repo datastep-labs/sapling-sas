@@ -130,7 +130,7 @@ Without `end=`, every date counts, and a date before START becomes START (as adm
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Derives the time to the first skin event from the first dose: CNSR 0 is an event, 1 a censoring.
 
@@ -189,10 +189,14 @@ ADaM steps: [%merge_subject](merge_subject.md), [%pick](pick.md), [%summarize](s
 
 Named on this page: [%km](km.md), [%logrank](logrank.md), [%cox](cox.md).
 
-Guides that use %tte: [Make a Kaplan-Meier figure with the number at risk](../how-to/kaplan-meier-figure.md), [Run the examples of the reference](../how-to/run-the-examples.md).
+Guides that use %tte: [Make a Kaplan-Meier figure with the number at risk](../how-to/kaplan-meier-figure.md).
 
 ## Proof
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+Checked on its test cases of the time to an event, also within a period (small made-up records): every value the same as that of the expected records; ran on SAS 9.4 M9, 2026-11-12.
+
+The known answers and test cases are kept with the development of the library, not in this repository.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 [Source of %tte](https://github.com/datastep-labs/sapling-sas/blob/main/macros/tte.sas)

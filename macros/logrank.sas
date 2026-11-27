@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : logrank.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -23,9 +23,9 @@
 |                 used with a missing or negative CNSR stops the macro with an
 |                 ERROR.
 | Procedure     : PROC LIFETEST (STRATA)
-| Proven        : the known answer of the method logrank (src/methods.ts, worked
-|                 out by tools/method_answers.R; node tools/methods_sas.ts); ran
-|                 on SAS 9.4 M9, 2026-11-12
+| Proven        : Checked against its known answer (on a small data set, the
+|                 numbers worked out independently in R); ran on SAS 9.4 M9,
+|                 2026-11-12
 |
 | Input Parameters :
 |
@@ -84,17 +84,19 @@
 | 16-NOV-2026 Sapling      1.9.1: one group is not tested: the value missing, no
 |                          WARNING (DEV-050); PLOTS=NONE only with ODS graphics
 |                          on (DEV-051). No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: CNSR as in ADaM: 0 is an event and any positive
+| 27-NOV-2026 Sapling      1.10.0: CNSR as in ADaM: 0 is an event and any positive
 |                          value a censoring (before, only 1 was a censoring and
 |                          2 an event); a missing or negative CNSR on a record
 |                          used stops the macro with an ERROR. No number changes
 |                          on data with CNSR 0 and 1.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
+|                          manual. No number changes.
 |
 *******************************************************************************/
 %MACRO logrank(

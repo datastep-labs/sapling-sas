@@ -117,7 +117,7 @@ It computes nothing: use it for values computed before (the LS means of [%lsmean
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `f_bp_mean` (made by the [example of %meanplot](meanplot.md#examples)), `t14_2_1_cols` (made by the [example of %columns](columns.md#examples)).
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `f_bp_mean` (made by the [example of %meanplot](meanplot.md#examples)), `t14_2_1_cols` (made by the [example of %columns](columns.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Draws the means that meanplot kept as lines, with a band between the limits.
 
@@ -140,7 +140,7 @@ Draws the means that meanplot kept as lines, with a band between the limits.
  )
 ```
 
-![The figure that the example of %lineplot draws](../examples/lineplot.png)
+![Draws the means that meanplot kept as lines, with a band between the limits.](../examples/lineplot.png)
 
 ## Messages
 
@@ -150,6 +150,12 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 |---|---|
 | lower= and upper= come together | give both ends of the interval, or neither. |
 | x=&lt;x&gt; is a character variable | give x= a numeric variable (AVISITN), xformat= labels. |
+| data= and plot= are both given | give data= to compute, or plot= to draw an out= again. |
+| plot=&lt;plot&gt; does not exist | give plot= an out= of &lt;macro&gt; (make it first). |
+| plot=&lt;plot&gt; has no variable &lt;miss&gt; | give plot= the shape of out=: &lt;shape&gt;. |
+| par=&lt;par&gt; does not exist | give par= an outpar= of &lt;macro&gt; (make it first). |
+| par=&lt;par&gt; has no variables PARAMETER and VALUE | give par= an outpar= of &lt;macro&gt;. |
+| par=&lt;par&gt; has a row of no drawing parameter (with the PARAMETER of the record) | give par= rows of outpar= of &lt;macro&gt; only. |
 
 ## See also
 
@@ -157,12 +163,12 @@ Figures: [%kmplot](kmplot.md), [%forestplot](forestplot.md), [%meanplot](meanplo
 
 Named on this page: [%columns](columns.md), [%lsmeans](lsmeans.md), [%mmrm](mmrm.md).
 
-Guides that use %lineplot: [Run the examples of the reference](../how-to/run-the-examples.md).
-
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
+Its known answer: the values given, as they are; ran on SAS 9.4 M9, 2026-11-27 (the cases of the 9 figure macros: 103 of 103 the same).
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+The known answers and test cases are kept with the development of the library, not in this repository.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 [Source of %lineplot](https://github.com/datastep-labs/sapling-sas/blob/main/macros/lineplot.sas)

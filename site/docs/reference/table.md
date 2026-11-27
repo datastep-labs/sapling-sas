@@ -72,11 +72,11 @@ The data set of `out=`: the display data set of [%layout](layout.md). The data s
 
 ## Details
 
-Use %table when the defaults of the four steps fit; call [%columns](columns.md), [%ard](ard.md), [%layout](layout.md) and [%print](print.md) one by one to change a step between them. It passes them the same parameters as the separate calls and adds no logic of its own. The display data set is the data set [%layout](layout.md) writes: one row per printed line, one column per printed column. The numbers file is the CSV file of [%ard](ard.md) with every number of the table; the macro writes it only with `file=`, because it belongs to an output. The columns &lt;data&gt;_cols and the display data set `out=` stay in WORK. With `setup=`, a global macro variable also keeps the call of [%print](print.md) for `out=`: change `out=`, then print again with %print(&&lt;setup&gt;.). Without `file=`, the macro prints nothing: change `out=`, then call %print(&&lt;setup&gt;., `file=`...).
+Use %table when the defaults of the four steps fit; call [%columns](columns.md), [%ard](ard.md), [%layout](layout.md) and [%print](print.md) one by one to change a step between them. It passes them the same parameters as the separate calls and adds no logic of its own. The display data set is the data set [%layout](layout.md) writes: one row per printed line, one column per printed column. The numbers file is the CSV file of [%ard](ard.md) with every number of the table; the macro writes it only with `file=`, because it belongs to an output. The columns &lt;data&gt;_cols and the display data set `out=` stay in WORK. With `setup=`, a global macro variable also keeps the call of [%print](print.md) for `out=`: change `out=`, then print again with `%print(&<setup>.)`. Without `file=`, the macro prints nothing: change `out=`, then call `%print(&<setup>., file=...)`.
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `t14_2_1` (made by the [example of %stack](stack.md#examples)).
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `t14_2_1` (made by the [example of %stack](stack.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Runs columns, ard, layout and print in one call: the same table as the long program.
 
@@ -122,10 +122,14 @@ Tables in one call: [%table_summary](table_summary.md), [%table_ae](table_ae.md)
 
 Named on this page: [%columns](columns.md), [%ard](ard.md), [%layout](layout.md), [%print](print.md), [%stack](stack.md).
 
-Guides that use %table: [Make an adverse event table](../how-to/adverse-event-table.md), [Check a table against an independent program](../how-to/check-a-table.md), [Make an efficacy table with an ANCOVA](../how-to/efficacy-table.md), [Run the examples of the reference](../how-to/run-the-examples.md).
+Guides that use %table: [Make an adverse event table](../how-to/adverse-event-table.md), [Make an efficacy table with an ANCOVA](../how-to/efficacy-table.md).
 
 ## Proof
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+Its test cases: the same .lst and the same numbers file as the separate calls; ran on SAS 9.4 M9, 2026-11-12.
+
+The known answers and test cases are kept with the development of the library, not in this repository.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 [Source of %table](https://github.com/datastep-labs/sapling-sas/blob/main/macros/table.sas)

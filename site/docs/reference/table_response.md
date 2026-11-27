@@ -97,7 +97,7 @@ Makes a response table in one call: the responders in each group, and the compar
 
 ## Result
 
-The data sets: &lt;name&gt;_prop, &lt;name&gt;_&lt;measure&gt; (with a measure) and &lt;name&gt;_adj (with `covars=`), the results; &lt;name&gt; (the stacked results), &lt;name&gt;_cols, &lt;name&gt;_display, &lt;name&gt;_pop (with `adsl=`) and &lt;name&gt;_rec (with `adsl=` or `where=`). The files: &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file (only with `file=`). The global macro variable: &lt;name&gt;_print. With `show=`: the long program, in the log or in a file.
+The data sets: &lt;name&gt;_prop, &lt;name&gt;_&lt;measure&gt; (with a measure) and &lt;name&gt;_adj (with `covars=`), the results; &lt;name&gt; (the stacked results), &lt;name&gt;_cols, &lt;name&gt;_display, &lt;name&gt;_pop (with `adsl=`) and &lt;name&gt;_rec (with `adsl=` or `where=`). The files: &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file (only with `file=`). The global macro variable: &lt;name&gt;_print. With `show=`: the long program, in the log or in a file. In the printed table, a comparison is in the column of the group, on the rows under "vs" and the group it is compared with: the risk difference is the proportion of responders of the column group minus that of the group on the row (-0.013: 1.3 percentage points fewer); the relative risk and the odds ratios are the column group over the group on the row.
 
 ## Details
 
@@ -114,11 +114,11 @@ The table has no Total column. The long program is the program the macro writes 
 - &lt;name&gt;_cols: the columns ([%columns](columns.md))
 - &lt;name&gt;_display: the display data set, one row per printed line ([%layout](layout.md))
 
-The global macro variable &lt;name&gt;_print keeps the call of [%print](print.md): change &lt;name&gt;_display, then print again with %print(&&lt;name&gt;_print.).
+The global macro variable &lt;name&gt;_print keeps the call of [%print](print.md): change &lt;name&gt;_display, then print again with `%print(&<name>_print.)`.
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Makes the table of the responders with their limits and the risk difference of each pair.
 
@@ -157,7 +157,7 @@ Risk difference (95% CI) and p-value
     p-value                                                                       0.837
 ```
 
-Asks for the relative risk with Wilson limits, and the odds ratio adjusted for age.
+Asks for Wilson limits of each percent, the relative risk, and the odds ratio adjusted for age.
 
 ```sas
 %table_response(
@@ -216,10 +216,10 @@ Tables in one call: [%table](table.md), [%table_summary](table_summary.md), [%ta
 
 Named on this page: [%logistic](logistic.md), [%proportion](proportion.md), [%risk](risk.md), [%layout](layout.md), [%stack](stack.md), [%columns](columns.md), [%print](print.md).
 
-Guides that use %table_response: [Run the examples of the reference](../how-to/run-the-examples.md).
-
 ## Proof
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+Checked against its long program, written out by hand: the same display data set (PROC COMPARE), on a made-up study; ran on SAS 9.4 M9, 2026-11-13.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 [Source of %table_response](https://github.com/datastep-labs/sapling-sas/blob/main/macros/table_response.sas)

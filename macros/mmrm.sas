@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : mmrm.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -22,9 +22,9 @@
 |                 stats= asks for it. The macro writes a result: a data set with
 |                 one row per number (the result shape, see %stack).
 | Procedure     : PROC MIXED (REPEATED, LSMEANS)
-| Proven        : the known answer of the method mmrm (src/methods.ts, worked
-|                 out by tools/method_answers.R; node tools/methods_sas.ts); ran
-|                 on SAS 9.4 M9, 2026-11-12
+| Proven        : Checked against its known answer (on a small data set, the
+|                 numbers worked out independently in R); ran on SAS 9.4 M9,
+|                 2026-11-12
 |
 | Input Parameters :
 |
@@ -83,20 +83,26 @@
 |
 | Output        : OUT: the result shape (see %stack), as in %lsmeans. A row of a
 |                 difference has the group in the by= variable and the group it
-|                 is compared with in VERSUS; a row of an LS mean has VERSUS
-|                 blank. GROUPS is the by= variable and VERSUS. When no
+|                 is compared with in VERSUS: diff is the LS mean of the group
+|                 at the visit of at= minus the LS mean of VERSUS at that visit
+|                 (a negative diff: a smaller LS mean in the group), diff_se its
+|                 standard error, lcl and ucl its confidence limits, pval the
+|                 p-value of the test that it is 0. With pairs=all the group is
+|                 the later one in the order of order=. A row of an LS mean has
+|                 VERSUS blank. GROUPS is the by= variable and VERSUS. When no
 |                 structure converges, the macro stops with an ERROR and writes
 |                 no result.
 | Note          : The model is fitted by iteration: another program gives the
 |                 same numbers to about five digits, not to the last one. A
 |                 structure may converge in one program and not in the other. On
 |                 visits that are very closely correlated, PROC MIXED stops
-|                 AR(1) with an infinite likelihood where the function mmrm() of
-|                 the R package sapling converges, so the same call may use the
-|                 next structure of fallback= in SAS. The NOTE "[mmrm] The
-|                 covariance structure TYPE=... converged" names the structure
-|                 used. The WARNING lines of a fit that did not converge are
-|                 followed by a NOTE that says so.
+|                 AR(1) with an infinite likelihood where the R twin of this
+|                 macro (mmrm() of the R package sapling, a separate product)
+|                 converges, so the same call may use the next structure of
+|                 fallback= in SAS. The NOTE "[mmrm] The covariance structure
+|                 TYPE=... converged" names the structure used. The WARNING
+|                 lines of a fit that did not converge are followed by a NOTE
+|                 that says so.
 |
 | Example:
 |
@@ -138,18 +144,23 @@
 |                          after the WARNING lines of a fit that did not
 |                          converge; the header names the difference of the
 |                          engines (DEV-043). No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: The example without class=avisit (visit= adds
+| 27-NOV-2026 Sapling      1.10.0: The example without class=avisit (visit= adds
 |                          it); the text says how the log names the covariance
 |                          structure used. The text of stats=: a name without a
 |                          pattern takes its default pattern. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the text of the Note names the R package. No
+| 27-NOV-2026 Sapling      1.10.0: the text of the Note names the R package. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: The Output says the direction of diff (the
+|                          group minus VERSUS, at the visit of at=); the Note
+|                          names the R twin as a separate product; Proven in
+|                          plain words, for the published manual. No number
+|                          changes.
 |
 *******************************************************************************/
 %MACRO mmrm(

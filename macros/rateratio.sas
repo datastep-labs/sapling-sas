@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : rateratio.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -17,9 +17,9 @@
 |                 The macro writes a result: a data set with one row per number
 |                 (the result shape, see %stack).
 | Procedure     : PROC GENMOD (LSMEANS)
-| Proven        : the known answer of the methods poisson, negbin
-|                 (src/methods.ts, worked out by tools/method_answers.R; node
-|                 tools/methods_sas.ts); ran on SAS 9.4 M9, 2026-11-12
+| Proven        : Checked against its known answers: a Poisson and a negative
+|                 binomial model (on a small data set, the numbers worked out
+|                 independently in R); ran on SAS 9.4 M9, 2026-11-12
 |
 | Input Parameters :
 |
@@ -71,12 +71,19 @@
 |
 | Output        : OUT: the result shape (see %stack), one row per pair and
 |                 statistic: the group in the by= variable, the group it is
-|                 compared with in VERSUS, and the variables of within=. GROUPS
-|                 is the by= variable, VERSUS and the within= variables.
+|                 compared with in VERSUS, and the variables of within=. irr is
+|                 the rate of the count per unit of exposure in the group over
+|                 that rate in VERSUS, adjusted for the covariates and the class
+|                 factors (a rate ratio above 1: more events per unit of
+|                 exposure in the group), lcl and ucl its confidence limits,
+|                 pval its p-value. With pairs=all the group is the later one in
+|                 the order of order=. GROUPS is the by= variable, VERSUS and
+|                 the within= variables.
 | Note          : The standard errors of a negative binomial model are those of
 |                 PROC GENMOD: the observed information of the coefficients and
-|                 the dispersion together. The function rateratio() of the R
-|                 package sapling computes the same.
+|                 the dispersion together. The R twin of this macro (rateratio()
+|                 of the R package sapling, a separate product) computes the
+|                 same.
 |
 | Example:
 |
@@ -109,17 +116,22 @@
 |                          case (names in lower case). No number changes.
 | 16-NOV-2026 Sapling      1.9.1: covars=, class= and the variables of exposure=
 |                          are checked (DEV-036). No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: The text of stats=: a name without a pattern
+| 27-NOV-2026 Sapling      1.10.0: The text of stats=: a name without a pattern
 |                          takes its default pattern. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the message of exposure= prints a macro
+| 27-NOV-2026 Sapling      1.10.0: the message of exposure= prints a macro
 |                          variable, not a macro expression; the Note names the R
 |                          package. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: The Output says the direction of irr (the
+|                          rate of the group over the rate of VERSUS); the Note
+|                          names the R twin as a separate product; Proven in
+|                          plain words, for the published manual. No number
+|                          changes.
 |
 *******************************************************************************/
 %MACRO rateratio(

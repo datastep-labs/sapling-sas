@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : _spl_quote.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -36,7 +36,7 @@
 |                          pairs and no labels: SYMGET read them at run time).
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
-| 27-NOV-2026 Sapling      1.9.1: The header names no internal tool. No number
+| 27-NOV-2026 Sapling      1.10.0: The header names no internal tool. No number
 |                          changes.
 |
 *******************************************************************************/

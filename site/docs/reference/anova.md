@@ -56,7 +56,7 @@ Use [%ttest](ttest.md) or [%wilcoxon](wilcoxon.md) to compare pairs of groups, a
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Tests age across the three groups: one row, the p value of the F test.
 
@@ -84,12 +84,14 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 
 Test the groups: [%ttest](ttest.md), [%wilcoxon](wilcoxon.md), [%chisq](chisq.md), [%fisher](fisher.md), [%cmh](cmh.md), [%ancova](ancova.md), [%adjust](adjust.md).
 
-Guides that use %anova: [Make a demographic table with tests](../how-to/demographic-table.md), [Run the examples of the reference](../how-to/run-the-examples.md).
+Guides that use %anova: [Make a demographic table with tests](../how-to/demographic-table.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
+Checked against its known answer (on a small data set, the numbers worked out independently in R); ran on SAS 9.4 M9, 2026-11-12.
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+The known answers and test cases are kept with the development of the library, not in this repository.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 [Source of %anova](https://github.com/datastep-labs/sapling-sas/blob/main/macros/anova.sas)

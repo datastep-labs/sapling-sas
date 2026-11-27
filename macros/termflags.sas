@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : termflags.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -18,9 +18,10 @@
 |                 (within= the variables of terms=), with the subjects of each
 |                 group as the denominator.
 | Procedure     : PROC SORT, MERGE, PROC SUMMARY
-| Proven        : the known answer of the method perterm (src/methods.ts, worked
-|                 out by tools/method_answers.R; node tools/methods_sas.ts); ran
-|                 on SAS 9.4 M9, 2026-11-12
+| Proven        : Checked against its known answer: the risk difference of each
+|                 term of an adverse event table (on a small data set, the
+|                 numbers worked out independently in R); ran on SAS 9.4 M9,
+|                 2026-11-12
 |
 | Input Parameters :
 |
@@ -79,11 +80,13 @@
 |                          (the owner's rule 7). No number changes.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the text of the header for the manual: the
+| 27-NOV-2026 Sapling      1.10.0: the text of the header for the manual: the
 |                          summary, the form of each parameter. No number
 |                          changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
+|                          manual. No number changes.
 |
 *******************************************************************************/
 %MACRO termflags(

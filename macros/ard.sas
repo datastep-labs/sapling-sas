@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : ard.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -21,9 +21,8 @@
 |                 - A number has the values of at most five groups (g1_value to
 |                   g5_value), in the order of GROUPS.
 | Procedure     : DATA steps (FILE, PUT)
-| Proven        : the tables of the dummy study SYNHTN01 (759 of 759 numbers the
-|                 same as those of a second program in R); ran on SAS 9.4 M9,
-|                 2026-11-12
+| Proven        : The tables of a made-up study: 759 of 759 numbers the same as
+|                 those of a second program in R; ran on SAS 9.4 M9, 2026-11-12
 |
 | Input Parameters :
 |
@@ -40,12 +39,16 @@
 |
 | Output        : FILE: <out>/ard/<file>.csv, where <out> is the output folder
 |                 that %study set and <file> is in lower case. Its columns:
-|                 result, stat, g1_value ... g5_value, raw (the number with all
-|                 its digits) and formatted (the number as printed).
+|                 result (the name of the result), stat (the statistic),
+|                 g1_value to g5_value (the values of the group variables in the
+|                 order of GROUPS of the result: the column first, then the
+|                 levels of the row, such as VERSUS of a comparison), raw (the
+|                 value written with BEST32., up to 15 significant digits; blank
+|                 for a missing value) and formatted (the printed text).
 |
 | Example:
 |
- * Writes every number of the table and each column N to one CSV file: the full value and the text.;
+ * Writes every number of the table and each column N to one CSV file: the raw value and the text.;
  %ard(data=t14_2_1, columns=t14_2_1_cols, file=t14_2_1)
 |
 |-------------------------------------------------------------------------------
@@ -61,15 +64,18 @@
 | 16-NOV-2026 Sapling      1.9.1: data= is checked before file=; the header says
 |                          that file= is required without %study (DEV-012). No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: The text says what the numbers file holds
+| 27-NOV-2026 Sapling      1.10.0: The text says what the numbers file holds
 |                          (BEST32.). The header names no internal tool. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: The Output names each column of the numbers
+|                          file; Proven in plain words, for the published
+|                          manual. No number changes.
 |
 *******************************************************************************/
 %MACRO ard(

@@ -119,8 +119,9 @@ example, a table of age by treatment goes to `&spl_out./tlf/t14_1_01`, and its n
 
 ```sas
 %describe(data=saf, var=age, by=trt01a, label="Age (years)", out=t_age)
-%columns(data=t_age, n=saf, var=trt01a, order=trt01an, out=t_age_cols)
-%ard(data=t_age, columns=t_age_cols)
+%stack(t_age, out=t_age_table)
+%columns(data=t_age_table, n=saf, var=trt01a, order=trt01an, out=t_age_cols)
+%ard(data=t_age_table, columns=t_age_cols)
 ```
 
 ```text
@@ -129,8 +130,8 @@ result,stat,g1_value,g2_value,g3_value,g4_value,g5_value,raw,formatted
 N,n,Placebo,,,,,86,(N=86)
 N,n,Xanomeline Low Dose,,,,,96,(N=96)
 N,n,Xanomeline High Dose,,,,,72,(N=72)
-,n,Placebo,,,,,86,86
-,mean,Placebo,,,,,75.2093023255814,75.2
+T_AGE,n,Placebo,,,,,86,86
+T_AGE,mean,Placebo,,,,,75.2093023255814,75.2
 ```
 
 ### 5. Keep the log short

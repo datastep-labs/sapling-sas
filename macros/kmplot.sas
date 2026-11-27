@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : kmplot.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -22,8 +22,9 @@
 |                 draw the figure again without computing, give plot= the out=
 |                 and par= the outpar= of an earlier call.
 | Procedure     : PROC LIFETEST, PROC SUMMARY, PROC SGPANEL
-| Proven        : its known answer in tools/figures_sas.ts (survival and number
-|                 at risk worked out by hand); not yet run on a SAS server
+| Proven        : Its known answer: the survival and the number at risk, worked
+|                 out by hand; ran on SAS 9.4 M9, 2026-11-27 (the cases of the 9
+|                 figure macros: 103 of 103 the same)
 | Note          : Draw again: plot= takes the out= of an earlier %kmplot call,
 |                 changed or not, and draws it as it is, with no statistic
 |                 computed. par= takes the outpar= of that call and gives the
@@ -152,22 +153,24 @@
 | 16-NOV-2026 Sapling      1.9.1: PLOTS=NONE only with ODS graphics on: no
 |                          WARNING when they are off (DEV-051). No number
 |                          changes.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: The text of data= and time= (required unless
+| 27-NOV-2026 Sapling      1.10.0: The text of data= and time= (required unless
 |                          plot= is given) and of conftype= (the values it
 |                          accepts). No number changes.
-| 27-NOV-2026 Sapling      1.9.1: CNSR as in ADaM: 0 is an event and any positive
+| 27-NOV-2026 Sapling      1.10.0: CNSR as in ADaM: 0 is an event and any positive
 |                          value a censoring (before, only 1 was a censoring and
 |                          2 an event); a missing or negative CNSR on a record
 |                          used stops the macro with an ERROR. No number changes
 |                          on data with CNSR 0 and 1.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; the
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example; the
 |                          first call keeps its drawing parameters (outpar=), a
 |                          second call draws the figure again from them (plot=,
 |                          par=). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
+|                          manual. No number changes.
 |
 *******************************************************************************/
 %MACRO kmplot(

@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : _spl_figure_nodata.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 16NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)

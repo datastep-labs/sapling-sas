@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : risk.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -24,10 +24,11 @@
 |                 the p-value of the CMH test. The macro writes a result: a data
 |                 set with one row per number (the result shape, see %stack).
 | Procedure     : PROC FREQ (RISKDIFF, RELRISK, CHISQ; COMMONRISKDIFF, CMH)
-| Proven        : the known answer of the methods riskdiff, riskratio,
-|                 oddsratio, perterm (src/methods.ts, worked out by
-|                 tools/method_answers.R; node tools/methods_sas.ts); ran on SAS
-|                 9.4 M9, 2026-11-12
+| Proven        : Checked against its known answers: the risk difference, the
+|                 relative risk, the odds ratio, and the risk difference of each
+|                 term of an adverse event table (on a small data set, the
+|                 numbers worked out independently in R); ran on SAS 9.4 M9,
+|                 2026-11-12
 |
 | Input Parameters :
 |
@@ -88,8 +89,18 @@
 |
 | Output        : OUT: the result shape (see %stack), one row per pair and
 |                 statistic: the group in the by= variable, the group it is
-|                 compared with in VERSUS, and the variables of within=. GROUPS
-|                 is the by= variable, VERSUS and the within= variables.
+|                 compared with in VERSUS, and the variables of within=. The
+|                 risk of a group is its subjects with the event of event= over
+|                 its subjects in the records used. With measure=rd, rd is the
+|                 risk of the group minus the risk of VERSUS, a difference of
+|                 two proportions (0.25: 25 percentage points more in the
+|                 group); with strata=, the Mantel-Haenszel estimate of that
+|                 difference. With measure=rr, rr is the risk of the group over
+|                 the risk of VERSUS; with measure=or, or is the odds of the
+|                 event in the group over the odds in VERSUS. lcl and ucl are
+|                 the limits of the estimate, pval its p-value. With pairs=all
+|                 the group is the later one in the order of order=. GROUPS is
+|                 the by= variable, VERSUS and the within= variables.
 |
 | Example:
 |
@@ -155,16 +166,19 @@
 |                          has is an error with its fix.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: The text of stats=: a name without a pattern
+| 27-NOV-2026 Sapling      1.10.0: The text of stats=: a name without a pattern
 |                          takes its default pattern. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: examples with measure=rr and with strata=. No
+| 27-NOV-2026 Sapling      1.10.0: examples with measure=rr and with strata=. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: The Output says the direction of rd, rr and
+|                          or (the group against VERSUS); Proven in plain words,
+|                          for the published manual. No number changes.
 |
 *******************************************************************************/
 %MACRO risk(

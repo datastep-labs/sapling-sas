@@ -78,7 +78,7 @@ Use [%freq](freq.md) for the percent of subjects with an event, and [%rateratio]
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Gives the subjects with an event per 100 patient years, with the exposure and the limits.
 
@@ -191,12 +191,12 @@ Describe the data: [%describe](describe.md), [%freq](freq.md), [%proportion](pro
 
 Named on this page: [%layout](layout.md), [%rateratio](rateratio.md).
 
-Guides that use %rate: [Run the examples of the reference](../how-to/run-the-examples.md).
-
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
+Checked against its known answers: the rate of the subjects with an event and the rate of the events (on a small data set, the numbers worked out independently in R); ran on SAS 9.4 M9, 2026-11-12.
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+The known answers and test cases are kept with the development of the library, not in this repository.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 [Source of %rate](https://github.com/datastep-labs/sapling-sas/blob/main/macros/rate.sas)

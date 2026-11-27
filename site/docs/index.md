@@ -59,5 +59,7 @@ Sex
 
 ## License
 
-The macros are source available: you may read them, run the tutorial and the examples, and check the proof. Using
-them in your own work needs a license of DataStep Labs.
+The macros are source available, not open source: the code and the proof are public to read. The terms of use are
+in the [LICENSE](https://github.com/datastep-labs/sapling-sas/blob/main/LICENSE) of the repository.
+
+This manual describes the library version 1.10.0.

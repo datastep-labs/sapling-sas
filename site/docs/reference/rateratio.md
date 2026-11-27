@@ -81,7 +81,7 @@ Returns the rate ratios of pairs of groups from a Poisson or negative binomial m
 
 ## Result
 
-The data set of `out=`: the [result shape](../explanation/result-shape.md), one row per pair and statistic: the group in the `by=` variable, the group it is compared with in VERSUS, and the variables of `within=`. GROUPS is the `by=` variable, VERSUS and the `within=` variables.
+The data set of `out=`: the [result shape](../explanation/result-shape.md), one row per pair and statistic: the group in the `by=` variable, the group it is compared with in VERSUS, and the variables of `within=`. irr is the rate of the count per unit of exposure in the group over that rate in VERSUS, adjusted for the covariates and the class factors (a rate ratio above 1: more events per unit of exposure in the group), lcl and ucl its confidence limits, pval its p-value. With pairs=all the group is the later one in the order of `order=`. GROUPS is the `by=` variable, VERSUS and the `within=` variables.
 
 ## Details
 
@@ -89,11 +89,11 @@ Use [%rate](rate.md) for the rate of each group without a model. The model is PR
 
 !!! note "Good to know"
 
-    The standard errors of a negative binomial model are those of PROC GENMOD: the observed information of the coefficients and the dispersion together. The function rateratio() of the R package sapling computes the same.
+    The standard errors of a negative binomial model are those of PROC GENMOD: the observed information of the coefficients and the dispersion together. The R twin of this macro (rateratio() of the R package sapling, a separate product) computes the same.
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Compares the event counts in a negative binomial model: STAT irr is the rate ratio.
 
@@ -141,12 +141,12 @@ Compare groups with a model: [%lsmeans](lsmeans.md), [%mmrm](mmrm.md), [%logisti
 
 Named on this page: [%describe](describe.md), [%rate](rate.md).
 
-Guides that use %rateratio: [Run the examples of the reference](../how-to/run-the-examples.md).
-
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
+Checked against its known answers: a Poisson and a negative binomial model (on a small data set, the numbers worked out independently in R); ran on SAS 9.4 M9, 2026-11-12.
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+The known answers and test cases are kept with the development of the library, not in this repository.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 [Source of %rateratio](https://github.com/datastep-labs/sapling-sas/blob/main/macros/rateratio.sas)

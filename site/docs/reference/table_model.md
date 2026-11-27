@@ -117,28 +117,28 @@ Makes a table of a continuous endpoint in one call: descriptive statistics, and 
 
 ## Result
 
-The data sets: &lt;name&gt;_&lt;variable&gt; (the descriptive results), &lt;name&gt;_ancova or &lt;name&gt;_mmrm (the result of the model), &lt;name&gt; (the stacked results), &lt;name&gt;_cols, &lt;name&gt;_display, &lt;name&gt;_at (with `at=`), &lt;name&gt;_pop (with `adsl=`) and &lt;name&gt;_rec (with `adsl=` or `where=`). The files: &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file (only with `file=`). The global macro variable: &lt;name&gt;_print. With `show=`: the long program, in the log or in a file.
+The data sets: &lt;name&gt;_&lt;variable&gt; (the descriptive results), &lt;name&gt;_ancova or &lt;name&gt;_mmrm (the result of the model), &lt;name&gt; (the stacked results), &lt;name&gt;_cols, &lt;name&gt;_display, &lt;name&gt;_at (with `at=`), &lt;name&gt;_pop (with `adsl=`) and &lt;name&gt;_rec (with `adsl=` or `where=`). The files: &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file (only with `file=`). The global macro variable: &lt;name&gt;_print. With `show=`: the long program, in the log or in a file. In the printed table, a comparison is in the column of the group, on the rows under "vs" and the group it is compared with: the LS mean of the column group minus the LS mean of the group on the row.
 
 ## Details
 
 Use [%table_visit](table_visit.md) for the statistics at every visit without a model; to add or change a block, start from its long program (show=). A block is the rows of one call in the table. The table has these blocks:
 
 - one block per variable of `describe=`: its descriptive statistics on the records of the visit of `at=` ([%describe](describe.md))
-- with method=ancova: the LS means and the differences of pairs of groups from an ANCOVA on the records of the visit of `at=` ([%lsmeans](lsmeans.md))
-- with method=mmrm: the same from a mixed model for repeated measures over all visits, at the visit of `at=` ([%mmrm](mmrm.md))
+- with method=ancova: the LS means and the differences of pairs of groups from an ANCOVA on the records of the visit of `at=` ([%lsmeans](lsmeans.md)), in a block with the label "ANCOVA, adjusted for" and the names of `covars=` in lower case, such as "ANCOVA, adjusted for base" (without `covars=`: "Analysis of variance")
+- with method=mmrm: the same from a mixed model for repeated measures over all visits, at the visit of `at=` ([%mmrm](mmrm.md)), in a block with the label "MMRM: " and the visit, such as "MMRM: Week 24"
 
-With method=ancova, the records of the visit of `at=` must be one record per subject: give `where=` the parameter and the analysis flag, as [%lsmeans](lsmeans.md) uses the first record of a subject (with a NOTE when it leaves one out). The table has no Total column. The long program is the program the macro writes and runs: the population, the records, one call per block, [%stack](stack.md) and [%table](table.md), the calls a person would write by hand. The macro computes nothing itself. These data sets stay in WORK, for a change and a second print:
+With method=ancova, the records of the visit of `at=` must be one record per subject: give `where=` the parameter and the analysis flag, as [%lsmeans](lsmeans.md) uses the first record of a subject (with a NOTE when it leaves one out). The label of the model block is not changed by `names=`: change its row in &lt;name&gt;_display and print again, or start from the long program (show=). The table has no Total column. The long program is the program the macro writes and runs: the population, the records, one call per block, [%stack](stack.md) and [%table](table.md), the calls a person would write by hand. The macro computes nothing itself. These data sets stay in WORK, for a change and a second print:
 
 - &lt;name&gt;_&lt;variable&gt; and &lt;name&gt;_ancova or &lt;name&gt;_mmrm: the results, one row per number (the [result shape](../explanation/result-shape.md))
 - &lt;name&gt;: the stacked results
 - &lt;name&gt;_cols: the columns ([%columns](columns.md))
 - &lt;name&gt;_display: the display data set, one row per printed line ([%layout](layout.md))
 
-The global macro variable &lt;name&gt;_print keeps the call of [%print](print.md): change &lt;name&gt;_display, then print again with %print(&&lt;name&gt;_print.).
+The global macro variable &lt;name&gt;_print keeps the call of [%print](print.md): change &lt;name&gt;_display, then print again with `%print(&<name>_print.)`.
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Makes the ANCOVA table at Week 12: three descriptive blocks, then the LS means and difference.
 
@@ -219,9 +219,7 @@ Table 14.3.3 MMRM of the change of systolic blood pressure at Week 24
                           Placebo      Xanomeline Low Dose  Xanomeline High Dose
                           (N=86)       (N=84)               (N=84)
 --------------------------------------------------------------------------------
-```
 
-```text
 MMRM: Week 24
   LS mean (SE)            -1.8 (1.72)  -1.4 (2.41)          -5.9 (2.31)
   vs Placebo
@@ -249,10 +247,12 @@ Tables in one call: [%table](table.md), [%table_summary](table_summary.md), [%ta
 
 Named on this page: [%lsmeans](lsmeans.md), [%mmrm](mmrm.md), [%layout](layout.md), [%describe](describe.md), [%stack](stack.md), [%columns](columns.md), [%print](print.md).
 
-Guides that use %table_model: [Make an efficacy table with an ANCOVA](../how-to/efficacy-table.md), [Run the examples of the reference](../how-to/run-the-examples.md).
+Guides that use %table_model: [Make an efficacy table with an ANCOVA](../how-to/efficacy-table.md).
 
 ## Proof
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+Checked against its long program, written out by hand: the same display data set (PROC COMPARE), on a made-up study; ran on SAS 9.4 M9, 2026-11-13.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 [Source of %table_model](https://github.com/datastep-labs/sapling-sas/blob/main/macros/table_model.sas)

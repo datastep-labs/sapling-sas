@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : chisq.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -17,9 +17,9 @@
 |                 result: a data set with one row per number (the result shape,
 |                 see %stack).
 | Procedure     : PROC FREQ (CHISQ, FISHER)
-| Proven        : the known answer of the methods chisq, fisher (src/methods.ts,
-|                 worked out by tools/method_answers.R; node
-|                 tools/methods_sas.ts); ran on SAS 9.4 M9, 2026-11-12
+| Proven        : Checked against its known answers: the chi-square test and the
+|                 exact test (on a small data set, the numbers worked out
+|                 independently in R); ran on SAS 9.4 M9, 2026-11-12
 |
 | Input Parameters :
 |
@@ -85,14 +85,16 @@
 |                          runs: the flat program has it. No number changes.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: The example result is sex_chisq, the name
+| 27-NOV-2026 Sapling      1.10.0: The example result is sex_chisq, the name
 |                          %stack reads. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
+|                          manual. No number changes.
 |
 *******************************************************************************/
 %MACRO chisq(

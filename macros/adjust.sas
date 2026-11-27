@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : adjust.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -28,10 +28,10 @@
 |                 term, call %adjust once per term, on a data set with only the
 |                 rows of that term (a DATA step with WHERE first).
 | Procedure     : PROC MULTTEST (INPVALUES=); a DATA step
-| Proven        : the known answer of the method riskdiff (src/methods.ts,
-|                 worked out by tools/method_answers.R; node
-|                 tools/methods_sas.ts) with the adjusted p-values of a family;
-|                 ran on SAS 9.4 M9, 2026-11-12
+| Proven        : Checked against its known answers: the risk differences of a
+|                 family of pairs and their adjusted p-values (on a small data
+|                 set, the numbers worked out independently in R); ran on SAS
+|                 9.4 M9, 2026-11-12
 |
 | Input Parameters :
 |
@@ -45,7 +45,10 @@
 | family      The pairs of the family in their order, separated   Required
 |             by #: each the group first and then the group it
 |             is compared with, each value in quotes: family =
-|             "High" "Placebo" # "Low" "Placebo"
+|             "High" "Placebo" # "Low" "Placebo". A pair is in
+|             the direction of the rows of data= (the group in
+|             by=, then VERSUS): "Placebo" "High" does not find
+|             the row of High against Placebo.
 | method      The adjustment: bonferroni, holm, hochberg or       Required
 |             hierarchy
 | weights     The weights of a weighted Bonferroni test: one      Optional
@@ -93,12 +96,15 @@
 |                          p-value has its length (>0.999, not >; DEV-045); the
 |                          header says that the family is every row of a pair of
 |                          family= (DEV-044). No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: family= says that a pair is in the direction
+|                          of the rows of data=; Proven in plain words, for the
+|                          published manual. No number changes.
 |
 *******************************************************************************/
 %MACRO adjust(

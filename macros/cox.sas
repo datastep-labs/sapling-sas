@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : cox.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -27,9 +27,9 @@
 |                 record used with a missing or negative CNSR stops the macro
 |                 with an ERROR.
 | Procedure     : PROC PHREG (LSMEANS); PROC LIFETEST for pvalue=logrank
-| Proven        : the known answer of the method cox (src/methods.ts, worked out
-|                 by tools/method_answers.R; node tools/methods_sas.ts); ran on
-|                 SAS 9.4 M9, 2026-11-12
+| Proven        : Checked against its known answer (on a small data set, the
+|                 numbers worked out independently in R); ran on SAS 9.4 M9,
+|                 2026-11-12
 |
 | Input Parameters :
 |
@@ -90,8 +90,12 @@
 | Output        : OUT: the result shape (see %stack), one row per pair and
 |                 statistic: the BY variable (the group), VERSUS (the group it
 |                 is compared with), the variables of within=, GROUPS, BLOCK,
-|                 STAT, VALUE and TEXT. GROUPS is the name of the BY variable,
-|                 VERSUS and the names of within=.
+|                 STAT, VALUE and TEXT. hr is the hazard of the group over the
+|                 hazard of VERSUS (a hazard ratio below 1: fewer events in the
+|                 group, as its hazard is lower), lcl and ucl its confidence
+|                 limits, pval its p-value. With pairs=all the group is the
+|                 later one in the order of order=. GROUPS is the name of the BY
+|                 variable, VERSUS and the names of within=.
 | Note          : The ties of the library are Efron's, as in coxph of R; PROC
 |                 PHREG by itself uses Breslow's.
 |
@@ -126,7 +130,7 @@
             # "Xanomeline Low Dose"  "Placebo"
    , out    = hr_age
  )
- * Uses the Breslow ties and the p value of the log rank score test.;
+ * Uses the Breslow ties, and as p value the log rank test of the two groups of each pair.;
  %cox(
      data   = adttde
    , var    = aval
@@ -162,21 +166,27 @@
 | 16-NOV-2026 Sapling      1.9.1: PLOTS=NONE only with ODS graphics on: no
 |                          WARNING when they are off (DEV-051). No number
 |                          changes.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: The text of stats=: a name without a pattern
+| 27-NOV-2026 Sapling      1.10.0: The text of stats=: a name without a pattern
 |                          takes its default pattern. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: CNSR as in ADaM: 0 is an event and any positive
+| 27-NOV-2026 Sapling      1.10.0: CNSR as in ADaM: 0 is an event and any positive
 |                          value a censoring (before, only 1 was a censoring and
 |                          2 an event); a missing or negative CNSR on a record
 |                          used stops the macro with an ERROR. No number changes
 |                          on data with CNSR 0 and 1.
-| 27-NOV-2026 Sapling      1.9.1: an example with ties= and pvalue=logrank. No
+| 27-NOV-2026 Sapling      1.10.0: an example with ties= and pvalue=logrank. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: The Output says the direction of hr (the
+|                          hazard of the group over that of VERSUS); the caption
+|                          of the fourth example names the log rank test of the
+|                          two groups of each pair (PROC LIFETEST); Proven in
+|                          plain words, for the published manual. No number
+|                          changes.
 |
 *******************************************************************************/
 %MACRO cox(

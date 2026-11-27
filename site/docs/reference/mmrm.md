@@ -96,7 +96,7 @@ Returns the differences of the LS means of pairs of groups at one visit from a r
 
 ## Result
 
-The data set of `out=`: the [result shape](../explanation/result-shape.md), as in [%lsmeans](lsmeans.md). A row of a difference has the group in the `by=` variable and the group it is compared with in VERSUS; a row of an LS mean has VERSUS blank. GROUPS is the `by=` variable and VERSUS. When no structure converges, the macro stops with an ERROR and writes no result.
+The data set of `out=`: the [result shape](../explanation/result-shape.md), as in [%lsmeans](lsmeans.md). A row of a difference has the group in the `by=` variable and the group it is compared with in VERSUS: diff is the LS mean of the group at the visit of `at=` minus the LS mean of VERSUS at that visit (a negative diff: a smaller LS mean in the group), diff_se its standard error, lcl and ucl its confidence limits, pval the p-value of the test that it is 0. With pairs=all the group is the later one in the order of `order=`. A row of an LS mean has VERSUS blank. GROUPS is the `by=` variable and VERSUS. When no structure converges, the macro stops with an ERROR and writes no result.
 
 ## Details
 
@@ -104,11 +104,11 @@ Use [%lsmeans](lsmeans.md) for one record per subject, and [%ancova](ancova.md) 
 
 !!! note "Good to know"
 
-    The model is fitted by iteration: another program gives the same numbers to about five digits, not to the last one. A structure may converge in one program and not in the other. On visits that are very closely correlated, PROC MIXED stops AR(1) with an infinite likelihood where the function mmrm() of the R package sapling converges, so the same call may use the next structure of `fallback=` in SAS. The NOTE "[mmrm] The covariance structure TYPE=... converged" names the structure used. The WARNING lines of a fit that did not converge are followed by a NOTE that says so.
+    The model is fitted by iteration: another program gives the same numbers to about five digits, not to the last one. A structure may converge in one program and not in the other. On visits that are very closely correlated, PROC MIXED stops AR(1) with an infinite likelihood where the R twin of this macro (mmrm() of the R package sapling, a separate product) converges, so the same call may use the next structure of `fallback=` in SAS. The NOTE "[mmrm] The covariance structure TYPE=... converged" names the structure used. The WARNING lines of a fit that did not converge are followed by a NOTE that says so.
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Fits the MMRM of the change at five visits and compares the groups at Week 24.
 
@@ -163,12 +163,12 @@ Compare groups with a model: [%lsmeans](lsmeans.md), [%logistic](logistic.md), [
 
 Named on this page: [%describe](describe.md), [%ancova](ancova.md).
 
-Guides that use %mmrm: [Make an efficacy table with an ANCOVA](../how-to/efficacy-table.md), [Run the examples of the reference](../how-to/run-the-examples.md).
-
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
+Checked against its known answer (on a small data set, the numbers worked out independently in R); ran on SAS 9.4 M9, 2026-11-12.
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+The known answers and test cases are kept with the development of the library, not in this repository.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 [Source of %mmrm](https://github.com/datastep-labs/sapling-sas/blob/main/macros/mmrm.sas)

@@ -123,7 +123,7 @@ Use [%km](km.md) for the Kaplan-Meier estimates in a table; %kmplot computes its
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#examples)), `t14_2_1_cols` (made by the [example of %columns](columns.md#examples)).
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#examples)), `t14_2_1_cols` (made by the [example of %columns](columns.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Draws the curves with the number at risk and the median of each group, and keeps the numbers.
 
@@ -141,6 +141,8 @@ Draws the curves with the number at risk and the median of each group, and keeps
  )
 ```
 
+![Draws the curves with the number at risk and the median of each group, and keeps the numbers.](../examples/kmplot.png)
+
 Draws the figure again from out= and outpar= of the call before: no median, another label.
 
 ```sas
@@ -154,9 +156,7 @@ Draws the figure again from out= and outpar= of the call before: no median, anot
  )
 ```
 
-![The figure that the example of %kmplot draws](../examples/kmplot.png)
-
-![The figure that the example of %kmplot draws](../examples/kmplot_1.png)
+![Draws the figure again from out= and outpar= of the call before: no median, another label.](../examples/kmplot_1.png)
 
 ## Messages
 
@@ -167,6 +167,12 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 | times=&lt;times&gt; is not a list of numbers | give times= the ticks separated by blanks: 0 30 60 90. |
 | plot=&lt;plot&gt; has no row of KIND atrisk: its X are the ticks | give plot= its rows of KIND atrisk (atrisk=no hides them). |
 | cnsr=&lt;cnsr&gt; is missing or negative on &lt;nbad&gt; record(s) used | give each record CNSR 0 (an event) or more (a censoring). |
+| data= and plot= are both given | give data= to compute, or plot= to draw an out= again. |
+| plot=&lt;plot&gt; does not exist | give plot= an out= of &lt;macro&gt; (make it first). |
+| plot=&lt;plot&gt; has no variable &lt;miss&gt; | give plot= the shape of out=: &lt;shape&gt;. |
+| par=&lt;par&gt; does not exist | give par= an outpar= of &lt;macro&gt; (make it first). |
+| par=&lt;par&gt; has no variables PARAMETER and VALUE | give par= an outpar= of &lt;macro&gt;. |
+| par=&lt;par&gt; has a row of no drawing parameter (with the PARAMETER of the record) | give par= rows of outpar= of &lt;macro&gt; only. |
 
 ## See also
 
@@ -174,13 +180,15 @@ Figures: [%forestplot](forestplot.md), [%meanplot](meanplot.md), [%lineplot](lin
 
 Named on this page: [%columns](columns.md), [%km](km.md).
 
-Guides that use %kmplot: [Make a Kaplan-Meier figure with the number at risk](../how-to/kaplan-meier-figure.md), [Run the examples of the reference](../how-to/run-the-examples.md).
+Guides that use %kmplot: [Make a Kaplan-Meier figure with the number at risk](../how-to/kaplan-meier-figure.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
+Its known answer: the survival and the number at risk, worked out by hand; ran on SAS 9.4 M9, 2026-11-27 (the cases of the 9 figure macros: 103 of 103 the same).
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+The known answers and test cases are kept with the development of the library, not in this repository.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 Used in the proof against pharmaverse: [f14_1](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/f14_1.sas) (R Submission Pilot 1). See [what the proof shows](../explanation/proof.md).
 

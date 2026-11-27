@@ -27,8 +27,10 @@ WORK data sets `adsl` (the safety population), `adae`, `advs`, `adlb`, `adtte` a
 
 ### 2. Run the examples in this order
 
-Copy the code of each example from its reference page and submit it, page by page: the parts below in their order,
-and in each part the pages in the order of its list. The code of a page is all its blocks, top to bottom.
+The program [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas)
+holds every example in this order: submit it after `examples/setup.sas`, in the same session, whole or one part after
+another. To run the examples of one page by hand, submit the pages before it first, in the order below: the parts in
+their order, and in each part the pages in the order of its list. The code of a page is all its blocks, top to bottom.
 
 #### Read the data and start the program
 

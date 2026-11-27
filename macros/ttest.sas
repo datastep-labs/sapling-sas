@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : ttest.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -24,9 +24,9 @@
 |                 The macro uses one record per subject: when a subject has
 |                 several records, the first one.
 | Procedure     : PROC TTEST
-| Proven        : the known answer of the method ttest (src/methods.ts, worked
-|                 out by tools/method_answers.R; node tools/methods_sas.ts); ran
-|                 on SAS 9.4 M9, 2026-11-12
+| Proven        : Checked against its known answer (on a small data set, the
+|                 numbers worked out independently in R); ran on SAS 9.4 M9,
+|                 2026-11-12
 |
 | Input Parameters :
 |
@@ -113,17 +113,19 @@
 |                          case (names in lower case). No number changes.
 | 16-NOV-2026 Sapling      1.9.1: a numeric by= stops with the ERROR of the
 |                          macro (DEV-048). No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the text of the header for the manual: the
+| 27-NOV-2026 Sapling      1.10.0: the text of the header for the manual: the
 |                          summary, the form of each parameter. No number
 |                          changes.
-| 27-NOV-2026 Sapling      1.9.1: The example analyses the records of anl01fl =
+| 27-NOV-2026 Sapling      1.10.0: The example analyses the records of anl01fl =
 |                          'Y' (one record per subject). The text of stats=: a
 |                          name without a pattern takes its default pattern. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: an example with pairs= and variances=unequal.
+| 27-NOV-2026 Sapling      1.10.0: an example with pairs= and variances=unequal.
 |                          No number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
+|                          manual. No number changes.
 |
 *******************************************************************************/
 %MACRO ttest(

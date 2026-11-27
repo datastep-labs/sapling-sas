@@ -1,6 +1,6 @@
 # %lsmeans
 
-Returns the differences of the LS means of pairs of groups in a linear model, with confidence limits and p-values.
+The ANCOVA of the groups: returns the differences of the LS means of pairs of groups in a linear model, with confidence limits and p-values.
 
 **Procedure:** PROC MIXED (LSMEANS) · **Family:** [Compare groups with a model](index.md#models)
 
@@ -72,17 +72,17 @@ Returns the differences of the LS means of pairs of groups in a linear model, wi
 
 ## Result
 
-The data set of `out=`: the [result shape](../explanation/result-shape.md). A row of a difference has the group in the `by=` variable and the group it is compared with in VERSUS; a row of an LS mean has VERSUS blank. GROUPS is the `by=` variable, VERSUS and the `within=` variables.
+The data set of `out=`: the [result shape](../explanation/result-shape.md). A row of a difference has the group in the `by=` variable and the group it is compared with in VERSUS: diff is the LS mean of the group minus the LS mean of VERSUS (a negative diff: a smaller LS mean in the group), diff_se its standard error, lcl and ucl its confidence limits, pval the p-value of the test that it is 0. With pairs=all the group is the later one in the order of `order=`. A row of an LS mean has VERSUS blank. GROUPS is the `by=` variable, VERSUS and the `within=` variables.
 
 ## Details
 
-Use [%ancova](ancova.md) for the test of one numeric term, and [%mmrm](mmrm.md) for repeated visits of a subject. The model is PROC MIXED without a random effect (least squares): the covariates, the class factors and the groups, one record per subject (the first with a value; when `where=` leaves a second record of a subject, the log has a NOTE with their number). Give a `where=` that leaves one record per subject, such as one parameter at one visit with `anl01fl = 'Y'`; otherwise each subject has the first of its records in the order of `data=`, whichever it is. The LS mean of each group comes when `stats=` asks for it.
+Use [%ancova](ancova.md) for the test of one numeric term (a dose response), and [%mmrm](mmrm.md) for repeated visits of a subject. The model is PROC MIXED without a random effect (least squares): the covariates, the class factors and the groups, one record per subject (the first with a value; when `where=` leaves a second record of a subject, the log has a NOTE with their number). Give a `where=` that leaves one record per subject, such as one parameter at one visit with `anl01fl = 'Y'`; otherwise each subject has the first of its records in the order of `data=`, whichever it is. The LS mean of each group comes when `stats=` asks for it.
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
-Gives the LS means and the difference of every pair at Week 12, adjusted for baseline and sex.
+Gives the difference of the LS means of every pair at Week 12, adjusted for baseline and sex.
 
 ```sas
 %lsmeans(
@@ -165,13 +165,15 @@ Compare groups with a model: [%mmrm](mmrm.md), [%logistic](logistic.md), [%risk]
 
 Named on this page: [%describe](describe.md), [%ancova](ancova.md).
 
-Guides that use %lsmeans: [Make an efficacy table with an ANCOVA](../how-to/efficacy-table.md), [Run the examples of the reference](../how-to/run-the-examples.md).
+Guides that use %lsmeans: [Make an efficacy table with an ANCOVA](../how-to/efficacy-table.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
+Checked against its known answer (on a small data set, the numbers worked out independently in R); ran on SAS 9.4 M9, 2026-11-12.
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+The known answers and test cases are kept with the development of the library, not in this repository.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 Used in the proof against pharmaverse: [t14_3_01](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/t14_3_01.sas) (R Submission Pilot 1), [t14_3_02](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/t14_3_02.sas) (R Submission Pilot 1). See [what the proof shows](../explanation/proof.md).
 

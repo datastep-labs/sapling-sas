@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : locf.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -21,8 +21,9 @@
 |                 The new records get the window variables of their window and
 |                 DTYPE = 'LOCF'; the other records get a blank DTYPE.
 | Procedure     : PROC SORT, a DATA step (SET POINT=)
-| Proven        : the fixtures of the step kind impute (src/adam_steps.ts; node
-|                 tools/adam_steps_sas.ts); ran on SAS 9.4 M9, 2026-11-12
+| Proven        : Checked on its test cases of the value carried into a visit
+|                 without one (small made-up records): every value the same as
+|                 that of the expected records; ran on SAS 9.4 M9, 2026-11-12
 |
 | Input Parameters :
 |
@@ -82,18 +83,20 @@
 |                          case (names in lower case). No number changes.
 | 16-NOV-2026 Sapling      1.9.1: the header names no variable _ROW (DEV-024).
 |                          No change of the code.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). No number changes.
-| 27-NOV-2026 Sapling      1.9.1: DTYPE gets its length before the records are
+| 27-NOV-2026 Sapling      1.10.0: DTYPE gets its length before the records are
 |                          read: data= with DTYPE of another length gave a
 |                          WARNING. The text of the header for the manual: the
 |                          summary, the form of each parameter. No number
 |                          changes.
-| 27-NOV-2026 Sapling      1.9.1: The example first copies its records into a
+| 27-NOV-2026 Sapling      1.10.0: The example first copies its records into a
 |                          data set of its own, so that it changes no data set of
 |                          setup.sas for a later example. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
+|                          manual. No number changes.
 |
 *******************************************************************************/
 %MACRO locf(

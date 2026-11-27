@@ -27,7 +27,7 @@ Writes every number of a table to a CSV file, the numbers file.
 
 ## Result
 
-The files: &lt;out&gt;/ard/&lt;file&gt;.csv, where &lt;out&gt; is the output folder that [%study](study.md) set and &lt;file&gt; is in lower case. Its columns: result, stat, g1_value ... g5_value, raw (the number with all its digits) and formatted (the number as printed).
+The files: &lt;out&gt;/ard/&lt;file&gt;.csv, where &lt;out&gt; is the output folder that [%study](study.md) set and &lt;file&gt; is in lower case. Its columns: result (the name of the result), stat (the statistic), g1_value to g5_value (the values of the group variables in the order of GROUPS of the result: the column first, then the levels of the row, such as VERSUS of a comparison), raw (the value written with BEST32., up to 15 significant digits; blank for a missing value) and formatted (the printed text).
 
 ## Details
 
@@ -38,9 +38,9 @@ Use [%csv](csv.md) for the records of a listing or the numbers of a figure. The 
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `t14_2_1` (made by the [example of %stack](stack.md#examples)), `t14_2_1_cols` (made by the [example of %columns](columns.md#examples)).
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `t14_2_1` (made by the [example of %stack](stack.md#examples)), `t14_2_1_cols` (made by the [example of %columns](columns.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
-Writes every number of the table and each column N to one CSV file: the full value and the text.
+Writes every number of the table and each column N to one CSV file: the raw value and the text.
 
 ```sas
 %ard(data=t14_2_1, columns=t14_2_1_cols, file=t14_2_1)
@@ -100,11 +100,13 @@ Build a table: [%stack](stack.md), [%columns](columns.md), [%layout](layout.md),
 
 Named on this page: [%study](study.md).
 
-Guides that use %ard: [Check a table against an independent program](../how-to/check-a-table.md), [Make a demographic table with tests](../how-to/demographic-table.md), [Use the macros in your own program](../how-to/own-program.md), [Run the examples of the reference](../how-to/run-the-examples.md).
+Guides that use %ard: [Tutorial: your first table](../tutorial/index.md), [Check a table against an independent program](../how-to/check-a-table.md), [Make a demographic table with tests](../how-to/demographic-table.md), [Use the macros in your own program](../how-to/own-program.md).
 
 ## Proof
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+The tables of a made-up study: 759 of 759 numbers the same as those of a second program in R; ran on SAS 9.4 M9, 2026-11-12.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 Used in the proof against pharmaverse: [t14_2_01](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/t14_2_01.sas) (R Submission Pilot 1), [t14_3_01](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/t14_3_01.sas) (R Submission Pilot 1), [t14_3_02](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/t14_3_02.sas) (R Submission Pilot 1), [adverse_events](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pharmaverse/programs/adverse_events.sas) (pharmaverse examples), [demographic](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pharmaverse/programs/demographic.sas) (pharmaverse examples). See [what the proof shows](../explanation/proof.md).
 

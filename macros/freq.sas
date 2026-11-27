@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : freq.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -17,9 +17,9 @@
 |                 counts the subjects with any record. The name events in stats=
 |                 adds the number of records of each cell.
 | Procedure     : PROC FREQ
-| Proven        : the known answer of the methods count, catsumm
-|                 (src/methods.ts, worked out by tools/method_answers.R; node
-|                 tools/methods_sas.ts); ran on SAS 9.4 M9, 2026-11-12
+| Proven        : Checked against its known answers: the counts and the percents
+|                 of the subjects (on a small data set, the numbers worked out
+|                 independently in R); ran on SAS 9.4 M9, 2026-11-12
 |
 | Input Parameters :
 |
@@ -129,7 +129,7 @@
    , levels = bnrind 'LOW' 'NORMAL' 'HIGH' anrind 'LOW' 'NORMAL' 'HIGH'
    , out    = shift
  )
- * Keeps the terms that reach 5 percent in a group, in the order of their subjects, the most first.;
+ * Keeps the terms that reach 5 percent in a group: AEDECODN ranks them, the most subjects first.;
  %freq(
      data      = adae
    , denom     = adsl
@@ -176,20 +176,23 @@
 | 16-NOV-2026 Sapling      1.9.1: denom= that does not exist stops with the
 |                          ERROR of the macro (DEV-004); no record: the NOTE No
 |                          data qualified (DEV-003). No number changes.
-| 27-NOV-2026 Sapling      1.9.1: by= takes more variables, as in %describe:
+| 27-NOV-2026 Sapling      1.10.0: by= takes more variables, as in %describe:
 |                          the first gives the columns and the Total, the
 |                          others the rows or the pages (by=trt01a sex). One
 |                          variable: no number changes.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: The example result is sex_freq, the name %stack
+| 27-NOV-2026 Sapling      1.10.0: The example result is sex_freq, the name %stack
 |                          reads. The text of stats=: a name without a pattern
 |                          takes its default pattern. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example; a
 |                          fifth call with a page variable (by= trt01a sex). No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.10.0: The caption of the fourth example says that
+|                          AEDECODN holds the rank; Proven in plain words, for
+|                          the published manual. No number changes.
 |
 *******************************************************************************/
 %MACRO freq(

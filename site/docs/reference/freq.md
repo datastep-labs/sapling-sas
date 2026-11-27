@@ -33,7 +33,7 @@ Counts the subjects in each category and group, with their percent of the subjec
 :   The input data set: the records to count, with USUBJID. *(required)*
 
 `denom=`
-:   The subjects of each group: the N of the percent and the columns. A data set with one row per subject and the variables of `by=`; data set options are allowed: adsl(where=(`saffl = 'Y'`)). When not given, the subjects of `data=` (without `where=`). *(optional)*
+:   The subjects of each group: the N of the percent and the columns. A data set with one row per subject and the variables of `by=`; data set options are allowed: `adsl(where=(saffl = 'Y'))`. When not given, the subjects of `data=` (without `where=`). *(optional)*
 
 `where=`
 :   The records to count: a condition in parentheses, such as `where = (trtemfl = 'Y')`. *(optional)*
@@ -88,7 +88,7 @@ Use [%proportion](proportion.md) when the percent needs a confidence interval, a
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Counts each sex in each group and in the Total: n and the percent of the subjects of the group.
 
@@ -191,7 +191,7 @@ Placebo  ALT      NORMAL  HIGH          2        3  TRT01A PARAMCD BNRIND ANRIND
 Placebo  ALT      NORMAL  LOW           2        1  TRT01A PARAMCD BNRIND ANRIND         n                1  1
 ```
 
-Keeps the terms that reach 5 percent in a group, in the order of their subjects, the most first.
+Keeps the terms that reach 5 percent in a group: AEDECODN ranks them, the most subjects first.
 
 ```sas
 %freq(
@@ -274,13 +274,15 @@ Describe the data: [%describe](describe.md), [%proportion](proportion.md), [%rat
 
 Named on this page: [%layout](layout.md), [%print](print.md).
 
-Guides that use %freq: [Make an adverse event table](../how-to/adverse-event-table.md), [Make a demographic table with tests](../how-to/demographic-table.md), [Make one page per subgroup](../how-to/page-per-subgroup.md), [Run the examples of the reference](../how-to/run-the-examples.md).
+Guides that use %freq: [Tutorial: your first table](../tutorial/index.md), [Make an adverse event table](../how-to/adverse-event-table.md), [Check a table against an independent program](../how-to/check-a-table.md), [Make a demographic table with tests](../how-to/demographic-table.md), [Make one page per subgroup](../how-to/page-per-subgroup.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
+Checked against its known answers: the counts and the percents of the subjects (on a small data set, the numbers worked out independently in R); ran on SAS 9.4 M9, 2026-11-12.
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+The known answers and test cases are kept with the development of the library, not in this repository.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 Used in the proof against pharmaverse: [t14_2_01](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/t14_2_01.sas) (R Submission Pilot 1), [adverse_events](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pharmaverse/programs/adverse_events.sas) (pharmaverse examples), [demographic](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pharmaverse/programs/demographic.sas) (pharmaverse examples). See [what the proof shows](../explanation/proof.md).
 

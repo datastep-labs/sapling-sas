@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : _spl_begin.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 16NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -50,7 +50,7 @@
      _macro     /* The name of the calling macro */
 ) / DES = 'The begin line of a macro in the log';
   %LOCAL version quiet;
-  %LET version = 1.9.1;
+  %LET version = 1.10.0;
   %LET quiet   = NO;
   %IF %SYMEXIST(spl_quiet) %THEN %DO;
     %IF %LENGTH(%SUPERQ(spl_quiet)) %THEN %LET quiet = %QUPCASE(%SUPERQ(spl_quiet));

@@ -1,29 +1,30 @@
 /*******************************************************************************
 | Macro Name    : lsmeans.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : Returns the differences of the LS means of pairs of groups in
-|                 a linear model, with confidence limits and p-values. Use
-|                 %ancova for the test of one numeric term, and %mmrm for
-|                 repeated visits of a subject. The model is PROC MIXED without
-|                 a random effect (least squares): the covariates, the class
-|                 factors and the groups, one record per subject (the first with
-|                 a value; when where= leaves a second record of a subject, the
-|                 log has a NOTE with their number). Give a where= that leaves
-|                 one record per subject, such as one parameter at one visit
-|                 with anl01fl = 'Y'; otherwise each subject has the first of
-|                 its records in the order of data=, whichever it is. The LS
-|                 mean of each group comes when stats= asks for it. The macro
-|                 writes a result: a data set with one row per number (the
-|                 result shape, see %stack).
+| Macro Purpose : The ANCOVA of the groups: returns the differences of the LS
+|                 means of pairs of groups in a linear model, with confidence
+|                 limits and p-values. Use %ancova for the test of one numeric
+|                 term (a dose response), and %mmrm for repeated visits of a
+|                 subject. The model is PROC MIXED without a random effect
+|                 (least squares): the covariates, the class factors and the
+|                 groups, one record per subject (the first with a value; when
+|                 where= leaves a second record of a subject, the log has a NOTE
+|                 with their number). Give a where= that leaves one record per
+|                 subject, such as one parameter at one visit with anl01fl =
+|                 'Y'; otherwise each subject has the first of its records in
+|                 the order of data=, whichever it is. The LS mean of each group
+|                 comes when stats= asks for it. The macro writes a result: a
+|                 data set with one row per number (the result shape, see
+|                 %stack).
 | Procedure     : PROC MIXED (LSMEANS)
-| Proven        : the known answer of the method lsmeans (src/methods.ts, worked
-|                 out by tools/method_answers.R; node tools/methods_sas.ts); ran
-|                 on SAS 9.4 M9, 2026-11-12
+| Proven        : Checked against its known answer (on a small data set, the
+|                 numbers worked out independently in R); ran on SAS 9.4 M9,
+|                 2026-11-12
 |
 | Input Parameters :
 |
@@ -68,12 +69,17 @@
 |
 | Output        : OUT: the result shape (see %stack). A row of a difference has
 |                 the group in the by= variable and the group it is compared
-|                 with in VERSUS; a row of an LS mean has VERSUS blank. GROUPS
-|                 is the by= variable, VERSUS and the within= variables.
+|                 with in VERSUS: diff is the LS mean of the group minus the LS
+|                 mean of VERSUS (a negative diff: a smaller LS mean in the
+|                 group), diff_se its standard error, lcl and ucl its confidence
+|                 limits, pval the p-value of the test that it is 0. With
+|                 pairs=all the group is the later one in the order of order=. A
+|                 row of an LS mean has VERSUS blank. GROUPS is the by=
+|                 variable, VERSUS and the within= variables.
 |
 | Example:
 |
- * Gives the LS means and the difference of every pair at Week 12, adjusted for baseline and sex.;
+ * Gives the difference of the LS means of every pair at Week 12, adjusted for baseline and sex.;
  %lsmeans(
      data   = advs
    , where  = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')
@@ -117,25 +123,31 @@
 |                          case (names in lower case). No number changes.
 | 16-NOV-2026 Sapling      1.9.1: covars= and class= are checked (DEV-036). No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: lsmean_lcl and lsmean_ucl, the confidence
+| 27-NOV-2026 Sapling      1.10.0: lsmean_lcl and lsmean_ucl, the confidence
 |                          limits of each LS mean (PROC MIXED, LSMEANS / CL).
 |                          No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: a NOTE when where= leaves a second record of
+| 27-NOV-2026 Sapling      1.10.0: a NOTE when where= leaves a second record of
 |                          a subject (the first is used, as before). No number
 |                          changes.
-| 27-NOV-2026 Sapling      1.9.1: The example analyses the records of anl01fl =
+| 27-NOV-2026 Sapling      1.10.0: The example analyses the records of anl01fl =
 |                          'Y' (one record per subject). The text of stats=: a
 |                          name without a pattern takes its default pattern. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: an example with pairs=, level= and stats= with
+| 27-NOV-2026 Sapling      1.10.0: an example with pairs=, level= and stats= with
 |                          the LS means; the text says to give a where= that
 |                          leaves one record per subject. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: The first sentence says that the macro is the
+|                          ANCOVA of the groups; the Output says the direction
+|                          of diff (the group minus VERSUS); the caption of the
+|                          first example says what it gives (the differences,
+|                          not the LS means); Proven in plain words, for the
+|                          published manual. No number changes.
 |
 *******************************************************************************/
 %MACRO lsmeans(

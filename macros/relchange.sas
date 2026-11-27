@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : relchange.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -24,8 +24,9 @@
 |                 upper limit is not above the lower one. For the change from
 |                 baseline (CHG = AVAL - BASE), use %baseline and a DATA step.
 | Procedure     : PROC SORT, a DATA step (LAG)
-| Proven        : the fixtures of the step kind relchange (src/adam_steps.ts;
-|                 node tools/adam_steps_sas.ts); ran on SAS 9.4 M9, 2026-11-12
+| Proven        : Checked on its test cases of the relative change (small
+|                 made-up records): every value the same as that of the expected
+|                 records; ran on SAS 9.4 M9, 2026-11-12
 |
 | Input Parameters :
 |
@@ -92,16 +93,18 @@
 |                          keeps its length in data= (length 1 only when data=
 |                          has none: a WARNING of two lengths before). The
 |                          license line; the example in the house case.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: The text says that CHG is a DATA step after
+| 27-NOV-2026 Sapling      1.10.0: The text says that CHG is a DATA step after
 |                          %baseline. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the text says what the macro computes. No
+| 27-NOV-2026 Sapling      1.10.0: the text says what the macro computes. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
+|                          manual. No number changes.
 |
 *******************************************************************************/
 %MACRO relchange(

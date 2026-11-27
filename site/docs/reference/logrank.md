@@ -64,7 +64,7 @@ Use [%km](km.md) for the medians of the groups, and [%cox](cox.md) for a hazard 
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#examples)).
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Tests the curves of the groups with the log rank test, stratified by sex: one p value.
 
@@ -96,12 +96,14 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Time to an event: [%km](km.md), [%cox](cox.md).
 
-Guides that use %logrank: [Make a Kaplan-Meier figure with the number at risk](../how-to/kaplan-meier-figure.md), [Run the examples of the reference](../how-to/run-the-examples.md).
+Guides that use %logrank: [Make a Kaplan-Meier figure with the number at risk](../how-to/kaplan-meier-figure.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
+Checked against its known answer (on a small data set, the numbers worked out independently in R); ran on SAS 9.4 M9, 2026-11-12.
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+The known answers and test cases are kept with the development of the library, not in this repository.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 [Source of %logrank](https://github.com/datastep-labs/sapling-sas/blob/main/macros/logrank.sas)

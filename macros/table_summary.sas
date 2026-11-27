@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : table_summary.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -35,9 +35,8 @@
 |                 %print: change <name>_display, then print again with
 |                 %print(&<name>_print.).
 | Procedure     : none of its own (those of %describe, %freq, %table)
-| Proven        : its cases of node tools/print_sas.ts (the same .lst and the
-|                 same numbers file as the long program); ran on SAS 9.4 M9,
-|                 2026-11-13
+| Proven        : Its test cases: the same .lst and the same numbers file as the
+|                 long program; ran on SAS 9.4 M9, 2026-11-13
 |
 | Input Parameters :
 |
@@ -139,13 +138,15 @@
 |                          %table and cleared after it; a missing folder of
 |                          show= is made. The license line; the example in the
 |                          house case. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example; a
 |                          second call with other forms of its parameters. No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
+|                          manual. No number changes.
 |
 *******************************************************************************/
 %MACRO table_summary(

@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : param_wide.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -14,8 +14,9 @@
 |                 group give an ERROR line that names the group. A code of
 |                 params= with no record stops the macro with an ERROR.
 | Procedure     : PROC SORT, MERGE
-| Proven        : the fixtures of the step kind computed (src/adam_steps.ts;
-|                 node tools/adam_steps_sas.ts); ran on SAS 9.4 M9, 2026-11-12
+| Proven        : Checked on its test cases of a value computed from other
+|                 parameters (small made-up records): every value the same as
+|                 that of the expected records; ran on SAS 9.4 M9, 2026-11-12
 |
 | Input Parameters :
 |
@@ -65,12 +66,14 @@
 | 16-NOV-2026 Sapling      1.9.1: params= in any case (DEV-023: params=weight
 |                          reads PARAMCD WEIGHT); a code without a record stops
 |                          with the ERROR of the macro.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
+|                          manual. No number changes.
 |
 *******************************************************************************/
 %MACRO param_wide(

@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : proportion.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -16,9 +16,9 @@
 |                 the subjects of the group in denom=. The interval comes from
 |                 the BINOMIAL option of PROC FREQ.
 | Procedure     : PROC FREQ (BINOMIAL)
-| Proven        : the known answer of the method propci (src/methods.ts, worked
-|                 out by tools/method_answers.R; node tools/methods_sas.ts); ran
-|                 on SAS 9.4 M9, 2026-11-12
+| Proven        : Checked against its known answer (on a small data set, the
+|                 numbers worked out independently in R); ran on SAS 9.4 M9,
+|                 2026-11-12
 |
 | Input Parameters :
 |
@@ -100,14 +100,16 @@
 |                          NOTE No data qualified, not ERRORs of PROC FREQ
 |                          (DEV-035); the header names exact as another name of
 |                          clopper-pearson (DEV-042). No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: The text of stats=: a name without a pattern
+| 27-NOV-2026 Sapling      1.10.0: The text of stats=: a name without a pattern
 |                          takes its default pattern. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
+|                          manual. No number changes.
 |
 *******************************************************************************/
 %MACRO proportion(

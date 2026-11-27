@@ -77,7 +77,7 @@ Use [%kmplot](kmplot.md) to draw the curve, and [%table_tte](table_tte.md) for t
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#examples)).
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Gives n, events, the median and its limits of each group: NE is a median not reached.
 
@@ -145,7 +145,7 @@ Xanomeline Low Dose   TRT01P         lcl     94.837376767   94.8
 Xanomeline Low Dose   TRT01P         ucl              100  100.0
 ```
 
-Uses conftype=loglog and a 90 percent level: the median stays, its limits change.
+Uses conftype=loglog and a 90 percent level: only the lower limit of Low Dose changes, 51 to 48.
 
 ```sas
 %km(
@@ -192,12 +192,14 @@ Time to an event: [%logrank](logrank.md), [%cox](cox.md).
 
 Named on this page: [%describe](describe.md), [%kmplot](kmplot.md), [%table_tte](table_tte.md).
 
-Guides that use %km: [Make a Kaplan-Meier figure with the number at risk](../how-to/kaplan-meier-figure.md), [Run the examples of the reference](../how-to/run-the-examples.md).
+Guides that use %km: [Make a Kaplan-Meier figure with the number at risk](../how-to/kaplan-meier-figure.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
+Checked against its known answers: the median and the percent without an event at a time (on a small data set, the numbers worked out independently in R); ran on SAS 9.4 M9, 2026-11-12.
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+The known answers and test cases are kept with the development of the library, not in this repository.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 [Source of %km](https://github.com/datastep-labs/sapling-sas/blob/main/macros/km.sas)

@@ -114,7 +114,7 @@ It computes no statistic: it draws a result of [%cox](cox.md), [%logistic](logis
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `hr_sub` (made by the [example of %stack](stack.md#examples)), `t14_2_1_cols` (made by the [example of %columns](columns.md#examples)).
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `hr_sub` (made by the [example of %stack](stack.md#examples)), `t14_2_1_cols` (made by the [example of %columns](columns.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Draws the hazard ratios of each subgroup on a log scale, with the reference line at 1.
 
@@ -132,7 +132,7 @@ Draws the hazard ratios of each subgroup on a log scale, with the reference line
  )
 ```
 
-![The figure that the example of %forestplot draws](../examples/forestplot.png)
+![Draws the hazard ratios of each subgroup on a log scale, with the reference line at 1.](../examples/forestplot.png)
 
 ## Messages
 
@@ -142,6 +142,12 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 |---|---|
 | data=&lt;data&gt; has no STAT and VALUE: it is not a result | give data= the out= of a comparison with within=. |
 | estimate=&lt;estimate&gt; is not a statistic (STAT) of data=&lt;data&gt;. | give estimate= a statistic of the results (hr, or, rd). |
+| data= and plot= are both given | give data= to compute, or plot= to draw an out= again. |
+| plot=&lt;plot&gt; does not exist | give plot= an out= of &lt;macro&gt; (make it first). |
+| plot=&lt;plot&gt; has no variable &lt;miss&gt; | give plot= the shape of out=: &lt;shape&gt;. |
+| par=&lt;par&gt; does not exist | give par= an outpar= of &lt;macro&gt; (make it first). |
+| par=&lt;par&gt; has no variables PARAMETER and VALUE | give par= an outpar= of &lt;macro&gt;. |
+| par=&lt;par&gt; has a row of no drawing parameter (with the PARAMETER of the record) | give par= rows of outpar= of &lt;macro&gt; only. |
 
 ## See also
 
@@ -149,12 +155,12 @@ Figures: [%kmplot](kmplot.md), [%meanplot](meanplot.md), [%lineplot](lineplot.md
 
 Named on this page: [%columns](columns.md), [%cox](cox.md), [%logistic](logistic.md), [%rateratio](rateratio.md), [%lsmeans](lsmeans.md), [%risk](risk.md).
 
-Guides that use %forestplot: [Run the examples of the reference](../how-to/run-the-examples.md).
-
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
+Its known answer: made-up results, arranged by hand; ran on SAS 9.4 M9, 2026-11-27 (the cases of the 9 figure macros: 103 of 103 the same).
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+The known answers and test cases are kept with the development of the library, not in this repository.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 [Source of %forestplot](https://github.com/datastep-labs/sapling-sas/blob/main/macros/forestplot.sas)

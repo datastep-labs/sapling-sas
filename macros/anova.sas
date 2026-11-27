@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : anova.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -15,9 +15,9 @@
 |                 model, one test of all the groups together. A record with a
 |                 missing value or a missing group is not used.
 | Procedure     : PROC GLM
-| Proven        : the known answer of the method anova (src/methods.ts, worked
-|                 out by tools/method_answers.R; node tools/methods_sas.ts); ran
-|                 on SAS 9.4 M9, 2026-11-12
+| Proven        : Checked against its known answer (on a small data set, the
+|                 numbers worked out independently in R); ran on SAS 9.4 M9,
+|                 2026-11-12
 |
 | Input Parameters :
 |
@@ -65,13 +65,15 @@
 |                          runs: the flat program has it. No number changes.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the text of the header for the manual: the
+| 27-NOV-2026 Sapling      1.10.0: the text of the header for the manual: the
 |                          summary, the form of each parameter. No number
 |                          changes.
-| 27-NOV-2026 Sapling      1.9.1: The example result is age_anova, the name
+| 27-NOV-2026 Sapling      1.10.0: The example result is age_anova, the name
 |                          %stack reads. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
+|                          manual. No number changes.
 |
 *******************************************************************************/
 %MACRO anova(

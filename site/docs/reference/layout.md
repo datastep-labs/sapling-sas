@@ -109,14 +109,14 @@ In a template:
 The setup (setup=):
 
 - The global macro variable keeps the parameters of [%print](print.md) for `out=`: `data=`, by=row, var=c:, together=grp and label=row=" " with the labels of `label=`; also `page=`, `rows=`, `file=` and `nodata=` when they are given to %layout. A NOTE in the log shows it.
-- %print(&name.) prints the display data set again after a change. A parameter that is not in the setup is added after it: %print(&name., `file=`...).
+- `%print(&name.)` prints the display data set again after a change. A parameter that is not in the setup is added after it: `%print(&name., file=...)`.
 - A parameter that is in the setup cannot be given again, as SAS stops a call that has a keyword twice: give it to %layout, or write the whole [%print](print.md) call.
 
 When `data=` has no row, the display data set has no row, and [%print](print.md) prints the text of `nodata=`.
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `t14_2_1` (made by the [example of %stack](stack.md#examples)), `t14_2_1_cols` (made by the [example of %columns](columns.md#examples)), `t14_1_1` (made by the [example of %stack](stack.md#examples)), `t14_1_1_cols` (made by the [example of %columns](columns.md#examples)).
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `t14_2_1` (made by the [example of %stack](stack.md#examples)), `t14_2_1_cols` (made by the [example of %columns](columns.md#examples)), `t14_1_1` (made by the [example of %stack](stack.md#examples)), `t14_1_1_cols` (made by the [example of %columns](columns.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Makes the display data set: one row per printed line, one column per group, sex by its labels.
 
@@ -221,27 +221,7 @@ Sex
 Prints the display data set again with the call that the setup keeps.
 
 ```sas
-%layout(
-     data    = t_sev50
-   , columns = t14_2_1_cols
-   , var     = trt01a
-   , file    = &spl_out./tlf/t_sev50
-   , nodata  = No subject under 50 had a severe event
-   , setup   = t_sev50_print
-   , out     = t_sev50_display
- )
-```
-
-```text
-t_sev50_display: 0 rows
-GRP  ROW  C1
-```
-
-```text
-tlf/t_sev50.lst: 3 lines
---------------------------------------
-
-No subject under 50 had a severe event
+%print(&t14_2_1_label_print.)
 ```
 
 Counts the severe events of the subjects under 50: there is none, so the result has no row.
@@ -257,18 +237,30 @@ Counts the severe events of the subjects under 50: there is none, so the result 
 )
 ```
 
+```text
+tlf/t_sev50.lst: 3 lines
+--------------------------------------
+
+No subject under 50 had a severe event
+```
+
 Gives nodata= for a result with no row: the display data set has no row.
 
 ```sas
 %layout(
-    data    = t_sev50
-  , columns = t14_2_1_cols
-  , var     = trt01a
-  , file    = &spl_out./tlf/t_sev50
-  , nodata  = No subject under 50 had a severe event
-  , setup   = t_sev50_print
-  , out     = t_sev50_display
-)
+     data    = t_sev50
+   , columns = t14_2_1_cols
+   , var     = trt01a
+   , file    = &spl_out./tlf/t_sev50
+   , nodata  = No subject under 50 had a severe event
+   , setup   = t_sev50_print
+   , out     = t_sev50_display
+ )
+```
+
+```text
+t_sev50_display: 0 rows
+GRP  ROW  C1
 ```
 
 Prints the setup of the empty table: the page has the text of nodata= in place of the rows.
@@ -297,11 +289,15 @@ Build a table: [%stack](stack.md), [%columns](columns.md), [%ard](ard.md), [%pri
 
 Named on this page: [%table](table.md).
 
-Guides that use %layout: [Make a demographic table with tests](../how-to/demographic-table.md), [Make one page per subgroup](../how-to/page-per-subgroup.md), [Run the examples of the reference](../how-to/run-the-examples.md).
+Guides that use %layout: [Tutorial: your first table](../tutorial/index.md), [Make a demographic table with tests](../how-to/demographic-table.md), [Make one page per subgroup](../how-to/page-per-subgroup.md).
 
 ## Proof
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+The 12 tables of a made-up study, each with a clean log, also as the code the macros wrote, run without the macros; its test cases of setup=; ran on SAS 9.4 M9, 2026-11-12. The 12 tables of the CDISC pilot study (the p-value of each term in Table 14.5.2), 2026-11-13.
+
+The known answers and test cases are kept with the development of the library, not in this repository.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 Used in the proof against pharmaverse: [t14_2_01](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/t14_2_01.sas) (R Submission Pilot 1), [t14_3_01](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/t14_3_01.sas) (R Submission Pilot 1), [t14_3_02](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/t14_3_02.sas) (R Submission Pilot 1), [adverse_events](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pharmaverse/programs/adverse_events.sas) (pharmaverse examples), [demographic](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pharmaverse/programs/demographic.sas) (pharmaverse examples). See [what the proof shows](../explanation/proof.md).
 

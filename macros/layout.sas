@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : layout.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -78,11 +78,11 @@
 |                 When data= has no row, the display data set has no row, and
 |                 %print prints the text of nodata=.
 | Procedure     : DATA steps, PROC FORMAT, PROC SORT, PROC TRANSPOSE
-| Proven        : the tables of the dummy study SYNHTN01 (every program ran with
-|                 a clean log, also as a program without a macro, 12 of 12) and
-|                 the cases of setup= in node tools/print_sas.ts; ran on SAS 9.4
-|                 M9, 2026-11-12; the 12 tables of the CDISC pilot (the p value
-|                 of each term in T14_5_2), 2026-11-13
+| Proven        : The 12 tables of a made-up study, each with a clean log, also
+|                 as the code the macros wrote, run without the macros; its test
+|                 cases of setup=; ran on SAS 9.4 M9, 2026-11-12. The 12 tables
+|                 of the CDISC pilot study (the p-value of each term in Table
+|                 14.5.2), 2026-11-13
 |
 | Input Parameters :
 |
@@ -229,29 +229,31 @@
 |                          observations (DEV-007); the empty display has no note
 |                          of uninitialized variables (DEV-008). No number
 |                          changes.
-| 27-NOV-2026 Sapling      1.9.1: page=: one page per value of a BY variable,
+| 27-NOV-2026 Sapling      1.10.0: page=: one page per value of a BY variable,
 |                          the header of each column with the N of its page.
 |                          Without page= no change.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: The header names no internal tool. No number
+| 27-NOV-2026 Sapling      1.10.0: The header names no internal tool. No number
 |                          changes.
-| 27-NOV-2026 Sapling      1.9.1: a row of a value of all groups (C99 only, such
+| 27-NOV-2026 Sapling      1.10.0: a row of a value of all groups (C99 only, such
 |                          as the p-value of a block) has the GRP of the rows of
 |                          its block before it: a page break no longer separates
 |                          a p-value from its block. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; more
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example; more
 |                          calls: page=, label= and rows=, nodata= on a result
 |                          with no row, each printed with its setup. The line
 |                          table of the header as a list, line by line, with
 |                          the labels of the estimates by their STAT. No number
 |                          changes.
-| 27-NOV-2026 Sapling      1.9.1: data= with no row and no page= made a syntax
+| 27-NOV-2026 Sapling      1.10.0: data= with no row and no page= made a syntax
 |                          error (the LENGTH statement of the empty display
 |                          named the page variable, blank): the empty display
 |                          is made again. No number changes.
+| 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
+|                          manual. No number changes.
 |
 *******************************************************************************/
 %MACRO layout(

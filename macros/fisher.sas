@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : fisher.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -16,9 +16,9 @@
 |                 test of the same table. The macro writes a result: a data set
 |                 with one row per number (the result shape, see %stack).
 | Procedure     : PROC FREQ (FISHER, CHISQ)
-| Proven        : the known answer of the method fisher (src/methods.ts, worked
-|                 out by tools/method_answers.R; node tools/methods_sas.ts); ran
-|                 on SAS 9.4 M9, 2026-11-12
+| Proven        : Checked against its known answer (on a small data set, the
+|                 numbers worked out independently in R); ran on SAS 9.4 M9,
+|                 2026-11-12
 |
 | Input Parameters :
 |
@@ -81,12 +81,14 @@
 | 16-NOV-2026 Sapling      1.9.1: a table of one group or one column is not
 |                          tested: the value missing, no WARNING of ODS OUTPUT
 |                          (DEV-049). No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
+|                          manual. No number changes.
 |
 *******************************************************************************/
 %MACRO fisher(

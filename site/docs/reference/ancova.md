@@ -1,6 +1,6 @@
 # %ancova
 
-Returns the Type III p-value of a numeric term in a linear model, such as a test of dose response.
+Returns the Type III p-value of one numeric term in a linear model, such as the test of a dose response (`test = trt01pn`): the test of one numeric term, not a comparison of the groups.
 
 **Procedure:** PROC GLM · **Family:** [Test the groups](index.md#tests)
 
@@ -64,11 +64,11 @@ The data set of `out=`: the [result shape](../explanation/result-shape.md): one 
 
 ## Details
 
-Use [%lsmeans](lsmeans.md) for the differences between pairs of groups, and [%mmrm](mmrm.md) for a model of repeated visits. The model is PROC GLM: the class factors, the covariates and the tested term, one record per subject (the first with a value; when `where=` leaves a second record of a subject, the log has a NOTE with their number). Give a `where=` that leaves one record per subject, such as one parameter at one visit with `anl01fl = 'Y'`; otherwise each subject has the first of its records in the order of `data=`, whichever it is. The coefficient of the term, its standard error and its confidence limits come when `stats=` asks for them.
+For the ANCOVA comparison of the groups, use [%lsmeans](lsmeans.md); for a model of repeated visits, [%mmrm](mmrm.md). The model is PROC GLM: the class factors, the covariates and the tested term, one record per subject (the first with a value; when `where=` leaves a second record of a subject, the log has a NOTE with their number). Give a `where=` that leaves one record per subject, such as one parameter at one visit with `anl01fl = 'Y'`; otherwise each subject has the first of its records in the order of `data=`, whichever it is. The coefficient of the term, its standard error and its confidence limits come when `stats=` asks for them.
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Tests a linear dose response of the change at Week 12, adjusted for baseline: one p value.
 
@@ -100,13 +100,15 @@ Test the groups: [%anova](anova.md), [%ttest](ttest.md), [%wilcoxon](wilcoxon.md
 
 Named on this page: [%describe](describe.md), [%lsmeans](lsmeans.md), [%mmrm](mmrm.md).
 
-Guides that use %ancova: [Make an efficacy table with an ANCOVA](../how-to/efficacy-table.md), [Run the examples of the reference](../how-to/run-the-examples.md).
+Guides that use %ancova: [Make an efficacy table with an ANCOVA](../how-to/efficacy-table.md).
 
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
+Checked against its known answer (on a small data set, the numbers worked out independently in R); ran on SAS 9.4 M9, 2026-11-12.
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+The known answers and test cases are kept with the development of the library, not in this repository.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 Used in the proof against pharmaverse: [t14_3_01](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/t14_3_01.sas) (R Submission Pilot 1). See [what the proof shows](../explanation/proof.md).
 

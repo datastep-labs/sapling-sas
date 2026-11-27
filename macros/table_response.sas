@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : table_response.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -33,9 +33,9 @@
 |                 %print: change <name>_display, then print again with
 |                 %print(&<name>_print.).
 | Procedure     : none of its own (those of %proportion, %risk, %logistic, %table)
-| Proven        : node tools/tables_sas.ts (the same display data set as the
-|                 long program, on the made-up study SYNHTN01); ran on SAS
-|                 9.4 M9, 2026-11-13
+| Proven        : Checked against its long program, written out by hand: the
+|                 same display data set (PROC COMPARE), on a made-up study; ran
+|                 on SAS 9.4 M9, 2026-11-13
 |
 | Input Parameters :
 |
@@ -109,7 +109,13 @@
 |                 and <name>_rec (with adsl= or where=). FILE: <file>.rtf,
 |                 <file>.lst and the numbers file (only with file=). SETUP: the
 |                 global macro variable <name>_print. SHOW: the long program, in
-|                 the log or in a file.
+|                 the log or in a file. In the printed table, a comparison is in
+|                 the column of the group, on the rows under "vs" and the group
+|                 it is compared with: the risk difference is the proportion of
+|                 responders of the column group minus that of the group on the
+|                 row (-0.013: 1.3 percentage points fewer); the relative risk
+|                 and the odds ratios are the column group over the group on the
+|                 row.
 |
 | Example:
 |
@@ -124,7 +130,7 @@
    , title  = "Table 14.3.2 Responders"
    , file   = &spl_out./tlf/t14_3_2
  )
- * Asks for the relative risk with Wilson limits, and the odds ratio adjusted for age.;
+ * Asks for Wilson limits of each percent, the relative risk, and the odds ratio adjusted for age.;
  %table_response(
      data    = adrs
    , where   = (paramcd = 'RSP')
@@ -156,13 +162,18 @@
 | 16-NOV-2026 Sapling      1.9.1: measure=or no longer stops at a macro %IF
 |                          (DEV-029); var=, by= and order= are checked before
 |                          the long program (DEV-031).
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example; a
 |                          second call with other forms of its parameters. No
 |                          number changes.
+| 27-NOV-2026 Sapling      1.10.0: The direction of a comparison in the printed
+|                          table; the caption of the second example says that
+|                          the Wilson limits are those of the percents; Proven
+|                          in plain words, for the published manual. No number
+|                          changes.
 |
 *******************************************************************************/
 %MACRO table_response(

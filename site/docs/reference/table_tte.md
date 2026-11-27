@@ -88,7 +88,7 @@ Makes a time-to-event table in one call: the Kaplan-Meier summary, the log-rank 
 
 ## Result
 
-The data sets: &lt;name&gt;_km, &lt;name&gt;_surv (with `time=`), &lt;name&gt;_lr and &lt;name&gt;_cox (the results), &lt;name&gt; (the stacked results), &lt;name&gt;_cols, &lt;name&gt;_display, &lt;name&gt;_pop (with `adsl=`) and &lt;name&gt;_rec (with `adsl=` or `where=`). The files: &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file (only with `file=`). The global macro variable: &lt;name&gt;_print. With `show=`: the long program, in the log or in a file.
+The data sets: &lt;name&gt;_km, &lt;name&gt;_surv (with `time=`), &lt;name&gt;_lr and &lt;name&gt;_cox (the results), &lt;name&gt; (the stacked results), &lt;name&gt;_cols, &lt;name&gt;_display, &lt;name&gt;_pop (with `adsl=`) and &lt;name&gt;_rec (with `adsl=` or `where=`). The files: &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file (only with `file=`). The global macro variable: &lt;name&gt;_print. With `show=`: the long program, in the log or in a file. In the printed table, a comparison is in the column of the group, on the rows under "vs" and the group it is compared with: the hazard ratio is the hazard of the column group over the hazard of the group on the row (below 1: fewer events in the column group).
 
 ## Details
 
@@ -106,13 +106,13 @@ The table has no Total column. The long program is the program the macro writes 
 - &lt;name&gt;_cols: the columns ([%columns](columns.md))
 - &lt;name&gt;_display: the display data set, one row per printed line ([%layout](layout.md))
 
-The global macro variable &lt;name&gt;_print keeps the call of [%print](print.md): change &lt;name&gt;_display, then print again with %print(&&lt;name&gt;_print.). CNSR 0 is an event and any positive value is a censoring, as in ADaM, where the value names the reason of the censoring: a CNSR of 2 is censored as 1 is. A record used with a missing or negative CNSR stops the macro with an ERROR.
+The global macro variable &lt;name&gt;_print keeps the call of [%print](print.md): change &lt;name&gt;_display, then print again with `%print(&<name>_print.)`. CNSR 0 is an event and any positive value is a censoring, as in ADaM, where the value names the reason of the censoring: a CNSR of 2 is censored as 1 is. A record used with a missing or negative CNSR stops the macro with an ERROR.
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#examples)), `and` (made by the [example of %kmplot](kmplot.md#examples)).
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
-Makes the table of the time to the event: the curves, the log rank test and the hazard ratio.
+Makes the table of the time to the event: Kaplan Meier, the log rank test and the hazard ratio.
 
 ```sas
 %table_tte(
@@ -132,6 +132,21 @@ Table 14.6.1 Time to the first skin event
                                                         Placebo   Xanomeline Low Dose  Xanomeline High Dose  All
                                                         (N=85)    (N=95)               (N=72)                groups
 -------------------------------------------------------------------------------------------------------------------
+
+Kaplan-Meier: subjects, events, median time and 95% CI
+  n                                                     85        95                   72
+  Events                                                20        39                   39
+  Median                                                NE        80.0                 57.0
+  Confidence interval                                   (NE, NE)  (51.0, NE)           (46.0, 177.0)
+
+Log-rank test
+  p-value                                                                                                    <0.001
+
+Cox model: hazard ratio (95% CI) and p-value
+  vs Placebo
+    Hazard ratio                                                                       3.59
+    Confidence interval                                                                (2.09, 6.19)
+    p-value                                                                            <0.001
 ```
 
 Takes the N of each column from adsl= and stratifies the test and the Cox model by sex.
@@ -155,26 +170,7 @@ Table 14.6.2 Time to the first skin event, stratified by sex
                                                         Placebo   Xanomeline Low Dose  Xanomeline High Dose  All
                                                         (N=86)    (N=96)               (N=72)                groups
 -------------------------------------------------------------------------------------------------------------------
-```
 
-```text
-Kaplan-Meier: subjects, events, median time and 95% CI
-  n                                                     85        95                   72
-  Events                                                20        39                   39
-  Median                                                NE        80.0                 57.0
-  Confidence interval                                   (NE, NE)  (51.0, NE)           (46.0, 177.0)
-
-Log-rank test
-  p-value                                                                                                    <0.001
-
-Cox model: hazard ratio (95% CI) and p-value
-  vs Placebo
-    Hazard ratio                                                                       3.59
-    Confidence interval                                                                (2.09, 6.19)
-    p-value                                                                            <0.001
-```
-
-```text
 Kaplan-Meier: subjects, events, median time and 95% CI
   n                                                     85        95                   72
   Events                                                20        39                   39
@@ -210,10 +206,10 @@ Tables in one call: [%table](table.md), [%table_summary](table_summary.md), [%ta
 
 Named on this page: [%km](km.md), [%layout](layout.md), [%kmplot](kmplot.md), [%logrank](logrank.md), [%cox](cox.md), [%stack](stack.md), [%columns](columns.md), [%print](print.md).
 
-Guides that use %table_tte: [Run the examples of the reference](../how-to/run-the-examples.md).
-
 ## Proof
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+Checked against its long program, written out by hand: the same display data set (PROC COMPARE), on a made-up study; ran on SAS 9.4 M9, 2026-11-13.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 [Source of %table_tte](https://github.com/datastep-labs/sapling-sas/blob/main/macros/table_tte.sas)

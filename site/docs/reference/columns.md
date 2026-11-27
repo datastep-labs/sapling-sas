@@ -62,7 +62,7 @@ A header is the value, a | and the N: Placebo|(N=86). [%layout](layout.md) reads
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `t14_2_1` (made by the [example of %stack](stack.md#examples)), `t14_1_1` (made by the [example of %stack](stack.md#examples)).
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `t14_2_1` (made by the [example of %stack](stack.md#examples)), `t14_1_1` (made by the [example of %stack](stack.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Makes the four columns with their N from adsl, the Total last, in the order of TRT01AN.
 
@@ -147,11 +147,13 @@ Build a table: [%stack](stack.md), [%ard](ard.md), [%layout](layout.md), [%print
 
 Named on this page: [%freq](freq.md).
 
-Guides that use %columns: [Make a demographic table with tests](../how-to/demographic-table.md), [Make a Kaplan-Meier figure with the number at risk](../how-to/kaplan-meier-figure.md), [Make one page per subgroup](../how-to/page-per-subgroup.md), [Run the examples of the reference](../how-to/run-the-examples.md).
+Guides that use %columns: [Tutorial: your first table](../tutorial/index.md), [Check a table against an independent program](../how-to/check-a-table.md), [Make a demographic table with tests](../how-to/demographic-table.md), [Make a Kaplan-Meier figure with the number at risk](../how-to/kaplan-meier-figure.md), [Use the macros in your own program](../how-to/own-program.md), [Make one page per subgroup](../how-to/page-per-subgroup.md).
 
 ## Proof
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+The tables of a made-up study: the N of every column the same as that of a second program in R; ran on SAS 9.4 M9, 2026-11-12.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 Used in the proof against pharmaverse: [t14_2_01](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/t14_2_01.sas) (R Submission Pilot 1), [t14_3_01](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/t14_3_01.sas) (R Submission Pilot 1), [t14_3_02](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/t14_3_02.sas) (R Submission Pilot 1), [adverse_events](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pharmaverse/programs/adverse_events.sas) (pharmaverse examples), [demographic](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pharmaverse/programs/demographic.sas) (pharmaverse examples). See [what the proof shows](../explanation/proof.md).
 

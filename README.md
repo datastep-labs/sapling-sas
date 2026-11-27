@@ -58,13 +58,14 @@ The reference of every macro, with its parameters, examples and their output: [t
 Every example of the manual runs on the example data in [examples/data](examples/data): data sets of the R packages
 pharmaverseadam and pharmaversesdtm (the subjects of the CDISC pilot study, [examples/data/NOTICE](examples/data/NOTICE)).
 Set `spl_root` in [examples/setup.sas](examples/setup.sas) to the folder of this repository and run it first: it reads
-the transport files and makes the WORK data sets the examples use. Then run the examples of the reference in the order
+the transport files and makes the WORK data sets the examples use. Then run [examples/tutorial.sas](examples/tutorial.sas)
+(the tutorial) or [examples/reference.sas](examples/reference.sas) (every example of the reference), or the examples of the reference in the order
 of [Run the examples of the reference](https://datastep-labs.github.io/sapling-sas/how-to/run-the-examples/) (an example may use the results of the
 ones before it). Under each example the manual shows what it gave on SAS 9.4: its result data sets, the listing of a
 table, the figure.
 
 ## License
 
-The macros are **source available, not open source**: you may read them and check the proof, but using them needs a
-license of DataStep Labs ([LICENSE](LICENSE)). The data and the references of the proof belong to their owners
+The macros are **source available, not open source**: the code and the proof are public to read. The terms of use are
+in the [LICENSE](LICENSE) of DataStep Labs. The data and the references of the proof belong to their owners
 ([NOTICE](NOTICE)).

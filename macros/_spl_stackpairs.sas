@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : _spl_stackpairs.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -60,7 +60,7 @@
 |                          an error (macro=, PAIRSOK of the caller).
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the message prints a macro variable, not a
+| 27-NOV-2026 Sapling      1.10.0: the message prints a macro variable, not a
 |                          macro expression: it reads the same in the log and in
 |                          the code. No number changes.
 |

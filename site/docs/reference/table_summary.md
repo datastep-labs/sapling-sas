@@ -102,11 +102,11 @@ A character variable without # stops the macro with an ERROR. The long program i
 - &lt;name&gt;_cols: the columns ([%columns](columns.md))
 - &lt;name&gt;_display: the display data set, one row per printed line ([%layout](layout.md))
 
-The global macro variable &lt;name&gt;_print keeps the call of [%print](print.md): change &lt;name&gt;_display, then print again with %print(&&lt;name&gt;_print.).
+The global macro variable &lt;name&gt;_print keeps the call of [%print](print.md): change &lt;name&gt;_display, then print again with `%print(&<name>_print.)`.
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Makes the demographic table from one row per subject: age as numbers, the categories as rows.
 
@@ -220,10 +220,14 @@ Tables in one call: [%table](table.md), [%table_ae](table_ae.md), [%table_visit]
 
 Named on this page: [%freq](freq.md), [%layout](layout.md), [%describe](describe.md), [%stack](stack.md), [%columns](columns.md), [%print](print.md).
 
-Guides that use %table_summary: [Make a demographic table with tests](../how-to/demographic-table.md), [Run the examples of the reference](../how-to/run-the-examples.md).
+Guides that use %table_summary: [Make a demographic table with tests](../how-to/demographic-table.md).
 
 ## Proof
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+Its test cases: the same .lst and the same numbers file as the long program; ran on SAS 9.4 M9, 2026-11-13.
+
+The known answers and test cases are kept with the development of the library, not in this repository.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 [Source of %table_summary](https://github.com/datastep-labs/sapling-sas/blob/main/macros/table_summary.sas)

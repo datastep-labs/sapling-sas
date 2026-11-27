@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : visits.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -16,9 +16,9 @@
 |                 is not in visits= keeps its old AVISIT and AVISITN: drop them
 |                 before the call when such a record must have none.
 | Procedure     : DATA steps (SET POINT=)
-| Proven        : the fixtures of the step kind windows.visit
-|                 (src/adam_steps.ts; node tools/adam_steps_sas.ts); ran on SAS
-|                 9.4 M9, 2026-11-12
+| Proven        : Checked on its test cases of the analysis visit of each
+|                 collected visit (small made-up records): every value the same
+|                 as that of the expected records; ran on SAS 9.4 M9, 2026-11-12
 |
 | Input Parameters :
 |
@@ -70,17 +70,19 @@
 |                          rows), no data set of them. No number changes.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: The example first copies its records into a
+| 27-NOV-2026 Sapling      1.10.0: The example first copies its records into a
 |                          data set of its own, so that it changes no data set of
 |                          setup.sas for a later example. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the text says that a record of no visit keeps
+| 27-NOV-2026 Sapling      1.10.0: the text says that a record of no visit keeps
 |                          an AVISIT that data= has already. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
+|                          manual. No number changes.
 |
 *******************************************************************************/
 %MACRO visits(

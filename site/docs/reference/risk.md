@@ -81,7 +81,7 @@ Returns the risk difference, relative risk or odds ratio of pairs of groups, wit
 
 ## Result
 
-The data set of `out=`: the [result shape](../explanation/result-shape.md), one row per pair and statistic: the group in the `by=` variable, the group it is compared with in VERSUS, and the variables of `within=`. GROUPS is the `by=` variable, VERSUS and the `within=` variables.
+The data set of `out=`: the [result shape](../explanation/result-shape.md), one row per pair and statistic: the group in the `by=` variable, the group it is compared with in VERSUS, and the variables of `within=`. The risk of a group is its subjects with the event of `event=` over its subjects in the records used. With measure=rd, rd is the risk of the group minus the risk of VERSUS, a difference of two proportions (0.25: 25 percentage points more in the group); with `strata=`, the Mantel-Haenszel estimate of that difference. With measure=rr, rr is the risk of the group over the risk of VERSUS; with measure=or, or is the odds of the event in the group over the odds in VERSUS. lcl and ucl are the limits of the estimate, pval its p-value. With pairs=all the group is the later one in the order of `order=`. GROUPS is the `by=` variable, VERSUS and the `within=` variables.
 
 ## Details
 
@@ -95,7 +95,7 @@ The p-value is that of Pearson's chi-square test without continuity correction. 
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `ae_flags` (made by the [example of %termflags](termflags.md#examples)).
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `ae_flags` (made by the [example of %termflags](termflags.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Gives the risk difference of discontinuation of each pair, its Newcombe limits and p value.
 
@@ -234,6 +234,7 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 |---|---|
 | ci=&lt;ci&gt; is not an interval here | give ci= wald, newcombe, miettinen-nurminen, agresti-caffo, mh. |
 | strata=&lt;strata&gt; is taken by the risk difference only | give measure=rd, or no strata=. |
+| pairs= names the group "&lt;group&gt;", and no record has it. | give pairs= the values of &lt;by&gt; as the data have them. |
 
 ## See also
 
@@ -241,12 +242,12 @@ Compare groups with a model: [%lsmeans](lsmeans.md), [%mmrm](mmrm.md), [%logisti
 
 Named on this page: [%termflags](termflags.md), [%describe](describe.md), [%fisher](fisher.md).
 
-Guides that use %risk: [Run the examples of the reference](../how-to/run-the-examples.md).
-
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
+Checked against its known answers: the risk difference, the relative risk, the odds ratio, and the risk difference of each term of an adverse event table (on a small data set, the numbers worked out independently in R); ran on SAS 9.4 M9, 2026-11-12.
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+The known answers and test cases are kept with the development of the library, not in this repository.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 [Source of %risk](https://github.com/datastep-labs/sapling-sas/blob/main/macros/risk.sas)

@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : describe.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -16,8 +16,9 @@
 |                 whole number: a lab value of 3.9 prints as 4. Give min="XX.X"
 |                 max="XX.X" in stats= for values with decimals.
 | Procedure     : PROC MEANS
-| Proven        : the known answer of the method contsumm (src/methods.ts, worked
-|                 out by tools/method_answers.R); ran on SAS 9.4 M9, 2026-11-12
+| Proven        : Checked against its known answer (on a small data set, the
+|                 numbers worked out independently in R); ran on SAS 9.4 M9,
+|                 2026-11-12
 |
 | Input Parameters :
 |
@@ -125,19 +126,21 @@
 |                          Total (DEV-001: the Total changes where data= has
 |                          such a record); a character var= stops with the ERROR
 |                          of the macro (DEV-002).
-| 27-NOV-2026 Sapling      1.9.1: the text of the header for the manual: the
+| 27-NOV-2026 Sapling      1.10.0: the text of the header for the manual: the
 |                          summary, the form of each parameter. No number
 |                          changes.
-| 27-NOV-2026 Sapling      1.9.1: The example result is age_describe, the name
+| 27-NOV-2026 Sapling      1.10.0: The example result is age_describe, the name
 |                          %stack reads. The text of stats=: a name without a
 |                          pattern takes its default pattern. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: an example with stats= with se, q1 and q3,
+| 27-NOV-2026 Sapling      1.10.0: an example with stats= with se, q1 and q3,
 |                          decimals for min and max, and the Total named in
 |                          quotes; the text says that min and max print as whole
 |                          numbers by default. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example; a
 |                          fourth call with a page variable (by= trt01a sex).
 |                          No number changes.
+| 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
+|                          manual. No number changes.
 |
 *******************************************************************************/
 %MACRO describe(

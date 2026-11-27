@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : import_xpt.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -13,9 +13,9 @@
 |                 in the log. A member is read from <dir>/<member>.xpt; when
 |                 that file does not exist, from the same name in lower case.
 | Procedure     : LIBNAME XPORT, PROC COPY
-| Proven        : the ADaM and SDTM transport files of the dummy study SYNHTN01
-|                 (every program ran with a clean log; 570 of 570 numbers the
-|                 same as those of a second program in R); ran on SAS 9.4 M9,
+| Proven        : The ADaM and SDTM transport files of a made-up study: every
+|                 program ran with a clean log, and 570 of 570 numbers the same
+|                 as those of a second program in R; ran on SAS 9.4 M9,
 |                 2026-11-12
 |
 | Input Parameters :
@@ -57,14 +57,16 @@
 | 16-NOV-2026 Sapling      1.9.1: one ERROR and its fix for each missing
 |                          parameter (DEV-011); members= finds <member>.xpt also
 |                          in lower case (DEV-010). No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: The header names no internal tool. No number
+| 27-NOV-2026 Sapling      1.10.0: The header names no internal tool. No number
 |                          changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
+|                          manual. No number changes.
 |
 *******************************************************************************/
 %MACRO import_xpt(

@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : logistic.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -17,9 +17,9 @@
 |                 result: a data set with one row per number (the result shape,
 |                 see %stack).
 | Procedure     : PROC LOGISTIC (LSMEANS)
-| Proven        : the known answer of the method logistic (src/methods.ts,
-|                 worked out by tools/method_answers.R; node
-|                 tools/methods_sas.ts); ran on SAS 9.4 M9, 2026-11-12
+| Proven        : Checked against its known answer (on a small data set, the
+|                 numbers worked out independently in R); ran on SAS 9.4 M9,
+|                 2026-11-12
 |
 | Input Parameters :
 |
@@ -68,8 +68,13 @@
 |
 | Output        : OUT: the result shape (see %stack), one row per pair and
 |                 statistic: the group in the by= variable, the group it is
-|                 compared with in VERSUS, and the variables of within=. GROUPS
-|                 is the by= variable, VERSUS and the within= variables.
+|                 compared with in VERSUS, and the variables of within=. or is
+|                 the odds of the event of event= in the group over the odds in
+|                 VERSUS, adjusted for the covariates and the class factors (an
+|                 odds ratio above 1: the event is more likely in the group),
+|                 lcl and ucl its Wald confidence limits, pval its p-value. With
+|                 pairs=all the group is the later one in the order of order=.
+|                 GROUPS is the by= variable, VERSUS and the within= variables.
 | Note          : The iterations go on until no parameter changes by more than
 |                 1E-10 (XCONV=). PROC LOGISTIC alone stops at a relative
 |                 gradient of 1E-8. So the estimate is the maximum to the digits
@@ -120,16 +125,20 @@
 |                          maximum to the last digits (the odds ratio 7 of a 2 x
 |                          2 table, not 6.9999907; DEV-041). The numbers change
 |                          after the sixth digit.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: The text of stats=: a name without a pattern
+| 27-NOV-2026 Sapling      1.10.0: The text of stats=: a name without a pattern
 |                          takes its default pattern. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: an example with within= and pairs=. No number
+| 27-NOV-2026 Sapling      1.10.0: an example with within= and pairs=. No number
 |                          changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: The Output says the direction of or (the odds
+|                          of the group over the odds of VERSUS); Proven in
+|                          plain words, for the published manual. No number
+|                          changes.
 |
 *******************************************************************************/
 %MACRO logistic(

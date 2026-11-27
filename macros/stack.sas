@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : stack.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -24,17 +24,19 @@
 |                 result in the same shape. Each variable gets the longest
 |                 length it has in the results, so that no text is cut.
 | Procedure     : a DATA step (SET INDSNAME=)
-| Proven        : the tables of the dummy study SYNHTN01 (every program ran with
-|                 a clean log; 570 of 570 numbers the same as those of a second
-|                 program in R); ran on SAS 9.4 M9, 2026-11-12
+| Proven        : The tables of a made-up study: every program ran with a clean
+|                 log, and 570 of 570 numbers the same as those of a second
+|                 program in R; ran on SAS 9.4 M9, 2026-11-12
 |
 | Input Parameters :
 |
 | Name        Description                                         Default
 |-------------------------------------------------------------------------------
 | results     The results to stack: data set names separated by   Required
-|             blanks, in the order of the blocks (without a
-|             keyword)
+|             blanks, in the order of the blocks. Give them
+|             first, without a keyword (%stack(a b, out=t)), or
+|             as results= (%stack(results=a b, out=t)); a
+|             message names them results=.
 | out         The name of the stacked table                       Required
 |-------------------------------------------------------------------------------
 |
@@ -71,18 +73,21 @@
 | 16-NOV-2026 Sapling      1.9.1: a result that does not exist stops with the
 |                          ERROR of the macro (DEV-005); ORD is the place of the
 |                          result in the list (DEV-006). No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: The example names the results of the examples
+| 27-NOV-2026 Sapling      1.10.0: The example names the results of the examples
 |                          of %describe, %anova, %freq and %chisq. The header
 |                          names no internal tool. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the message of a result that does not exist is
+| 27-NOV-2026 Sapling      1.10.0: the message of a result that does not exist is
 |                          two lines, the fault and its fix. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example; a
 |                          third call, the results of a table with a page per
 |                          sex. No number changes.
+| 27-NOV-2026 Sapling      1.10.0: results= may be given without a keyword or as
+|                          results=; Proven in plain words, for the published
+|                          manual. No number changes.
 |
 *******************************************************************************/
 %MACRO stack(

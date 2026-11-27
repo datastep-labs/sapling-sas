@@ -82,7 +82,7 @@ AVAL is missing on the first record of a group, on a record with no AVISITN, and
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Adds a record per value: its change from the record before, relative to half the normal range.
 
@@ -125,10 +125,12 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 
 ADaM steps: [%merge_subject](merge_subject.md), [%pick](pick.md), [%summarize](summarize.md), [%summarize_groups](summarize_groups.md), [%baseline](baseline.md), [%flag_first](flag_first.md), [%flag_if_any](flag_if_any.md), [%windows](windows.md), [%visits](visits.md), [%locf](locf.md), [%param_wide](param_wide.md), [%pool](pool.md), [%tte](tte.md).
 
-Guides that use %relchange: [Derive analysis visits, the baseline and the change from baseline](../how-to/derive-baseline.md), [Run the examples of the reference](../how-to/run-the-examples.md).
-
 ## Proof
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+Checked on its test cases of the relative change (small made-up records): every value the same as that of the expected records; ran on SAS 9.4 M9, 2026-11-12.
+
+The known answers and test cases are kept with the development of the library, not in this repository.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 [Source of %relchange](https://github.com/datastep-labs/sapling-sas/blob/main/macros/relchange.sas)

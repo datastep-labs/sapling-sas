@@ -39,7 +39,7 @@ Prints a table or a listing with one PROC REPORT into an RTF file and a monospac
 :   A variable: the rows of one value stay on one page, such as `together = grp` of [%layout](layout.md). *(optional)*
 
 `label=`
-:   Column labels: name="text" pairs, separated by blanks, such as %STR(row=" "). A | splits a header into lines. When not given, the labels of the variables are used. *(optional)*
+:   Column labels: name="text" pairs, separated by blanks, such as `%STR(row=" ")`. A | splits a header into lines. When not given, the labels of the variables are used. *(optional)*
 
 `rows=`
 :   The rows of a page for `together=`: a positive whole number. *(optional, default `40`)*
@@ -70,11 +70,11 @@ It prints a table from its display data set ([%layout](layout.md)), and a listin
 - With `page=`, each value of the page variable gets its own pages, in the same two files, under a BY statement, so that a title can name the value (OPTIONS NOBYLINE and TITLE2 "Sex: #BYVAL1").
 - With no row, the report has one row: the text of `nodata=`.
 
-The setup of [%layout](layout.md) (setup=) holds the parameters of a table: %print(&name.) prints its display data set again after a change. A parameter that is not in the setup is added after it: %print(&name., `file=`...). SAS stops a call that has a parameter twice: change that parameter in [%layout](layout.md).
+The setup of [%layout](layout.md) (setup=) holds the parameters of a table: `%print(&name.)` prints its display data set again after a change. A parameter that is not in the setup is added after it: `%print(&name., file=...)`. SAS stops a call that has a parameter twice: change that parameter in [%layout](layout.md).
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `t14_2_1_display` (made by the [example of %layout](layout.md#examples)), `t14_1_1_display` (made by the [example of %layout](layout.md#examples)).
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `t14_2_1_display` (made by the [example of %layout](layout.md#examples)), `t14_1_1_display` (made by the [example of %layout](layout.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Prints the display data set as RTF and as a listing: the rows of one block stay on one page.
 
@@ -235,11 +235,15 @@ Build a table: [%stack](stack.md), [%columns](columns.md), [%ard](ard.md), [%lay
 
 Named on this page: [%table](table.md).
 
-Guides that use %print: [Make a demographic table with tests](../how-to/demographic-table.md), [Use the macros in your own program](../how-to/own-program.md), [Make one page per subgroup](../how-to/page-per-subgroup.md), [Run the examples of the reference](../how-to/run-the-examples.md).
+Guides that use %print: [Tutorial: your first table](../tutorial/index.md), [Make a demographic table with tests](../how-to/demographic-table.md), [Make one page per subgroup](../how-to/page-per-subgroup.md).
 
 ## Proof
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+Its 18 test cases (each with a clean log and the files it is about) and the tables and listings of a made-up study (12 of 12, also as the code the macros wrote, run without the macros); ran on SAS 9.4 M9, 2026-11-12.
+
+The known answers and test cases are kept with the development of the library, not in this repository.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 Used in the proof against pharmaverse: [t14_2_01](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/t14_2_01.sas) (R Submission Pilot 1), [t14_3_01](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/t14_3_01.sas) (R Submission Pilot 1), [t14_3_02](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/t14_3_02.sas) (R Submission Pilot 1), [adverse_events](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pharmaverse/programs/adverse_events.sas) (pharmaverse examples), [demographic](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pharmaverse/programs/demographic.sas) (pharmaverse examples). See [what the proof shows](../explanation/proof.md).
 

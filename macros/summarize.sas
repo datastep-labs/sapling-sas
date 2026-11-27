@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : summarize.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -13,9 +13,10 @@
 |                 missing value. A sum of only missing values is missing. The
 |                 rows of data= keep their order.
 | Procedure     : PROC SUMMARY, MERGE
-| Proven        : the fixtures of the step kind derive.from.summary
-|                 (src/adam_steps.ts; node tools/adam_steps_sas.ts); ran on SAS
-|                 9.4 M9, 2026-11-12
+| Proven        : Checked on its test cases of a value summarized over the
+|                 records of a subject (small made-up records): every value the
+|                 same as that of the expected records; ran on SAS 9.4 M9,
+|                 2026-11-12
 |
 | Input Parameters :
 |
@@ -73,15 +74,17 @@
 |                          number changes.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: The example first copies its records into a
+| 27-NOV-2026 Sapling      1.10.0: The example first copies its records into a
 |                          data set of its own, so that it changes no data set of
 |                          setup.sas for a later example. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
+|                          manual. No number changes.
 |
 *******************************************************************************/
 %MACRO summarize(

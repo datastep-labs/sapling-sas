@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : baseline.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -17,8 +17,9 @@
 |                 records, the log has an ERROR line that names the group, and
 |                 data= is not changed.
 | Procedure     : PROC SORT, MERGE
-| Proven        : the fixtures of the step kind baseline (src/adam_steps.ts;
-|                 node tools/adam_steps_sas.ts); ran on SAS 9.4 M9, 2026-11-12
+| Proven        : Checked on its test cases of the baseline value (small made-up
+|                 records): every value the same as that of the expected
+|                 records; ran on SAS 9.4 M9, 2026-11-12
 |
 | Input Parameters :
 |
@@ -70,16 +71,18 @@
 |                          case (names in lower case). No number changes.
 | 16-NOV-2026 Sapling      1.9.1: two baseline records in a group: the ERROR,
 |                          then data= is not changed (DEV-025).
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: The text says that CHG is a DATA step after
+| 27-NOV-2026 Sapling      1.10.0: The text says that CHG is a DATA step after
 |                          %baseline. The example first copies its records into a
 |                          data set of its own, so that it changes no data set of
 |                          setup.sas for a later example. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
+|                          manual. No number changes.
 |
 *******************************************************************************/
 %MACRO baseline(

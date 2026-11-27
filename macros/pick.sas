@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : pick.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -16,9 +16,10 @@
 |                 missing value. When data= has the variable new= already, the
 |                 new values replace it and the log says so.
 | Procedure     : PROC SORT, MERGE
-| Proven        : the fixtures of the step kinds derive.from.one,
-|                 derive.from.extreme, ice (src/adam_steps.ts; node
-|                 tools/adam_steps_sas.ts); ran on SAS 9.4 M9, 2026-11-12
+| Proven        : Checked on its test cases of a value from one record, from the
+|                 first or the last record, and from an intercurrent event
+|                 (small made-up records): every value the same as that of the
+|                 expected records; ran on SAS 9.4 M9, 2026-11-12
 |
 | Input Parameters :
 |
@@ -95,19 +96,21 @@
 |                          replaced, with a NOTE (a subject without a value kept
 |                          its old value). The license line; the example in the
 |                          house case.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: The example first copies its records into a
+| 27-NOV-2026 Sapling      1.10.0: The example first copies its records into a
 |                          data set of its own, so that it changes no data set of
 |                          setup.sas for a later example. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the message of two records of a subject with
+| 27-NOV-2026 Sapling      1.10.0: the message of two records of a subject with
 |                          unique=yes names the parameters of the macro (unique=,
 |                          order=, which=); the text of unique=. No number
 |                          changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
+|                          manual. No number changes.
 |
 *******************************************************************************/
 %MACRO pick(

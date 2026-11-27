@@ -116,11 +116,11 @@ Use it for vital signs or laboratory values over the visits; use [%table_summary
 - &lt;name&gt;_cols: the columns ([%columns](columns.md))
 - &lt;name&gt;_display: the display data set, one row per printed line ([%layout](layout.md))
 
-The global macro variable &lt;name&gt;_print keeps the call of [%print](print.md): change &lt;name&gt;_display, then print again with %print(&&lt;name&gt;_print.).
+The global macro variable &lt;name&gt;_print keeps the call of [%print](print.md): change &lt;name&gt;_display, then print again with `%print(&<name>_print.)`.
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Makes the table of the value at each visit and of its change after baseline.
 
@@ -263,10 +263,10 @@ Tables in one call: [%table](table.md), [%table_summary](table_summary.md), [%ta
 
 Named on this page: [%describe](describe.md), [%layout](layout.md), [%stack](stack.md), [%columns](columns.md), [%print](print.md).
 
-Guides that use %table_visit: [Run the examples of the reference](../how-to/run-the-examples.md).
-
 ## Proof
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+Checked against its long program, written out by hand: the same display data set (PROC COMPARE), on a made-up study; ran on SAS 9.4 M9, 2026-11-13.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 [Source of %table_visit](https://github.com/datastep-labs/sapling-sas/blob/main/macros/table_visit.sas)

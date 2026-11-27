@@ -18,7 +18,7 @@ Starts a program: sets the study, the program and the output folder, opens the A
 ## Parameters
 
 `id` (the first value, without a keyword)
-:   The name of the study: a text without quotes, given first, without a keyword (%study(CDISCPILOT01, ...)). *(required)*
+:   The name of the study: a text without quotes, given first, without a keyword (`%study(CDISCPILOT01, ...)`). *(required)*
 
 `program=`
 :   The name of this program, without quotes (`program = t14_2_01`). [%ard](ard.md) names the numbers file after it when its `file=` is not given. *(required)*
@@ -39,7 +39,7 @@ Call it once, at the top of each program, before any other macro of the library.
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Starts the program of the examples: it sets SPL_STUDY, SPL_PROGRAM and SPL_OUT and opens ADAM.
 
@@ -70,11 +70,13 @@ Start a program: [%import_xpt](import_xpt.md).
 
 Named on this page: [%ard](ard.md).
 
-Guides that use %study: [Use the macros in your own program](../how-to/own-program.md), [Run the examples of the reference](../how-to/run-the-examples.md).
+Guides that use %study: [Use the macros in your own program](../how-to/own-program.md).
 
 ## Proof
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+Every program of a made-up study: each ran with a clean log, and 570 of 570 numbers the same as those of a second program in R; ran on SAS 9.4 M9, 2026-11-12.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 Used in the proof against pharmaverse: [f14_1](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/f14_1.sas) (R Submission Pilot 1), [t14_2_01](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/t14_2_01.sas) (R Submission Pilot 1), [t14_3_01](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/t14_3_01.sas) (R Submission Pilot 1), [t14_3_02](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/t14_3_02.sas) (R Submission Pilot 1), [adverse_events](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pharmaverse/programs/adverse_events.sas) (pharmaverse examples), [demographic](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pharmaverse/programs/demographic.sas) (pharmaverse examples). See [what the proof shows](../explanation/proof.md).
 

@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : columns.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -24,8 +24,8 @@
 |                   data, Placebo|(N=33) on the page of the males and
 |                   Placebo|(N=53) on the page of the females.
 | Procedure     : PROC SUMMARY
-| Proven        : the tables of the dummy study SYNHTN01 (the N of every column
-|                 the same as that of a second program in R); ran on SAS 9.4 M9,
+| Proven        : The tables of a made-up study: the N of every column the same
+|                 as that of a second program in R; ran on SAS 9.4 M9,
 |                 2026-11-12
 |
 | Input Parameters :
@@ -102,20 +102,22 @@
 |                          data out, before %ard and %layout.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
-| 27-NOV-2026 Sapling      1.9.1: page=: the columns on each page of a page
+| 27-NOV-2026 Sapling      1.10.0: page=: the columns on each page of a page
 |                          variable, the N of each column that of its page.
 |                          Without page= no change.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: The header names no internal tool. No number
+| 27-NOV-2026 Sapling      1.10.0: The header names no internal tool. No number
 |                          changes.
-| 27-NOV-2026 Sapling      1.9.1: the N of a page in the text is that of the
+| 27-NOV-2026 Sapling      1.10.0: the N of a page in the text is that of the
 |                          example data. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; two
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example; two
 |                          more calls: page= and a call without n=. No number
 |                          changes.
+| 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
+|                          manual. No number changes.
 |
 *******************************************************************************/
 %MACRO columns(

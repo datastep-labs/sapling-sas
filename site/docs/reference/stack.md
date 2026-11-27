@@ -16,7 +16,7 @@ Stacks results one under another into one table, a block per result, in the orde
 ## Parameters
 
 `results` (the first value, without a keyword)
-:   The results to stack: data set names separated by blanks, in the order of the blocks. *(required)*
+:   The results to stack: data set names separated by blanks, in the order of the blocks. Give them first, without a keyword (`%stack(a b, out=t)`), or as `results=` (`%stack(results=a b, out=t)`); a message names them `results=`. *(required)*
 
 `out=`
 :   The name of the stacked table. *(required)*
@@ -40,7 +40,7 @@ A block is the rows of one call in the table: the rows of one result, under its 
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `age_describe` (made by the [example of %describe](describe.md#examples)), `age_anova` (made by the [example of %anova](anova.md#examples)), `sex_freq` (made by the [example of %freq](freq.md#examples)), `sex_chisq` (made by the [example of %chisq](chisq.md#examples)), `hr_sex` (made by the [example of %cox](cox.md#examples)), `hr_age` (made by the [example of %cox](cox.md#examples)), `age_sex` (made by the [example of %describe](describe.md#examples)), `agegr_sex` (made by the [example of %freq](freq.md#examples)).
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `age_describe` (made by the [example of %describe](describe.md#examples)), `age_anova` (made by the [example of %anova](anova.md#examples)), `sex_freq` (made by the [example of %freq](freq.md#examples)), `sex_chisq` (made by the [example of %chisq](chisq.md#examples)), `hr_sex` (made by the [example of %cox](cox.md#examples)), `hr_age` (made by the [example of %cox](cox.md#examples)), `age_sex` (made by the [example of %describe](describe.md#examples)), `agegr_sex` (made by the [example of %freq](freq.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Stacks four results in the order of the table: RESULT and ORD tell where each row came from.
 
@@ -134,11 +134,13 @@ Build a table: [%columns](columns.md), [%ard](ard.md), [%layout](layout.md), [%p
 
 Named on this page: [%describe](describe.md), [%freq](freq.md).
 
-Guides that use %stack: [Make an adverse event table](../how-to/adverse-event-table.md), [Make a demographic table with tests](../how-to/demographic-table.md), [Run the examples of the reference](../how-to/run-the-examples.md).
+Guides that use %stack: [Tutorial: your first table](../tutorial/index.md), [Make an adverse event table](../how-to/adverse-event-table.md), [Check a table against an independent program](../how-to/check-a-table.md), [Make a demographic table with tests](../how-to/demographic-table.md), [Make an efficacy table with an ANCOVA](../how-to/efficacy-table.md), [Use the macros in your own program](../how-to/own-program.md), [Make one page per subgroup](../how-to/page-per-subgroup.md).
 
 ## Proof
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+The tables of a made-up study: every program ran with a clean log, and 570 of 570 numbers the same as those of a second program in R; ran on SAS 9.4 M9, 2026-11-12.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 Used in the proof against pharmaverse: [t14_2_01](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/t14_2_01.sas) (R Submission Pilot 1), [t14_3_01](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/t14_3_01.sas) (R Submission Pilot 1), [t14_3_02](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/t14_3_02.sas) (R Submission Pilot 1), [adverse_events](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pharmaverse/programs/adverse_events.sas) (pharmaverse examples), [demographic](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pharmaverse/programs/demographic.sas) (pharmaverse examples). See [what the proof shows](../explanation/proof.md).
 

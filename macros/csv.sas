@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : csv.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -13,9 +13,8 @@
 |                 written with their formats, so that a second program, in SAS
 |                 or R, can compare its listing or figure with this file.
 | Procedure     : DATA steps (FILE, PUT)
-| Proven        : the listings of the dummy study SYNHTN01 (the same as the
-|                 listings of a second program in R); ran on SAS 9.4 M9,
-|                 2026-11-12
+| Proven        : The listings of a made-up study: the same as the listings of a
+|                 second program in R; ran on SAS 9.4 M9, 2026-11-12
 |
 | Input Parameters :
 |
@@ -49,13 +48,15 @@
 | 16-NOV-2026 Sapling      1.9.0: a missing output folder is made, with a NOTE
 |                          (%_spl_folder). The license line; the example in the
 |                          house case.
-| 27-NOV-2026 Sapling      1.9.1: the text of the header for the manual: the
+| 27-NOV-2026 Sapling      1.10.0: the text of the header for the manual: the
 |                          summary, the form of each parameter. No number
 |                          changes.
-| 27-NOV-2026 Sapling      1.9.1: The header names no internal tool. No number
+| 27-NOV-2026 Sapling      1.10.0: The header names no internal tool. No number
 |                          changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
+|                          manual. No number changes.
 |
 *******************************************************************************/
 %MACRO csv(

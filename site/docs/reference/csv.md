@@ -40,7 +40,7 @@ Use [%ard](ard.md) for the numbers of a table. The first line has the names of t
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Writes the listing as a CSV file: the names of var= in the first line, then one line per record.
 
@@ -102,11 +102,11 @@ Build a table: [%stack](stack.md), [%columns](columns.md), [%ard](ard.md), [%lay
 
 Named on this page: [%study](study.md).
 
-Guides that use %csv: [Run the examples of the reference](../how-to/run-the-examples.md).
-
 ## Proof
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+The listings of a made-up study: the same as the listings of a second program in R; ran on SAS 9.4 M9, 2026-11-12.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 Used in the proof against pharmaverse: [f14_1](https://github.com/datastep-labs/sapling-sas/blob/main/proof/pilot1/programs/f14_1.sas) (R Submission Pilot 1). See [what the proof shows](../explanation/proof.md).
 

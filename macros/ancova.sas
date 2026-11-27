@@ -1,29 +1,30 @@
 /*******************************************************************************
 | Macro Name    : ancova.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
 |
-| Macro Purpose : Returns the Type III p-value of a numeric term in a linear
-|                 model, such as a test of dose response. Use %lsmeans for the
-|                 differences between pairs of groups, and %mmrm for a model of
-|                 repeated visits. The model is PROC GLM: the class factors, the
-|                 covariates and the tested term, one record per subject (the
-|                 first with a value; when where= leaves a second record of a
-|                 subject, the log has a NOTE with their number). Give a where=
-|                 that leaves one record per subject, such as one parameter at
-|                 one visit with anl01fl = 'Y'; otherwise each subject has the
-|                 first of its records in the order of data=, whichever it is.
-|                 The coefficient of the term, its standard error and its
-|                 confidence limits come when stats= asks for them. The macro
-|                 writes a result: a data set with one row per number (the
-|                 result shape, see %stack).
+| Macro Purpose : Returns the Type III p-value of one numeric term in a linear
+|                 model, such as the test of a dose response (test = trt01pn):
+|                 the test of one numeric term, not a comparison of the groups.
+|                 For the ANCOVA comparison of the groups, use %lsmeans; for a
+|                 model of repeated visits, %mmrm. The model is PROC GLM: the
+|                 class factors, the covariates and the tested term, one record
+|                 per subject (the first with a value; when where= leaves a
+|                 second record of a subject, the log has a NOTE with their
+|                 number). Give a where= that leaves one record per subject,
+|                 such as one parameter at one visit with anl01fl = 'Y';
+|                 otherwise each subject has the first of its records in the
+|                 order of data=, whichever it is. The coefficient of the term,
+|                 its standard error and its confidence limits come when stats=
+|                 asks for them. The macro writes a result: a data set with one
+|                 row per number (the result shape, see %stack).
 | Procedure     : PROC GLM
-| Proven        : the known answer of the method ancova (src/methods.ts, worked
-|                 out by tools/method_answers.R; node tools/methods_sas.ts); ran
-|                 on SAS 9.4 M9, 2026-11-12
+| Proven        : Checked against its known answer (on a small data set, the
+|                 numbers worked out independently in R); ran on SAS 9.4 M9,
+|                 2026-11-12
 |
 | Input Parameters :
 |
@@ -85,21 +86,26 @@
 |                          runs: the flat program has it. No number changes.
 | 16-NOV-2026 Sapling      1.9.0: the license line; the example in the house
 |                          case (names in lower case). No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: a NOTE when where= leaves a second record of
+| 27-NOV-2026 Sapling      1.10.0: a NOTE when where= leaves a second record of
 |                          a subject (the first is used, as before). No number
 |                          changes.
-| 27-NOV-2026 Sapling      1.9.1: The example analyses the records of anl01fl =
+| 27-NOV-2026 Sapling      1.10.0: The example analyses the records of anl01fl =
 |                          'Y' (one record per subject). The text of stats=: a
 |                          name without a pattern takes its default pattern. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: the text says to give a where= that leaves one
+| 27-NOV-2026 Sapling      1.10.0: the text says to give a where= that leaves one
 |                          record per subject. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: The first sentence says that the macro tests
+|                          one numeric term (a dose response) and names %lsmeans
+|                          for the ANCOVA comparison of the groups; Proven in
+|                          plain words, for the published manual. No number
+|                          changes.
 |
 *******************************************************************************/
 %MACRO ancova(

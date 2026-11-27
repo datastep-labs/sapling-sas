@@ -40,7 +40,7 @@ Use [%pick](pick.md) when the other data set has more rows per subject and one o
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Copies the time to event records with four variables of their own.
 
@@ -94,10 +94,12 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 ADaM steps: [%pick](pick.md), [%summarize](summarize.md), [%summarize_groups](summarize_groups.md), [%baseline](baseline.md), [%flag_first](flag_first.md), [%flag_if_any](flag_if_any.md), [%windows](windows.md), [%visits](visits.md), [%locf](locf.md), [%relchange](relchange.md), [%param_wide](param_wide.md), [%pool](pool.md), [%tte](tte.md).
 
-Guides that use %merge_subject: [Run the examples of the reference](../how-to/run-the-examples.md).
-
 ## Proof
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+Checked on its test cases of the variables copied from the subjects and from a period (small made-up records): every value the same as that of the expected records; ran on SAS 9.4 M9, 2026-11-12.
+
+The known answers and test cases are kept with the development of the library, not in this repository.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 [Source of %merge_subject](https://github.com/datastep-labs/sapling-sas/blob/main/macros/merge_subject.sas)

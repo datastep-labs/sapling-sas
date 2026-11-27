@@ -68,7 +68,7 @@ Use [%interaction_logistic](interaction_logistic.md) for a response, [%interacti
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run.
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 Tests the treatment by sex interaction of the change at Week 12, adjusted for baseline.
 
@@ -99,12 +99,12 @@ The macro gives only the [messages every macro shares](index.md#messages-every-m
 
 Subgroups: [%interaction_logistic](interaction_logistic.md), [%interaction_genmod](interaction_genmod.md), [%interaction_phreg](interaction_phreg.md).
 
-Guides that use %interaction_glm: [Run the examples of the reference](../how-to/run-the-examples.md).
-
 ## Proof
 
-Checked against its known answers: numbers worked out independently in R and compared on SAS by the tests of the library (the tests are kept with the development of the library, not in this repository).
+Checked against its known answer (on a small data set, the numbers worked out independently in R); ran on SAS 9.4 M9, 2026-11-12.
 
-The examples of this page ran on SAS 9.4M9 on 2026-11-27, with a log free of ERROR and WARNING.
+The known answers and test cases are kept with the development of the library, not in this repository.
+
+The examples of this page ran on SAS 9.4 M9 on 2026-11-27, with a log free of ERROR and WARNING.
 
 [Source of %interaction_glm](https://github.com/datastep-labs/sapling-sas/blob/main/macros/interaction_glm.sas)

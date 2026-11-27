@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : km.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -26,9 +26,9 @@
 |                 is censored as 1 is. A record used with a missing or negative
 |                 CNSR stops the macro with an ERROR.
 | Procedure     : PROC LIFETEST
-| Proven        : the known answer of the methods km, kmrate (src/methods.ts,
-|                 worked out by tools/method_answers.R; node
-|                 tools/methods_sas.ts); ran on SAS 9.4 M9, 2026-11-12
+| Proven        : Checked against its known answers: the median and the percent
+|                 without an event at a time (on a small data set, the numbers
+|                 worked out independently in R); ran on SAS 9.4 M9, 2026-11-12
 |
 | Input Parameters :
 |
@@ -94,7 +94,7 @@
    , stats = n="XX" events="XX" surv="XX.X" lcl="XX.X" ucl="XX.X"
    , out   = os_km
  )
- * Uses conftype=loglog and a 90 percent level: the median stays, its limits change.;
+ * Uses conftype=loglog and a 90 percent level: only the lower limit of Low Dose changes, 51 to 48.;
  %km(
      data     = adttde
    , var      = aval
@@ -122,23 +122,26 @@
 | 16-NOV-2026 Sapling      1.9.1: conftype= is checked (DEV-047); PLOTS=NONE
 |                          only with ODS graphics on (DEV-051). No number
 |                          changes.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: The example with time= shows the survival
+| 27-NOV-2026 Sapling      1.10.0: The example with time= shows the survival
 |                          (stats= with surv); the text says which limits lcl and
 |                          ucl are. The text of stats=: a name without a pattern
 |                          takes its default pattern. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: CNSR as in ADaM: 0 is an event and any positive
+| 27-NOV-2026 Sapling      1.10.0: CNSR as in ADaM: 0 is an event and any positive
 |                          value a censoring (before, only 1 was a censoring and
 |                          2 an event); a missing or negative CNSR on a record
 |                          used stops the macro with an ERROR. No number changes
 |                          on data with CNSR 0 and 1.
-| 27-NOV-2026 Sapling      1.9.1: an example with conftype= and level=. No number
+| 27-NOV-2026 Sapling      1.10.0: an example with conftype= and level=. No number
 |                          changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example (a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
+| 27-NOV-2026 Sapling      1.10.0: The caption of the third example says what
+|                          changes in its output; Proven in plain words, for the
+|                          published manual. No number changes.
 |
 *******************************************************************************/
 %MACRO km(

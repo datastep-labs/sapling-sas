@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : print.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -35,9 +35,10 @@
 |                 it: %print(&name., file=...). SAS stops a call that has a
 |                 parameter twice: change that parameter in %layout.
 | Procedure     : PROC REPORT
-| Proven        : its cases of node tools/print_sas.ts (PRINT SAS PASS: 18 cases)
-|                 and the tables and listings of the dummy study SYNHTN01
-|                 (flat programs 12 of 12); ran on SAS 9.4 M9, 2026-11-12
+| Proven        : Its 18 test cases (each with a clean log and the files it is
+|                 about) and the tables and listings of a made-up study (12 of
+|                 12, also as the code the macros wrote, run without the
+|                 macros); ran on SAS 9.4 M9, 2026-11-12
 |
 | Input Parameters :
 |
@@ -121,16 +122,18 @@
 | 16-NOV-2026 Sapling      1.9.0: a missing output folder is made, with a NOTE
 |                          (%_spl_folder). The license line; the example in the
 |                          house case.
-| 27-NOV-2026 Sapling      1.9.1: page=: a new page for each value of a
+| 27-NOV-2026 Sapling      1.10.0: page=: a new page for each value of a
 |                          variable, in the same files, its value for a
 |                          title (#BYVAL1), the headers of its page from
 |                          HEAD_X. Without page= no change.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example; a
 |                          third call with page=. No number changes.
+| 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
+|                          manual. No number changes.
 |
 *******************************************************************************/
 %MACRO print(

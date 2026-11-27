@@ -1,7 +1,7 @@
 /*******************************************************************************
 | Macro Name    : table_model.sas
 | SAS Version   : SAS 9.4
-| Macro Version : 1.9.1
+| Macro Version : 1.10.0
 | Created By    : Sapling
 | Date          : 27NOV2026
 | License       : Commercial, DataStep Labs (see LICENSE)
@@ -16,18 +16,25 @@
 |                   statistics on the records of the visit of at= (%describe)
 |                 - with method=ancova: the LS means and the differences of
 |                   pairs of groups from an ANCOVA on the records of the visit
-|                   of at= (%lsmeans)
+|                   of at= (%lsmeans), in a block with the label "ANCOVA,
+|                   adjusted for" and the names of covars= in lower case, such
+|                   as "ANCOVA, adjusted for base" (without covars=: "Analysis
+|                   of variance")
 |                 - with method=mmrm: the same from a mixed model for repeated
-|                   measures over all visits, at the visit of at= (%mmrm)
+|                   measures over all visits, at the visit of at= (%mmrm), in a
+|                   block with the label "MMRM: " and the visit, such as "MMRM:
+|                   Week 24"
 |                 With method=ancova, the records of the visit of at= must be
 |                 one record per subject: give where= the parameter and the
 |                 analysis flag, as %lsmeans uses the first record of a subject
-|                 (with a NOTE when it leaves one out). The table has no Total
-|                 column. The long program is the program the macro writes and
-|                 runs: the population, the records, one call per block, %stack
-|                 and %table, the calls a person would write by hand. The macro
-|                 computes nothing itself. These data sets stay in WORK, for a
-|                 change and a second print:
+|                 (with a NOTE when it leaves one out). The label of the model
+|                 block is not changed by names=: change its row in
+|                 <name>_display and print again, or start from the long program
+|                 (show=). The table has no Total column. The long program is
+|                 the program the macro writes and runs: the population, the
+|                 records, one call per block, %stack and %table, the calls a
+|                 person would write by hand. The macro computes nothing itself.
+|                 These data sets stay in WORK, for a change and a second print:
 |                 - <name>_<variable> and <name>_ancova or <name>_mmrm: the
 |                   results, one row per number (the result shape, see %stack)
 |                 - <name>: the stacked results
@@ -38,9 +45,9 @@
 |                 %print: change <name>_display, then print again with
 |                 %print(&<name>_print.).
 | Procedure     : none of its own (those of %describe, %lsmeans, %mmrm, %table)
-| Proven        : node tools/tables_sas.ts (the same display data set as the
-|                 long program, on the made-up study SYNHTN01); ran on SAS
-|                 9.4 M9, 2026-11-13
+| Proven        : Checked against its long program, written out by hand: the
+|                 same display data set (PROC COMPARE), on a made-up study; ran
+|                 on SAS 9.4 M9, 2026-11-13
 |
 | Input Parameters :
 |
@@ -130,6 +137,10 @@
 |                 or where=). FILE: <file>.rtf, <file>.lst and the numbers file
 |                 (only with file=). SETUP: the global macro variable
 |                 <name>_print. SHOW: the long program, in the log or in a file.
+|                 In the printed table, a comparison is in the column of the
+|                 group, on the rows under "vs" and the group it is compared
+|                 with: the LS mean of the column group minus the LS mean of the
+|                 group on the row.
 |
 | Example:
 |
@@ -176,17 +187,22 @@
 |                          house case. No number changes.
 | 16-NOV-2026 Sapling      1.9.1: var=, by= and order= are checked before the
 |                          long program (DEV-031). No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the example runs on the example data
+| 27-NOV-2026 Sapling      1.10.0: the example runs on the example data
 |                          (sas/examples). The text of the header for the
 |                          manual: the summary, the form of each parameter. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: The example gives adsl=: the N of the columns
+| 27-NOV-2026 Sapling      1.10.0: The example gives adsl=: the N of the columns
 |                          is that of the population. No number changes.
-| 27-NOV-2026 Sapling      1.9.1: the text of where= and model=; the text says
+| 27-NOV-2026 Sapling      1.10.0: the text of where= and model=; the text says
 |                          that the ANCOVA needs one record per subject. No
 |                          number changes.
-| 27-NOV-2026 Sapling      1.9.1: a caption for each call of the example; a
+| 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example; a
 |                          second call with other forms of its parameters. No
+|                          number changes.
+| 27-NOV-2026 Sapling      1.10.0: The label of the model block ("ANCOVA,
+|                          adjusted for base", "MMRM: Week 24") and the
+|                          direction of a difference in the printed table;
+|                          Proven in plain words, for the published manual. No
 |                          number changes.
 |
 *******************************************************************************/

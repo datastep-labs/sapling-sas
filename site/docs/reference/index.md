@@ -36,7 +36,7 @@ One test of the groups per call: its p-value in the result.
 | [%chisq](chisq.md) | Returns the p-value of the Pearson chi-square test of the groups against the categories of a response. |
 | [%fisher](fisher.md) | Returns the p-value of Fisher's exact test of the subjects with a record against the subjects without, between groups. |
 | [%cmh](cmh.md) | Returns the p-value of the Cochran-Mantel-Haenszel test of the groups against the categories of a response, within strata. |
-| [%ancova](ancova.md) | Returns the Type III p-value of a numeric term in a linear model, such as a test of dose response. |
+| [%ancova](ancova.md) | Returns the Type III p-value of one numeric term in a linear model, such as the test of a dose response (test = trt01pn): the test of one numeric term, not a comparison of the groups. |
 | [%adjust](adjust.md) | Adds the adjusted p-values of a family of pairs of groups to a result: one row padj per pair. |
 
 ## Compare groups with a model {#models}
@@ -45,7 +45,7 @@ Estimates of the difference between pairs of groups, with their confidence inter
 
 | Macro | It makes |
 |---|---|
-| [%lsmeans](lsmeans.md) | Returns the differences of the LS means of pairs of groups in a linear model, with confidence limits and p-values. |
+| [%lsmeans](lsmeans.md) | The ANCOVA of the groups: returns the differences of the LS means of pairs of groups in a linear model, with confidence limits and p-values. |
 | [%mmrm](mmrm.md) | Returns the differences of the LS means of pairs of groups at one visit from a repeated measures mixed model. |
 | [%logistic](logistic.md) | Returns the odds ratios of pairs of groups from a logistic regression, with their Wald confidence limits and p-values. |
 | [%risk](risk.md) | Returns the risk difference, relative risk or odds ratio of pairs of groups, with its confidence interval and p-value. |
