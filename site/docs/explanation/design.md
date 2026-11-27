@@ -47,7 +47,7 @@ input, so the log never fills with the errors of a procedure.
 |---|---|
 | A population parameter in the building blocks | a DATA step in the program, visible to the reviewer |
 | A list of treatments | the values of `by=` |
-| Sorting of the input | the program sorts; a macro keeps the order it is given |
+| Sorting of the input | the program sorts; a statistics macro keeps the order it is given (an ADaM step such as `%locf` sorts the data it changes, as its page says) |
 | "(Continued)" lines, page headers, splits of wide tables by hand | the titles and footnotes of the program; PROC REPORT pages and splits |
 | PROC SQL, PROC EXPORT | DATA steps and procedures that a SAS programmer reads at a glance |
 

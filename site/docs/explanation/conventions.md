@@ -122,3 +122,10 @@ empty row and no message, as that page says. `%summarize` has one statistic, in 
 
 - Explanation: [The result shape](result-shape.md), [How a number is kept and printed](numbers.md).
 - [Glossary](../glossary.md): the terms of these pages, such as *twin* and *block*.
+
+## A name of a macro and a name of a method
+
+`%ancova` is the Type III test of one numeric term, such as a dose response. The ANCOVA comparison of the treatment
+groups (LS means and their differences) is [`%lsmeans`](../reference/lsmeans.md), and `%table_model` with
+`method = ancova` calls `%lsmeans`, not `%ancova`.
+

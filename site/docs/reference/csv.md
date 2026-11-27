@@ -17,17 +17,17 @@ Writes the records of a listing, or the numbers of a figure, to a CSV file.
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The records: the data set of the listing, or `out=` of a figure macro. *(required)*
 
-`var=`
+<a id="var"></a>`var=`
 :   The variables to write: names separated by blanks, in the order of the columns. *(required)*
 
-`folder=`
+<a id="folder"></a>`folder=`
 :   The folder in the outputs: listings or figures. *(optional, default `listings`)*
     Accepts: `listings`, `figures`.
 
-`file=`
+<a id="file"></a>`file=`
 :   The name of the CSV file, without its extension. *(required)*
 
 ## Result

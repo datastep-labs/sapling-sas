@@ -21,29 +21,29 @@ Adds the adjusted p-values of a family of pairs of groups to a result: one row p
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   A result of pairs with the variables of `by=`, VERSUS, STAT and VALUE: the `out=` of [%lsmeans](lsmeans.md), [%mmrm](mmrm.md), [%cox](cox.md) and the other macros of pairs. *(required)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups: the variable of `data=` with the group of each pair (`by = trt01p`). *(required)*
 
-`family=`
+<a id="family"></a>`family=`
 :   The pairs of the family in their order, separated by #: each the group first and then the group it is compared with, each value in quotes: `family = "High" "Placebo" # "Low" "Placebo"`. A pair is in the direction of the rows of `data=` (the group in `by=`, then VERSUS): "Placebo" "High" does not find the row of High against Placebo. *(required)*
 
-`method=`
+<a id="method"></a>`method=`
 :   The adjustment: bonferroni, holm, hochberg or hierarchy. *(required)*
     Accepts: `bonferroni`, `holm`, `hochberg`, `hierarchy`.
 
-`weights=`
+<a id="weights"></a>`weights=`
 :   The weights of a weighted Bonferroni test: one number per pair, in the order of `family=`, separated by blanks (`weights = 0.8 0.2`). Only with method=bonferroni. *(optional)*
 
-`pattern=`
+<a id="pattern"></a>`pattern=`
 :   The pattern of the printed adjusted p-value, in quotes. *(optional, default `"X.XXX"`)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the result data set. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _adjust_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -64,14 +64,14 @@ Every row of `data=` with STAT pval and a pair of `family=` is one hypothesis of
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `sbp_ls` (made by the [example of %lsmeans](lsmeans.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `sbp_ls` (made by the [example of %lsmeans](lsmeans.md#ex-sbp_ls)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 ??? note "Before these examples: the calls that make their inputs"
 
-    Run `examples/setup.sas`, then these examples of other pages ([%lsmeans](lsmeans.md)), in this order. Then the examples of this page run as shown.
+    Run `examples/setup.sas`, then these calls from the examples of %lsmeans, in this order. Then the examples of this page run as shown.
 
     ```sas
-    /* the example of %lsmeans */
+    /* from the example of %lsmeans */
     * Gives the difference of the LS means of every pair at Week 12, adjusted for baseline and sex.;
     %lsmeans(
          data   = advs
@@ -84,23 +84,9 @@ The examples run on the [example data](../tutorial/index.md#the-example-data) af
        , order  = trt01pn
        , out    = sbp_ls
      )
-    * Compares two pairs against Placebo at a 90 percent level and keeps the statistics of stats=.;
-    %lsmeans(
-         data   = advs
-       , where  = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')
-       , var    = chg
-       , by     = trt01p
-       , covars = base
-       , pairs  = "Xanomeline High Dose" "Placebo"
-                # "Xanomeline Low Dose"  "Placebo"
-       , order  = trt01pn
-       , level  = 0.90
-       , stats  = lsmean lsmean_se diff lcl ucl pval
-       , out    = sbp_ls90
-     )
-    TITLE;
-    FOOTNOTE;
     ```
+
+<a id="ex-sbp_adj"></a>
 
 Adjusts the p values of the two comparisons against Placebo by Hochberg: PADJ after PVAL.
 

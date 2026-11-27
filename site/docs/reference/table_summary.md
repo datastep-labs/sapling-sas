@@ -30,56 +30,56 @@ Makes a summary table of the subjects in one call, such as demographics: one blo
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set: the subjects, one row per subject, such as adsl. *(required)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The population: a condition in parentheses, such as `where = (saffl = 'Y')`. *(optional)*
 
-`vars=`
+<a id="vars"></a>`vars=`
 :   The variables of the table in its order, separated by blanks: a name alone for a numeric variable, a name and # for a categorical one, such as `vars = age sex# agegr1#agegr1n`. *(required)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups of the columns: one character variable, such as `by = trt01a`. *(required)*
 
-`order=`
+<a id="order"></a>`order=`
 :   The numeric twin of `by=`, such as `order = trt01an`: it gives the order of the columns. *(optional)*
 
-`levels=`
+<a id="levels"></a>`levels=`
 :   The planned categories of some categorical variables: each variable, then its values in quotes (levels= of [%freq](freq.md)), such as `levels = sex 'F' 'M'`. A planned category has a row also without a subject. *(optional)*
 
-`total=`
+<a id="total"></a>`total=`
 :   yes: add the column Total, all groups together. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
-`catstats=`
+<a id="catstats"></a>`catstats=`
 :   The statistics of a categorical variable, each name with its pattern (stats= of [%freq](freq.md)). *(optional)*
 
-`names=`
+<a id="names"></a>`names=`
 :   The labels of the blocks: pairs variable="text", separated by blanks, such as `names = age="Age (years)"`. A block without a pair has the label of its variable, or its name. *(optional)*
 
-`format=`
+<a id="format"></a>`format=`
 :   The labels of the categories: pairs of a variable and a format, as in a FORMAT statement (`format = sex $sexf. race $racef.`), as `format=` of [%layout](layout.md). *(optional)*
 
-`name=`
+<a id="name"></a>`name=`
 :   The name of the table: the first part of the names of its data sets, such as `name = t14_3_01`. When not given, the last part of `file=` is used; without `file=`, `name=` is required. *(optional)*
 
-`show=`
+<a id="show"></a>`show=`
 :   yes: write the long program to the log. A file path, without quotes: write the long program to that file. In both cases the macro runs it. *(optional, default `no`)*
 
-`stats=`
+<a id="stats"></a>`stats=`
 :   The statistics of a numeric variable, each name with its pattern (stats= of [%describe](describe.md)). *(optional)*
 
-`title=`
+<a id="title"></a>`title=`
 :   The titles of the table: one text in quotes per line (TITLE1, TITLE2 ...). They hold for this table only. When not given, the TITLE statements in force in the program are used. *(optional)*
 
-`footnote=`
+<a id="footnote"></a>`footnote=`
 :   The footnotes of the table: one text in quotes per line (FOOTNOTE1, FOOTNOTE2 ...). They hold for this table only. When not given, the FOOTNOTE statements in force in the program are used. *(optional)*
 
-`file=`
+<a id="file"></a>`file=`
 :   The output file without its extension: the macro writes &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file. When not given, nothing is printed. *(optional)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets of the macros that the long program calls. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 

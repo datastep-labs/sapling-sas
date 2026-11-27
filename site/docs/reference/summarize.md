@@ -19,23 +19,23 @@ Gives each subject the sum, mean, largest or smallest value of a variable over i
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The data set to change in place, such as adsl. *(required)*
 
-`from=`
+<a id="from"></a>`from=`
 :   The data set of the records, with USUBJID. When the value is not a variable yet, make it first in a DATA step. *(required)*
 
-`value=`
+<a id="value"></a>`value=`
 :   The numeric variable of `from=` to summarize. To count records, give a 0/1 variable and stat=sum; for "some record meets it" use stat=max, for "every record meets it" stat=min. *(required)*
 
-`stat=`
+<a id="stat"></a>`stat=`
 :   The statistic: sum, mean, max or min. *(optional, default `sum`)*
     Accepts: `sum`, `mean`, `max`, `min`.
 
-`new=`
+<a id="new"></a>`new=`
 :   The name of the new variable. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _summarize_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 

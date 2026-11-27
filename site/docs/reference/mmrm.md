@@ -33,64 +33,64 @@ Returns the differences of the LS means of pairs of groups at one visit from a r
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set: one record per subject and visit. *(required)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (paramcd = 'SYSBP' AND anl01fl = 'Y')`. *(optional)*
 
-`var=`
+<a id="var"></a>`var=`
 :   The response: one numeric variable. *(required)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups: one character variable. *(required)*
 
-`visit=`
+<a id="visit"></a>`visit=`
 :   The visit: one variable, the repeated factor of the REPEATED statement. The macro adds it to the class factors. *(required)*
 
-`at=`
+<a id="at"></a>`at=`
 :   The visit of the LS means and their differences: a value of `visit=` in quotes (`at = "Week 24"`). *(required)*
 
-`class=`
+<a id="class"></a>`class=`
 :   The class factors besides the groups and the subject: variables separated by blanks. *(optional)*
 
-`subject=`
+<a id="subject"></a>`subject=`
 :   The subject: one variable. *(optional, default `USUBJID`)*
 
-`model=`
+<a id="model"></a>`model=`
 :   The fixed effects: the MODEL statement after the equal sign. It must have the term of the groups by visit: `model = base trt01p avisit trt01p*avisit`. *(required)*
 
-`type=`
+<a id="type"></a>`type=`
 :   The covariance structure: TYPE= of REPEATED (un, cs, ar(1), toep ...). *(optional, default `un`)*
 
-`fallback=`
+<a id="fallback"></a>`fallback=`
 :   Other covariance structures to try in their order when one does not converge, separated by blanks (`fallback = toep cs`). *(optional)*
 
-`ddfm=`
+<a id="ddfm"></a>`ddfm=`
 :   The degrees of freedom: DDFM= of MODEL (bw is between-within, kr is Kenward-Roger). *(optional, default `bw`)*
 
-`method=`
+<a id="method"></a>`method=`
 :   The estimation method: reml or ml. *(optional, default `reml`)*
 
-`pairs=`
+<a id="pairs"></a>`pairs=`
 :   The pairs of groups to compare. all: each later group against each earlier one, in the order of `order=` (or of the values). Or the pairs separated by #, each the group first and then the group it is compared with, a value with a blank or a hyphen in quotes: `pairs = "Drug" "Placebo" # "High" "Low"`. *(optional, default `all`)*
 
-`order=`
+<a id="order"></a>`order=`
 :   The order of the groups: one numeric variable with one value per group (`order = trt01pn`). *(optional)*
 
-`level=`
+<a id="level"></a>`level=`
 :   The confidence level of the limits: a number between 0 and 1. *(optional, default `0.95`)*
 
-`stats=`
-:   The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are diff, diff_se, lcl, ucl, pval, lsmean and lsmean_se. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed). *(optional, default `diff="XX.X" diff_se="XX.XX" lcl="XX.X" ucl="XX.X" pval="X.XXX"`)*
+<a id="stats"></a>`stats=`
+:   The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are diff, diff_se, lcl, ucl, pval, lsmean and lsmean_se. A name without a pattern takes its default pattern: see the [table of default patterns](../explanation/numbers.md#the-table-of-default-patterns). *(optional, default `diff="XX.X" diff_se="XX.XX" lcl="XX.X" ucl="XX.X" pval="X.XXX"`)*
 
-`label=`
+<a id="label"></a>`label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the result data set. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _mmrm_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -109,6 +109,8 @@ Use [%lsmeans](lsmeans.md) for one record per subject, and [%ancova](ancova.md) 
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+<a id="ex-sbp_mmrm"></a>
 
 Fits the MMRM of the change at five visits and compares the groups at Week 24.
 

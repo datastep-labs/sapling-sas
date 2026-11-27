@@ -114,7 +114,7 @@
 |
 | Example:
 |
- * Derives the time to the first skin event from the first dose: CNSR 0 is an event, 1 a censoring.;
+ * Makes TTDE. Log NOTE: 2 subject(s) with no event and no censoring date: no record (no TRTEDT).;
  %tte(
      subjects      = adsl
    , events        = adae
@@ -129,6 +129,58 @@
    , source        = "ADAE"
    , paramcd       = "TTDE"
    , out           = adttde
+ )
+ * Makes the subjects with the end of week 12 (day 84) and the time of the first dose.;
+ DATA sl;
+   SET adsl;
+   wk12dt = trtsdt + 83;
+   trtstm = TIMEPART(trtsdtm);
+   FORMAT wk12dt DATE9. trtstm TIME5.;
+ RUN;
+ * Ends the period at week 12: no event or censoring in it gives CNSR 1 on day 84. All 254 count.;
+ %tte(
+     subjects      = sl
+   , events        = adae
+   , event         = trtemfl = 'Y' AND aebodsys = 'SKIN AND SUBCUTANEOUS TISSUE DISORDERS'
+   , date          = astdt
+   , start         = trtsdt
+   , end           = wk12dt
+   , censor_date   = trtedt
+   , seq           = aeseq
+   , censor_desc   = "End of treatment"
+   , censor_source = "ADSL"
+   , end_desc      = "End of week 12"
+   , event_desc    = aedecod
+   , source        = "ADAE"
+   , paramcd       = "TTDE12"
+   , out           = adttde12
+ )
+ * Makes the start time of each event, in seconds since midnight.;
+ DATA ae_times;
+   SET adae;
+   asttm = TIMEPART(astdtm);
+   FORMAT asttm TIME5.;
+ RUN;
+ * Adds the times of the start day: all are 00:00, imputed (ATMF H), so the events of day 1 count.;
+ %tte(
+     subjects      = sl
+   , events        = ae_times
+   , event         = trtemfl = 'Y' AND aebodsys = 'SKIN AND SUBCUTANEOUS TISSUE DISORDERS'
+   , date          = astdt
+   , time          = asttm
+   , start         = trtsdt
+   , start_time    = trtstm
+   , end           = wk12dt
+   , censor_date   = trtedt
+   , seq           = aeseq
+   , atmf          = asttmf
+   , censor_desc   = "End of treatment"
+   , censor_source = "ADSL"
+   , end_desc      = "End of week 12"
+   , event_desc    = aedecod
+   , source        = "ADAE"
+   , paramcd       = "TTDE12"
+   , out           = adttde12t
  )
 |
 |-------------------------------------------------------------------------------
@@ -159,6 +211,10 @@
 |                          manual. Without end=, a subject with no event and no
 |                          censoring date is no longer left out in silence: a
 |                          NOTE gives their number. No number changes.
+|                          The caption of the first example has the NOTE of
+|                          the 2 subjects with a missing TRTEDT; examples with
+|                          end=, and with time= and start_time=. No number
+|                          changes.
 |
 *******************************************************************************/
 %MACRO tte(

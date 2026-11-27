@@ -27,47 +27,47 @@ Returns the p-value of the treatment-by-subgroup interaction in a Cox model of a
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set: one record per subject, with USUBJID, the time and the censoring variable. *(required)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (ittfl = 'Y')`. *(optional)*
 
-`var=`
+<a id="var"></a>`var=`
 :   The time: one numeric variable, such as aval. *(required)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups of the model, the treatment: one variable. *(required)*
 
-`factor=`
+<a id="factor"></a>`factor=`
 :   The factor of the subgroups: one variable whose values are its levels (`factor = sex`). *(required)*
 
-`cnsr=`
+<a id="cnsr"></a>`cnsr=`
 :   The censoring variable: one numeric variable, 0 for an event and a positive value for a censoring (the ADaM CNSR: 1, 2 ... name the reason). A missing or negative value on a record used stops the macro with an ERROR. *(optional, default `CNSR`)*
 
-`covars=`
+<a id="covars"></a>`covars=`
 :   The numeric covariates of the model, separated by blanks (`covars = base`). *(optional)*
 
-`class=`
+<a id="class"></a>`class=`
 :   The other class factors of the model, separated by blanks (`class = sitegr1`). *(optional)*
 
-`strata=`
+<a id="strata"></a>`strata=`
 :   The strata of the models, separated by blanks (`strata = sitegr1`). When not given, the models have no strata. *(optional)*
 
-`ties=`
+<a id="ties"></a>`ties=`
 :   The method for tied times: efron, breslow, or exact (TIES=DISCRETE of PROC PHREG). discrete is accepted as another name of exact. *(optional, default `efron`)*
     Accepts: `efron`, `breslow`, `exact`, `discrete`.
 
-`stats=`
+<a id="stats"></a>`stats=`
 :   The statistic with its pattern of the printed number: pval. *(optional, default `pval="X.XXX"`)*
 
-`label=`
+<a id="label"></a>`label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the result data set. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _interaction_phreg_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -81,15 +81,15 @@ Use [%interaction_glm](interaction_glm.md) for a continuous variable, [%interact
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#ex-adttde)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 ??? note "Before these examples: the calls that make their inputs"
 
-    Run `examples/setup.sas`, then these examples of other pages ([%tte](tte.md)), in this order. Then the examples of this page run as shown.
+    Run `examples/setup.sas`, then these calls from the examples of %tte, in this order. Then the examples of this page run as shown.
 
     ```sas
-    /* the example of %tte */
-    * Derives the time to the first skin event from the first dose: CNSR 0 is an event, 1 a censoring.;
+    /* from the example of %tte */
+    * Makes TTDE. Log NOTE: 2 subject(s) with no event and no censoring date: no record (no TRTEDT).;
     %tte(
          subjects      = adsl
        , events        = adae
@@ -105,9 +105,9 @@ The examples run on the [example data](../tutorial/index.md#the-example-data) af
        , paramcd       = "TTDE"
        , out           = adttde
      )
-    TITLE;
-    FOOTNOTE;
     ```
+
+<a id="ex-ttde_int"></a>
 
 Tests the treatment by sex interaction of the time to the event in a Cox model.
 
@@ -139,8 +139,6 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 ## See also
 
 Subgroups: [%interaction_glm](interaction_glm.md), [%interaction_logistic](interaction_logistic.md), [%interaction_genmod](interaction_genmod.md).
-
-Named on this page: [%tte](tte.md).
 
 ## Proof
 

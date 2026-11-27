@@ -31,60 +31,60 @@ Returns the hazard ratio of pairs of groups from a Cox proportional hazards mode
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set: one record per subject, with USUBJID, the time and the censoring variable. *(required)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (paramcd = 'TTDE')`. *(optional)*
 
-`var=`
+<a id="var"></a>`var=`
 :   The time: one numeric variable, such as aval. *(required)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups of the model: one character variable. *(required)*
 
-`cnsr=`
+<a id="cnsr"></a>`cnsr=`
 :   The censoring variable: one numeric variable, 0 for an event and a positive value for a censoring (the ADaM CNSR: 1, 2 ... name the reason). A missing or negative value on a record used stops the macro with an ERROR. *(optional, default `CNSR`)*
 
-`within=`
+<a id="within"></a>`within=`
 :   One model in each group of these variables, separated by blanks (`within = sex` for the levels of a subgroup). A record with a missing value of one of them is not used. *(optional)*
 
-`covars=`
+<a id="covars"></a>`covars=`
 :   The numeric covariates of the model, separated by blanks (`covars = age`). *(optional)*
 
-`class=`
+<a id="class"></a>`class=`
 :   The class factors of the model, separated by blanks (`class = sitegr1`). *(optional)*
 
-`strata=`
+<a id="strata"></a>`strata=`
 :   The strata of the model, separated by blanks (`strata = sitegr1`). When not given, the model has no strata. *(optional)*
 
-`pairs=`
+<a id="pairs"></a>`pairs=`
 :   The pairs of groups to compare. all: each later group against each earlier one, in the order of `order=` (or of the values). Or a list of pairs separated by #: the group first, then the group it is compared with, each value in quotes ("Drug" "Placebo" # "High" "Low"). *(optional, default `all`)*
 
-`order=`
+<a id="order"></a>`order=`
 :   The order of the groups: one numeric variable with one value per group (`order = trt01pn`). *(optional)*
 
-`ties=`
+<a id="ties"></a>`ties=`
 :   The method for tied times: efron, breslow, or exact (TIES=DISCRETE of PROC PHREG, which coxph of R calls exact). discrete is accepted as another name of exact. *(optional, default `efron`)*
     Accepts: `efron`, `breslow`, `exact`, `discrete`.
 
-`pvalue=`
+<a id="pvalue"></a>`pvalue=`
 :   The p-value of each pair: wald (the Wald test of the pair in the model) or logrank (the log-rank test of the two groups of the pair, in the strata). logrank is not possible with `within=`. *(optional, default `wald`)*
     Accepts: `wald`, `logrank`.
 
-`level=`
+<a id="level"></a>`level=`
 :   The confidence level: a number between 0 and 1. *(optional, default `0.95`)*
 
-`stats=`
-:   The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are hr, lcl, ucl and pval. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed). *(optional, default `hr="XX.XX" lcl="XX.XX" ucl="XX.XX" pval="X.XXX"`)*
+<a id="stats"></a>`stats=`
+:   The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are hr, lcl, ucl and pval. A name without a pattern takes its default pattern: see the [table of default patterns](../explanation/numbers.md#the-table-of-default-patterns). *(optional, default `hr="XX.XX" lcl="XX.XX" ucl="XX.XX" pval="X.XXX"`)*
 
-`label=`
+<a id="label"></a>`label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the result data set. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _cox_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -102,15 +102,15 @@ Use [%logrank](logrank.md) for the test of all groups together without a model, 
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#ex-adttde)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 ??? note "Before these examples: the calls that make their inputs"
 
-    Run `examples/setup.sas`, then these examples of other pages ([%tte](tte.md)), in this order. Then the examples of this page run as shown.
+    Run `examples/setup.sas`, then these calls from the examples of %tte, in this order. Then the examples of this page run as shown.
 
     ```sas
-    /* the example of %tte */
-    * Derives the time to the first skin event from the first dose: CNSR 0 is an event, 1 a censoring.;
+    /* from the example of %tte */
+    * Makes TTDE. Log NOTE: 2 subject(s) with no event and no censoring date: no record (no TRTEDT).;
     %tte(
          subjects      = adsl
        , events        = adae
@@ -126,9 +126,9 @@ The examples run on the [example data](../tutorial/index.md#the-example-data) af
        , paramcd       = "TTDE"
        , out           = adttde
      )
-    TITLE;
-    FOOTNOTE;
     ```
+
+<a id="ex-ttde_hr"></a>
 
 Gives the hazard ratio of each pair, stratified by sex, with its limits and p value.
 
@@ -159,6 +159,8 @@ Xanomeline Low Dose   Placebo              TRT01A VERSUS         lcl   1.8648836
 Xanomeline Low Dose   Placebo              TRT01A VERSUS         ucl   5.6156129982  5.62
 Xanomeline Low Dose   Placebo              TRT01A VERSUS         pval   0.000029663  <0.001
 ```
+
+<a id="ex-hr_sex"></a>
 
 Gives the hazard ratio against Placebo for each sex: the rows carry SEX, for a forest plot.
 
@@ -194,6 +196,8 @@ Xanomeline Low Dose   Placebo  M    TRT01A VERSUS SEX         lcl   2.1988056105
 Xanomeline Low Dose   Placebo  M    TRT01A VERSUS SEX         ucl   13.160521402  13.16
 ```
 
+<a id="ex-hr_age"></a>
+
 Gives the hazard ratio against Placebo for each age group.
 
 ```sas
@@ -227,6 +231,8 @@ Xanomeline Low Dose   Placebo  >64     TRT01A VERSUS AGEGR1         hr    3.0497
 Xanomeline Low Dose   Placebo  >64     TRT01A VERSUS AGEGR1         lcl    1.708031955  1.71
 Xanomeline Low Dose   Placebo  >64     TRT01A VERSUS AGEGR1         ucl   5.4453164325  5.45
 ```
+
+<a id="ex-ttde_hr_lr"></a>
 
 Uses the Breslow ties, and as p value the log rank test of the two groups of each pair.
 
@@ -269,7 +275,7 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Time to an event: [%km](km.md), [%logrank](logrank.md).
 
-Named on this page: [%interaction_phreg](interaction_phreg.md), [%tte](tte.md).
+Named on this page: [%interaction_phreg](interaction_phreg.md).
 
 ## Proof
 

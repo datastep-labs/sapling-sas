@@ -66,11 +66,17 @@
 |             rr, the relative risk, the ratio of the two risks;
 |             or or, the odds ratio, the ratio of the two odds.
 |             A ratio has no unit.
-| ci          The interval of a risk difference: wald, newcombe,  wald
-|             miettinen-nurminen (CL=MN), agresti-caffo (CL=AC)
-|             or mh, the interval of Mantel and Haenszel, which
-|             needs strata=; with strata= the interval is always
-|             mh, whatever ci= says
+| ci          The interval of a risk difference: wald, the Wald   wald
+|             interval (CL=WALD); newcombe, the hybrid score
+|             interval of Newcombe, from the Wilson interval of
+|             each risk (CL=NEWCOMBE); mn or miettinen-nurminen,
+|             the score interval of Miettinen and Nurminen
+|             (CL=MN); ac or agresti-caffo, the interval of
+|             Agresti and Caffo, a Wald interval with one event
+|             and one non-event added to each group (CL=AC); or
+|             mh, the interval of Mantel and Haenszel, which
+|             needs strata=. With strata= the interval is always
+|             mh, whatever ci= says.
 | level       The confidence level of the interval: a number      0.95
 |             between 0 and 1
 | stats       The statistics, in the order of the rows: each      Optional
@@ -185,7 +191,8 @@
 |                          ci=mh without strata= stops with the ERROR of the
 |                          macro (PROC FREQ has no RISKDIFF(CL=MH), so the step
 |                          stopped with a syntax error before). No number
-|                          changes.
+|                          changes. ci= names each interval it takes, also the
+|                          short names mn and ac. No number changes.
 |
 *******************************************************************************/
 %MACRO risk(

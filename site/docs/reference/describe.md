@@ -24,37 +24,37 @@ Returns the descriptive statistics of a numeric variable in each group: n, mean,
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set. *(required)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (anl01fl = 'Y')`. When not given, all records are used. *(optional)*
 
-`var=`
+<a id="var"></a>`var=`
 :   The variable to describe: one numeric variable. *(required)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups: one variable or several, separated by blanks. The first variable gives the columns of the table; the others give its rows, such as a parameter and a visit (`by = trt01a paramcd avisit`). *(required)*
 
-`keep=`
+<a id="keep"></a>`keep=`
 :   Other variables to keep in the result, separated by blanks, for the names and the order of the rows (`keep = param avisitn`). Each gets its largest value in the group (the ID statement of PROC MEANS). *(optional)*
 
-`total=`
+<a id="total"></a>`total=`
 :   yes: add the group "Total", all groups of the first BY variable together. A text in quotes gives the Total another name ("All subjects"). A record with a missing group is counted in no group and not in the Total. *(optional, default `no`)*
 
-`qntldef=`
+<a id="qntldef"></a>`qntldef=`
 :   The definition of the quantiles: a number from 1 to 5, as QNTLDEF= of PROC MEANS (5 is the default of SAS). *(optional, default `5`)*
 
-`stats=`
+<a id="stats"></a>`stats=`
 :   The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, mean, sd, median, min, max, q1, q3 and se. A name without a pattern takes its default pattern: XX for n, min and max; XX.X for mean, median, q1 and q3; XX.XX for sd and se. *(optional, default `n="XX" mean="XX.X" sd="XX.XX" median="XX.X" min="XX" max="XX"`)*
 
-`label=`
+<a id="label"></a>`label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the result data set. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _describe_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -69,6 +69,8 @@ Use [%freq](freq.md) for the subjects of each category of a variable. Only the v
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+<a id="ex-age_describe"></a>
 
 Summarizes age in each group and in the Total: n, mean, SD, median, minimum and maximum.
 
@@ -103,6 +105,8 @@ Xanomeline High Dose  TRT01A  Age (years)  mean    73.777777778  73.8
 Xanomeline High Dose  TRT01A  Age (years)  sd      7.9438562002  7.94
 ```
 
+<a id="ex-vs"></a>
+
 Uses three BY variables: one row per group, parameter, visit and statistic, with PARAM kept.
 
 ```sas
@@ -135,6 +139,8 @@ Placebo  DIABP    Week 16           Diastolic Blood Pressure (mmHg)       16  TR
 Placebo  DIABP    Week 16           Diastolic Blood Pressure (mmHg)       16  TRT01A PARAMCD AVISIT         mean    74.253731343   74.3
 Placebo  DIABP    Week 16           Diastolic Blood Pressure (mmHg)       16  TRT01A PARAMCD AVISIT         sd      10.359219702  10.36
 ```
+
+<a id="ex-wt_describe"></a>
 
 Adds the SE, Q1 and Q3 and calls the Total All subjects: the rows keep the order of stats=.
 
@@ -170,6 +176,8 @@ Placebo       TRT01A  Weight at baseline (kg)  se      1.3770663537   1.38
 Placebo       TRT01A  Weight at baseline (kg)  median         60.56   60.6
 Placebo       TRT01A  Weight at baseline (kg)  q1             53.52   53.5
 ```
+
+<a id="ex-age_sex"></a>
 
 Adds sex as a second BY variable: the rows of each group and sex, for a page per sex.
 

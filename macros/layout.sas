@@ -112,7 +112,9 @@
 | file        The output of %print: a path without its extension  Optional
 |             (file= of %print). It goes into the setup.
 | nodata      The text that %print prints when there is no row    Optional
-|             (nodata= of %print). It goes into the setup.
+|             (nodata= of %print): a text without quotes, as
+|             in %print, where a quote in it is printed. It
+|             goes into the setup.
 | setup       The name of a global macro variable that keeps the  Optional
 |             %print call of out=: a SAS name that does not
 |             start with SYS or SPL_. When not given, no setup
@@ -173,13 +175,13 @@
  %print(&t14_2_1_label_print.)
  * Counts the severe events of the subjects under 50: there is none, so the result has no row.;
  %freq(
-     data  = adae
-   , denom = adsl
-   , where = (aesev = 'SEVERE' AND age < 50)
-   , var   = aedecod
-   , by    = trt01a
-   , out   = t_sev50
- )
+      data  = adae
+    , denom = adsl
+    , where = (aesev = 'SEVERE' AND age < 50)
+    , var   = aedecod
+    , by    = trt01a
+    , out   = t_sev50
+  )
  * Gives nodata= for a result with no row: the display data set has no row.;
  %layout(
      data    = t_sev50
@@ -255,6 +257,10 @@
 | 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
 |                          manual. The caption of the third call and the text of
 |                          page= in plain words. No number changes.
+|                          The %freq call of the example in the house form of
+|                          a call (5 blanks, then the comma 3 in) where the
+|                          manual shows it; the text of nodata=: a text
+|                          without quotes. No number changes.
 |
 *******************************************************************************/
 %MACRO layout(

@@ -24,37 +24,37 @@ Returns the p-value of the treatment-by-subgroup interaction in a linear model o
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set: one record per subject, with USUBJID. *(required)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (ittfl = 'Y')`. *(optional)*
 
-`var=`
+<a id="var"></a>`var=`
 :   The variable of the model: one numeric variable, such as chg. *(required)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups of the model, the treatment: one variable. *(required)*
 
-`factor=`
+<a id="factor"></a>`factor=`
 :   The factor of the subgroups: one variable whose values are its levels (`factor = sex`). *(required)*
 
-`covars=`
+<a id="covars"></a>`covars=`
 :   The numeric covariates of the model, separated by blanks (`covars = base`). *(optional)*
 
-`class=`
+<a id="class"></a>`class=`
 :   The other class factors of the model, separated by blanks (`class = sitegr1`). *(optional)*
 
-`stats=`
+<a id="stats"></a>`stats=`
 :   The statistic with its pattern of the printed number: pval. *(optional, default `pval="X.XXX"`)*
 
-`label=`
+<a id="label"></a>`label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the result data set. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _interaction_glm_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -69,6 +69,8 @@ Use [%interaction_logistic](interaction_logistic.md) for a response, [%interacti
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+<a id="ex-sbp_int"></a>
 
 Tests the treatment by sex interaction of the change at Week 12, adjusted for baseline.
 

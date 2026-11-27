@@ -24,7 +24,14 @@
 |                   line (%layout)
 |                 The global macro variable <name>_print keeps the call of
 |                 %print: change <name>_display, then print again with
-|                 %print(&<name>_print.).
+|                 %print(&<name>_print.). The table has one block: a system
+|                 organ class is a heading over its terms and prints without a
+|                 count, and there is no row of the subjects with any TEAE. To
+|                 add them, write the long program with show=, and add before
+|                 the block of the terms in %stack a %freq without var= (any
+|                 event) and a %freq with var=aebodsys (the subjects of each
+|                 class), with denom= the population, as the how-to guide "Make
+|                 an adverse event table" shows.
 | Procedure     : none of its own (those of %freq, %table)
 | Proven        : Checked against its long program, written out by hand: the
 |                 same display data set (PROC COMPARE), on a made-up study; ran
@@ -152,6 +159,9 @@
 | 27-NOV-2026 Sapling      1.10.0: The caption of the first example: the table
 |                          counts subjects; Proven in plain words, for the
 |                          published manual. No number changes.
+|                          The Details say that a class prints without a
+|                          count, that there is no row of any TEAE, and how to
+|                          add them. No number changes.
 |
 *******************************************************************************/
 %MACRO table_ae(

@@ -90,11 +90,11 @@ SPL_STUDY    CDISCPILOT01
   `SPL_OUT` (the output folder). `%ard` names its numbers file after `SPL_PROGRAM` when its `file=` is not given.
 - It opens the folder of `adam=` as the library `ADAM`, read only.
 - It sets the output folder, `out=`. The programs write their files under it as `&spl_out./...`.
+- It sets the options of the outputs (`NODATE NONUMBER NOCENTER`, `MISSING=' '` and the others of its
+  [reference page](../reference/study.md)) and clears the TITLE and FOOTNOTE statements.
 
 The defaults of `adam=` and `out=` are `&spl_root./adam` and `&spl_root./out`: folders of the library. With the
 library in a folder of its own, always give `adam=` and `out=`, the folders of the study.
-- It sets the options of the outputs (`NODATE NONUMBER NOCENTER`, `MISSING=' '` and the others of its
-  [reference page](../reference/study.md)) and clears the TITLE and FOOTNOTE statements.
 
 A macro reads the data set of its `data=`, never the library `ADAM` by itself. Select the population in a DATA step
 of the program:

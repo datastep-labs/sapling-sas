@@ -38,80 +38,80 @@ Makes a table of a continuous endpoint in one call: descriptive statistics, and 
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set: the records, with USUBJID. *(required)*
 
-`adsl=`
+<a id="adsl"></a>`adsl=`
 :   The subjects: a data set with one row per subject. It gives the population and the N of each column, and its variables are merged onto the records by USUBJID. When not given, the N of a column is the subjects of its records. *(optional)*
 
-`pop=`
+<a id="pop"></a>`pop=`
 :   The population: a condition on `adsl=` in parentheses, such as `pop = (saffl = 'Y')`. It is used only with `adsl=`. *(optional)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (paramcd = 'SYSBP')`. *(optional)*
 
-`var=`
+<a id="var"></a>`var=`
 :   The response: one numeric variable. *(optional, default `CHG`)*
 
-`covars=`
+<a id="covars"></a>`covars=`
 :   The covariates of the model, separated by blanks, such as `covars = base`. *(optional)*
 
-`visit=`
+<a id="visit"></a>`visit=`
 :   The variable of the visit: one variable. *(optional, default `AVISIT`)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups of the columns: one character variable, such as `by = trt01a`. *(required)*
 
-`at=`
+<a id="at"></a>`at=`
 :   The visit of the table: a value of `visit=` in quotes, such as `at = "Week 24"`. It selects the records of the descriptive blocks and of the ANCOVA, and the visit of the LS means of the MMRM. When not given, the ANCOVA uses all records. *(optional)*
 
-`order=`
+<a id="order"></a>`order=`
 :   The numeric twin of `by=`, such as `order = trt01an`: it gives the order of the columns and of the groups in the comparisons. *(optional)*
 
-`describe=`
+<a id="describe"></a>`describe=`
 :   The variables with a descriptive block before the model, separated by blanks, such as `describe = base aval chg`. *(optional)*
 
-`method=`
+<a id="method"></a>`method=`
 :   ancova ([%lsmeans](lsmeans.md)) or mmrm ([%mmrm](mmrm.md), which needs `at=`). *(optional, default `ancova`)*
     Accepts: `ancova`, `mmrm`.
 
-`model=`
+<a id="model"></a>`model=`
 :   The fixed effects of the MMRM, separated by blanks. When not given: the covariates, the `by=` variable, the `visit=` variable and the interaction of the two (such as trt01p*avisit). This default has no interaction of a covariate with the visit, such as base*avisit: give `model=` to add one. *(optional)*
 
-`type=`
+<a id="type"></a>`type=`
 :   The covariance structure of the MMRM: TYPE= of the REPEATED statement, such as un, cs, ar(1) or toep (type= of [%mmrm](mmrm.md)). *(optional, default `un`)*
 
-`fallback=`
+<a id="fallback"></a>`fallback=`
 :   Other covariance structures of the MMRM to try in their order when one does not converge, separated by blanks, such as `fallback = toep cs`. *(optional)*
 
-`pairs=`
+<a id="pairs"></a>`pairs=`
 :   The pairs of groups to compare, separated by #: each group in quotes, then the group it is compared with ("Xanomeline High Dose" "Placebo"). When not given, each later group is compared with each earlier one. *(optional)*
 
-`names=`
+<a id="names"></a>`names=`
 :   The labels of the blocks: pairs variable="text", separated by blanks, such as `names = chg="Change from baseline"`. A block without a pair has the label of its variable, or its name. *(optional)*
 
-`format=`
+<a id="format"></a>`format=`
 :   The labels of the categories: pairs of a variable and a format, as in a FORMAT statement (`format = sex $sexf. race $racef.`), as `format=` of [%layout](layout.md). *(optional)*
 
-`name=`
+<a id="name"></a>`name=`
 :   The name of the table: the first part of the names of its data sets, such as `name = t14_3_01`. When not given, the last part of `file=` is used; without `file=`, `name=` is required. *(optional)*
 
-`show=`
+<a id="show"></a>`show=`
 :   yes: write the long program to the log. A file path, without quotes: write the long program to that file. In both cases the macro runs it. *(optional, default `no`)*
 
-`stats=`
+<a id="stats"></a>`stats=`
 :   The statistics of the model block, each name with its pattern. When not given: the LS means with their SE, the difference with its SE and limits, and the p-value. *(optional)*
 
-`title=`
+<a id="title"></a>`title=`
 :   The titles of the table: one text in quotes per line (TITLE1, TITLE2 ...). They hold for this table only. When not given, the TITLE statements in force in the program are used. *(optional)*
 
-`footnote=`
+<a id="footnote"></a>`footnote=`
 :   The footnotes of the table: one text in quotes per line (FOOTNOTE1, FOOTNOTE2 ...). They hold for this table only. When not given, the FOOTNOTE statements in force in the program are used. *(optional)*
 
-`file=`
+<a id="file"></a>`file=`
 :   The output file without its extension: the macro writes &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file. When not given, nothing is printed. *(optional)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets of the macros that the long program calls. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 

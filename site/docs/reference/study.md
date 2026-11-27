@@ -17,16 +17,16 @@ Starts a program: sets the study, the program and the output folder, opens the A
 
 ## Parameters
 
-`id` (the first value, without a keyword)
+<a id="id"></a>`id` (the first value, without a keyword)
 :   The name of the study: a text without quotes, given first, without a keyword (`%study(CDISCPILOT01, ...)`). *(required)*
 
-`program=`
+<a id="program"></a>`program=`
 :   The name of this program, without quotes (`program = t14_2_01`). [%ard](ard.md) names the numbers file after it when its `file=` is not given. *(required)*
 
-`adam=`
+<a id="adam"></a>`adam=`
 :   The folder of the ADaM data sets: a path without quotes. The macro opens it as the library ADAM, read only. SPL_ROOT is the folder of the library (it holds macros/): give `adam=` when the study is in a folder of its own. *(optional, default `&spl_root./adam`)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The output folder: a path without quotes. The macros write into its folders tlf, listings, figures and ard. SPL_ROOT is the folder of the library (it holds macros/): give `out=` when the study is in a folder of its own. *(optional, default `&spl_root./out`)*
 
 ## Result
@@ -50,6 +50,8 @@ To set an option back, write an OPTIONS statement after the call of %study: OPTI
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+<a id="ex-out"></a>
 
 Starts the program of the examples: it sets SPL_STUDY, SPL_PROGRAM and SPL_OUT and opens ADAM.
 

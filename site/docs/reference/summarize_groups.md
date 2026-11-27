@@ -18,19 +18,19 @@ Returns one record per group with the sum, mean, largest or smallest value of ea
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set. When a value is not a variable yet (a condition as 0 or 1), make it first in a DATA step. *(required)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups: one variable or several, separated by blanks (`by = usubjid paramcd`). *(required)*
 
-`vars=`
+<a id="vars"></a>`vars=`
 :   The numeric variables to summarize, separated by blanks. *(required)*
 
-`stats=`
+<a id="stats"></a>`stats=`
 :   One statistic for each variable of `vars=`, in the same order, separated by blanks: sum, mean, max or min (`stats = sum max`). *(required)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the data set it writes. *(required)*
 
 ## Result
@@ -44,6 +44,8 @@ Use [%summarize](summarize.md) to add a summary of each subject's records to ano
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+<a id="ex-vs_extremes"></a>
 
 Takes the largest AVAL and the smallest CHG of each subject and parameter: one record each.
 

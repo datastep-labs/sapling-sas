@@ -21,28 +21,28 @@ Returns one record per subject and term, with a flag that says whether the subje
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set: the records of the events, with USUBJID. *(required)*
 
-`denom=`
+<a id="denom"></a>`denom=`
 :   The subjects of the groups: a data set with one row per subject (the population), with USUBJID and the variable of `by=`. *(required)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (trtemfl = 'Y')`. *(optional)*
 
-`terms=`
+<a id="terms"></a>`terms=`
 :   The variables of a row: one or several, separated by blanks, nested in their order (`terms = aebodsys aedecod`: a term within its class). When not given, one row of all the records, such as "any event" of an overview table. *(optional)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups: one variable of `denom=`. *(required)*
 
-`threshold=`
+<a id="threshold"></a>`threshold=`
 :   A percent (`threshold = 5`): keep only the terms with this percent of the subjects or more in at least one group. The macro compares the percent itself, not its rounded text. It needs `terms=`. *(optional)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the result data set. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _termflags_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -57,6 +57,8 @@ Use it before [%risk](risk.md) to compare the groups on the subjects with a term
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+<a id="ex-ae_flags"></a>
 
 Flags each subject for each term that reaches 5 percent: FLAG is Y with the term, N without.
 

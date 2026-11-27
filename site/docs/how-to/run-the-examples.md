@@ -115,8 +115,7 @@ Each one-call table reads the data sets of `setup.sas`; `%table_tte` also reads 
 #### ADaM steps
 
 Each step of an ADaM program changes a data set in place. Its example first copies the records it needs into a data
-set of its own (`vs`, `lb`, `sl` or `tt`), so `advs`, `adlb`, `adsl` and `adtte` stay as `setup.sas` made them. Some
-steps go on with the copy that a step before them made.
+set of its own (`vs`, `lb`, `sl` or `tt`), so `advs`, `adlb`, `adsl` and `adtte` stay as `setup.sas` made them.
 
 1. [%merge_subject](../reference/merge_subject.md)
 2. [%pick](../reference/pick.md)

@@ -29,53 +29,53 @@ Returns the risk difference, relative risk or odds ratio of pairs of groups, wit
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set, with USUBJID: one record per subject, or per subject and term with `within=`. *(required)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (saffl = 'Y')`. *(optional)*
 
-`var=`
+<a id="var"></a>`var=`
 :   The response: one variable with two values, numeric or character. *(required)*
 
-`event=`
+<a id="event"></a>`event=`
 :   The value of `var=` that is the event, in quotes (`event = "DISCONTINUED"`). *(optional, default `"Y"`)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups: one character variable. *(required)*
 
-`within=`
+<a id="within"></a>`within=`
 :   One comparison in each group of these variables, separated by blanks, such as each term of an adverse event table with the flags of [%termflags](termflags.md) (`within = aebodsys aedecod`). *(optional)*
 
-`strata=`
+<a id="strata"></a>`strata=`
 :   The strata of the Mantel-Haenszel risk difference: variables separated by blanks. Only with measure=rd. *(optional)*
 
-`pairs=`
+<a id="pairs"></a>`pairs=`
 :   The pairs of groups to compare. all: each later group against each earlier one, in the order of `order=` (or of the values). Or the pairs separated by #, each the group first and then the group it is compared with, a value with a blank or a hyphen in quotes: `pairs = "Drug" "Placebo" # "High" "Low"`. *(optional, default `all`)*
 
-`order=`
+<a id="order"></a>`order=`
 :   The order of the groups: one numeric variable with one value per group (`order = trt01an`). *(optional)*
 
-`measure=`
+<a id="measure"></a>`measure=`
 :   The estimate of the group against the group it is compared with: rd, the risk difference, a difference of two proportions between -1 and 1 (0.25 is 25 percentage points), not of percents; rr, the relative risk, the ratio of the two risks; or or, the odds ratio, the ratio of the two odds. A ratio has no unit. *(optional, default `rd`)*
     Accepts: `rd`, `rr`, `or`.
 
-`ci=`
-:   The interval of a risk difference: wald, newcombe, miettinen-nurminen (CL=MN), agresti-caffo (CL=AC) or mh, the interval of Mantel and Haenszel, which needs `strata=`; with `strata=` the interval is always mh, whatever `ci=` says. *(optional, default `wald`)*
+<a id="ci"></a>`ci=`
+:   The interval of a risk difference: wald, the Wald interval (CL=WALD); newcombe, the hybrid score interval of Newcombe, from the Wilson interval of each risk (CL=NEWCOMBE); mn or miettinen-nurminen, the score interval of Miettinen and Nurminen (CL=MN); ac or agresti-caffo, the interval of Agresti and Caffo, a Wald interval with one event and one non-event added to each group (CL=AC); or mh, the interval of Mantel and Haenszel, which needs `strata=`. With `strata=` the interval is always mh, whatever `ci=` says. *(optional, default `wald`)*
 
-`level=`
+<a id="level"></a>`level=`
 :   The confidence level of the interval: a number between 0 and 1. *(optional, default `0.95`)*
 
-`stats=`
-:   The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. When not given: rd="X.XXX" lcl="X.XXX" ucl="X.XXX" pval="X.XXX"; for measure=rr or or, rr="XX.XX" or or="XX.XX" with lcl="XX.XX" ucl="XX.XX" pval="X.XXX". A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed). *(optional)*
+<a id="stats"></a>`stats=`
+:   The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. When not given: rd="X.XXX" lcl="X.XXX" ucl="X.XXX" pval="X.XXX"; for measure=rr or or, rr="XX.XX" or or="XX.XX" with lcl="XX.XX" ucl="XX.XX" pval="X.XXX". A name without a pattern takes its default pattern: see the [table of default patterns](../explanation/numbers.md#the-table-of-default-patterns). *(optional)*
 
-`label=`
+<a id="label"></a>`label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the result data set. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _risk_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -95,14 +95,14 @@ The p-value is that of Pearson's chi-square test without continuity correction. 
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `ae_flags` (made by the [example of %termflags](termflags.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `ae_flags` (made by the [example of %termflags](termflags.md#ex-ae_flags)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 ??? note "Before these examples: the calls that make their inputs"
 
-    Run `examples/setup.sas`, then these examples of other pages ([%termflags](termflags.md)), in this order. Then the examples of this page run as shown.
+    Run `examples/setup.sas`, then these calls from the examples of %termflags, in this order. Then the examples of this page run as shown.
 
     ```sas
-    /* the example of %termflags */
+    /* from the example of %termflags */
     * Flags each subject for each term that reaches 5 percent: FLAG is Y with the term, N without.;
     %termflags(
          data      = adae
@@ -113,9 +113,9 @@ The examples run on the [example data](../tutorial/index.md#the-example-data) af
        , threshold = 5
        , out       = ae_flags
      )
-    TITLE;
-    FOOTNOTE;
     ```
+
+<a id="ex-eos_rd"></a>
 
 Gives the risk difference of discontinuation of each pair, its Newcombe limits and p value.
 
@@ -147,6 +147,8 @@ Xanomeline High Dose  Xanomeline Low Dose  TRT01A VERSUS         lcl   -0.253571
 Xanomeline High Dose  Xanomeline Low Dose  TRT01A VERSUS         ucl   0.0259371208  0.026
 Xanomeline High Dose  Xanomeline Low Dose  TRT01A VERSUS         pval  0.1118759331  0.112
 ```
+
+<a id="ex-ae_rd"></a>
 
 Gives the risk difference of each flagged term against Placebo, within its class and term.
 
@@ -184,6 +186,8 @@ Xanomeline High Dose  Placebo  GASTROINTESTINAL DISORDERS  NAUSEA               
 Xanomeline High Dose  Placebo  GASTROINTESTINAL DISORDERS  NAUSEA                 TRT01A VERSUS AEBODSYS AEDECOD         ucl   0.1382228882   0.138
 ```
 
+<a id="ex-eos_rr"></a>
+
 Asks for the relative risk with measure=rr: the rows of STAT rr hold the ratio of the two risks.
 
 ```sas
@@ -214,6 +218,8 @@ Xanomeline High Dose  Xanomeline Low Dose  TRT01A VERSUS         lcl   0.6817794
 Xanomeline High Dose  Xanomeline Low Dose  TRT01A VERSUS         ucl   1.0474707849  1.05
 Xanomeline High Dose  Xanomeline Low Dose  TRT01A VERSUS         pval  0.1118759331  0.112
 ```
+
+<a id="ex-eos_rd_mh"></a>
 
 Stratifies by sex: the risk difference is the Mantel Haenszel estimate over the strata.
 

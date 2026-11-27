@@ -21,28 +21,28 @@ Adds last-observation-carried-forward records (DTYPE = 'LOCF') to the analysis w
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The data set to change in place, such as advs: the new records are added to it. *(required)*
 
-`windows=`
+<a id="windows"></a>`windows=`
 :   The windows, in the form of `windows=` of [%windows](windows.md): baseline first, then one window or more after it. *(required)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to carry forward: a condition in parentheses, such as `where = (paramcd = 'SYSBP')`. When not given, all analysed records count. *(optional)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups, each carried forward by itself: variables separated by blanks. *(optional, default `USUBJID PARAMCD`)*
 
-`flag=`
+<a id="flag"></a>`flag=`
 :   The flag of the analysed records: a character variable that is 'Y' on them. *(optional, default `ANL01FL`)*
 
-`day=`
+<a id="day"></a>`day=`
 :   The numeric variable of the study day: it gives AWTDIFF of a new record. *(optional, default `ADY`)*
 
-`length=`
+<a id="length"></a>`length=`
 :   The length of DTYPE, such as $8. *(optional, default `$8`)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _locf_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 

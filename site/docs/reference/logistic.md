@@ -28,49 +28,49 @@ Returns the odds ratios of pairs of groups from a logistic regression, with thei
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set, with USUBJID. *(required)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (paramcd = 'RESP')`. *(optional)*
 
-`var=`
+<a id="var"></a>`var=`
 :   The response: one variable with two values, numeric or character. *(required)*
 
-`event=`
+<a id="event"></a>`event=`
 :   The value of `var=` that is the event, in quotes; for a number also in quotes (`event = "1"`). PROC LOGISTIC alone models the first value in sort order. *(optional, default `"Y"`)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups of the model: one character variable. *(required)*
 
-`within=`
+<a id="within"></a>`within=`
 :   One model in each group of these variables, separated by blanks, such as the levels of a subgroup (`within = sex`). *(optional)*
 
-`covars=`
+<a id="covars"></a>`covars=`
 :   The covariates: numeric variables separated by blanks (`covars = age`). *(optional)*
 
-`class=`
+<a id="class"></a>`class=`
 :   The class factors besides the groups: variables separated by blanks (`class = sex`). *(optional)*
 
-`pairs=`
+<a id="pairs"></a>`pairs=`
 :   The pairs of groups to compare. all: each later group against each earlier one, in the order of `order=` (or of the values). Or the pairs separated by #, each the group first and then the group it is compared with, a value with a blank or a hyphen in quotes: `pairs = "Drug" "Placebo" # "High" "Low"`. *(optional, default `all`)*
 
-`order=`
+<a id="order"></a>`order=`
 :   The order of the groups: one numeric variable with one value per group (`order = trt01pn`). *(optional)*
 
-`level=`
+<a id="level"></a>`level=`
 :   The confidence level of the limits: a number between 0 and 1. *(optional, default `0.95`)*
 
-`stats=`
-:   The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are or, lcl, ucl and pval. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed). *(optional, default `or="XX.XX" lcl="XX.XX" ucl="XX.XX" pval="X.XXX"`)*
+<a id="stats"></a>`stats=`
+:   The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are or, lcl, ucl and pval. A name without a pattern takes its default pattern: see the [table of default patterns](../explanation/numbers.md#the-table-of-default-patterns). *(optional, default `or="XX.XX" lcl="XX.XX" ucl="XX.XX" pval="X.XXX"`)*
 
-`label=`
+<a id="label"></a>`label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the result data set. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _logistic_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -89,6 +89,8 @@ Use [%risk](risk.md) for a risk difference, relative risk or odds ratio from the
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+<a id="ex-eos_or"></a>
 
 Gives the odds ratio of discontinuation for each pair, adjusted for age and sex.
 
@@ -121,6 +123,8 @@ Xanomeline Low Dose   Placebo              TRT01A VERSUS         lcl   3.0717911
 Xanomeline Low Dose   Placebo              TRT01A VERSUS         ucl   11.148588582  11.15
 Xanomeline Low Dose   Placebo              TRT01A VERSUS         pval  7.7570593E-8  <0.001
 ```
+
+<a id="ex-eos_or_sex"></a>
 
 Gives the odds ratio against Placebo for each sex: the rows carry SEX.
 

@@ -36,6 +36,10 @@
 |                 reason of the censoring: a CNSR of 2 is censored as 1 is. A
 |                 record used with a missing or negative CNSR stops the macro
 |                 with an ERROR.
+|                 In the second example the column N of Placebo is 86 (from
+|                 adsl=) while n of the Kaplan-Meier block is 85: the 2 subjects
+|                 with a missing TRTEDT have no event and no censoring date, so
+|                 %tte gives them no record in adttde.
 | Procedure     : none of its own (those of %km, %logrank, %cox, %table)
 | Proven        : Checked against its long program, written out by hand: the
 |                 same display data set (PROC COMPARE), on a made-up study; ran
@@ -167,6 +171,9 @@
 |                          printed table; the caption of the first example names
 |                          the Kaplan-Meier summary (no curve); Proven in plain
 |                          words, for the published manual. No number changes.
+|                          The Details say why the N of a column (86) and n of
+|                          the Kaplan-Meier block (85) differ. No number
+|                          changes.
 |
 *******************************************************************************/
 %MACRO table_tte(

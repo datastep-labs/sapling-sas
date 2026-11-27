@@ -81,6 +81,19 @@
    , which = last
    , new   = exldose
  )
+ * Keeps the disposition event of each subject: one record per subject.;
+ DATA ds_eos;
+   SET sdtm.ds;
+   WHERE dscat = 'DISPOSITION EVENT';
+ RUN;
+ * Takes the disposition term: unique=yes checks one record per subject, so no order is needed.;
+ %pick(
+     data   = sl
+   , from   = work.ds_eos
+   , value  = dsdecod
+   , unique = yes
+   , new    = dcdecod
+ )
 |
 |-------------------------------------------------------------------------------
 | Change Log :
@@ -110,7 +123,8 @@
 | 27-NOV-2026 Sapling      1.10.0: a caption for each call of the example (a
 |                          comment line before it). No number changes.
 | 27-NOV-2026 Sapling      1.10.0: Proven in plain words, for the published
-|                          manual. No number changes.
+|                          manual. An example with unique=yes. No number
+|                          changes.
 |
 *******************************************************************************/
 %MACRO pick(

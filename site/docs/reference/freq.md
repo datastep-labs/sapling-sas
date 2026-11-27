@@ -29,52 +29,52 @@ Counts the subjects in each category and group, with their percent of the subjec
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set: the records to count, with USUBJID. *(required)*
 
-`denom=`
+<a id="denom"></a>`denom=`
 :   The subjects of each group: the N of the percent and the columns. A data set with one row per subject and the variables of `by=`; data set options are allowed: `adsl(where=(saffl = 'Y'))`. When not given, the subjects of `data=` (without `where=`). *(optional)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to count: a condition in parentheses, such as `where = (trtemfl = 'Y')`. *(optional)*
 
-`var=`
+<a id="var"></a>`var=`
 :   The categories: one variable or several, separated by blanks, nested in their order (`var = aebodsys aedecod`: a term within its class). When not given, the macro counts the subjects with any record. *(optional)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups: one variable or several, separated by blanks. The first variable gives the columns of the table; the others give its rows or its pages (`by = trt01a sex`, with `page=` of [%layout](layout.md)). *(required)*
 
-`keep=`
+<a id="keep"></a>`keep=`
 :   Other variables to keep with the categories for their names and order, separated by blanks. PARAM and PARAMN go with PARAMCD, AVISITN with AVISIT, any &lt;V&gt;N with V. Each gets the value of the first record of its category. *(optional)*
 
-`levels=`
+<a id="levels"></a>`levels=`
 :   The planned categories of some variables of `var=`: each variable followed by its values in quotes (`levels = bnrind 'LOW' 'NORMAL' 'HIGH'`). A planned category shows also without a subject; a record of another category is not counted. The rows of a planned variable V follow the order given, through its twin VN (1, 2 ...) in `out=`, unless `keep=` has VN. The categories of the other variables come from the records counted. *(optional)*
 
-`total=`
+<a id="total"></a>`total=`
 :   yes: add the group "Total", all groups of the first BY variable together. A text in quotes gives the Total another name ("All subjects"). The first BY variable must be character. *(optional, default `no`)*
 
-`threshold=`
+<a id="threshold"></a>`threshold=`
 :   A percent (`threshold = 5`): keep only the categories with this percent of the subjects or more in at least one group (the Total counts as a group). The macro compares the percent itself, not its rounded text. *(optional)*
 
-`order=`
+<a id="order"></a>`order=`
 :   frequency: order the rows of `orderof=` by their subjects, the most first, and equal counts by their value. The rank goes into the twin &lt;V&gt;N, and [%print](print.md) orders the rows by it. When not given, the rows are in the order of the values. *(optional)*
 
-`orderof=`
+<a id="orderof"></a>`orderof=`
 :   The variable of `var=` whose rows order=frequency ranks: one variable. When not given, the last variable of `var=`. *(optional)*
 
-`orderby=`
+<a id="orderby"></a>`orderby=`
 :   The group whose subjects rank the rows for order=frequency: a value of the first BY variable, in quotes (`orderby = "Placebo"`). When not given, all groups together, without the Total. *(optional)*
 
-`stats=`
-:   The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, pct and events. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed). *(optional, default `n="XX" pct="(XX.X%)"`)*
+<a id="stats"></a>`stats=`
+:   The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, pct and events. A name without a pattern takes its default pattern: see the [table of default patterns](../explanation/numbers.md#the-table-of-default-patterns). *(optional, default `n="XX" pct="(XX.X%)"`)*
 
-`label=`
+<a id="label"></a>`label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the result data set. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _freq_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -89,6 +89,8 @@ Use [%proportion](proportion.md) when the percent needs a confidence interval, a
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+<a id="ex-sex_freq"></a>
 
 Counts each sex in each group and in the Total: n and the percent of the subjects of the group.
 
@@ -122,6 +124,8 @@ Xanomeline Low Dose   F    TRT01A SEX  Sex    n               55  55
 Xanomeline Low Dose   F    TRT01A SEX  Sex    pct   57.291666667  (57.3%)
 Xanomeline Low Dose   M    TRT01A SEX  Sex    n               41  41
 ```
+
+<a id="ex-teae"></a>
 
 Counts subjects and events of each term under its class: the percent uses the N of denom=.
 
@@ -157,6 +161,8 @@ Placebo  CARDIAC DISORDERS  ATRIOVENTRICULAR BLOCK SECOND DEGREE  TRT01A AEBODSY
 Placebo  CARDIAC DISORDERS  ATRIOVENTRICULAR BLOCK SECOND DEGREE  TRT01A AEBODSYS AEDECOD         events             1  1
 ```
 
+<a id="ex-shift"></a>
+
 Counts the shift at Week 24 with planned levels: a level without a subject has a row of 0.
 
 ```sas
@@ -190,6 +196,8 @@ Placebo  ALT      NORMAL  HIGH          2        3  TRT01A PARAMCD BNRIND ANRIND
 Placebo  ALT      NORMAL  HIGH          2        3  TRT01A PARAMCD BNRIND ANRIND         pct   2.3255813953  ( 2.3%)
 Placebo  ALT      NORMAL  LOW           2        1  TRT01A PARAMCD BNRIND ANRIND         n                1  1
 ```
+
+<a id="ex-common"></a>
 
 Keeps the terms that reach 5 percent in a group: AEDECODN ranks them, the most subjects first.
 
@@ -225,6 +233,8 @@ Placebo  COUGH                              17  TRT01A AEDECOD         n        
 Placebo  COUGH                              17  TRT01A AEDECOD         pct   1.1627906977  ( 1.2%)
 Placebo  DIARRHOEA                           9  TRT01A AEDECOD         n                9  9
 ```
+
+<a id="ex-agegr_sex"></a>
 
 Adds sex as a second BY variable: the age groups of each group and sex, for a page per sex.
 

@@ -21,28 +21,28 @@ Returns the p-value of the F test of a one-way analysis of variance of a variabl
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set. *(required)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (anl01fl = 'Y')`. *(optional)*
 
-`var=`
+<a id="var"></a>`var=`
 :   The variable to analyse: one numeric variable. *(required)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups to compare: one variable. *(required)*
 
-`stats=`
+<a id="stats"></a>`stats=`
 :   The statistic with its pattern of the printed number: pval. *(optional, default `pval="X.XXX"`)*
 
-`label=`
+<a id="label"></a>`label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the result data set. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _anova_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -57,6 +57,8 @@ Use [%ttest](ttest.md) or [%wilcoxon](wilcoxon.md) to compare pairs of groups, a
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+<a id="ex-age_anova"></a>
 
 Tests age across the three groups: one row, the p value of the F test.
 

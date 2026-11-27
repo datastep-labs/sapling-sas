@@ -25,7 +25,7 @@ TITLE;
 FOOTNOTE;
 
 /* %tte: https://datastep-labs.github.io/sapling-sas/reference/tte/ */
-* Derives the time to the first skin event from the first dose: CNSR 0 is an event, 1 a censoring.;
+* Makes TTDE. Log NOTE: 2 subject(s) with no event and no censoring date: no record (no TRTEDT).;
 %tte(
      subjects      = adsl
    , events        = adae
@@ -40,6 +40,58 @@ FOOTNOTE;
    , source        = "ADAE"
    , paramcd       = "TTDE"
    , out           = adttde
+ )
+* Makes the subjects with the end of week 12 (day 84) and the time of the first dose.;
+DATA sl;
+  SET adsl;
+  wk12dt = trtsdt + 83;
+  trtstm = TIMEPART(trtsdtm);
+  FORMAT wk12dt DATE9. trtstm TIME5.;
+RUN;
+* Ends the period at week 12: no event or censoring in it gives CNSR 1 on day 84. All 254 count.;
+%tte(
+     subjects      = sl
+   , events        = adae
+   , event         = trtemfl = 'Y' AND aebodsys = 'SKIN AND SUBCUTANEOUS TISSUE DISORDERS'
+   , date          = astdt
+   , start         = trtsdt
+   , end           = wk12dt
+   , censor_date   = trtedt
+   , seq           = aeseq
+   , censor_desc   = "End of treatment"
+   , censor_source = "ADSL"
+   , end_desc      = "End of week 12"
+   , event_desc    = aedecod
+   , source        = "ADAE"
+   , paramcd       = "TTDE12"
+   , out           = adttde12
+ )
+* Makes the start time of each event, in seconds since midnight.;
+DATA ae_times;
+  SET adae;
+  asttm = TIMEPART(astdtm);
+  FORMAT asttm TIME5.;
+RUN;
+* Adds the times of the start day: all are 00:00, imputed (ATMF H), so the events of day 1 count.;
+%tte(
+     subjects      = sl
+   , events        = ae_times
+   , event         = trtemfl = 'Y' AND aebodsys = 'SKIN AND SUBCUTANEOUS TISSUE DISORDERS'
+   , date          = astdt
+   , time          = asttm
+   , start         = trtsdt
+   , start_time    = trtstm
+   , end           = wk12dt
+   , censor_date   = trtedt
+   , seq           = aeseq
+   , atmf          = asttmf
+   , censor_desc   = "End of treatment"
+   , censor_source = "ADSL"
+   , end_desc      = "End of week 12"
+   , event_desc    = aedecod
+   , source        = "ADAE"
+   , paramcd       = "TTDE12"
+   , out           = adttde12t
  )
 TITLE;
 FOOTNOTE;
@@ -406,7 +458,7 @@ FOOTNOTE;
    , order  = trt01pn
    , out    = sbp_ls
  )
-* Compares two pairs against Placebo at a 90 percent level and keeps the statistics of stats=.;
+* Without class=sex, two pairs at a 90 percent level: High Dose -5.73 here, not -5.24 as above.;
 %lsmeans(
      data   = advs
    , where  = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')
@@ -419,6 +471,19 @@ FOOTNOTE;
    , level  = 0.90
    , stats  = lsmean lsmean_se diff lcl ucl pval
    , out    = sbp_ls90
+ )
+* Fits one model at each visit with within=avisit: High Dose against Placebo at Week 12 and 24.;
+%lsmeans(
+     data   = advs
+   , where  = (paramcd = 'SYSBP' AND avisit IN ('Week 12' 'Week 24') AND anl01fl = 'Y')
+   , var    = chg
+   , by     = trt01p
+   , within = avisit
+   , covars = base
+   , class  = sex
+   , pairs  = "Xanomeline High Dose" "Placebo"
+   , order  = trt01pn
+   , out    = sbp_ls_vis
  )
 TITLE;
 FOOTNOTE;
@@ -575,12 +640,14 @@ FOOTNOTE;
    , conftype = loglog
    , out      = ttde_kmll
  )
-* Uses a 90 percent level: on these data the limits of the median stay as at 95 percent.;
+* Gives the survival at day 182 with 90 percent limits, narrower than the 95 percent limits.;
 %km(
      data  = adttde
    , var   = aval
    , by    = trt01a
+   , time  = 182
    , level = 0.90
+   , stats = n events surv lcl ucl
    , out   = ttde_km90
  )
 TITLE;
@@ -739,13 +806,13 @@ FOOTNOTE;
 %print(&t14_2_1_label_print.)
 * Counts the severe events of the subjects under 50: there is none, so the result has no row.;
 %freq(
-    data  = adae
-  , denom = adsl
-  , where = (aesev = 'SEVERE' AND age < 50)
-  , var   = aedecod
-  , by    = trt01a
-  , out   = t_sev50
-)
+     data  = adae
+   , denom = adsl
+   , where = (aesev = 'SEVERE' AND age < 50)
+   , var   = aedecod
+   , by    = trt01a
+   , out   = t_sev50
+ )
 * Gives nodata= for a result with no row: the display data set has no row.;
 %layout(
      data    = t_sev50
@@ -771,15 +838,6 @@ FOOTNOTE;
    , label    = %STR(row=" ")
    , file     = &spl_out./tlf/t14_2_1
  )
-* Sorts the events by subject and start date: a listing shows its records in their order.;
-PROC SORT DATA=adae OUT=ae_listing; BY usubjid astdt aedecod; RUN;
-* Prints the listing: USUBJID is the left column, shown once for each subject.;
-%print(
-     data = ae_listing
-   , by   = usubjid
-   , var  = trt01a aedecod astdt aesev
-   , file = &spl_out./listings/l14_5_1
- )
 * Prints one page per sex: the N of each column is that of the page, and the title names the sex.;
 OPTIONS NOBYLINE;
 TITLE1 "Table 14.1.1 Demographic characteristics by sex";
@@ -793,7 +851,16 @@ TITLE2 "Sex: #BYVAL1";
    , label    = %STR(row=" ")
    , file     = &spl_out./tlf/t14_1_1_page
  )
+* Resets the BY line and titles, sorts the events, prints the listing: USUBJID shown once each.;
 OPTIONS BYLINE;
+TITLE;
+PROC SORT DATA=adae OUT=ae_listing; BY usubjid astdt aedecod; RUN;
+%print(
+     data = ae_listing
+   , by   = usubjid
+   , var  = trt01a aedecod astdt aesev
+   , file = &spl_out./listings/l14_5_1
+ )
 TITLE;
 FOOTNOTE;
 
@@ -1235,6 +1302,19 @@ RUN;
    , order = exstdtc exseq
    , which = last
    , new   = exldose
+ )
+* Keeps the disposition event of each subject: one record per subject.;
+DATA ds_eos;
+  SET sdtm.ds;
+  WHERE dscat = 'DISPOSITION EVENT';
+RUN;
+* Takes the disposition term: unique=yes checks one record per subject, so no order is needed.;
+%pick(
+     data   = sl
+   , from   = work.ds_eos
+   , value  = dsdecod
+   , unique = yes
+   , new    = dcdecod
  )
 TITLE;
 FOOTNOTE;

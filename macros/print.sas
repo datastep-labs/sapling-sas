@@ -66,8 +66,9 @@
 |             number
 | file        The output: a path without its extension. The       Required
 |             macro writes <file>.rtf and <file>.lst.
-| nodata      The text printed when there is no row               No data
-|                                                                 qualified
+| nodata      The text printed when there is no row: a text       No data
+|             without quotes, as the default (a quote in it is    qualified
+|             printed)
 | debug       yes: keep the work data sets _print_*               no
 |-------------------------------------------------------------------------------
 |
@@ -87,15 +88,6 @@
    , label    = %STR(row=" ")
    , file     = &spl_out./tlf/t14_2_1
  )
- * Sorts the events by subject and start date: a listing shows its records in their order.;
- PROC SORT DATA=adae OUT=ae_listing; BY usubjid astdt aedecod; RUN;
- * Prints the listing: USUBJID is the left column, shown once for each subject.;
- %print(
-     data = ae_listing
-   , by   = usubjid
-   , var  = trt01a aedecod astdt aesev
-   , file = &spl_out./listings/l14_5_1
- )
  * Prints one page per sex: the N of each column is that of the page, and the title names the sex.;
  OPTIONS NOBYLINE;
  TITLE1 "Table 14.1.1 Demographic characteristics by sex";
@@ -109,7 +101,16 @@
    , label    = %STR(row=" ")
    , file     = &spl_out./tlf/t14_1_1_page
  )
+ * Resets the BY line and titles, sorts the events, prints the listing: USUBJID shown once each.;
  OPTIONS BYLINE;
+ TITLE;
+ PROC SORT DATA=adae OUT=ae_listing; BY usubjid astdt aedecod; RUN;
+ %print(
+     data = ae_listing
+   , by   = usubjid
+   , var  = trt01a aedecod astdt aesev
+   , file = &spl_out./listings/l14_5_1
+ )
 |
 |-------------------------------------------------------------------------------
 | Change Log :
@@ -138,6 +139,12 @@
 |                          manual. The listing example sorts its records by
 |                          subject and start date first (PROC SORT), as a
 |                          listing should. No number changes.
+|                          The example of the listing and the example of
+|                          page= are two examples, each with its caption: the
+|                          page= example first, then the listing, which sets
+|                          the BY line and the titles back. No number changes.
+|                          The text of nodata=: a text without quotes. No
+|                          number changes.
 |
 *******************************************************************************/
 %MACRO print(

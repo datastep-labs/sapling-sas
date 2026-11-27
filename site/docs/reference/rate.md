@@ -25,41 +25,41 @@ Returns the exposure-adjusted incidence rate of each group, with its exact Poiss
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set: the records of the events, with USUBJID. *(required)*
 
-`denom=`
+<a id="denom"></a>`denom=`
 :   The subjects of the groups with their exposure: a data set with one row per subject, USUBJID and the variable of `by=`. *(required)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (trtemfl = 'Y')`. *(optional)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups: one variable, in `data=` and in `denom=`. *(required)*
 
-`exposure=`
+<a id="exposure"></a>`exposure=`
 :   The exposure of a subject: a numeric variable of `denom=`, or an expression of its variables (`exposure = trtdur / 365.25` gives years). *(required)*
 
-`count=`
+<a id="count"></a>`count=`
 :   What the rate counts: subjects (the subjects with a record, each once) or events (every record). *(optional, default `subjects`)*
     Accepts: `subjects`, `events`.
 
-`per=`
+<a id="per"></a>`per=`
 :   The units of exposure of the rate: a number (`per = 1000` gives the rate per 1000 patient-years). The row label of [%layout](layout.md) reads "Rate per 100 patient-years"; with another `per=`, change LABEL in the display data set. *(optional, default `100`)*
 
-`level=`
+<a id="level"></a>`level=`
 :   The confidence level: a number between 0 and 1 (`level = 0.90`). *(optional, default `0.95`)*
 
-`stats=`
-:   The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, events, exposure, rate, lcl and ucl. When not given: n (events with count=events), exposure, rate, lcl and ucl. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed). *(optional)*
+<a id="stats"></a>`stats=`
+:   The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, events, exposure, rate, lcl and ucl. When not given: n (events with count=events), exposure, rate, lcl and ucl. A name without a pattern takes its default pattern: see the [table of default patterns](../explanation/numbers.md#the-table-of-default-patterns). *(optional)*
 
-`label=`
+<a id="label"></a>`label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the result data set. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _rate_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -79,6 +79,8 @@ Use [%freq](freq.md) for the percent of subjects with an event, and [%rateratio]
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+<a id="ex-ae_rate"></a>
 
 Gives the subjects with an event per 100 patient years, with the exposure and the limits.
 
@@ -113,6 +115,8 @@ Xanomeline Low Dose   TRT01A         lcl       296.74266009  296.74
 Xanomeline Low Dose   TRT01A         ucl       460.59373936  460.59
 ```
 
+<a id="ex-ae_events"></a>
+
 Counts the events, not the subjects, with count=events: a subject adds each of its events.
 
 ```sas
@@ -146,6 +150,8 @@ Xanomeline Low Dose   TRT01A         rate      1891.1331393  1891.13
 Xanomeline Low Dose   TRT01A         lcl       1715.9914371  1715.99
 Xanomeline Low Dose   TRT01A         ucl       2079.3019306  2079.30
 ```
+
+<a id="ex-ae_rate1000"></a>
 
 Gives the rate of severe events per 1000 patient years with per=1000.
 

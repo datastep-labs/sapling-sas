@@ -59,6 +59,10 @@
 | Output        : OUT: the result shape (see %stack): one row per statistic, of
 |                 all subjects together (GROUPS is blank). STAT is pval,
 |                 estimate, se, lcl or ucl.
+| Note          : This macro gives no comparison of the groups: the ANCOVA
+|                 comparison of the groups (the differences of the LS means) is
+|                 %lsmeans, and %table_model with method=ancova calls %lsmeans,
+|                 not %ancova.
 |
 | Example:
 |
@@ -105,7 +109,9 @@
 |                          one numeric term (a dose response) and names %lsmeans
 |                          for the ANCOVA comparison of the groups; Proven in
 |                          plain words, for the published manual. stats= points
-|                          to the table of default patterns of the manual. No
+|                          to the table of default patterns of the manual. A
+|                          Note: the ANCOVA comparison of the groups is
+|                          %lsmeans, which %table_model method=ancova calls. No
 |                          number changes.
 |
 *******************************************************************************/

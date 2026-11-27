@@ -33,65 +33,65 @@ Makes a shift table in one call: the subjects in each category at baseline again
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set: the records, with USUBJID. *(required)*
 
-`adsl=`
+<a id="adsl"></a>`adsl=`
 :   The subjects: a data set with one row per subject. It gives the population and the N of each column, and its variables are merged onto the records by USUBJID. When not given, the N of a column is the subjects of its records. *(optional)*
 
-`pop=`
+<a id="pop"></a>`pop=`
 :   The population: a condition on `adsl=` in parentheses, such as `pop = (saffl = 'Y')`. It is used only with `adsl=`. *(optional)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (trtemfl = 'Y')`. *(optional)*
 
-`var=`
+<a id="var"></a>`var=`
 :   Two variables, separated by a blank: the category at baseline, then the category after baseline. *(optional, default `BNRIND ANRIND`)*
 
-`within=`
+<a id="within"></a>`within=`
 :   The levels above the two variables of `var=`, nested in their order and separated by blanks, such as `within = paramcd avisit`. *(optional)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups of the columns: one character variable, such as `by = trt01a`. *(required)*
 
-`keep=`
+<a id="keep"></a>`keep=`
 :   Other variables to keep for the names and the order of the rows, separated by blanks (keep= of [%freq](freq.md)), such as `keep = param avisitn`. *(optional)*
 
-`order=`
+<a id="order"></a>`order=`
 :   The numeric twin of `by=`, such as `order = trt01an`: it gives the order of the columns. *(optional)*
 
-`levels=`
+<a id="levels"></a>`levels=`
 :   The planned categories of both variables of `var=`: values in quotes, separated by blanks, such as `levels = 'LOW' 'NORMAL' 'HIGH'`. A planned category has a row also without a subject; a record of another category is not counted (levels= of [%freq](freq.md)). *(optional)*
 
-`total=`
+<a id="total"></a>`total=`
 :   yes: add the column Total, all groups together. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
-`format=`
+<a id="format"></a>`format=`
 :   The labels of the categories: pairs of a variable and a format, as in a FORMAT statement (`format = sex $sexf. race $racef.`), as `format=` of [%layout](layout.md). *(optional)*
 
-`name=`
+<a id="name"></a>`name=`
 :   The name of the table: the first part of the names of its data sets, such as `name = t14_3_01`. When not given, the last part of `file=` is used; without `file=`, `name=` is required. *(optional)*
 
-`show=`
+<a id="show"></a>`show=`
 :   yes: write the long program to the log. A file path, without quotes: write the long program to that file. In both cases the macro runs it. *(optional, default `no`)*
 
-`label=`
+<a id="label"></a>`label=`
 :   The label of the block in the table: a text in quotes. *(optional)*
 
-`stats=`
+<a id="stats"></a>`stats=`
 :   The statistics, each name with its pattern, separated by blanks (stats= of [%freq](freq.md)). *(optional)*
 
-`title=`
+<a id="title"></a>`title=`
 :   The titles of the table: one text in quotes per line (TITLE1, TITLE2 ...). They hold for this table only. When not given, the TITLE statements in force in the program are used. *(optional)*
 
-`footnote=`
+<a id="footnote"></a>`footnote=`
 :   The footnotes of the table: one text in quotes per line (FOOTNOTE1, FOOTNOTE2 ...). They hold for this table only. When not given, the FOOTNOTE statements in force in the program are used. *(optional)*
 
-`file=`
+<a id="file"></a>`file=`
 :   The output file without its extension: the macro writes &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file. When not given, nothing is printed. *(optional)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets of the macros that the long program calls. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 

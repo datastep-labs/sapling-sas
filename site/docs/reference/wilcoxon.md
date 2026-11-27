@@ -25,41 +25,41 @@ Returns the p-value of the Wilcoxon rank-sum test of each pair of groups, with t
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set: one record per subject, with USUBJID. *(required)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (avisit = 'Week 24')`. *(optional)*
 
-`var=`
+<a id="var"></a>`var=`
 :   The variable to compare: one numeric variable. *(required)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups: one character variable (trt01a, not trt01an). *(required)*
 
-`pairs=`
+<a id="pairs"></a>`pairs=`
 :   Which groups to compare. all: each later group against each earlier one, in the order of `order=` (else of the values). Or the pairs, separated by #: in each pair the group first, then the group it is compared with, each value in quotes (`pairs = "Drug" "Placebo" # "High" "Low"`). *(optional, default `all`)*
 
-`order=`
+<a id="order"></a>`order=`
 :   The order of the groups: one numeric variable with one value per group (`order = trt01an`). *(optional)*
 
-`correction=`
+<a id="correction"></a>`correction=`
 :   yes: the continuity correction of the normal approximation; no: none. *(optional, default `yes`)*
     Accepts: `yes`, `no`.
 
-`level=`
+<a id="level"></a>`level=`
 :   The confidence level: a number between 0 and 1 (`level = 0.90`). *(optional, default `0.95`)*
 
-`stats=`
-:   The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are estimate, lcl, ucl and pval. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed). *(optional, default `estimate="XX.XX" lcl="XX.XX" ucl="XX.XX" pval="X.XXX"`)*
+<a id="stats"></a>`stats=`
+:   The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are estimate, lcl, ucl and pval. A name without a pattern takes its default pattern: see the [table of default patterns](../explanation/numbers.md#the-table-of-default-patterns). *(optional, default `estimate="XX.XX" lcl="XX.XX" ucl="XX.XX" pval="X.XXX"`)*
 
-`label=`
+<a id="label"></a>`label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the result data set. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _wilcoxon_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -80,6 +80,8 @@ The macro uses one record per subject: when a subject has several records, the f
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+<a id="ex-dbp_w"></a>
 
 Compares each pair with the Wilcoxon rank sum test and the Hodges Lehmann estimate.
 
@@ -110,6 +112,8 @@ Xanomeline High Dose  Xanomeline Low Dose  TRT01P VERSUS         lcl            
 Xanomeline High Dose  Xanomeline Low Dose  TRT01P VERSUS         ucl                  2   2.00
 Xanomeline High Dose  Xanomeline Low Dose  TRT01P VERSUS         pval       0.202676797  0.203
 ```
+
+<a id="ex-dbp_w_nocc"></a>
 
 Leaves out the continuity correction for one pair: only the p value changes.
 

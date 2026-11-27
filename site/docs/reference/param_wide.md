@@ -20,25 +20,25 @@ Returns the values of several parameters side by side: one record per group, wit
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set, with PARAMCD and the BY variables, such as advs. *(required)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to read: a condition in parentheses, such as `where = (anl01fl = 'Y')`. *(optional)*
 
-`params=`
+<a id="params"></a>`params=`
 :   The parameter codes, separated by blanks (`params = sysbp diabp`). They are compared with PARAMCD in upper case. *(required)*
 
-`vars=`
+<a id="vars"></a>`vars=`
 :   The variables to keep of each parameter, separated by blanks (`vars = aval chg`). *(required)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups: variables separated by blanks, such as the subject and the visit (`by = usubjid avisitn`). *(required)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the data set it writes. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _param_wide_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -53,6 +53,8 @@ The variables of each parameter are named &lt;PARAMCD&gt;_&lt;VAR&gt;, such as S
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+<a id="ex-bp_wide"></a>
 
 Puts the value and the change of SYSBP and DIABP side by side: one row per subject and visit.
 

@@ -20,25 +20,25 @@ Keeps the records of each subject at its worst level, such as the highest severi
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set: the records, with USUBJID. *(required)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (trtemfl = 'Y')`. *(optional)*
 
-`var=`
+<a id="var"></a>`var=`
 :   The graded variable: one variable, character or numeric (`var = aesev`). *(required)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The variables of a row: one or several, separated by blanks (`by = aebodsys aedecod`). The macro keeps the worst records of each subject in each row. When not given, the worst of all the records of the subject. *(optional)*
 
-`levels=`
+<a id="levels"></a>`levels=`
 :   The values of `var=` from the least to the most severe, separated by blanks: texts in quotes, numbers without (`levels = 'MILD' 'MODERATE' 'SEVERE'`). *(required)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the data set of the records kept. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _worst_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -53,6 +53,8 @@ Use it before [%freq](freq.md), so that [%freq](freq.md) counts each subject onc
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+<a id="ex-ae_worst"></a>
 
 Keeps the records of each subject and term at the worst severity, the last value of levels=.
 

@@ -23,35 +23,35 @@ Returns the p-value of Fisher's exact test of the subjects with a record against
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set: the records (adverse events), with USUBJID. *(required)*
 
-`denom=`
+<a id="denom"></a>`denom=`
 :   The subjects, one row each, with USUBJID and the variable of `by=`: a data set, with data set options if needed, such as denom = `adsl(where = (saffl = 'Y'))`. *(required)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (trtemfl = 'Y')`. *(optional)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups to compare: one variable of `denom=`. *(required)*
 
-`within=`
+<a id="within"></a>`within=`
 :   One test in each group of these variables of `data=`, separated by blanks, such as each preferred term (`within = aedecod`). *(optional)*
 
-`exact=`
+<a id="exact"></a>`exact=`
 :   no: the Pearson chi-square test of the same table instead of Fisher's exact test. *(optional, default `yes`)*
     Accepts: `yes`, `no`.
 
-`stats=`
+<a id="stats"></a>`stats=`
 :   The statistic pval and the pattern of its printed number, such as `stats = pval="X.XXXX"`. *(optional, default `pval="X.XXX"`)*
 
-`label=`
+<a id="label"></a>`label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the result data set. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _fisher_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -66,6 +66,8 @@ Use it for an adverse event between treatments; use [%chisq](chisq.md) for the c
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+<a id="ex-soc_test"></a>
 
 Tests the subjects with an event against those without in each class: one p value per class.
 

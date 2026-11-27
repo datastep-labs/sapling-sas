@@ -27,46 +27,46 @@ The ANCOVA of the groups: returns the differences of the LS means of pairs of gr
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set, with USUBJID. *(required)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (paramcd = 'SYSBP' AND avisit = 'Week 12')`. *(optional)*
 
-`var=`
+<a id="var"></a>`var=`
 :   The response: one numeric variable. *(required)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups of the model: one character variable. *(required)*
 
-`within=`
+<a id="within"></a>`within=`
 :   One model in each group of these variables, separated by blanks (`within = paramcd`). *(optional)*
 
-`covars=`
+<a id="covars"></a>`covars=`
 :   The covariates: numeric variables separated by blanks (`covars = base`). *(optional)*
 
-`class=`
+<a id="class"></a>`class=`
 :   The class factors besides the groups: variables separated by blanks (`class = sex`). *(optional)*
 
-`pairs=`
+<a id="pairs"></a>`pairs=`
 :   The pairs of groups to compare. all: each later group against each earlier one, in the order of `order=` (or of the values). Or the pairs separated by #, each the group first and then the group it is compared with, a value with a blank or a hyphen in quotes: `pairs = "Drug" "Placebo" # "High" "Low"`. *(optional, default `all`)*
 
-`order=`
+<a id="order"></a>`order=`
 :   The order of the groups: one numeric variable with one value per group (`order = trt01pn`). *(optional)*
 
-`level=`
+<a id="level"></a>`level=`
 :   The confidence level of the limits: a number between 0 and 1. *(optional, default `0.95`)*
 
-`stats=`
-:   The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are diff, diff_se, lcl, ucl, pval, lsmean, lsmean_se, lsmean_lcl and lsmean_ucl. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed). *(optional, default `diff="XX.X" diff_se="XX.XX" lcl="XX.X" ucl="XX.X" pval="X.XXX"`)*
+<a id="stats"></a>`stats=`
+:   The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are diff, diff_se, lcl, ucl, pval, lsmean, lsmean_se, lsmean_lcl and lsmean_ucl. A name without a pattern takes its default pattern: see the [table of default patterns](../explanation/numbers.md#the-table-of-default-patterns). *(optional, default `diff="XX.X" diff_se="XX.XX" lcl="XX.X" ucl="XX.X" pval="X.XXX"`)*
 
-`label=`
+<a id="label"></a>`label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the result data set. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _lsmeans_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -81,6 +81,8 @@ Use [%ancova](ancova.md) for the test of one numeric term (a dose response), and
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+<a id="ex-sbp_ls"></a>
 
 Gives the difference of the LS means of every pair at Week 12, adjusted for baseline and sex.
 
@@ -118,7 +120,9 @@ Xanomeline Low Dose   Placebo              TRT01P VERSUS         ucl      4.8155
 Xanomeline Low Dose   Placebo              TRT01P VERSUS         pval     0.9584423033  0.958
 ```
 
-Compares two pairs against Placebo at a 90 percent level and keeps the statistics of stats=.
+<a id="ex-sbp_ls90"></a>
+
+Without class=sex, two pairs at a 90 percent level: High Dose -5.73 here, not -5.24 as above.
 
 ```sas
 %lsmeans(
@@ -153,6 +157,40 @@ Xanomeline Low Dose   Placebo  TRT01P VERSUS         diff       0.0821393501    
 Xanomeline Low Dose   Placebo  TRT01P VERSUS         lcl        -4.170619641   -4.2
 Xanomeline Low Dose   Placebo  TRT01P VERSUS         ucl        4.3348983413    4.3
 Xanomeline Low Dose   Placebo  TRT01P VERSUS         pval       0.9745379028  0.975
+```
+
+<a id="ex-sbp_ls_vis"></a>
+
+Fits one model at each visit with within=avisit: High Dose against Placebo at Week 12 and 24.
+
+```sas
+%lsmeans(
+     data   = advs
+   , where  = (paramcd = 'SYSBP' AND avisit IN ('Week 12' 'Week 24') AND anl01fl = 'Y')
+   , var    = chg
+   , by     = trt01p
+   , within = avisit
+   , covars = base
+   , class  = sex
+   , pairs  = "Xanomeline High Dose" "Placebo"
+   , order  = trt01pn
+   , out    = sbp_ls_vis
+ )
+```
+
+```text
+sbp_ls_vis: 10 rows
+TRT01P                VERSUS   AVISIT   GROUPS                BLOCK  STAT            VALUE   TEXT
+Xanomeline High Dose  Placebo  Week 12  TRT01P VERSUS AVISIT         diff     -5.237880107   -5.2
+Xanomeline High Dose  Placebo  Week 12  TRT01P VERSUS AVISIT         diff_se  2.5065985028   2.51
+Xanomeline High Dose  Placebo  Week 12  TRT01P VERSUS AVISIT         lcl      -10.19207069  -10.2
+Xanomeline High Dose  Placebo  Week 12  TRT01P VERSUS AVISIT         ucl      -0.283689527   -0.3
+Xanomeline High Dose  Placebo  Week 12  TRT01P VERSUS AVISIT         pval     0.0383969398  0.038
+Xanomeline High Dose  Placebo  Week 24  TRT01P VERSUS AVISIT         diff     -3.200754613   -3.2
+Xanomeline High Dose  Placebo  Week 24  TRT01P VERSUS AVISIT         diff_se  3.3340595813   3.33
+Xanomeline High Dose  Placebo  Week 24  TRT01P VERSUS AVISIT         lcl      -9.810138883   -9.8
+Xanomeline High Dose  Placebo  Week 24  TRT01P VERSUS AVISIT         ucl      3.4086296557    3.4
+Xanomeline High Dose  Placebo  Week 24  TRT01P VERSUS AVISIT         pval     0.3392108933  0.339
 ```
 
 ## Messages

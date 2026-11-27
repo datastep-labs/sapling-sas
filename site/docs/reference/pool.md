@@ -21,28 +21,28 @@ Pools small groups, such as sites, into one group: a new variable that is the gr
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The data set to change in place, one record per subject, such as adsl. *(required)*
 
-`var=`
+<a id="var"></a>`var=`
 :   The variable of the groups to pool, such as siteid. *(required)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The variable whose every group must have `min=` records in a group of `var=`, such as the treatment. *(required)*
 
-`min=`
+<a id="min"></a>`min=`
 :   The smallest number of records: a whole number. *(required)*
 
-`length=`
+<a id="length"></a>`length=`
 :   The length of the new variable, such as $3. *(optional)*
 
-`new=`
+<a id="new"></a>`new=`
 :   The name of the new variable: the value of `var=`, or `into=` for a small group. *(required)*
 
-`into=`
+<a id="into"></a>`into=`
 :   The value of the pooled group, without quotes. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _pool_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 

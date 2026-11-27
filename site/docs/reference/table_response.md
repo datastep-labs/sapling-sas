@@ -33,65 +33,65 @@ Makes a response table in one call: the responders in each group, and the compar
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set: the records, with USUBJID. *(required)*
 
-`adsl=`
+<a id="adsl"></a>`adsl=`
 :   The subjects: a data set with one row per subject. It gives the population and the N of each column, and its variables are merged onto the records by USUBJID. When not given, the N of a column is the subjects of its records. *(optional)*
 
-`pop=`
+<a id="pop"></a>`pop=`
 :   The population: a condition on `adsl=` in parentheses, such as `pop = (saffl = 'Y')`. It is used only with `adsl=`. *(optional)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (trtemfl = 'Y')`. *(optional)*
 
-`var=`
+<a id="var"></a>`var=`
 :   The response: one variable with two values. *(required)*
 
-`event=`
+<a id="event"></a>`event=`
 :   The value of `var=` that is the event: a text in quotes. *(optional, default `"Y"`)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups of the columns: one character variable, such as `by = trt01a`. *(required)*
 
-`covars=`
+<a id="covars"></a>`covars=`
 :   The covariates, separated by blanks, such as `covars = sitegr1`: they add a block with the odds ratio adjusted for them ([%logistic](logistic.md)). When not given, there is no such block. *(optional)*
 
-`order=`
+<a id="order"></a>`order=`
 :   The numeric twin of `by=`, such as `order = trt01an`: it gives the order of the columns and of the groups in the comparisons. *(optional)*
 
-`pairs=`
+<a id="pairs"></a>`pairs=`
 :   The pairs of groups to compare, separated by #: each group in quotes, then the group it is compared with ("Xanomeline High Dose" "Placebo"). When not given, each later group is compared with each earlier one. *(optional)*
 
-`ci=`
+<a id="ci"></a>`ci=`
 :   The interval of the percent of responders: clopper-pearson, wilson, wald or agresti-coull (ci= of [%proportion](proportion.md)). *(optional, default `clopper-pearson`)*
 
-`measure=`
+<a id="measure"></a>`measure=`
 :   rd (the risk difference), rr (the relative risk) or or (the odds ratio): the comparison of [%risk](risk.md); none: no comparison. *(optional, default `rd`)*
     Accepts: `rd`, `rr`, `or`, `none`.
 
-`diffci=`
+<a id="diffci"></a>`diffci=`
 :   The interval of a risk difference: wald, newcombe, miettinen-nurminen or agresti-caffo (ci= of [%risk](risk.md)). It is used only with `measure = rd`. *(optional, default `wald`)*
 
-`format=`
+<a id="format"></a>`format=`
 :   The labels of the categories: pairs of a variable and a format, as in a FORMAT statement (`format = sex $sexf. race $racef.`), as `format=` of [%layout](layout.md). *(optional)*
 
-`name=`
+<a id="name"></a>`name=`
 :   The name of the table: the first part of the names of its data sets, such as `name = t14_3_01`. When not given, the last part of `file=` is used; without `file=`, `name=` is required. *(optional)*
 
-`show=`
+<a id="show"></a>`show=`
 :   yes: write the long program to the log. A file path, without quotes: write the long program to that file. In both cases the macro runs it. *(optional, default `no`)*
 
-`title=`
+<a id="title"></a>`title=`
 :   The titles of the table: one text in quotes per line (TITLE1, TITLE2 ...). They hold for this table only. When not given, the TITLE statements in force in the program are used. *(optional)*
 
-`footnote=`
+<a id="footnote"></a>`footnote=`
 :   The footnotes of the table: one text in quotes per line (FOOTNOTE1, FOOTNOTE2 ...). They hold for this table only. When not given, the FOOTNOTE statements in force in the program are used. *(optional)*
 
-`file=`
+<a id="file"></a>`file=`
 :   The output file without its extension: the macro writes &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file. When not given, nothing is printed. *(optional)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets of the macros that the long program calls. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 

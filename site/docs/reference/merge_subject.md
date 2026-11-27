@@ -17,16 +17,16 @@ Copies variables from a data set with one row per subject to every row of that s
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The data set to change in place, such as adsl or adae. *(required)*
 
-`from=`
+<a id="from"></a>`from=`
 :   The data set to copy from: one row per subject, with USUBJID. *(required)*
 
-`vars=`
+<a id="vars"></a>`vars=`
 :   The variables to copy, separated by blanks. new=old copies the variable old under the name new (`vars = trtsdt trt01a=arm`). *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _merge_subject_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 

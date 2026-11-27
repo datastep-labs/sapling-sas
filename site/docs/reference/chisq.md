@@ -23,35 +23,35 @@ Returns the p-value of the Pearson chi-square test of the groups against the cat
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set: the records, with USUBJID. *(required)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (avisit = 'Week 24')`. *(optional)*
 
-`var=`
+<a id="var"></a>`var=`
 :   The categories of the response: one variable, numeric or character. *(required)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups to compare: one variable. *(required)*
 
-`within=`
+<a id="within"></a>`within=`
 :   One test in each group of these variables, separated by blanks, such as a parameter and a visit (`within = paramcd avisit`). *(optional)*
 
-`exact=`
+<a id="exact"></a>`exact=`
 :   yes: Fisher's exact test of the same table instead of the chi-square test. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
-`stats=`
+<a id="stats"></a>`stats=`
 :   The statistic pval and the pattern of its printed number, such as `stats = pval="X.XXXX"`. *(optional, default `pval="X.XXX"`)*
 
-`label=`
+<a id="label"></a>`label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the result data set. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _chisq_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -66,6 +66,8 @@ Use [%fisher](fisher.md) for subjects with a record against subjects without (an
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+<a id="ex-sex_chisq"></a>
 
 Tests sex across the groups: one row, the p value of the chi square test.
 
@@ -84,6 +86,8 @@ sex_chisq: 1 row
 GROUPS  BLOCK  STAT         VALUE   TEXT
         Sex    pval  0.2514896384  0.251
 ```
+
+<a id="ex-nr_test"></a>
 
 Runs the exact test of the normal range within each parameter: one p value per parameter.
 

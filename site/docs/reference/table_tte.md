@@ -31,58 +31,58 @@ Makes a time-to-event table in one call: the Kaplan-Meier summary, the log-rank 
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set: the records, with USUBJID. *(required)*
 
-`adsl=`
+<a id="adsl"></a>`adsl=`
 :   The subjects: a data set with one row per subject. It gives the population and the N of each column, and its variables are merged onto the records by USUBJID. When not given, the N of a column is the subjects of its records. *(optional)*
 
-`pop=`
+<a id="pop"></a>`pop=`
 :   The population: a condition on `adsl=` in parentheses, such as `pop = (saffl = 'Y')`. It is used only with `adsl=`. *(optional)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (trtemfl = 'Y')`. *(optional)*
 
-`var=`
+<a id="var"></a>`var=`
 :   The time: one numeric variable. *(optional, default `AVAL`)*
 
-`cnsr=`
+<a id="cnsr"></a>`cnsr=`
 :   The censoring variable: one numeric variable, 0 for an event and a positive value for a censoring (the ADaM CNSR: 1, 2 ... name the reason). A missing or negative value on a record used stops the macro with an ERROR. *(optional, default `CNSR`)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups of the columns: one character variable, such as `by = trt01a`. *(required)*
 
-`time=`
+<a id="time"></a>`time=`
 :   A time: adds a block with the percent without an event at that time and its limits (time= of [%km](km.md)), such as `time = 182`. *(optional)*
 
-`strata=`
+<a id="strata"></a>`strata=`
 :   The strata of the log-rank test and of the Cox model: variables separated by blanks, such as `strata = sitegr1`. *(optional)*
 
-`order=`
+<a id="order"></a>`order=`
 :   The numeric twin of `by=`, such as `order = trt01an`: it gives the order of the columns and of the groups in the comparisons. *(optional)*
 
-`pairs=`
+<a id="pairs"></a>`pairs=`
 :   The pairs of groups to compare, separated by #: each group in quotes, then the group it is compared with ("Xanomeline High Dose" "Placebo"). When not given, each later group is compared with each earlier one. *(optional)*
 
-`format=`
+<a id="format"></a>`format=`
 :   The labels of the categories: pairs of a variable and a format, as in a FORMAT statement (`format = sex $sexf. race $racef.`), as `format=` of [%layout](layout.md). *(optional)*
 
-`name=`
+<a id="name"></a>`name=`
 :   The name of the table: the first part of the names of its data sets, such as `name = t14_3_01`. When not given, the last part of `file=` is used; without `file=`, `name=` is required. *(optional)*
 
-`show=`
+<a id="show"></a>`show=`
 :   yes: write the long program to the log. A file path, without quotes: write the long program to that file. In both cases the macro runs it. *(optional, default `no`)*
 
-`title=`
+<a id="title"></a>`title=`
 :   The titles of the table: one text in quotes per line (TITLE1, TITLE2 ...). They hold for this table only. When not given, the TITLE statements in force in the program are used. *(optional)*
 
-`footnote=`
+<a id="footnote"></a>`footnote=`
 :   The footnotes of the table: one text in quotes per line (FOOTNOTE1, FOOTNOTE2 ...). They hold for this table only. When not given, the FOOTNOTE statements in force in the program are used. *(optional)*
 
-`file=`
+<a id="file"></a>`file=`
 :   The output file without its extension: the macro writes &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file. When not given, nothing is printed. *(optional)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets of the macros that the long program calls. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -106,19 +106,19 @@ The table has no Total column. The long program is the program the macro writes 
 - &lt;name&gt;_cols: the columns ([%columns](columns.md))
 - &lt;name&gt;_display: the display data set, one row per printed line ([%layout](layout.md))
 
-The global macro variable &lt;name&gt;_print keeps the call of [%print](print.md): change &lt;name&gt;_display, then print again with `%print(&<name>_print.)`. CNSR 0 is an event and any positive value is a censoring, as in ADaM, where the value names the reason of the censoring: a CNSR of 2 is censored as 1 is. A record used with a missing or negative CNSR stops the macro with an ERROR.
+The global macro variable &lt;name&gt;_print keeps the call of [%print](print.md): change &lt;name&gt;_display, then print again with `%print(&<name>_print.)`. CNSR 0 is an event and any positive value is a censoring, as in ADaM, where the value names the reason of the censoring: a CNSR of 2 is censored as 1 is. A record used with a missing or negative CNSR stops the macro with an ERROR. In the second example the column N of Placebo is 86 (from `adsl=`) while n of the Kaplan-Meier block is 85: the 2 subjects with a missing TRTEDT have no event and no censoring date, so [%tte](tte.md) gives them no record in adttde.
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `adttde` (made by the [example of %tte](tte.md#ex-adttde)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 ??? note "Before these examples: the calls that make their inputs"
 
-    Run `examples/setup.sas`, then these examples of other pages ([%tte](tte.md)), in this order. Then the examples of this page run as shown.
+    Run `examples/setup.sas`, then these calls from the examples of %tte, in this order. Then the examples of this page run as shown.
 
     ```sas
-    /* the example of %tte */
-    * Derives the time to the first skin event from the first dose: CNSR 0 is an event, 1 a censoring.;
+    /* from the example of %tte */
+    * Makes TTDE. Log NOTE: 2 subject(s) with no event and no censoring date: no record (no TRTEDT).;
     %tte(
          subjects      = adsl
        , events        = adae
@@ -134,8 +134,6 @@ The examples run on the [example data](../tutorial/index.md#the-example-data) af
        , paramcd       = "TTDE"
        , out           = adttde
      )
-    TITLE;
-    FOOTNOTE;
     ```
 
 Makes the table of the time to the event: Kaplan Meier, the log rank test and the hazard ratio.

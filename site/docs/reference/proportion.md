@@ -25,40 +25,40 @@ Returns the percent of subjects in each category and group, with its confidence 
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set: the records, with USUBJID. *(required)*
 
-`denom=`
+<a id="denom"></a>`denom=`
 :   The subjects of the percent: a data set with one row per subject and the variable of `by=`. When not given, the subjects of `data=` (without `where=`). *(optional)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (avisit = 'Week 24')`. *(optional)*
 
-`var=`
+<a id="var"></a>`var=`
 :   The category: one variable. *(required)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups: one variable, the columns of the table. *(required)*
 
-`levels=`
+<a id="levels"></a>`levels=`
 :   The planned categories: the variable, then its values in quotes (`levels = avalc 'CR' 'PR'`). A planned category without a subject shows with `n = 0`. *(optional)*
 
-`ci=`
+<a id="ci"></a>`ci=`
 :   The method of the interval: clopper-pearson (the exact interval, CL=EXACT; exact is another name for it), wilson (the score interval, CL=WILSON), wald (CL=WALD) or agresti-coull (CL=AGRESTICOULL). *(optional, default `clopper-pearson`)*
 
-`level=`
+<a id="level"></a>`level=`
 :   The confidence level: a number between 0 and 1 (`level = 0.90`). *(optional, default `0.95`)*
 
-`stats=`
-:   The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, pct, lcl and ucl. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed). *(optional, default `n="XX" pct="(XX.X%)" lcl="XX.X" ucl="XX.X"`)*
+<a id="stats"></a>`stats=`
+:   The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are n, pct, lcl and ucl. A name without a pattern takes its default pattern: see the [table of default patterns](../explanation/numbers.md#the-table-of-default-patterns). *(optional, default `n="XX" pct="(XX.X%)" lcl="XX.X" ucl="XX.X"`)*
 
-`label=`
+<a id="label"></a>`label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the result data set. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _proportion_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -73,6 +73,8 @@ Use [%freq](freq.md) for counts and percents without an interval. The statistics
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+<a id="ex-eos_ci"></a>
 
 Gives the percent that completed and that discontinued, each with its Clopper Pearson limits.
 
@@ -106,6 +108,8 @@ Xanomeline High Dose  DISCONTINUED  TRT01A EOSSTT         n               45  45
 Xanomeline High Dose  DISCONTINUED  TRT01A EOSSTT         pct           62.5  (62.5%)
 Xanomeline High Dose  DISCONTINUED  TRT01A EOSSTT         lcl   50.298592937  50.3
 ```
+
+<a id="ex-bor_ci"></a>
 
 Gives the percent of the best responses CR and PR of the N of denom=, with Wilson limits.
 

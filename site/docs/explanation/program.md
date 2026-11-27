@@ -8,21 +8,27 @@ sees the population, each block of the table, the columns, and the print. Nothin
 Every table program has the same five parts, in the same order, after the library is loaded (part 0).
 
 ```sas
-%LET spl_root = /studies/cdiscpilot01;                    /* 0. load the library  */
+%LET spl_root  = /opt/sapling-sas;                         /* 0. load the library  */
+%LET studydir  = /studies/cdiscpilot01;
 %INCLUDE "&spl_root./macros/sapling.sas";
 
-%study(CDISCPILOT01, program = t14_2_01)                  /* 1. start the program */
+%study(
+     CDISCPILOT01
+   , program = t14_2_01
+   , adam    = &studydir./adam
+   , out     = &studydir./out
+ )                                                          /* 1. start the program */
 
-DATA itt;                                                 /* 2. the population    */
+DATA saf;                                                  /* 2. the population    */
   SET adam.adsl;
-  WHERE ittfl = 'Y';
+  WHERE saffl = 'Y';
 RUN;
 
-%describe(data=itt, var=age, by=trt01p, label="Age", out=t_age)     /* 3. one call per block */
-%freq(data=itt, var=race, by=trt01p, label="Race", out=t_race)
+%describe(data=saf, var=age, by=trt01p, label="Age", out=t_age)     /* 3. one call per block */
+%freq(data=saf, var=race, by=trt01p, label="Race", out=t_race)
 
 %stack(t_age t_race, out=t14_2_01)                        /* 4. the table as data */
-%columns(data=t14_2_01, n=itt, var=trt01p, order=trt01pn, out=t14_2_01_cols)
+%columns(data=t14_2_01, n=saf, var=trt01p, order=trt01pn, out=t14_2_01_cols)
 %ard(data=t14_2_01, columns=t14_2_01_cols, file=t14_2_01)
 %layout(
      data    = t14_2_01

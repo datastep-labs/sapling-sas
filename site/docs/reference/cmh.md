@@ -24,38 +24,38 @@ Returns the p-value of the Cochran-Mantel-Haenszel test of the groups against th
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set: the records, with USUBJID. *(required)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (avisit = 'Week 24')`. *(optional)*
 
-`var=`
+<a id="var"></a>`var=`
 :   The categories of the response: one variable; numeric for statistic=rowmean. *(required)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups to compare: one variable. *(required)*
 
-`strata=`
+<a id="strata"></a>`strata=`
 :   The stratification variables, separated by blanks (`strata = sitegr1`). When not given, the test has one stratum. *(optional)*
 
-`within=`
+<a id="within"></a>`within=`
 :   One test in each group of these variables, separated by blanks, such as a parameter and a visit (`within = paramcd avisit`). *(optional)*
 
-`statistic=`
+<a id="statistic"></a>`statistic=`
 :   The test: general (general association) or rowmean (the mean scores of the groups differ). *(optional, default `general`)*
     Accepts: `general`, `rowmean`.
 
-`stats=`
+<a id="stats"></a>`stats=`
 :   The statistic pval and the pattern of its printed number, such as `stats = pval="X.XXXX"`. *(optional, default `pval="X.XXX"`)*
 
-`label=`
+<a id="label"></a>`label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the result data set. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _cmh_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -73,6 +73,8 @@ Use [%chisq](chisq.md) for the same test without strata. Each subject counts onc
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+<a id="ex-eos_cmh"></a>
 
 Tests the status at the end of the study across the groups, stratified by sex: one p value.
 
@@ -92,6 +94,8 @@ eos_cmh: 1 row
 GROUPS  BLOCK                   STAT         VALUE  TEXT
         Discontinued the study  pval  8.4616214E-8  <0.001
 ```
+
+<a id="ex-agegr_cmh"></a>
 
 Uses the row mean score statistic for the ordered age groups: one p value.
 

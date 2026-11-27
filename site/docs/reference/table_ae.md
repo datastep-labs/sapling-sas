@@ -32,63 +32,63 @@ Makes a table of the subjects with adverse events by system organ class and pref
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set: the records, with USUBJID. *(required)*
 
-`adsl=`
+<a id="adsl"></a>`adsl=`
 :   The subjects: a data set with one row per subject. It gives the population and the N of each column, and its variables are merged onto the records by USUBJID. When not given, the N of a column is the subjects of its records. *(optional)*
 
-`pop=`
+<a id="pop"></a>`pop=`
 :   The population: a condition on `adsl=` in parentheses, such as `pop = (saffl = 'Y')`. It is used only with `adsl=`. *(optional)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (trtemfl = 'Y')`. *(optional)*
 
-`var=`
+<a id="var"></a>`var=`
 :   The variables of the rows, nested in their order and separated by blanks, such as `var = aebodsys aedecod`. *(required)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups of the columns: one character variable, such as `by = trt01a`. *(required)*
 
-`order=`
+<a id="order"></a>`order=`
 :   The numeric twin of `by=`, such as `order = trt01an`: it gives the order of the columns. *(optional)*
 
-`sort=`
+<a id="sort"></a>`sort=`
 :   frequency: the rows of the last variable of `var=` in the order of their subjects, the most first (order=frequency of [%freq](freq.md)). When not given, the rows are in the order of their values. *(optional)*
     Accepts: `frequency`.
 
-`threshold=`
+<a id="threshold"></a>`threshold=`
 :   A percent: keep only the rows whose percent of subjects reaches it in at least one group (threshold= of [%freq](freq.md)), such as `threshold = 5`. *(optional)*
 
-`total=`
+<a id="total"></a>`total=`
 :   yes: add the column Total, all groups together. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
-`format=`
+<a id="format"></a>`format=`
 :   The labels of the categories: pairs of a variable and a format, as in a FORMAT statement (`format = sex $sexf. race $racef.`), as `format=` of [%layout](layout.md). *(optional)*
 
-`name=`
+<a id="name"></a>`name=`
 :   The name of the table: the first part of the names of its data sets, such as `name = t14_3_01`. When not given, the last part of `file=` is used; without `file=`, `name=` is required. *(optional)*
 
-`show=`
+<a id="show"></a>`show=`
 :   yes: write the long program to the log. A file path, without quotes: write the long program to that file. In both cases the macro runs it. *(optional, default `no`)*
 
-`label=`
+<a id="label"></a>`label=`
 :   The label of the block in the table: a text in quotes. *(optional)*
 
-`stats=`
+<a id="stats"></a>`stats=`
 :   The statistics, each name with its pattern, separated by blanks (stats= of [%freq](freq.md)), such as `stats = n pct events`. *(optional)*
 
-`title=`
+<a id="title"></a>`title=`
 :   The titles of the table: one text in quotes per line (TITLE1, TITLE2 ...). They hold for this table only. When not given, the TITLE statements in force in the program are used. *(optional)*
 
-`footnote=`
+<a id="footnote"></a>`footnote=`
 :   The footnotes of the table: one text in quotes per line (FOOTNOTE1, FOOTNOTE2 ...). They hold for this table only. When not given, the FOOTNOTE statements in force in the program are used. *(optional)*
 
-`file=`
+<a id="file"></a>`file=`
 :   The output file without its extension: the macro writes &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file. When not given, nothing is printed. *(optional)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets of the macros that the long program calls. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -105,7 +105,7 @@ Use it for any count of subjects by nested levels of records; to add a block tha
 - &lt;name&gt;_cols: the columns ([%columns](columns.md))
 - &lt;name&gt;_display: the display data set, one row per printed line ([%layout](layout.md))
 
-The global macro variable &lt;name&gt;_print keeps the call of [%print](print.md): change &lt;name&gt;_display, then print again with `%print(&<name>_print.)`.
+The global macro variable &lt;name&gt;_print keeps the call of [%print](print.md): change &lt;name&gt;_display, then print again with `%print(&<name>_print.)`. The table has one block: a system organ class is a heading over its terms and prints without a count, and there is no row of the subjects with any TEAE. To add them, write the long program with `show=`, and add before the block of the terms in [%stack](stack.md) a [%freq](freq.md) without `var=` (any event) and a [%freq](freq.md) with var=aebodsys (the subjects of each class), with `denom=` the population, as the how-to guide "Make an adverse event table" shows.
 
 ## Examples
 

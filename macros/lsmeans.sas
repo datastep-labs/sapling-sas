@@ -91,7 +91,7 @@
    , order  = trt01pn
    , out    = sbp_ls
  )
- * Compares two pairs against Placebo at a 90 percent level and keeps the statistics of stats=.;
+ * Without class=sex, two pairs at a 90 percent level: High Dose -5.73 here, not -5.24 as above.;
  %lsmeans(
      data   = advs
    , where  = (paramcd = 'SYSBP' AND avisit = 'Week 12' AND anl01fl = 'Y')
@@ -104,6 +104,19 @@
    , level  = 0.90
    , stats  = lsmean lsmean_se diff lcl ucl pval
    , out    = sbp_ls90
+ )
+ * Fits one model at each visit with within=avisit: High Dose against Placebo at Week 12 and 24.;
+ %lsmeans(
+     data   = advs
+   , where  = (paramcd = 'SYSBP' AND avisit IN ('Week 12' 'Week 24') AND anl01fl = 'Y')
+   , var    = chg
+   , by     = trt01p
+   , within = avisit
+   , covars = base
+   , class  = sex
+   , pairs  = "Xanomeline High Dose" "Placebo"
+   , order  = trt01pn
+   , out    = sbp_ls_vis
  )
 |
 |-------------------------------------------------------------------------------
@@ -149,6 +162,9 @@
 |                          not the LS means); Proven in plain words, for the
 |                          published manual. stats= points to the table of
 |                          default patterns of the manual. No number changes.
+|                          The caption of the second example says that it has
+|                          no class=sex, so its difference differs from the
+|                          first; an example with within=. No number changes.
 |
 *******************************************************************************/
 %MACRO lsmeans(

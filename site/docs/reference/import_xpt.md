@@ -16,13 +16,13 @@ Copies SAS transport files (XPORT version 5, .xpt) into SAS data sets in a folde
 
 ## Parameters
 
-`dir=`
+<a id="dir"></a>`dir=`
 :   The folder of the transport files: a path without quotes. *(required)*
 
-`members=`
+<a id="members"></a>`members=`
 :   The names of the data sets to read: one name or several, separated by blanks (`members = dm ae vs`). The file of VTXC is VTXC.xpt or, when that does not exist, vtxc.xpt. *(required)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The folder that gets the data sets: a path without quotes. The folder must exist. *(required)*
 
 ## Result
@@ -36,6 +36,8 @@ The macro stands alone: a program can include it without the library (00_import.
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+<a id="ex-adam"></a>
 
 Copies the six ADaM transport files of the example data into SAS data sets of one folder.
 

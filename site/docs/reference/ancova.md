@@ -24,37 +24,37 @@ Returns the Type III p-value of one numeric term in a linear model, such as the 
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set, with USUBJID. *(required)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (paramcd = 'SYSBP' AND avisit = 'Week 12')`. *(optional)*
 
-`var=`
+<a id="var"></a>`var=`
 :   The response: one numeric variable. *(required)*
 
-`covars=`
+<a id="covars"></a>`covars=`
 :   The covariates: numeric variables separated by blanks (`covars = base`). *(optional)*
 
-`class=`
+<a id="class"></a>`class=`
 :   The class factors: variables separated by blanks (`class = sex`). *(optional)*
 
-`test=`
+<a id="test"></a>`test=`
 :   The tested term: one numeric variable, such as a dose or the number of a treatment (`test = trt01pn`). *(required)*
 
-`level=`
+<a id="level"></a>`level=`
 :   The confidence level of the limits: a number between 0 and 1. *(optional, default `0.95`)*
 
-`stats=`
-:   The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are pval, estimate, se, lcl and ucl. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed). *(optional, default `pval="X.XXX"`)*
+<a id="stats"></a>`stats=`
+:   The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are pval, estimate, se, lcl and ucl. A name without a pattern takes its default pattern: see the [table of default patterns](../explanation/numbers.md#the-table-of-default-patterns). *(optional, default `pval="X.XXX"`)*
 
-`label=`
+<a id="label"></a>`label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the result data set. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _ancova_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -66,9 +66,15 @@ The data set of `out=`: the [result shape](../explanation/result-shape.md): one 
 
 For the ANCOVA comparison of the groups, use [%lsmeans](lsmeans.md); for a model of repeated visits, [%mmrm](mmrm.md). The model is PROC GLM: the class factors, the covariates and the tested term, one record per subject (the first with a value; when `where=` leaves a second record of a subject, the log has a NOTE with their number). Give a `where=` that leaves one record per subject, such as one parameter at one visit with `anl01fl = 'Y'`; otherwise each subject has the first of its records in the order of `data=`, whichever it is. The coefficient of the term, its standard error and its confidence limits come when `stats=` asks for them.
 
+!!! note "Good to know"
+
+    This macro gives no comparison of the groups: the ANCOVA comparison of the groups (the differences of the LS means) is [%lsmeans](lsmeans.md), and [%table_model](table_model.md) with method=ancova calls [%lsmeans](lsmeans.md), not %ancova.
+
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+<a id="ex-sbp_dose"></a>
 
 Tests a linear dose response of the change at Week 12, adjusted for baseline: one p value.
 
@@ -103,7 +109,7 @@ The macro also writes these NOTE lines to the log, without stopping:
 
 Test the groups: [%anova](anova.md), [%ttest](ttest.md), [%wilcoxon](wilcoxon.md), [%chisq](chisq.md), [%fisher](fisher.md), [%cmh](cmh.md), [%adjust](adjust.md).
 
-Named on this page: [%lsmeans](lsmeans.md), [%mmrm](mmrm.md).
+Named on this page: [%lsmeans](lsmeans.md), [%mmrm](mmrm.md), [%table_model](table_model.md).
 
 Guides that use %ancova: [Make an efficacy table with an ANCOVA](../how-to/efficacy-table.md).
 

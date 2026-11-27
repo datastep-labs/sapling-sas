@@ -35,71 +35,71 @@ Makes a table of the descriptive statistics of each variable by group, parameter
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set: the records, with USUBJID. *(required)*
 
-`adsl=`
+<a id="adsl"></a>`adsl=`
 :   The subjects: a data set with one row per subject. It gives the population and the N of each column, and its variables are merged onto the records by USUBJID. When not given, the N of a column is the subjects of its records. *(optional)*
 
-`pop=`
+<a id="pop"></a>`pop=`
 :   The population: a condition on `adsl=` in parentheses, such as `pop = (saffl = 'Y')`. It is used only with `adsl=`. *(optional)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (trtemfl = 'Y')`. *(optional)*
 
-`vars=`
+<a id="vars"></a>`vars=`
 :   The numeric variables to describe, separated by blanks: one block each, such as `vars = aval chg`. *(required)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups of the columns: one character variable, such as `by = trt01a`. *(required)*
 
-`param=`
+<a id="param"></a>`param=`
 :   The variable of the parameter: one variable. *(optional, default `PARAMCD`)*
 
-`visit=`
+<a id="visit"></a>`visit=`
 :   The variable of the visit: one variable. *(optional, default `AVISIT`)*
 
-`keep=`
+<a id="keep"></a>`keep=`
 :   Other variables to keep for the names and the order of the rows, separated by blanks (keep= of [%describe](describe.md)), such as `keep = param paramn avisitn`. *(optional)*
 
-`order=`
+<a id="order"></a>`order=`
 :   The numeric twin of `by=`, such as `order = trt01an`: it gives the order of the columns. *(optional)*
 
-`post=`
+<a id="post"></a>`post=`
 :   The variables of `vars=` whose block uses only the records of `postwhere=`, separated by blanks, such as `post = chg`. *(optional)*
 
-`postwhere=`
+<a id="postwhere"></a>`postwhere=`
 :   The records after baseline: a condition in parentheses. *(optional, default `(ablfl NE 'Y')`)*
 
-`names=`
+<a id="names"></a>`names=`
 :   The labels of the blocks: pairs variable="text", separated by blanks, such as `names = chg="Change from baseline"`. A block without a pair has the label of its variable, or its name. *(optional)*
 
-`total=`
+<a id="total"></a>`total=`
 :   yes: add the column Total, all groups together. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
-`format=`
+<a id="format"></a>`format=`
 :   The labels of the categories: pairs of a variable and a format, as in a FORMAT statement (`format = sex $sexf. race $racef.`), as `format=` of [%layout](layout.md). *(optional)*
 
-`name=`
+<a id="name"></a>`name=`
 :   The name of the table: the first part of the names of its data sets, such as `name = t14_3_01`. When not given, the last part of `file=` is used; without `file=`, `name=` is required. *(optional)*
 
-`show=`
+<a id="show"></a>`show=`
 :   yes: write the long program to the log. A file path, without quotes: write the long program to that file. In both cases the macro runs it. *(optional, default `no`)*
 
-`stats=`
+<a id="stats"></a>`stats=`
 :   The statistics, each name with its pattern, separated by blanks (stats= of [%describe](describe.md)). *(optional)*
 
-`title=`
+<a id="title"></a>`title=`
 :   The titles of the table: one text in quotes per line (TITLE1, TITLE2 ...). They hold for this table only. When not given, the TITLE statements in force in the program are used. *(optional)*
 
-`footnote=`
+<a id="footnote"></a>`footnote=`
 :   The footnotes of the table: one text in quotes per line (FOOTNOTE1, FOOTNOTE2 ...). They hold for this table only. When not given, the FOOTNOTE statements in force in the program are used. *(optional)*
 
-`file=`
+<a id="file"></a>`file=`
 :   The output file without its extension: the macro writes &lt;file&gt;.rtf, &lt;file&gt;.lst and the numbers file. When not given, nothing is printed. *(optional)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets of the macros that the long program calls. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 

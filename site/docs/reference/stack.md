@@ -15,10 +15,10 @@ Stacks results one under another into one table, a block per result, in the orde
 
 ## Parameters
 
-`results` (the first value, without a keyword)
+<a id="results"></a>`results` (the first value, without a keyword)
 :   The results to stack: data set names separated by blanks, in the order of the blocks. Give them first, without a keyword (`%stack(a b, out=t)`), or as `results=` (`%stack(results=a b, out=t)`); a message names them `results=`. *(required)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the stacked table. *(required)*
 
 ## Result
@@ -40,15 +40,15 @@ A block is the rows of one call in the table: the rows of one result, under its 
 
 ## Examples
 
-The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `age_describe` (made by the [example of %describe](describe.md#examples)), `age_anova` (made by the [example of %anova](anova.md#examples)), `sex_freq` (made by the [example of %freq](freq.md#examples)), `sex_chisq` (made by the [example of %chisq](chisq.md#examples)), `hr_sex` (made by the [example of %cox](cox.md#examples)), `hr_age` (made by the [example of %cox](cox.md#examples)), `age_sex` (made by the [example of %describe](describe.md#examples)), `agegr_sex` (made by the [example of %freq](freq.md#examples)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. They also read `age_describe` (made by the [example of %describe](describe.md#ex-age_describe)), `age_anova` (made by the [example of %anova](anova.md#ex-age_anova)), `sex_freq` (made by the [example of %freq](freq.md#ex-sex_freq)), `sex_chisq` (made by the [example of %chisq](chisq.md#ex-sex_chisq)), `hr_sex` (made by the [example of %cox](cox.md#ex-hr_sex)), `hr_age` (made by the [example of %cox](cox.md#ex-hr_age)), `age_sex` (made by the [example of %describe](describe.md#ex-age_sex)), `agegr_sex` (made by the [example of %freq](freq.md#ex-agegr_sex)). All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
 
 ??? note "Before these examples: the calls that make their inputs"
 
-    Run `examples/setup.sas`, then these examples of other pages ([%tte](tte.md), [%describe](describe.md), [%anova](anova.md), [%freq](freq.md), [%chisq](chisq.md), [%cox](cox.md)), in this order. Then the examples of this page run as shown.
+    Run `examples/setup.sas`, then these calls from the examples of %tte, %describe, %anova, %freq, %chisq, %cox, in this order. Then the examples of this page run as shown.
 
     ```sas
-    /* the example of %tte */
-    * Derives the time to the first skin event from the first dose: CNSR 0 is an event, 1 a censoring.;
+    /* from the example of %tte */
+    * Makes TTDE. Log NOTE: 2 subject(s) with no event and no censoring date: no record (no TRTEDT).;
     %tte(
          subjects      = adsl
        , events        = adae
@@ -64,9 +64,7 @@ The examples run on the [example data](../tutorial/index.md#the-example-data) af
        , paramcd       = "TTDE"
        , out           = adttde
      )
-    TITLE;
-    FOOTNOTE;
-    /* the example of %describe */
+    /* from the example of %describe */
     * Summarizes age in each group and in the Total: n, mean, SD, median, minimum and maximum.;
     %describe(
          data  = adsl
@@ -75,26 +73,6 @@ The examples run on the [example data](../tutorial/index.md#the-example-data) af
        , total = yes
        , label = "Age (years)"
        , out   = age_describe
-     )
-    * Uses three BY variables: one row per group, parameter, visit and statistic, with PARAM kept.;
-    %describe(
-         data  = advs
-       , where = (anl01fl = 'Y')
-       , var   = aval
-       , by    = trt01a paramcd avisit
-       , keep  = param avisitn
-       , out   = vs
-     )
-    * Adds the SE, Q1 and Q3 and calls the Total All subjects: the rows keep the order of stats=.;
-    %describe(
-         data  = advs
-       , where = (paramcd = 'WEIGHT' AND ablfl = 'Y')
-       , var   = aval
-       , by    = trt01a
-       , total = "All subjects"
-       , stats = n mean sd se median q1 q3 min="XX.X" max="XX.X"
-       , label = "Weight at baseline (kg)"
-       , out   = wt_describe
      )
     * Adds sex as a second BY variable: the rows of each group and sex, for a page per sex.;
     %describe(
@@ -105,9 +83,7 @@ The examples run on the [example data](../tutorial/index.md#the-example-data) af
        , label = "Age (years)"
        , out   = age_sex
      )
-    TITLE;
-    FOOTNOTE;
-    /* the example of %anova */
+    /* from the example of %anova */
     * Tests age across the three groups: one row, the p value of the F test.;
     %anova(
          data  = adsl
@@ -116,9 +92,7 @@ The examples run on the [example data](../tutorial/index.md#the-example-data) af
        , label = "Age (years)"
        , out   = age_anova
      )
-    TITLE;
-    FOOTNOTE;
-    /* the example of %freq */
+    /* from the example of %freq */
     * Counts each sex in each group and in the Total: n and the percent of the subjects of the group.;
     %freq(
          data  = adsl
@@ -127,37 +101,6 @@ The examples run on the [example data](../tutorial/index.md#the-example-data) af
        , total = yes
        , label = "Sex"
        , out   = sex_freq
-     )
-    * Counts subjects and events of each term under its class: the percent uses the N of denom=.;
-    %freq(
-         data  = adae
-       , denom = adsl
-       , where = (trtemfl = 'Y')
-       , var   = aebodsys aedecod
-       , by    = trt01a
-       , stats = n pct events
-       , out   = teae
-     )
-    * Counts the shift at Week 24 with planned levels: a level without a subject has a row of 0.;
-    %freq(
-         data   = adlb
-       , denom  = adsl
-       , where  = (avisit = 'Week 24')
-       , var    = paramcd bnrind anrind
-       , by     = trt01a
-       , levels = bnrind 'LOW' 'NORMAL' 'HIGH' anrind 'LOW' 'NORMAL' 'HIGH'
-       , out    = shift
-     )
-    * Keeps the terms that reach 5 percent in a group: AEDECODN ranks them, the most subjects first.;
-    %freq(
-         data      = adae
-       , denom     = adsl
-       , where     = (trtemfl = 'Y')
-       , var       = aedecod
-       , by        = trt01a
-       , threshold = 5
-       , order     = frequency
-       , out       = common
      )
     * Adds sex as a second BY variable: the age groups of each group and sex, for a page per sex.;
     %freq(
@@ -168,9 +111,7 @@ The examples run on the [example data](../tutorial/index.md#the-example-data) af
        , label = "Age group"
        , out   = agegr_sex
      )
-    TITLE;
-    FOOTNOTE;
-    /* the example of %chisq */
+    /* from the example of %chisq */
     * Tests sex across the groups: one row, the p value of the chi square test.;
     %chisq(
          data  = adsl
@@ -179,28 +120,7 @@ The examples run on the [example data](../tutorial/index.md#the-example-data) af
        , label = "Sex"
        , out   = sex_chisq
      )
-    * Runs the exact test of the normal range within each parameter: one p value per parameter.;
-    %chisq(
-         data   = adlb
-       , where  = (avisit = 'Week 24')
-       , var    = anrind
-       , by     = trt01a
-       , within = paramcd
-       , exact  = yes
-       , out    = nr_test
-     )
-    TITLE;
-    FOOTNOTE;
-    /* the example of %cox */
-    * Gives the hazard ratio of each pair, stratified by sex, with its limits and p value.;
-    %cox(
-         data   = adttde
-       , var    = aval
-       , by     = trt01a
-       , strata = sex
-       , order  = trt01an
-       , out    = ttde_hr
-     )
+    /* from the example of %cox */
     * Gives the hazard ratio against Placebo for each sex: the rows carry SEX, for a forest plot.;
     %cox(
          data   = adttde
@@ -221,20 +141,9 @@ The examples run on the [example data](../tutorial/index.md#the-example-data) af
                 # "Xanomeline Low Dose"  "Placebo"
        , out    = hr_age
      )
-    * Uses the Breslow ties, and as p value the log rank test of the two groups of each pair.;
-    %cox(
-         data   = adttde
-       , var    = aval
-       , by     = trt01a
-       , pairs  = "Xanomeline High Dose" "Placebo"
-                # "Xanomeline Low Dose"  "Placebo"
-       , ties   = breslow
-       , pvalue = logrank
-       , out    = ttde_hr_lr
-     )
-    TITLE;
-    FOOTNOTE;
     ```
+
+<a id="ex-t14_2_1"></a>
 
 Stacks four results in the order of the table: RESULT and ORD tell where each row came from.
 
@@ -262,6 +171,8 @@ Xanomeline High Dose       AGE_DESCRIBE    1  TRT01A  Age (years)  mean    73.77
 Xanomeline High Dose       AGE_DESCRIBE    1  TRT01A  Age (years)  sd      7.9438562002  7.94
 ```
 
+<a id="ex-hr_sub"></a>
+
 Stacks the hazard ratios by sex and by age group, for one forest plot.
 
 ```sas
@@ -287,6 +198,8 @@ Xanomeline Low Dose   Placebo  M            HR_SEX    1  TRT01A VERSUS SEX      
 Xanomeline Low Dose   Placebo  M            HR_SEX    1  TRT01A VERSUS SEX         lcl   2.1988056105  2.20
 Xanomeline Low Dose   Placebo  M            HR_SEX    1  TRT01A VERSUS SEX         ucl   13.160521402  13.16
 ```
+
+<a id="ex-t14_1_1"></a>
 
 Stacks age and the age groups by sex: the results of a table with a page per sex.
 
@@ -326,7 +239,7 @@ A wrong call writes the message and its fix to the log and stops. The macro also
 
 Build a table: [%columns](columns.md), [%ard](ard.md), [%layout](layout.md), [%print](print.md), [%csv](csv.md).
 
-Named on this page: [%describe](describe.md), [%freq](freq.md), [%tte](tte.md), [%anova](anova.md), [%chisq](chisq.md), [%cox](cox.md).
+Named on this page: [%describe](describe.md), [%freq](freq.md).
 
 Guides that use %stack: [Tutorial: your first table](../tutorial/index.md), [Make an adverse event table](../how-to/adverse-event-table.md), [Check a table against an independent program](../how-to/check-a-table.md), [Make a demographic table with tests](../how-to/demographic-table.md), [Make an efficacy table with an ANCOVA](../how-to/efficacy-table.md), [Use the macros in your own program](../how-to/own-program.md), [Make one page per subgroup](../how-to/page-per-subgroup.md).
 

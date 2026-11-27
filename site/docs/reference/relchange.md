@@ -26,43 +26,43 @@ Returns new records with the change from the record before, relative to the norm
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set, such as adlb; it is not changed. *(required)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to read: a condition in parentheses, such as `where = (paramcd = 'ALT')`. The record before is one of these records. *(optional)*
 
-`value=`
+<a id="value"></a>`value=`
 :   The numeric variable of the measured value, such as lbstresn. *(required)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups: variables separated by blanks. The first record of a group has no record before. *(optional, default `USUBJID PARAMCD`)*
 
-`lo=`
+<a id="lo"></a>`lo=`
 :   The numeric variable of the lower limit of the normal range. *(optional, default `A1LO`)*
 
-`hi=`
+<a id="hi"></a>`hi=`
 :   The numeric variable of the upper limit of the normal range. *(optional, default `A1HI`)*
 
-`order=`
+<a id="order"></a>`order=`
 :   The variables that sort the records of a group and so give the record before, separated by blanks. A missing value sorts first. *(optional, default `VISITNUM ADT LBSEQ`)*
 
-`prefix=`
+<a id="prefix"></a>`prefix=`
 :   The text put before PARAMCD in the new records, without quotes. *(optional, default `_`)*
 
-`digits=`
+<a id="digits"></a>`digits=`
 :   The number of decimals of AVAL. *(optional, default `1`)*
 
-`limit=`
+<a id="limit"></a>`limit=`
 :   The limit of ANRIND, in half ranges: H above `limit=`, L below -`limit=`. The value 1 is half the normal range. *(optional, default `1`)*
 
-`reset=`
+<a id="reset"></a>`reset=`
 :   The variables that are set missing on the new records, separated by blanks; a variable that `data=` does not have is skipped. *(optional, default `BASE CHG BNRIND R2A1LO R2A1HI BR2A1LO BR2A1HI`)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the data set of the new records. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _relchange_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -83,6 +83,8 @@ AVAL is missing on the first record of a group, on a record with no AVISITN, and
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+<a id="ex-alt_rel"></a>
 
 Adds a record per value: its change from the record before, relative to half the normal range.
 

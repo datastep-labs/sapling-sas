@@ -25,6 +25,10 @@
 |                 where the value names the reason of the censoring: a CNSR of 2
 |                 is censored as 1 is. A record used with a missing or negative
 |                 CNSR stops the macro with an ERROR.
+|                 In the first example n of Placebo is 85, while the column N of
+|                 Placebo in %table_tte with adsl= is 86: the 2 subjects with a
+|                 missing TRTEDT (one Placebo, one Low Dose) have no event and no
+|                 censoring date, so %tte gives them no record in adttde.
 | Procedure     : PROC LIFETEST
 | Proven        : Checked against its known answers: the median and the percent
 |                 without an event at a time (on a small data set, the numbers
@@ -102,12 +106,14 @@
    , conftype = loglog
    , out      = ttde_kmll
  )
- * Uses a 90 percent level: on these data the limits of the median stay as at 95 percent.;
+ * Gives the survival at day 182 with 90 percent limits, narrower than the 95 percent limits.;
  %km(
      data  = adttde
    , var   = aval
    , by    = trt01a
+   , time  = 182
    , level = 0.90
+   , stats = n events surv lcl ucl
    , out   = ttde_km90
  )
 |
@@ -153,6 +159,12 @@
 |                          two: conftype=loglog alone, then level=0.90 alone,
 |                          each with a caption true to its output. No number
 |                          changes.
+| 27-NOV-2026 Sapling      1.10.0: the example of level= gives the survival at
+|                          day 182, where the 90 percent limits differ from the
+|                          95 percent limits (on these data the limits of the
+|                          median did not change). The Details say why n of
+|                          Placebo is 85: the 2 subjects with a missing TRTEDT
+|                          have no record. No number changes.
 |
 *******************************************************************************/
 %MACRO km(

@@ -25,41 +25,41 @@ Returns the difference of the means of each pair of groups, with its confidence 
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set: one record per subject, with USUBJID. *(required)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (avisit = 'Week 24')`. *(optional)*
 
-`var=`
+<a id="var"></a>`var=`
 :   The variable to compare: one numeric variable. *(required)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups: one character variable (trt01a, not trt01an). *(required)*
 
-`pairs=`
+<a id="pairs"></a>`pairs=`
 :   Which groups to compare. all: each later group against each earlier one, in the order of `order=` (else of the values). Or the pairs, separated by #: in each pair the group first, then the group it is compared with, each value in quotes (`pairs = "Drug" "Placebo" # "High" "Low"`). *(optional, default `all`)*
 
-`order=`
+<a id="order"></a>`order=`
 :   The order of the groups: one numeric variable with one value per group (`order = trt01an`). *(optional)*
 
-`variances=`
+<a id="variances"></a>`variances=`
 :   equal (Student's test, the Pooled row of PROC TTEST) or unequal (Welch's test, the Satterthwaite row). *(optional, default `equal`)*
     Accepts: `equal`, `unequal`.
 
-`level=`
+<a id="level"></a>`level=`
 :   The confidence level: a number between 0 and 1 (`level = 0.90`). *(optional, default `0.95`)*
 
-`stats=`
-:   The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are diff, diff_se, lcl, ucl and pval. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed). *(optional, default `diff="XX.X" diff_se="XX.XX" lcl="XX.X" ucl="XX.X" pval="X.XXX"`)*
+<a id="stats"></a>`stats=`
+:   The statistics, in the order of the rows: each name with its pattern of the printed number, separated by blanks. The names are diff, diff_se, lcl, ucl and pval. A name without a pattern takes its default pattern: see the [table of default patterns](../explanation/numbers.md#the-table-of-default-patterns). *(optional, default `diff="XX.X" diff_se="XX.XX" lcl="XX.X" ucl="XX.X" pval="X.XXX"`)*
 
-`label=`
+<a id="label"></a>`label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the result data set. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _ttest_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -81,6 +81,8 @@ The macro uses one record per subject: when a subject has several records, the f
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+<a id="ex-sbp_t"></a>
 
 Compares each pair of groups with the pooled t test: the difference, its SE, limits and p value.
 
@@ -114,6 +116,8 @@ Xanomeline High Dose  Xanomeline Low Dose  TRT01P VERSUS         lcl      -14.16
 Xanomeline High Dose  Xanomeline Low Dose  TRT01P VERSUS         ucl      0.2121895088    0.2
 Xanomeline High Dose  Xanomeline Low Dose  TRT01P VERSUS         pval     0.0569857411  0.057
 ```
+
+<a id="ex-sbp_welch"></a>
 
 Uses the Welch test of unequal variances on two pairs: the SE, limits and p value change.
 

@@ -34,7 +34,7 @@ Placebo  TRT01A  Age (years)  sd      8.5901671271  8.59
 Placebo  TRT01A  Age (years)  median            76  76.0
 ```
 
-The listing shows `VALUE` with 12 significant digits; the data set keeps every digit SAS computed.
+The listing shows `VALUE` in at most 12 characters; the data set keeps the full value that SAS computed.
 
 ## Why one shape
 

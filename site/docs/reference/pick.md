@@ -23,35 +23,35 @@ Gives each subject the value of its first or last record in another data set, as
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The data set to change in place, such as adsl. *(required)*
 
-`from=`
+<a id="from"></a>`from=`
 :   The data set of the records, with USUBJID. When the value or a sort key is not a variable yet (a date from a text, a difference), make it first in a DATA step. *(required)*
 
-`value=`
+<a id="value"></a>`value=`
 :   The variable of `from=` that gives the value. *(required)*
 
-`order=`
+<a id="order"></a>`order=`
 :   The sort keys within a subject: variables separated by blanks; write descending before a key as in a BY statement (`order = descending astdt`). When not given, the records keep the order they have in `from=`. *(optional)*
 
-`which=`
+<a id="which"></a>`which=`
 :   first or last: the record of the subject that gives the value. *(optional, default `first`)*
     Accepts: `first`, `last`.
 
-`length=`
+<a id="length"></a>`length=`
 :   The length of the new variable when it is a text, such as $40. *(optional)*
 
-`format=`
+<a id="format"></a>`format=`
 :   The format of the new variable, such as date9. *(optional)*
 
-`unique=`
+<a id="unique"></a>`unique=`
 :   yes: each subject must have at most one record in `from=`, so that no order is needed. Two records of a subject give an ERROR line that names the subject. *(optional, default `no`)*
 
-`new=`
+<a id="new"></a>`new=`
 :   The name of the new variable. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _pick_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -103,24 +103,45 @@ Takes the dose of the last exposure record of each subject.
  )
 ```
 
+Keeps the disposition event of each subject: one record per subject.
+
+```sas
+DATA ds_eos;
+  SET sdtm.ds;
+  WHERE dscat = 'DISPOSITION EVENT';
+RUN;
+```
+
+Takes the disposition term: unique=yes checks one record per subject, so no order is needed.
+
+```sas
+%pick(
+     data   = sl
+   , from   = work.ds_eos
+   , value  = dsdecod
+   , unique = yes
+   , new    = dcdecod
+ )
+```
+
 ```text
 sl: the first 15 of 254 rows
-USUBJID      TRTSDT   EXFSTDTC    EXLDOSE
-01-701-1015  02JAN14  2014-01-02        0
-01-701-1023  05AUG12  2012-08-05        0
-01-701-1028  19JUL13  2013-07-19       54
-01-701-1033  18MAR14  2014-03-18       54
-01-701-1034  01JUL14  2014-07-01       54
-01-701-1047  12FEB13  2013-02-12        0
-01-701-1097  01JAN14  2014-01-01       54
-01-701-1111  07SEP12  2012-09-07       54
-01-701-1115  30NOV12  2012-11-30       54
-01-701-1118  12MAR14  2014-03-12        0
-01-701-1130  15FEB14  2014-02-15        0
-01-701-1133  28OCT12  2012-10-28       54
-01-701-1146  20MAY13  2013-05-20       81
-01-701-1148  23AUG13  2013-08-23       54
-01-701-1153  23SEP13  2013-09-23        0
+USUBJID      TRTSDT   EXFSTDTC    EXLDOSE  DCDECOD
+01-701-1015  02JAN14  2014-01-02        0  COMPLETED
+01-701-1023  05AUG12  2012-08-05        0  ADVERSE EVENT
+01-701-1028  19JUL13  2013-07-19       54  COMPLETED
+01-701-1033  18MAR14  2014-03-18       54  STUDY TERMINATED BY SPONSOR
+01-701-1034  01JUL14  2014-07-01       54  COMPLETED
+01-701-1047  12FEB13  2013-02-12        0  ADVERSE EVENT
+01-701-1097  01JAN14  2014-01-01       54  COMPLETED
+01-701-1111  07SEP12  2012-09-07       54  ADVERSE EVENT
+01-701-1115  30NOV12  2012-11-30       54  ADVERSE EVENT
+01-701-1118  12MAR14  2014-03-12        0  COMPLETED
+01-701-1130  15FEB14  2014-02-15        0  COMPLETED
+01-701-1133  28OCT12  2012-10-28       54  COMPLETED
+01-701-1146  20MAY13  2013-05-20       81  ADVERSE EVENT
+01-701-1148  23AUG13  2013-08-23       54  COMPLETED
+01-701-1153  23SEP13  2013-09-23        0  COMPLETED
 ```
 
 ## Messages

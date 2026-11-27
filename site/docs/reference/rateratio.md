@@ -29,53 +29,53 @@ Returns the rate ratios of pairs of groups from a Poisson or negative binomial m
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The input data set, with USUBJID: one record per subject. *(required)*
 
-`where=`
+<a id="where"></a>`where=`
 :   The records to use: a condition in parentheses, such as `where = (trtdurd > 0)`. *(optional)*
 
-`var=`
+<a id="var"></a>`var=`
 :   The count: one numeric variable (`var = teaecnt`). *(required)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups of the model: one character variable. *(required)*
 
-`exposure=`
+<a id="exposure"></a>`exposure=`
 :   The exposure of each subject: a numeric variable, or an expression of variables of `data=`, such as `exposure = trtdurd / 365.25` for years. A subject with an exposure of 0 or less is not used in the model. *(required)*
 
-`within=`
+<a id="within"></a>`within=`
 :   One model in each group of these variables, separated by blanks, such as the levels of a subgroup (`within = sex`). *(optional)*
 
-`covars=`
+<a id="covars"></a>`covars=`
 :   The covariates: numeric variables separated by blanks (`covars = age`). *(optional)*
 
-`class=`
+<a id="class"></a>`class=`
 :   The class factors besides the groups: variables separated by blanks (`class = sex`). *(optional)*
 
-`dist=`
+<a id="dist"></a>`dist=`
 :   The distribution of the count: poisson, or negbin (also nb) for the negative binomial. *(optional, default `poisson`)*
     Accepts: `poisson`, `negbin`, `nb`.
 
-`pairs=`
+<a id="pairs"></a>`pairs=`
 :   The pairs of groups to compare. all: each later group against each earlier one, in the order of `order=` (or of the values). Or the pairs separated by #, each the group first and then the group it is compared with, a value with a blank or a hyphen in quotes: `pairs = "Drug" "Placebo" # "High" "Low"`. *(optional, default `all`)*
 
-`order=`
+<a id="order"></a>`order=`
 :   The order of the groups: one numeric variable with one value per group (`order = trt01an`). *(optional)*
 
-`level=`
+<a id="level"></a>`level=`
 :   The confidence level of the limits: a number between 0 and 1. *(optional, default `0.95`)*
 
-`stats=`
-:   The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are irr, lcl, ucl and pval. A name without a pattern takes its default pattern: see the table of default patterns (How a number is kept and printed). *(optional, default `irr="XX.XX" lcl="XX.XX" ucl="XX.XX" pval="X.XXX"`)*
+<a id="stats"></a>`stats=`
+:   The statistics, in the order of the rows: each name with the pattern of its printed number, separated by blanks. The names are irr, lcl, ucl and pval. A name without a pattern takes its default pattern: see the [table of default patterns](../explanation/numbers.md#the-table-of-default-patterns). *(optional, default `irr="XX.XX" lcl="XX.XX" ucl="XX.XX" pval="X.XXX"`)*
 
-`label=`
+<a id="label"></a>`label=`
 :   The label of the block in the table: a text in quotes. A block is the rows of one call in the table. *(optional)*
 
-`out=`
+<a id="out"></a>`out=`
 :   The name of the result data set. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _rateratio_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
@@ -94,6 +94,8 @@ Use [%rate](rate.md) for the rate of each group without a model. The model is PR
 ## Examples
 
 The examples run on the [example data](../tutorial/index.md#the-example-data) after `examples/setup.sas`. The output under each call is the output of that run. All examples of the reference run as one program: [examples/reference.sas](https://github.com/datastep-labs/sapling-sas/blob/main/examples/reference.sas).
+
+<a id="ex-ae_rr"></a>
 
 Compares the event counts in a negative binomial model: STAT irr is the rate ratio.
 

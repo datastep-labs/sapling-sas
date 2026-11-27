@@ -20,25 +20,25 @@ Gives every record of a group the value of the group's baseline record, as a new
 
 ## Parameters
 
-`data=`
+<a id="data"></a>`data=`
 :   The data set to change in place, such as advs. *(required)*
 
-`value=`
+<a id="value"></a>`value=`
 :   The variable whose baseline value is taken, such as aval. *(required)*
 
-`by=`
+<a id="by"></a>`by=`
 :   The groups, each with one baseline record: variables separated by blanks (`by = usubjid paramcd`). *(required)*
 
-`flag=`
+<a id="flag"></a>`flag=`
 :   The baseline flag: a character variable that is 'Y' on the baseline record. *(optional, default `ABLFL`)*
 
-`replace=`
+<a id="replace"></a>`replace=`
 :   yes: `data=` has the variable `new=` already; the macro drops it and makes it again, with the type and length of `value=`. With no, the values are written into the variable `new=` of `data=` when it has one (its type, length and label stay). *(optional, default `no`)*
 
-`new=`
+<a id="new"></a>`new=`
 :   The name of the new variable, such as base. *(required)*
 
-`debug=`
+<a id="debug"></a>`debug=`
 :   yes: keep the work data sets _baseline_*. *(optional, default `no`)*
     Accepts: `yes`, `no`.
 
